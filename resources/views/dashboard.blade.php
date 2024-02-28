@@ -34,13 +34,13 @@
                 </div>
             @endforeach --}}
             @foreach($mensajes->groupBy('telefono_wa') as $telefono => $mensajesTelefono)
-            <div class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4">
+            <div onclick="abrirVentanaChat('{{ $telefono }}')" class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4">
                 <div class="p-4">
+                    <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                     <div class="font-bold">{{ $telefono }}</div>
                     <div class="mt-2">
                         @foreach($mensajesTelefono as $mensaje)
-                            <div onclick="abrirVentanaChat('{{ $telefono }}', '{{ $mensaje->mensaje_recibido }}')" class="flex items-center space-x-2 cursor-pointer">
-                                <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
+                            <div class="flex items-center space-x-2 cursor-pointer">
                                 <div>{{ $mensaje->mensaje_recibido }}</div>
                             </div>
                         @endforeach
@@ -56,7 +56,8 @@
 
     </div>
 
-    <div id="abrirchat" class=" bg-white dark:bg-slate-200 rounded-lg px-6 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl mx-4" style="border-color: #4a5568;">
+
+     <div id="abrirchat" class=" bg-white dark:bg-slate-200 rounded-lg px-6 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl mx-4" style="border-color: #4a5568;">
         <div class="relative">
             <h3 class="text-xl font-semibold mb-4">Chat</h3>
             <button onclick="cerrarChat()" class="absolute top-0 right-4 text-gray-600 hover:text-gray-800">

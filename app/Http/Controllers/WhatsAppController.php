@@ -10,29 +10,44 @@ class WhatsAppController extends Controller
 {
     public function index(Request $request){
         $notifications = Notificacion::all(); // Obtener todas las notificaciones
-    return view('dashboard', compact('notifications'));
+        return view('dashboard', compact('notifications'));
 
-    $notificacion = new Notificacion();
-    $notificacion->sender = 'WhatsApp'; // Cambia esto según el remitente real
-    $notificacion->message = $request->mensaje; // Esto obtiene el mensaje del formulario
-    $notificacion->save();
+        $notificacion = new Notificacion();
+        $notificacion->sender = 'WhatsApp'; // Cambia esto según el remitente real
+        $notificacion->message = $request->mensaje; // Esto obtiene el mensaje del formulario
+        $notificacion->save();
 
-    // Puedes redirigir a donde desees después de enviar la notificación
-    return redirect()->route('dashboard')->with('success', 'Mensaje enviado y notificación almacenada correctamente.');
+        // Puedes redirigir a donde desees después de enviar la notificación
+        return redirect()->route('dashboard')->with('success', 'Mensaje enviado y notificación almacenada correctamente.');
     }
     public function envia(Request $request)
     {
-        //token que nos da facebook
-        $token ='';
-        // nuestro telefono
-        $telefono = '';
-        //url a donde se manda el mensaje
-        $url = '';
+        $enviado = $request->input('enviado');
+        $telefonoCliente = $request->input('telefonoCliente');
 
-        $mensaje = '';
+        //token que nos da facebook
+        $token ='EAA0cGBz1VmwBO2PfnWb1Ih05lj3PagvoDGM0JIZCMqKXmEZCnFd7Ntdws2d2IOfGpAYAWQAxO5F5tzrZBfXQdQPdQXzfZCsoqZC1RahWBZCQFm7clpzm38bpc50yKu4Oy9ZCK9egwTcasNdwqHZC5XdnGkBZAAzgK2H4kzWnz3Yqgg6l086YZCR5jHXoGtFgbiMoZCZCsl7KT7MzepVuGbjIMt0ZD';
+        // nuestro telefono
+        $telefonoID = '224013397467233';
+        //url a donde se manda el mensaje
+        $url = 'https://graph.facebook.com/v15.0/' . $telefonoID . '/messages';
+
+         //CONFIGURACION DEL MENSAJE
+        $mensaje = ''
+                . '{'
+                . '"messaging_product": "whatsapp", '
+                . '"recipient_type": "individual",'
+                . '"to": "' . $telefonoCliente . '", '
+                . '"type": "text", '
+                . '"text": '
+                . '{'
+                . '     "body":"' . $enviado . '",'
+                . '     "preview_url": true, '
+                . '} '
+                . '}';
 
         //declaramos las cabeceras
-        $header = array("Authorization: Bearer ".$token, "Content-Type: applicacion");
+        $header = array("Authorization: Bearer ".$token, "Content-Type: application/json");
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
@@ -51,7 +66,7 @@ class WhatsAppController extends Controller
     }
     public function webhook(){
         //TOQUEN QUE QUERRAMOS PONER
-        $token = 'HolaNovato';
+        $token = 'TokenValidacion';
         //RETO QUE RECIBIREMOS DE FACEBOOK
         $hub_challenge = isset($_GET['hub_challenge']) ? $_GET['hub_challenge'] : '';
         //TOQUEN DE VERIFICACION QUE RECIBIREMOS DE FACEBOOK
@@ -65,7 +80,7 @@ class WhatsAppController extends Controller
       /*
       * RECEPCION DE MENSAJES
       */
-      public function recibe(){
+    public function recibe(){
         //LEEMOS LOS DATOS ENVIADOS POR WHATSAPP
         $respuesta = file_get_contents("php://input");
         //echo file_put_contents("text.txt", "Hola");
@@ -81,26 +96,17 @@ class WhatsAppController extends Controller
         $mensaje.="Mensaje:".$respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
         //GUARDAMOS EL MENSAJE Y LA RESPUESTA EN EL ARCHIVO text.txt
         file_put_contents("text.txt", $mensaje);
-      }
-    /**
-     * Show the form for creating a new resource.
-     */
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function reply($notificationId)
-    // {
-    //     // Aquí puedes obtener los detalles de la notificación según su ID
-    //     $notification = Whatsapp::findOrFail($notificationId);
+    }
 
-    //     // Puedes pasar estos detalles a la vista de respuesta
-    //     return view('reply', compact('notification'));
-    // }
+    public function notificacionMensaje(){
+        $mensajes = WhatsApp::all();
 
+        $mensajesFiltrados = $mensajes->filter(function ($mensaje) {
+            return $mensaje->telefono_envia !== $mensaje->telefono_recibe;
+        });
+        return view('dashboard', compact('mensajes')); // Pasa los mensajes a la vista 'dashboard'
+    }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(WhatsApp $whatsApp)
     {
         //

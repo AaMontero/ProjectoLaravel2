@@ -1,0 +1,1 @@
+El query: select * from `caracteristica_paquetes` where `paquetes`.`id` = `caracteristica_paquetes`.`paquete_id` and `lugar` LIKE ? or `descripcion` LIKE ?

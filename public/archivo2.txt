@@ -1,0 +1,1 @@
+{"cedula":"1716925365","nombres":"Anthonny Alexander","apellidos":"Montero Aguilar","numTelefonico":"0979345051","email":"aamonteroa@uce.edu.ec","ciudad":"Quito","provincia":"Pichincha","cliente_user":"asdasdafasdad"}

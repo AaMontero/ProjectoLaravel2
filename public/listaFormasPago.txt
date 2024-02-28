@@ -1,0 +1,17 @@
+["$500 con Master","$1000 con Visa","Se inserto un Credito Directo"]
+
+elem in listaFormaPago: 
+if (elem.trim[" "].len <= 4){
+    listaOtros.append (elem); 
+}
+cadena1 = "" ; 
+cadena2 = "" ; 
+cadenaRes = ""; 
+for (elem in listaOtros){
+    subelementos = elem.trim(" ")
+    cadena1 += (subelementos[0]); 
+    cadena2 += (subelementos[-1]);
+
+}
+cadenaRes = cadena1 . ", ", cadena2 ; 
+

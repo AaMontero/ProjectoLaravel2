@@ -89,7 +89,6 @@ Route::middleware('auth')->group(function () {
     //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
     //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
-        Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
 
 });
 

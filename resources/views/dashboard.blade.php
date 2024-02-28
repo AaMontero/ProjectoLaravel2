@@ -33,7 +33,7 @@
                     </div>
                 </div>
             @endforeach --}}
-            @foreach($mensajes->groupBy('telefono_wa') as $telefono => $mensajesTelefono)
+            {{-- @foreach($mensajes->groupBy('telefono_wa') as $telefono => $mensajesTelefono)
             <div class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4">
                 <div class="p-4">
                     <div class="font-bold">{{ $telefono }}</div>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @endforeach --}}
 
 
 
@@ -55,7 +55,7 @@
         <!-- Chats de Whatsapp -->
 
     </div>
-
+{{-- 
     <div id="abrirchat" class=" bg-white dark:bg-slate-200 rounded-lg px-6 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl mx-4" style="border-color: #4a5568;">
         <div class="relative">
             <h3 class="text-xl font-semibold mb-4">Chat</h3>
@@ -94,7 +94,7 @@
             @endforeach
 
         </div>
-    </div>
+    </div> --}}
 
 
 

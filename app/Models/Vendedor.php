@@ -16,4 +16,6 @@ class Vendedor extends Model
     }
 
     use HasFactory;
+
+    
 }

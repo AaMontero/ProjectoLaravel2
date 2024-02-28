@@ -9,7 +9,16 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 
-
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
 
 //Route::post();
@@ -20,12 +29,12 @@ use App\Http\Controllers\WhatsAppController;
 //Middleware - Bloque de código que se ejecuta en el medio del enrutamiento
 
 Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/', [WhatsAppController::class, 'index'])->name('dashboard');
     Route::get('/paquetes/{paquete}', function ($paquete) {
         return ('Este es el paquete: ' . $paquete);
     });
@@ -98,6 +107,7 @@ Route::middleware('auth')->group(function () {
     // });
     Route::get('/', [WhatsAppController::class, 'index']);
     Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
+
 });
 
 require __DIR__ . '/auth.php';

@@ -84,10 +84,13 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.store');
 
     //Chat WhatsApp
-    Route::post('dashboard/envia', [WhatsAppController::class,'envia'])->name('dashboard.envia');
-    Route::get('dashboard/webhook', [WhatsAppController::class, 'webhook']);
-    Route::post('dashboard/webhook', [WhatsAppController::class, 'recibe']);
-    // Route::get('/dashboard/reply/{notification}', [WhatsAppController::class, 'reply'])->name('dashboard.reply');
+    // Route::prefix('whatsapp')->group(function () {
+    //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
+    //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
+    //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
+    // });
+        Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
+
 });
 
 require __DIR__ . '/auth.php';

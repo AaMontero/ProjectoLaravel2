@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class WhatsApp extends Model
 {
     use HasFactory;
+
+    protected $table = 'whats_apps';
+
+    protected $fillable = [
+        'fecha_hora',
+        'mensaje_recibido',
+        'mensaje_enviado',
+        'id_wa',
+        'timestamp_wa',
+        'telefono_wa',
+    ];
+
+    protected $casts = [
+        'fecha_hora' => 'datetime', // Esto convierte automáticamente el valor en un objeto DateTime
+    ];
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaqueteController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 
 /*
@@ -74,6 +75,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])
         ->name('calendar.destroy');
 
+    //Rutas para los vendendores 
+    Route::get('vendedor/index', [VendedorController::class, 'index'])
+        ->name('vendedor.index');
+    Route::post('/vendedor', [VendedorController::class, 'store'])
+        ->name('vendedor.store');
+    Route::get('vendedor/agregar/{contrato}', [VendedorController::class, 'addContrato'])
+        ->name('vendedor.agregar');
 
     //Rutas para los contratos y clientes
     Route::get('contrato/index', [ContratoController::class, 'index'])
@@ -89,8 +97,7 @@ Route::middleware('auth')->group(function () {
     //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
     //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
-        Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
-
+    Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
 });
 
 require __DIR__ . '/auth.php';

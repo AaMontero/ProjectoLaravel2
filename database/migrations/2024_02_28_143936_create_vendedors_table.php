@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->String("nombres"); 
             $table->String("rol"); 
-            $table->decimal("porcentaje_ventas"); 
+            $table->String("porcentaje_ventas"); 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
         });
     }

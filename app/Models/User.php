@@ -57,6 +57,9 @@ class User extends Authenticatable
     public function contratos():HasMany{
         return $this->hasMany(Contrato::class); 
     }
+    public function vendedores():hasMany {
+        return $this->hasMany(Vendedor::class); 
+    }
     
 
 

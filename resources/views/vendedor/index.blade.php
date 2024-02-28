@@ -112,7 +112,9 @@
                                                 <?php
                                                 
                                                 ?>
-
+                                                <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
+                                                    {{ __('Editar Vendedor') }}
+                                                </x-dropdown-link>
 
 
                                             </x-slot>

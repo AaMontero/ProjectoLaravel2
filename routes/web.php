@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     Route::get('/paquetes/{paquete}', function ($paquete) {
         return ('Este es el paquete: ' . $paquete);
     });
@@ -71,6 +71,10 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.store');
     Route::get('vendedor/agregar/{contrato}', [VendedorController::class, 'addContrato'])
         ->name('vendedor.agregar');
+    Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
+        ->name('vendedor.edit');
+    Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
+        ->name('vendedor.update');
 
     //Rutas para los contratos y clientes
     Route::get('contrato/index', [ContratoController::class, 'index'])
@@ -79,6 +83,12 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.agregar');
     Route::post('/contrato', [ContratoController::class, 'store'])
         ->name('contrato.store');
+    Route::get('/contrato/{contrato}/addVendedor', [ContratoController::class, 'add_vendedor'])
+        ->name('contrato.vendedores');
+    Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
+        ->name('contrato.add_vendedores');
+
+
 
     //Chat WhatsApp
     // Route::prefix('whatsapp')->group(function () {
@@ -88,7 +98,6 @@ Route::middleware('auth')->group(function () {
     // });
     Route::get('/', [WhatsAppController::class, 'index']);
     Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
-
 });
 
 require __DIR__ . '/auth.php';

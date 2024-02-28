@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Vendedor;
 use Exception;
 use App\Models\Contrato;
 use Illuminate\Http\Request;
@@ -39,11 +40,32 @@ class ContratoController extends Controller
             "contratos" => Contrato::orderBy('created_at', 'desc')->get(),
         ]);
     }
+    public function add_vendedores_DB(Request $request)
+    {
+        $vendedor = $request->vendedor; 
+        $closer1 = $request->vendedor; 
+        $closer2 = $request->vendedor; 
+        $jefe_de_sala = $request->jefe_de_sala; 
+        $stringConcatenado = "Vendedor: " . $request->vendedor . ", Closer1: " . $request->closer1 . ", Closer2: " . $request->closer2 . ", Jefe de Sala: " . $request->jefe_de_sala;
+        file_put_contents("llega_vendedores",$stringConcatenado ); 
 
+
+
+    }
     public function add_contrato(Cliente $cliente)
     {
         return view('contratos.addNew', [
             "cliente" => $cliente
+        ]);
+    }
+    public function add_vendedor()
+    {
+        $vendedores = Vendedor::where('rol', "Vendedor");
+        file_put_contents("vendedoresActivos.txt",$vendedores); 
+        return view('contratos.contrato_vendedores', [
+            "vendedores" => Vendedor::where('rol', "Vendedor")->get(),
+            "closers" =>Vendedor::where('rol', "Closer")->get(),
+            "jefes_sala" => Vendedor::where('rol', "Jefe de Sala")->get(),
         ]);
     }
 
@@ -76,8 +98,8 @@ class ContratoController extends Controller
         $contienePagare = $request->contiene_pagare;
         $contieneCreditoDirecto = $request->contiene_credito_directo;
         $listaOtros = [];
-        $fomasPagoSinComillas = str_replace("[", "", $formasPago); 
-        $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas); 
+        $fomasPagoSinComillas = str_replace("[", "", $formasPago);
+        $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas);
         $formasPagoLista = explode(",", $fomasPagoSinComillas2);
         foreach ($formasPagoLista as $elem) {
             $elemDividido = explode(" ", $elem);
@@ -91,7 +113,7 @@ class ContratoController extends Controller
         foreach ($listaOtros as $item) {
             $StringOtrosFormaPago .= "[" . $item[0] . " , " . $item[1] . "]";
         }
-        str_replace('"','', $StringOtrosFormaPago); 
+        str_replace('"', '', $StringOtrosFormaPago);
         // Validación de datos
         $valida = (
             strlen($numCedula) == 10 &&
@@ -249,7 +271,7 @@ class ContratoController extends Controller
 
             $contrato->cliente_id = json_decode($persona, true)['id'];
             $request->user()->contratos()->create($contrato->toArray());
-            return redirect()->route('contrato.index')->with('success', 'Contrato creado exitosamente.');
+            return redirect()->route('contrato.add_vendedor')->with('success', 'Contrato creado exitosamente.');
         } else {
             $errores = $this->validarCampos(
                 $nombres,

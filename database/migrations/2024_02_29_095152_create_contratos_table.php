@@ -28,6 +28,10 @@ return new class extends Migration
                 $table->decimal('otro_valor', 10, 2)->nullable();
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
                 $table->foreignId('cliente_id')->constrained()->cascadeOnDelete(); 
+                $table->foreignId('vendedor_id')->nullable()->constrained(); 
+                $table->foreignId('closer_id')->nullable()->constrained('vendedors'); 
+                $table->foreignId('closer2_id')->nullable()->constrained('vendedors'); 
+                $table->foreignId('jefe_sala_id')->nullable()->constrained('vendedors');                 
                 $table->timestamps();
             });
     }

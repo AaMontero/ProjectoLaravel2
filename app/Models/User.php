@@ -57,5 +57,7 @@ class User extends Authenticatable
     public function contratos():HasMany{
         return $this->hasMany(Contrato::class); 
     }
+    
+
 
 }

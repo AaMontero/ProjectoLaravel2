@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +21,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $roles = Role::all();
+        return view('auth.register', compact('roles'));
     }
 
     /**
@@ -28,26 +30,30 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'rol' => ['required', 'string'],
-        ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'rol' => $request->rol,
-        ]);
+
+
+     public function store(Request $request): RedirectResponse
+     {
+         $request->validate([
+             'name' => ['required', 'string', 'max:255'],
+             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            
+         ]);
+     
+         $user = User::create([
+             'name' => $request->name,
+             'email' => $request->email,
+             'password' => Hash::make($request->password),
+         ]);
+         // Asignar el rol al usuario
+        $user->assignRole($request->rol);
 
         event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
-    }
+         Auth::login($user);
+     
+         return redirect(RouteServiceProvider::HOME);
+     }
+     
 }

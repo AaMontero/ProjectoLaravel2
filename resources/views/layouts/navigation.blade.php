@@ -15,6 +15,9 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
+
+                    @role('admin')
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
@@ -33,6 +36,29 @@
                     <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')">
                         {{ __('Vendedor') }}
                     </x-nav-link>
+                    @endrole
+
+                    
+                    @role('vendedor')
+               
+                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')">
+                        {{ __('Vendedor') }}
+                    </x-nav-link>
+                    @endrole
+
+                    @role('asesor')
+                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')">
+                        {{ __('Paquetes') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')">
+                        {{ __('Calendar') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')">
+                        {{ __('Clients') }}
+                    </x-nav-link>
+                 
+                    @endrole
+
 
                 </div>
             </div>

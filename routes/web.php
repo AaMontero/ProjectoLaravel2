@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])
         ->name('calendar.destroy');
 
-    //Rutas para los vendendores 
+    //Rutas para los vendendores
     Route::get('vendedor/index', [VendedorController::class, 'index'])
         ->name('vendedor.index');
     Route::post('/vendedor', [VendedorController::class, 'store'])
@@ -105,7 +105,7 @@ Route::middleware('auth')->group(function () {
     //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
     //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
-    Route::get('/', [WhatsAppController::class, 'index']);
+
     Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
 
 });

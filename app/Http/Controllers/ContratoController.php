@@ -40,35 +40,35 @@ class ContratoController extends Controller
             "contratos" => Contrato::orderBy('created_at', 'desc')->get(),
         ]);
     }
-    public function add_vendedores_DB(Request $request)
-    {
-        $vendedor = $request->vendedor; 
-        $closer1 = $request->vendedor; 
-        $closer2 = $request->vendedor; 
-        $jefe_de_sala = $request->jefe_de_sala; 
-        $stringConcatenado = "Vendedor: " . $request->vendedor . ", Closer1: " . $request->closer1 . ", Closer2: " . $request->closer2 . ", Jefe de Sala: " . $request->jefe_de_sala;
-        file_put_contents("llega_vendedores",$stringConcatenado ); 
 
-
-
-    }
     public function add_contrato(Cliente $cliente)
     {
         return view('contratos.addNew', [
             "cliente" => $cliente
         ]);
     }
-    public function add_vendedor()
+    public function add_vendedor($contratoId)
     {
-        $vendedores = Vendedor::where('rol', "Vendedor");
-        file_put_contents("vendedoresActivos.txt",$vendedores); 
+        file_put_contents("llegaAAddVendedor.txt",$contratoId); 
         return view('contratos.contrato_vendedores', [
+            "contratoId" => $contratoId,
             "vendedores" => Vendedor::where('rol', "Vendedor")->get(),
-            "closers" =>Vendedor::where('rol', "Closer")->get(),
+            "closers" => Vendedor::where('rol', "Closer")->get(),
             "jefes_sala" => Vendedor::where('rol', "Jefe de Sala")->get(),
         ]);
     }
-
+    public function add_vendedores_DB(Request $request)
+    {
+        $contratoId = $request->contratoId;
+        file_put_contents("contratoIDLLega.txt", $contratoId);
+        $contrato = Contrato::find($contratoId);
+        $contrato->vendedor_id = $request->vendedor;
+        $contrato->closer_id = $request->closer1;
+        $contrato->closer2_id = $request->closer2;
+        $contrato->jefe_sala_id = $request->jefe_de_sala;
+        $contrato->save();
+        return to_route('contrato.index');
+    }
     public function create(Request $request)
     {
     }
@@ -268,10 +268,13 @@ class ContratoController extends Controller
             $contrato->monto_contrato = $montoContrato;
             $contrato->bono_hospedaje_qori_loyalty = $bonoQory;
             $contrato->bono_hospedaje_internacional = $bonoQoryInt;
-
+            $contrato->contrato_id = "QT"; 
             $contrato->cliente_id = json_decode($persona, true)['id'];
-            $request->user()->contratos()->create($contrato->toArray());
-            return redirect()->route('contrato.add_vendedor')->with('success', 'Contrato creado exitosamente.');
+            $contratoIngresado = $request->user()->contratos()->create($contrato->toArray());
+            file_put_contents("urlAgregarVendedoresContrato.txt", $contratoIngresado);
+            return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
+
+            //return route('contrato.vendedores', ['contrato' => $contrato]);
         } else {
             $errores = $this->validarCampos(
                 $nombres,

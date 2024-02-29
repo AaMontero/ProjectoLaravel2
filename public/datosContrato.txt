@@ -1,1 +1,0 @@
-{"ubicacion_sala":"Plaza Argentina","anios_contrato":"2","monto_contrato":"1500","bono_hospedaje_qori_loyalty":true,"bono_hospedaje_internacional":true,"valor_total_credito_directo":"1500","meses_credito_directo":"12","abono_credito_directo":"150","valor_pagare":null,"fecha_fin_pagare":null,"cliente_id":1}

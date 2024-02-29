@@ -87,6 +87,11 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.edit');
     Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
         ->name('vendedor.update');
+    Route::get('/vendedor/{vendedor}/datosVendedor', [VendedorController::class, 'datosVendedor'])
+        ->name('vendedor.datos_vendedor');
+
+
+
 
     //Rutas para los contratos y clientes
     Route::get('contrato/index', [ContratoController::class, 'index'])
@@ -103,8 +108,13 @@ Route::middleware('auth')->group(function () {
 
 
     //Chat WhatsApp
-    Route::get('chat',[WhatsAppController::class, 'index']);
+    // Route::prefix('whatsapp')->group(function () {
+    //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
+    //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
+    //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
+    // });
 
+    Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
 });
 
 require __DIR__ . '/auth.php';

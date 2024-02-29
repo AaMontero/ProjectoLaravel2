@@ -1,1 +1,0 @@
-Nombres: Paula Romero12, Email: jhjaviersartica@hotmail.com, Apellidos: López Muñoz, Ciudad: Quito, Número de Cédula: 1234567890, Provincia: Pichincha, Ubicación de Sala: quito, Años de Contrato: 4, Monto de Contrato: 4000, Contiene Pagaré: , Contiene Crédito Directo: true

@@ -14,12 +14,17 @@ class VendedorController extends Controller
 
     {
         return view('vendedor.index', [
-            "vendedores" => Vendedor::with('contratos')->get(),
+            "vendedores" => Vendedor::with('pagosVendedor')->get(),
             "roles" => [
                 'Vendedor', 'Closer', 'Jefe de Sala'
             ],
             "porcentajes" => ['4% Fijo', 'Variable1', 'Variable2'],
         ]);
+    }
+
+
+    public function datosVendedor(){
+        return view('vendedor.detalles'); 
     }
 
     /**
@@ -30,9 +35,6 @@ class VendedorController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         file_put_contents("archivoVendedor.txt", $request->nombres);

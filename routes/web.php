@@ -106,7 +106,7 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.add_vendedores');
 
 
-
+    Route::get('chat', [WhatsAppController::class, 'index']);
     //Chat WhatsApp
     // Route::prefix('whatsapp')->group(function () {
     //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('whats_apps', function (Blueprint $table) {
             $table->id();
+            $table->string('id_numCliente', 15);
             $table->dateTime('fecha_hora')->default(now());
             $table->string('mensaje_recibido', 1000)->default('');
             $table->string('mensaje_enviado', 1000)->default('');

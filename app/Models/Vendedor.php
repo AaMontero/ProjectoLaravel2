@@ -11,8 +11,8 @@ class Vendedor extends Model
         'nombres', 'rol','porcentaje_ventas', 'user_id'
     ]; 
 
-    public function contratos(){
-        return $this->hasMany(Contrato::class, 'vendedor_id');
+    public function pagosVendedor   (){
+        return $this->hasMany(PagoVendedor::class);
     }
 
     use HasFactory;

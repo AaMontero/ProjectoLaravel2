@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Vendedor;
+use App\Models\PagoVendedor;
 use Exception;
 use App\Models\Contrato;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use DateTime;
 use DateInterval;
 use NumberFormatter;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\PagoVendedorController;
 
 $meses = array(
     1 => 'Enero',
@@ -48,8 +50,7 @@ class ContratoController extends Controller
         ]);
     }
     public function add_vendedor($contratoId)
-    {
-        file_put_contents("llegaAAddVendedor.txt",$contratoId); 
+    { 
         return view('contratos.contrato_vendedores', [
             "contratoId" => $contratoId,
             "vendedores" => Vendedor::where('rol', "Vendedor")->get(),
@@ -60,13 +61,24 @@ class ContratoController extends Controller
     public function add_vendedores_DB(Request $request)
     {
         $contratoId = $request->contratoId;
-        file_put_contents("contratoIDLLega.txt", $contratoId);
         $contrato = Contrato::find($contratoId);
         $contrato->vendedor_id = $request->vendedor;
         $contrato->closer_id = $request->closer1;
         $contrato->closer2_id = $request->closer2;
         $contrato->jefe_sala_id = $request->jefe_de_sala;
         $contrato->save();
+        $vendedor = Vendedor::find($request->vendedor); 
+        $closer1 = Vendedor::find($request->closer1); 
+        $closer2 = Vendedor::find($request->closer2); 
+        $jefeDeSala = Vendedor::find($request->jefe_de_sala); 
+        $controlerPV = new PagoVendedorController();
+
+        $utils = new Utils(); 
+        $utils->agregarPago($vendedor, $contrato, $controlerPV); 
+        $utils->agregarPago($closer1, $contrato, $controlerPV); 
+        $utils->agregarPago($closer2, $contrato, $controlerPV); 
+        $utils->agregarPago($jefeDeSala, $contrato, $controlerPV); 
+
         return to_route('contrato.index');
     }
     public function create(Request $request)
@@ -180,10 +192,6 @@ class ContratoController extends Controller
             $numCuotasCredDir = json_decode($_POST["cred_dir_num_cuotas"]);
             $montoCredDir = json_decode($_POST["cred_dir_valor"]);
             $abonoCredDir = json_decode($_POST["cred_dir_abono"]);
-            $montoFormaPago = $request->monto_forma_pago;
-            $formaPago = $request->forma_pago;
-
-
             if ($abonoCredDir == "") {
                 $abonoCredDir = 0;
             }
@@ -696,5 +704,17 @@ class DocumentGenerator
         $nombreArchivo = 'QTCheckList' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+    }
+}
+
+class Utils{
+    public function agregarPago($vendedor, $contrato, $controlerPV){
+         
+        $pagoVendedor = new PagoVendedor(); 
+        $pagoVendedor->valor_pago = $controlerPV->obtenerValorPago($vendedor->porcentaje_ventas); 
+        $pagoVendedor->fecha_pago = new DateTime('now');
+        $pagoVendedor->concepto = "Participación Contrato". $contrato->contrato_id;
+        $pagoVendedor->estado = "Pendiente"; 
+        $vendedor->pagosVendedor()->save($pagoVendedor);
     }
 }

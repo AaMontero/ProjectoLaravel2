@@ -34,7 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/', [WhatsAppController::class, 'index'])->name('dashboard');
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::get('/paquetes/{paquete}', function ($paquete) {
         return ('Este es el paquete: ' . $paquete);
     });
@@ -84,6 +87,11 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.edit');
     Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
         ->name('vendedor.update');
+    Route::get('/vendedor/{vendedor}/datosVendedor', [VendedorController::class, 'datosVendedor'])
+        ->name('vendedor.datos_vendedor');
+
+
+
 
     //Rutas para los contratos y clientes
     Route::get('contrato/index', [ContratoController::class, 'index'])
@@ -107,7 +115,6 @@ Route::middleware('auth')->group(function () {
     // });
 
     Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
-
 });
 
 require __DIR__ . '/auth.php';

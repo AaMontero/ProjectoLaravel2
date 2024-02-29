@@ -95,7 +95,7 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.agregar');
     Route::post('/contrato', [ContratoController::class, 'store'])
         ->name('contrato.store');
-    Route::get('/contrato/{contrato}/addVendedor', [ContratoController::class, 'add_vendedor'])
+    Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])
         ->name('contrato.vendedores');
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
         ->name('contrato.add_vendedores');

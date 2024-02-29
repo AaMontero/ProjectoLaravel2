@@ -5,7 +5,7 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-    @include('chat.chat')
+
 </x-app-layout>
 
 @include('layouts.footer')

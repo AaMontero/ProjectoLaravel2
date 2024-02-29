@@ -97,22 +97,6 @@
             }
             // Mostrar el área de chat
         }
-
-        function cargarMensajes(mensajes) {
-            console.log('Este mensaje es: ', mensajes);
-
-            var historialMensajes = document.getElementById("historial-mensajes");
-            // historialMensajes.innerHTML = ""; // Limpiar el historial antes de cargar mensajes
-
-            mensajes.forEach(function(mensaje) {
-                var claseMensaje = mensaje.remitente === "usuario" ? "mensaje-usuario" : "mensaje-sistema";
-                var nuevoMensaje = document.createElement("div");
-                nuevoMensaje.className = "mensaje " + claseMensaje; // Añadido 'mensaje' como clase base
-                nuevoMensaje.textContent = mensaje.texto;
-                historialMensajes.appendChild(nuevoMensaje);
-            });
-        }
-
         function cerrarChat() {
             var chat = document.getElementById('abrirchat');
             chat.style.display = 'none';

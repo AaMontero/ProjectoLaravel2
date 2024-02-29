@@ -39,17 +39,18 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        
+     
         <div class="mt-4">
-            <x-input-label for="rol" :value="__('Rol')" />
-        
-            <select id="rol" name="rol" class="block mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 transition duration-150 ease-in-out">
-                <option value="Administrador">Administrador</option>
-                <option value="Vendedor">Vendedor</option>
-                <option value="Asesor">Asesor</option>
+            <x-input-label for="rol" :value="__('Role')" />
+            <select name="rol" id="rol" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                @foreach($roles as $rol)
+                    <option value="{{ $rol->name }}">{{ $rol->name }}</option>
+                @endforeach
             </select>
-        
             <x-input-error :messages="$errors->get('rol')" class="mt-2" />
         </div>
+        
         
 
         <div class="flex items-center justify-end mt-4">

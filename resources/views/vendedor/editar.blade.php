@@ -3,15 +3,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Vendedores') }}
+                {{ __('Vendedores - Editar') }}
             </h2>
-            <div onclick="" class="cursor-pointer flex items-center">
-                <span class="mr-2">Agregar Nuevo Vendedor</span>
-                <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </div>
+            
         </div>
     </x-slot>
     <div class="py-2">
@@ -53,8 +47,7 @@
                         </select>
                         <x-input-error :messages="$errors->get('message')" />
                         <x-primary-button
-                            class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
-                            nuevo cliente</x-primary-button>
+                            class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Editar Cliente</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />
                 </div>
 

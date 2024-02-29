@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
             Schema::create('contratos', function (Blueprint $table) {
-                $table->id('contrato_id');
+                $table->id();
+                $table->string('contrato_id');
                 $table->string('ubicacion_sala');
                 $table->integer('anios_contrato');
                 $table->integer('monto_contrato'); 

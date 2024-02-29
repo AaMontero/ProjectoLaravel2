@@ -34,7 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/', [WhatsAppController::class, 'index'])->name('dashboard');
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::get('/paquetes/{paquete}', function ($paquete) {
         return ('Este es el paquete: ' . $paquete);
     });

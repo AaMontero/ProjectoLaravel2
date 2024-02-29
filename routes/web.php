@@ -34,7 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/', [WhatsAppController::class, 'index'])->name('dashboard');
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::get('/paquetes/{paquete}', function ($paquete) {
         return ('Este es el paquete: ' . $paquete);
     });
@@ -100,13 +103,7 @@ Route::middleware('auth')->group(function () {
 
 
     //Chat WhatsApp
-    // Route::prefix('whatsapp')->group(function () {
-    //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
-    //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
-    //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
-    // });
-
-    Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
+    Route::get('chat',[WhatsAppController::class, 'index']);
 
 });
 

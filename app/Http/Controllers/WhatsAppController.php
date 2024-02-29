@@ -11,7 +11,7 @@ class WhatsAppController extends Controller
 {
     public function index(){
         $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
-        return view('dashboard', ['mensajes' => $mensajes]);
+        return view('chat.chat', ['mensajes' => $mensajes]);
 
     }
     public function envia(Request $request)
@@ -58,7 +58,7 @@ class WhatsAppController extends Controller
         curl_close($curl);
 
 
-        return redirect()->route('dashboard');
+        return redirect()->route('chat.chat');
 
     }
     public function webhook(){
@@ -92,16 +92,15 @@ class WhatsAppController extends Controller
         //EXTRAEMOS EL MENSAJE DEL ARRAY
         $mensaje.="Mensaje:".$respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
         //GUARDAMOS EL MENSAJE Y LA RESPUESTA EN EL ARCHIVO text.txt
-        file_put_contents("text.txt", $mensaje);
+
     }
 
     public function notificacionMensaje(){
         $mensajes = WhatsApp::all();
 
-        $mensajesFiltrados = $mensajes->filter(function ($mensaje) {
-            return $mensaje->telefono_envia !== $mensaje->telefono_recibe;
-        });
-        return view('dashboard', compact('mensajes')); // Pasa los mensajes a la vista 'dashboard'
+
+
+        return view('chat.chat', compact('mensajes')); // Pasa los mensajes a la vista 'dashboard'
     }
 
     public function show(WhatsApp $whatsApp)

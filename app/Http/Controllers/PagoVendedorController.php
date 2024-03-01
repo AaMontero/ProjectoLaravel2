@@ -42,9 +42,14 @@ class PagoVendedorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PagoVendedor $pagoVendedor)
+    public function edit($idPago)
     {
-        //
+        $pagoEditar = PagoVendedor::find($idPago);
+        return view(
+            'pagoVendedor.editar',
+            ["pago" => $pagoEditar, 
+            "estados" => ["Pendiente","Pago"]]
+        );
     }
 
     /**
@@ -63,8 +68,9 @@ class PagoVendedorController extends Controller
         //
     }
 
-    public function obtenerValorPago($tipoPago){
+    public function obtenerValorPago($tipoPago)
+    {
         //Aqui va la lógica para obtener el pago
-        return 150.50; 
+        return 150.50;
     }
 }

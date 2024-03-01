@@ -8,6 +8,7 @@ use App\Http\Controllers\PaqueteController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
+use App\Http\Controllers\PagoVendedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,11 +86,17 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.agregar');
     Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
         ->name('vendedor.edit');
-    Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
-        ->name('vendedor.update');
     Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
         ->name('vendedor.datos_vendedor');
+    Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
+        ->name('vendedores.pagosPendientes');
 
+
+    //Rutas para Pagos de Vendedores 
+    Route::get('pagoVendedor/{idPago}/editar', [PagoVendedorController::class, 'edit'])
+        ->name('pagoVendedor.edit');
+    Route::put('pagoVendedor/update', [PagoVendedorController::class, 'update'])
+        ->name('pagoVendedor.update');
 
 
 

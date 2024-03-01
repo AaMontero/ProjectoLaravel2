@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vendedor;
 use App\Models\PagoVendedor;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 class VendedorController extends Controller
 {
     /**
@@ -30,25 +30,24 @@ class VendedorController extends Controller
         $listaPagos = PagoVendedor::where('vendedor_id', $vendedor->id)
             ->orderBy('fecha_pago', 'desc')
             ->get();
-        $listaPagosXMeses = [];
+        
         $listaMeses = [
             'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
         ];
-        foreach ($listaPagos as $pago) {
-            $fechaSeparada = explode("-", $pago->fecha_pago);
-            $mesNum = $fechaSeparada[1]; 
-            $anioNum = $fechaSeparada[0];
-            $mesLetras = $listaMeses[$mesNum]; 
-            $cadena = $mesLetras . " " . $anioNum;
-        }
+        $pagosAgrupados = $listaPagos->groupBy(function ($date) {
+            return Carbon::parse($date->fecha_pago)->format('Y-m'); // Agrupa por año y mes
+        });
+        
         $sumaPendientes = $listaPagos->where('estado', 'Pendiente')->sum('valor_pago');
         return view(
             'vendedor.detalles',
             [
                 'vendedor' => $vendedor,
                 'pagosVendedor' => $listaPagos,
-                'pagosPendientes' => $sumaPendientes
+                'pagosPendientes' => $sumaPendientes, 
+                'pagosXmeses' => $pagosAgrupados,
+                'mesesanio' => $listaMeses, 
             ]
         );
     }
@@ -63,7 +62,7 @@ class VendedorController extends Controller
 
     public function store(Request $request)
     {
-        file_put_contents("archivoVendedor.txt", $request->nombres);
+        
         $validated = $request->validate([
 
             'nombres' => ['required', 'min:5', 'max:255'],
@@ -113,4 +112,16 @@ class VendedorController extends Controller
     {
         //
     }
+
+    public function pagosPendientes(){
+        return view('vendedor.pagos_pendientes', [
+            'pagosPendientes' => PagoVendedor::where('estado', "Pendiente")
+            ->orderBy('fecha_pago', 'desc')
+            ->get(), 
+            'pagosEfectivos' => PagoVendedor::where('estado', "Pago")
+            ->orderBy('fecha_pago', 'desc')
+            ->get()
+        ]); 
+    }
+
 }

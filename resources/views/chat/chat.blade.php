@@ -88,7 +88,7 @@
 
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
-            console.log("El elemento es: " + elemento['mensaje_recibido']); 
+            console.log("El elemento es: " + elemento['mensaje_recibido']);
             elementoH1.textContent = "elemento['mensaje_recibido']";
             nuevoElemento.style.borderRadius = "5px";
             nuevoElemento.style.padding = "5px";
@@ -114,8 +114,8 @@
                     lista.removeChild(lista.firstChild);
                 }
             }
-            if (mensajes && mensajes.length > 0) {
 
+            if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
                     var nuevoElemento = document.createElement("h1");
                     nuevoElemento.textContent = elemento['mensaje_recibido'];

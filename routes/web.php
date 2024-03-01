@@ -121,7 +121,7 @@ Route::middleware('auth')->group(function () {
     //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
 
-    Route::get('dashboard/mensaje', [WhatsAppController::class, 'notificacionMensaje']);
+    Route::get('chat', [WhatsAppController::class, 'index']);
 });
 
 require __DIR__ . '/auth.php';

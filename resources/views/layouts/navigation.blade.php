@@ -18,22 +18,22 @@
 
 
                     @role('admin')
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="no-underline">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')">
+                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                         {{ __('Paquetes') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')">
+                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
                         {{ __('Calendar') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')">
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
                         {{ __('Clients') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')">
+                    </x-nav-link> 
+                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
                         {{ __('Contracts') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')">
+                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                         {{ __('Vendedor') }}
                     </x-nav-link>
                     @endrole
@@ -41,26 +41,23 @@
                     
                     @role('vendedor')
                
-                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')">
+                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                         {{ __('Vendedor') }}
                     </x-nav-link>
                     @endrole
 
                     @role('asesor')
-                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')">
+                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                         {{ __('Paquetes') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')">
+                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
                         {{ __('Calendar') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')">
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
                         {{ __('Clients') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')">
+                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
                         {{ __('Contracts') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')">
-                        {{ __('Vendedor') }}
                     </x-nav-link>
                     @endrole
 
@@ -96,17 +93,17 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link :href="route('profile.edit')" class="no-underline">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" class="no-underline">
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                this.closest('form').submit();" class="no-underline">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -133,22 +130,22 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="no-underline" >
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')">
+            <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                 {{ __('Paquetes') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')">
+            <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
                 {{ __('Calendar') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')">
+            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
                 {{ __('Clients') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')">
+            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
                 {{ __('Contracts') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')">
+            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
                 {{ __('Contracts') }}
             </x-responsive-nav-link>
             
@@ -163,15 +160,15 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('profile.edit')" class="no-underline">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="no-underline">
                     @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
+                    <x-responsive-nav-link :href="route('logout')" class="no-underline"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
@@ -184,3 +181,6 @@
    
     
 </nav>
+
+
+

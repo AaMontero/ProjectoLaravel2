@@ -6,6 +6,9 @@
         </h2>
     </x-slot>
 
-</x-app-layout>
+ {{-- @include('chat.chat')  --}}
+@yield('content')
 
+
+</x-app-layout>
 @include('layouts.footer')

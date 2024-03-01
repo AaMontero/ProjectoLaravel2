@@ -259,7 +259,7 @@
 
                                 <!-- Otros metodos de Pago-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Otro</th>
-                                
+
                                 <!--Id del Cliente-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Id Cliente</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Vendedor</th>
@@ -322,7 +322,6 @@
         </div>
     </div>
     {{-- Tabla para visualizar los contratos hechos  --}}
-    @include('layouts.footer')
 
 
     <script>
@@ -453,3 +452,4 @@
     </script>
 
 </x-app-layout>
+@include('layouts.footer')

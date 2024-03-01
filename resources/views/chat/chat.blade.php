@@ -58,10 +58,9 @@
                 <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                 <div id="telefono-chat"></div>
                 <div id="historial-mensajes">
-                    <!-- Aquí se mostrarán los mensajes -->
+                    <ul id="miLista"
+                        class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4 p-4 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
 
-                    <ul id="miLista">
-                        <!-- La lista se llenará con elementos h1 mediante JavaScript -->
                     </ul>
 
 
@@ -83,6 +82,29 @@
         var lista = document.getElementById("miLista");
         var telefonoEmisor = "593987411818"
 
+        function crearLineaChat(elemento) {
+
+
+
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h1");
+            console.log("El elemento es: " + elemento['mensaje_recibido']); 
+            elementoH1.textContent = "elemento['mensaje_recibido']";
+            nuevoElemento.style.borderRadius = "5px";
+            nuevoElemento.style.padding = "5px";
+            nuevoElemento.style.marginBottom = "8px";
+            nuevoElemento.style.backgroundColor = '#CCC9C9';
+            nuevoElemento.textContent = elemento['mensaje_recibido'];
+            nuevoElemento.style.color = 'blue';
+            nuevoElemento.innerHTML = elementoH1;
+            if (elemento['telefono_wa'] == telefonoEmisor) {
+                nuevoElemento.style.color = 'red'; // Cambiar a color rojo
+                nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
+            }
+            return nuevoElemento;
+
+        }
+
         function abrirchat(telefono, mensajes) {
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
@@ -103,7 +125,8 @@
                         nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
                     }
                     nuevoElemento.textContent = elemento['mensaje_recibido'];
-                    lista.appendChild(nuevoElemento);
+                    var elementoCreado = crearLineaChat(elemento);
+                    lista.appendChild(elementoCreado);
 
                 });
             }

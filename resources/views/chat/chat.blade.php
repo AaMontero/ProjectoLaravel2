@@ -58,12 +58,8 @@
                 <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                 <div id="telefono-chat"></div>
                 <div id="historial-mensajes">
-                    <ul id="miLista"
-                        class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4 p-4 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
-
+                    <ul id="miLista">
                     </ul>
-
-
                 </div>
                 <!-- Campo de texto para escribir -->
                 <form id="mensajeForm" class="mt-4">
@@ -84,25 +80,46 @@
 
         function crearLineaChat(elemento) {
 
-
-
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
-            console.log("El elemento es: " + elemento['mensaje_recibido']); 
-            elementoH1.textContent = "elemento['mensaje_recibido']";
-            nuevoElemento.style.borderRadius = "5px";
+            var horaElemento = document.createElement("p");
+
+            console.log("El elemento es: " + elemento['mensaje_recibido']);
+            elementoH1.textContent = elemento['mensaje_recibido'];
+
+            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+            horaElemento.style.fontSize = "12px"; // Tamaño de fuente para la hora
+            horaElemento.style.color = "#999"; // Color de la hora
+            horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaje
+
+
+            nuevoElemento.style.borderRadius = "10px";
             nuevoElemento.style.padding = "5px";
-            nuevoElemento.style.marginBottom = "8px";
+            nuevoElemento.style.marginBottom = "10px";
             nuevoElemento.style.backgroundColor = '#CCC9C9';
-            nuevoElemento.textContent = elemento['mensaje_recibido'];
+            nuevoElemento.style.fontFamily = "Arial, sans-serif";
+            nuevoElemento.style.fontSize = "20px"; // Tamaño de fuente
+            nuevoElemento.style.lineHeight = "1.5";
+
             nuevoElemento.style.color = 'blue';
-            nuevoElemento.innerHTML = elementoH1;
+            nuevoElemento.appendChild(elementoH1);
+            nuevoElemento.appendChild(horaElemento);
+
             if (elemento['telefono_wa'] == telefonoEmisor) {
                 nuevoElemento.style.color = 'red'; // Cambiar a color rojo
                 nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
+
             }
             return nuevoElemento;
 
+        }
+        function formatearHora(fechaHoraString) {
+            var fechaHora = new Date(fechaHoraString);
+            var hora = fechaHora.getHours();
+            var minutos = fechaHora.getMinutes();
+            var horaFormato = (hora < 10 ? '0' : '') + hora; // Agregar un cero delante si la hora es menor que 10
+            var minutosFormato = (minutos < 10 ? '0' : '') + minutos; // Agregar un cero delante si los minutos son menores que 10
+            return horaFormato + ':' + minutosFormato;
         }
 
         function abrirchat(telefono, mensajes) {

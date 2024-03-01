@@ -11,7 +11,7 @@ class Vendedor extends Model
         'nombres', 'rol','porcentaje_ventas', 'user_id'
     ]; 
 
-    public function pagosVendedor   (){
+    public function pagosVendedor(){
         return $this->hasMany(PagoVendedor::class);
     }
 

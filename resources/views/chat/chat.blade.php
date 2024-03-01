@@ -82,6 +82,7 @@
 
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
+<<<<<<< HEAD
             var horaElemento = document.createElement("p");
 
             console.log("El elemento es: " + elemento['mensaje_recibido']);
@@ -94,6 +95,11 @@
 
 
             nuevoElemento.style.borderRadius = "10px";
+=======
+            console.log("El elemento es: " + elemento['mensaje_recibido']);
+            elementoH1.textContent = "elemento['mensaje_recibido']";
+            nuevoElemento.style.borderRadius = "5px";
+>>>>>>> 048fe5654d705d30888aa0dd38ec3a8d23f3c9ef
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
             nuevoElemento.style.backgroundColor = '#CCC9C9';
@@ -131,8 +137,8 @@
                     lista.removeChild(lista.firstChild);
                 }
             }
-            if (mensajes && mensajes.length > 0) {
 
+            if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
                     var nuevoElemento = document.createElement("h1");
                     nuevoElemento.textContent = elemento['mensaje_recibido'];

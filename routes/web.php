@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.edit');
     Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
         ->name('vendedor.update');
-    Route::get('/vendedor/{vendedor}/datosVendedor', [VendedorController::class, 'datosVendedor'])
+    Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
         ->name('vendedor.datos_vendedor');
 
 

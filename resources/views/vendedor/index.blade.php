@@ -5,7 +5,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Vendedores') }}
             </h2>
-            <div onclick="" class="cursor-pointer flex items-center">
+            <div onclick="abrirAgregarVendedor()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar Nuevo Vendedor</span>
                 <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
                     stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -16,7 +16,7 @@
     </x-slot>
 
     <div class="py-2">
-        <div id="idAgregarVendedor" class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4" style=""> <!--"-->
+        <div id="idAgregarVendedor" class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4" style="display:none">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <!--Form para introducir un cliente-->
@@ -128,5 +128,15 @@
             </div>
         </div>
     </div>
+    <script>
+        function abrirAgregarVendedor() {
+            var VentanaAgregarContrato = document.getElementById("idAgregarVendedor");
+            if (VentanaAgregarContrato.style.display === 'none') {
+                VentanaAgregarContrato.style.display = 'block';
+            } else {
+                VentanaAgregarContrato.style.display = 'none';
+            }
+        }
+    </script>
     @include('layouts.footer')
 </x-app-layout>

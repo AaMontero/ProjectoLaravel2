@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vendedor;
+use App\Models\PagoVendedor;
 use Illuminate\Http\Request;
 
 class VendedorController extends Controller
@@ -23,8 +24,33 @@ class VendedorController extends Controller
     }
 
 
-    public function datosVendedor(){
-        return view('vendedor.detalles'); 
+    public function datosVendedor($vendedorId)
+    {
+        $vendedor = Vendedor::find($vendedorId);
+        $listaPagos = PagoVendedor::where('vendedor_id', $vendedor->id)
+            ->orderBy('fecha_pago', 'desc')
+            ->get();
+        $listaPagosXMeses = [];
+        $listaMeses = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        foreach ($listaPagos as $pago) {
+            $fechaSeparada = explode("-", $pago->fecha_pago);
+            $mesNum = $fechaSeparada[1]; 
+            $anioNum = $fechaSeparada[0];
+            $mesLetras = $listaMeses[$mesNum]; 
+            $cadena = $mesLetras . " " . $anioNum;
+        }
+        $sumaPendientes = $listaPagos->where('estado', 'Pendiente')->sum('valor_pago');
+        return view(
+            'vendedor.detalles',
+            [
+                'vendedor' => $vendedor,
+                'pagosVendedor' => $listaPagos,
+                'pagosPendientes' => $sumaPendientes
+            ]
+        );
     }
 
     /**

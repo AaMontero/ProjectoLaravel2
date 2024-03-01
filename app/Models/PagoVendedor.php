@@ -11,7 +11,6 @@ class PagoVendedor extends Model
         'valor_pago', 'fecha_pago', 'concepto', 'estado'
     ]; 
     use HasFactory;
-
     public function Vendedor(){
         return $this->belongsTo(Vendedor::class); 
     }

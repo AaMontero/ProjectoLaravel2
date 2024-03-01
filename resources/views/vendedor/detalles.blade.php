@@ -7,40 +7,66 @@
             </h2>
         </div>
     </x-slot>
-
-    <body class="bg-gray-100 p-6">
-
-        <div class="max-w-md mx-auto bg-white rounded-md shadow-md overflow-hidden">
-
-            <div class="bg-blue-500 text-white py-4 px-6">
-                <h2 class="text-2xl font-bold">Lista de Pagos</h2>
-            </div>
-
-            <div class="p-4">
-
-                <!-- Ejemplo de un pago -->
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-lg font-semibold">Pago de Julio</p>
-                        <p class="text-sm text-gray-500">Fecha: 2024-02-29</p>
-                    </div>
-                    <p class="text-lg font-bold">$500.00</p>
+    <div class = "border-4 mx-16 mt-4">
+        <div class="pt-2 pb-2 ">
+            <div class="bg-gray-100 pl-4 pt-4 rounded-md grid grid-cols-2 gap-4">
+                <div class = "pl-12">
+                    <p class="text-gray-700">
+                        <span class="text-lg font-bold mb-2">Nombres del Vendedor:</span>
+                        {{ $vendedor->nombres }}
+                    </p>
+                    <p class="text-gray-700">
+                        <span class="text-lg font-bold mb-2">Rol Actual:</span>
+                        {{ $vendedor->rol }}
+                    </p>
                 </div>
-
-                <!-- Ejemplo de otro pago -->
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-lg font-semibold">Pago de Agosto</p>
-                        <p class="text-sm text-gray-500">Fecha: 2024-03-31</p>
-                    </div>
-                    <p class="text-lg font-bold">$700.00</p>
+                <div class = "pl-12">
+                    <p class="text-gray-700">
+                        <span class="text-lg font-bold mb-2">Saldo Pendiente:</span>
+                        ${{ $pagosPendientes }}
+                    </p>
+                    <p class="text-gray-700">
+                        <span class="text-lg font-bold mb-2">Porcentaje de Ventas Actual:</span>
+                        {{ $vendedor->porcentaje_ventas }}
+                    </p>
                 </div>
-
-                <!-- Agrega más divs como este para cada pago -->
-
             </div>
-
         </div>
+    </div>
 
-    </body>
+    <div class="bg-gray-100 py-8 px-32">
+        <div class="bg-white rounded-md shadow-md overflow-hidden">
+            <div class="bg-blue-500 text-white py-2 px-6">
+                <h2 class="text-2xl font-bold text-center">Historial de Pagos</h2>
+            </div>
+            <div class = "py-2">
+                @foreach ($pagosVendedor as $pago)
+                    
+                    <div class="px-4 pt-1 ">
+                        <div class="flex items-center justify-between border-y-2">
+                            <div>
+                                <p class="text-xl font-semibold">{{ $pago->concepto }}</p>
+                                <p class="text-sm pl-4 text-gray-500">
+                                    <span class ="font-bold">Estado: </span>
+                                    {{ $pago->estado }}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-lg text-right font-bold ">${{ $pago->valor_pago }}</p>
+                                <p class="text-sm text-gray-500">
+                                    <span class ="font-bold">Fecha:</span>
+                                    {{ $pago->fecha_pago }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Agrega más divs como este para cada pago -->
+        </div>
+    </div>
+
+
+    </div>
 </x-app-layout>

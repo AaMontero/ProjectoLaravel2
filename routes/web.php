@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.edit');
     Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
         ->name('vendedor.update');
-    Route::get('/vendedor/{vendedor}/datosVendedor', [VendedorController::class, 'datosVendedor'])
+    Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
         ->name('vendedor.datos_vendedor');
 
 
@@ -106,7 +106,7 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.add_vendedores');
 
 
-
+    Route::get('chat', [WhatsAppController::class, 'index']);
     //Chat WhatsApp
     // Route::prefix('whatsapp')->group(function () {
     //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');

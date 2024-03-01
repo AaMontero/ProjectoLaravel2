@@ -38,7 +38,6 @@
                 </div>
             @endforeach
         </div>
-        <h1 id = "telefonoAbierto">asdadassd</h1>
         <!-- Chat -->
         <div id="abrirchat"
             class="relative w-1/2 bg-white dark:bg-slate-200 rounded-lg px-8 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
@@ -59,12 +58,12 @@
                 <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                 <div id="telefono-chat"></div>
                 <div id="historial-mensajes">
-                    <!-- Aquí se mostrarán los mensajes -->
-                    @foreach ($mensajes as $telefono)
-                        @if (isset($_POST['telefonoAbierto']) && $telefono->id_numCliente == $_POST['telefonoAbierto'])
-                            <h1>{{ $telefono['id'] }}</h1>
-                        @endif
-                    @endforeach
+                    <ul id="miLista"
+                        class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4 p-4 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+
+                    </ul>
+
+
                 </div>
                 <!-- Campo de texto para escribir -->
                 <form id="mensajeForm" class="mt-4">
@@ -76,30 +75,77 @@
                 </form>
             </div>
         </div>
-
     </div>
 
     <script>
+        // Obtener la lista
+        var lista = document.getElementById("miLista");
+        var telefonoEmisor = "593987411818"
+
+        function crearLineaChat(elemento) {
+
+
+
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h1");
+            console.log("El elemento es: " + elemento['mensaje_recibido']);
+            elementoH1.textContent = "elemento['mensaje_recibido']";
+            nuevoElemento.style.borderRadius = "5px";
+            nuevoElemento.style.padding = "5px";
+            nuevoElemento.style.marginBottom = "8px";
+            nuevoElemento.style.backgroundColor = '#CCC9C9';
+            nuevoElemento.textContent = elemento['mensaje_recibido'];
+            nuevoElemento.style.color = 'blue';
+            nuevoElemento.innerHTML = elementoH1;
+            if (elemento['telefono_wa'] == telefonoEmisor) {
+                nuevoElemento.style.color = 'red'; // Cambiar a color rojo
+                nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
+            }
+            return nuevoElemento;
+
+        }
+
         function abrirchat(telefono, mensajes) {
-            var activo = document.getElementById("telefonoAbierto").value = telefono.toString();
-            console.log("el valor activo es: " + activo);
-            console.log('Abriendo chat para el teléfono:', telefono);
+            var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
+
+            if (lista.childElementCount > 0) { // La lista tiene hijos, la vaciamos
+                while (lista.firstChild) {
+                    lista.removeChild(lista.firstChild);
+                }
+            }
+
+            if (mensajes && mensajes.length > 0) {
+                mensajes.forEach(function(elemento) {
+                    var nuevoElemento = document.createElement("h1");
+                    nuevoElemento.textContent = elemento['mensaje_recibido'];
+                    nuevoElemento.style.color = 'blue';
+                    if (elemento['telefono_wa'] == telefonoEmisor) {
+                        nuevoElemento.style.color = 'red'; // Cambiar a color rojo
+                        nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
+                    }
+                    nuevoElemento.textContent = elemento['mensaje_recibido'];
+                    var elementoCreado = crearLineaChat(elemento);
+                    lista.appendChild(elementoCreado);
+
+                });
+            }
+
             console.log('mensajes chat: ', mensajes);
 
             if (VentanaChat.style.display === 'none') {
-                //cargarMensajes(mensajes);
                 VentanaChat.style.display = 'block';
                 document.getElementById("telefono-chat").textContent = telefono;
-                //document.getElementById("historial-mensajes").textContent = mensajes;
             } else {
                 VentanaChat.style.display = 'none';
             }
-            // Mostrar el área de chat
         }
+
+
         function cerrarChat() {
             var chat = document.getElementById('abrirchat');
             chat.style.display = 'none';
+            document.getElementById("miLista").innerText = "";
         }
     </script>
 

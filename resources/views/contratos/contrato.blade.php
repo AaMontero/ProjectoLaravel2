@@ -261,7 +261,11 @@
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Otro</th>
                                 
                                 <!--Id del Cliente-->
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Cliente ID</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Id Cliente</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Vendedor</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 1 </th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 2</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Jefe Sala</th>
 
                             </tr>
                         </thead>
@@ -295,6 +299,18 @@
                                     <!--Id del Cliente-->
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $contrato->cliente_id }}
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $contrato->vendedor_id }}
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $contrato->closer_id }}
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $contrato->closer2_id }}
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $contrato->jefe_sala_id }}
                                     </td>
 
                                 </tr>

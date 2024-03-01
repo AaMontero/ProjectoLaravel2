@@ -39,7 +39,7 @@
                             @foreach ($closers as $closer)
                                 <option value="{{ $closer->id}}"
                                     {{ old('closer') == $closer ? 'selected' : '' }}>
-                                    {{ $vendedor->id. ".- ".  $closer->nombres }}
+                                    {{ $closer->id. ".- ".  $closer->nombres }}
                                 </option>
                             @endforeach
                         </select>
@@ -51,7 +51,7 @@
                                 {{ __('Seleccione el Closer 2') }}</option>
                             @foreach ($closers as $closer)
                                 <option value="{{ $closer->id }}" {{ old('closer') == $closer ? 'selected' : '' }}>
-                                    {{ $vendedor->id. ".- ".  $closer->nombres }}
+                                    {{ $closer->id. ".- ".  $closer->nombres }}
                                 </option>
                             @endforeach
                         </select>
@@ -64,7 +64,7 @@
                             @foreach ($jefes_sala as $jefeSala)
                                 <option value="{{$jefeSala->id }}"
                                     {{ old('jefeSala') == $jefeSala ? 'selected' : '' }}>
-                                    {{ $vendedor->id. ".- ".  $jefeSala->nombres }}
+                                    {{ $jefeSala->id. ".- ".  $jefeSala->nombres }}
                                 </option>
                             @endforeach
                         </select>

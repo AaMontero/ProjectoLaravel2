@@ -86,6 +86,7 @@
                                 <th class="py-2 px-4 border-b text-center ">Nombres</th>
                                 <th class="py-2 px-4 border-b text-center ">Rol</th>
                                 <th class="py-2 px-4 border-b text-center ">Porcentaje Ventas</th>
+                                <th class="py-2 px-4 border-b text-center ">Estado</th>
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
                             </tr>
                         </thead>
@@ -96,6 +97,7 @@
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->nombres }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->rol }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
+                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->activo == "1"? "Activo":"Inactivo"  }}</td>
                                     <td class = "text-right pr-6">
                                         <x-dropdown class="origin-top absolute ">
                                             <x-slot name="trigger">

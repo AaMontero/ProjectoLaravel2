@@ -6,6 +6,7 @@ use App\Models\Vendedor;
 use App\Models\PagoVendedor;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
 class VendedorController extends Controller
 {
     /**
@@ -30,7 +31,7 @@ class VendedorController extends Controller
         $listaPagos = PagoVendedor::where('vendedor_id', $vendedor->id)
             ->orderBy('fecha_pago', 'desc')
             ->get();
-        
+
         $listaMeses = [
             'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
@@ -38,16 +39,16 @@ class VendedorController extends Controller
         $pagosAgrupados = $listaPagos->groupBy(function ($date) {
             return Carbon::parse($date->fecha_pago)->format('Y-m'); // Agrupa por año y mes
         });
-        
+
         $sumaPendientes = $listaPagos->where('estado', 'Pendiente')->sum('valor_pago');
         return view(
             'vendedor.detalles',
             [
                 'vendedor' => $vendedor,
                 'pagosVendedor' => $listaPagos,
-                'pagosPendientes' => $sumaPendientes, 
+                'pagosPendientes' => $sumaPendientes,
                 'pagosXmeses' => $pagosAgrupados,
-                'mesesanio' => $listaMeses, 
+                'mesesanio' => $listaMeses,
             ]
         );
     }
@@ -62,7 +63,7 @@ class VendedorController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $validated = $request->validate([
 
             'nombres' => ['required', 'min:5', 'max:255'],
@@ -93,8 +94,8 @@ class VendedorController extends Controller
                 'Vendedor', 'Closer', 'Jefe de Sala'
             ],
             "porcentajes" => ['4% Fijo', 'Variable1', 'Variable2'],
+            "estados" => ['Activo', 'Inactivo']
         ]);
-        //
     }
 
     /**
@@ -103,6 +104,17 @@ class VendedorController extends Controller
     public function update(Request $request, Vendedor $vendedor)
     {
         //
+        $estadoReq =  $request->estado;
+        $vendedor->activo = $request->activo;
+        file_put_contents("estadoLlega.txt", $estadoReq);
+        $validated = $request->validate([
+            "nombres" => ['required', 'min:5', 'max:255'],
+            "rol" => ['required', 'min:5', 'max:255'],
+            "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
+            "activo" => ['required']
+        ]);
+        $vendedor->update($validated);
+        return to_route('vendedor.index');
     }
 
     /**
@@ -113,15 +125,15 @@ class VendedorController extends Controller
         //
     }
 
-    public function pagosPendientes(){
+    public function pagosPendientes()
+    {
         return view('vendedor.pagos_pendientes', [
             'pagosPendientes' => PagoVendedor::where('estado', "Pendiente")
-            ->orderBy('fecha_pago', 'desc')
-            ->get(), 
+                ->orderBy('fecha_pago', 'desc')
+                ->get(),
             'pagosEfectivos' => PagoVendedor::where('estado', "Pago")
-            ->orderBy('fecha_pago', 'desc')
-            ->get()
-        ]); 
+                ->orderBy('fecha_pago', 'desc')
+                ->get()
+        ]);
     }
-
 }

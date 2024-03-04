@@ -201,9 +201,7 @@
             nuevoElemento.style.textAlign = 'right';
             nuevoElemento.style.marginLeft = "300px";
             elementoH1.style.marginRight = '10px';
-            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
-
-
+            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)"; 
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);

@@ -79,27 +79,20 @@
         var telefonoEmisor = "593987411818"
 
         function crearLineaChat(elemento) {
-
+            
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
-<<<<<<< HEAD
             var horaElemento = document.createElement("p");
-
             console.log("El elemento es: " + elemento['mensaje_recibido']);
             elementoH1.textContent = elemento['mensaje_recibido'];
-
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             horaElemento.style.fontSize = "12px"; // Tamaño de fuente para la hora
             horaElemento.style.color = "#999"; // Color de la hora
-            horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaje
-
-
+            horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaj
             nuevoElemento.style.borderRadius = "10px";
-=======
             console.log("El elemento es: " + elemento['mensaje_recibido']);
             elementoH1.textContent = "elemento['mensaje_recibido']";
             nuevoElemento.style.borderRadius = "5px";
->>>>>>> 048fe5654d705d30888aa0dd38ec3a8d23f3c9ef
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
             nuevoElemento.style.backgroundColor = '#CCC9C9';

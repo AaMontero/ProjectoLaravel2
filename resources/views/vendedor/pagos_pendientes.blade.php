@@ -48,10 +48,10 @@
                                                 <?php
                                                 
                                                 ?>
-                                                <x-dropdown-link :href="route('pagoVendedor.edit', $pago->id)">
+                                                <x-dropdown-link :href="route('pagoVendedor.edit', $pago)">
                                                     {{ __('Editar Pago') }}
                                                 </x-dropdown-link>
-                                                <x-dropdown-link :href="route('pagoVendedor.edit', $pago->id)">
+                                                <x-dropdown-link :href="route('pagoVendedor.pagar', $pago)">
                                                     {{ __('Pago Realizado') }}
                                                 </x-dropdown-link>
 
@@ -105,10 +105,9 @@
                                             </x-slot>
                                             <x-slot name="content">
                                                 <?php
-                                                
                                                 ?>
-                                                <x-dropdown-link :href="route('vendedor.edit', $pago)">
-                                                    {{ __('Editar Vendedor') }}
+                                                <x-dropdown-link :href="route('pagoVendedor.revertirPago', $pago)">
+                                                    {{ __('Deshacer Pago') }}
                                                 </x-dropdown-link>
 
 

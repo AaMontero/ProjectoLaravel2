@@ -93,10 +93,14 @@ Route::middleware('auth')->group(function () {
 
 
     //Rutas para Pagos de Vendedores 
-    Route::get('pagoVendedor/{idPago}/editar', [PagoVendedorController::class, 'edit'])
+    Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
         ->name('pagoVendedor.edit');
-    Route::put('pagoVendedor/update', [PagoVendedorController::class, 'update'])
+    Route::put('pagoVendedor/{pago}', [PagoVendedorController::class, 'update'])
         ->name('pagoVendedor.update');
+    Route::get('pagoVendedores/pagoRealizado/{pago}', [PagoVendedorController::class, 'pagado'])
+        ->name('pagoVendedor.pagar');
+    Route::get('pagoVendedores/revertirPago/{pago}', [PagoVendedorController::class, 'quitarPagado'])
+        ->name('pagoVendedor.revertirPago');
 
 
 

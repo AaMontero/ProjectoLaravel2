@@ -15,13 +15,13 @@
                     <form method="POST" action = "{{ route('pagoVendedor.update', $pago) }} ">
                         @csrf @method('PUT')
                         <label class="mt-1 p-1 ml-4 font-bold">Valor de Pago:</label>
-                        <input type="text" name="valor_pago"
+                        <input type="number" name="valor_pago"
                             class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Editar valor del Pago') }}"
                             value="{{ old('valor_pago', $pago->valor_pago) }}">
 
                         <label class="mt-1 p-0 ml-4 font-bold">Fecha de Pago:</label>
-                        <input type="text" name="fecha_pago"
+                        <input type="date" name="fecha_pago"
                             class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese la Fecha de Pago') }}"
                             value="{{ old('fecha_pago', $pago->fecha_pago) }}">

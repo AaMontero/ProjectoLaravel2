@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -48,10 +48,10 @@ class ClienteController extends Controller
             'ciudad' => ['required', 'min:5', 'max:255'],
             'provincia' => ['required', 'min:5', 'max:255'],
             'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
-            'fecha_nacimiento' => ['required', 'date', 'before_or_equal:' . 
-            now()->subYears(18)->format('Y-m-d')],
+            'fecha_nacimiento' => ['required', 'date', 'before_or_equal:' .
+                now()->subYears(18)->format('Y-m-d')],
 
-            
+
         ]);
         $clienteUser = $this->obtenerNick($request->nombres, $request->apellidos);
         $validated['cliente_user'] = $clienteUser;
@@ -100,9 +100,8 @@ class ClienteController extends Controller
             'provincia' => ['required', 'min:5', 'max:255'],
             'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
         ]);
-        //$request->user()->clientes()->update($validated);
         $cliente->update($validated);
-        return to_route('clientes.index');
+        return to_route('vendedores.pagosPendientes');
     }
 
     /**

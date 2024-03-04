@@ -8,6 +8,7 @@ use App\Http\Controllers\PaqueteController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
+use App\Http\Controllers\PagoVendedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,17 +86,28 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.agregar');
     Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
         ->name('vendedor.edit');
-    Route::put('vendedor/{vendedor}', [ClienteController::class, 'update'])
-        ->name('vendedor.update');
     Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
         ->name('vendedor.datos_vendedor');
+    Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
+        ->name('vendedores.pagosPendientes');
 
+
+    //Rutas para Pagos de Vendedores 
+    Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
+        ->name('pagoVendedor.edit');
+    Route::put('pagoVendedor/{pago}', [PagoVendedorController::class, 'update'])
+        ->name('pagoVendedor.update');
+    Route::get('pagoVendedores/pagoRealizado/{pago}', [PagoVendedorController::class, 'pagado'])
+        ->name('pagoVendedor.pagar');
+    Route::get('pagoVendedores/revertirPago/{pago}', [PagoVendedorController::class, 'quitarPagado'])
+        ->name('pagoVendedor.revertirPago');
 
 
 
     //Rutas para los contratos y clientes
-    Route::get('contrato/index', [ContratoController::class, 'index'])
-        ->name('contrato.index');
+    Route::get('/contrato/index/', [ContratoController::class, 'index'])->name('contrato.index');
+
+
     Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
         ->name('contrato.agregar');
     Route::post('/contrato', [ContratoController::class, 'store'])
@@ -115,6 +127,11 @@ Route::middleware('auth')->group(function () {
     // });
 
     Route::get('chat', [WhatsAppController::class, 'index']);
+
+        // routes/web.php
+    Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
+
+
 });
 
 require __DIR__ . '/auth.php';

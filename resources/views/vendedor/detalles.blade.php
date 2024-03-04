@@ -39,27 +39,32 @@
             <div class="bg-blue-500 text-white py-2 px-6">
                 <h2 class="text-2xl font-bold text-center">Historial de Pagos</h2>
             </div>
-            <div class = "py-2">
-                @foreach ($pagosVendedor as $pago)
-                    
-                    <div class="px-4 pt-1 ">
-                        <div class="flex items-center justify-between border-y-2">
-                            <div>
-                                <p class="text-xl font-semibold">{{ $pago->concepto }}</p>
-                                <p class="text-sm pl-4 text-gray-500">
-                                    <span class ="font-bold">Estado: </span>
-                                    {{ $pago->estado }}
-                                </p>
-                            </div>
-                            <div>
-                                <p class="text-lg text-right font-bold ">${{ $pago->valor_pago }}</p>
-                                <p class="text-sm text-gray-500">
-                                    <span class ="font-bold">Fecha:</span>
-                                    {{ $pago->fecha_pago }}
-                                </p>
+
+            <div class="py-2">
+                @foreach ($pagosXmeses as $mes => $pagosPorMes)
+                    <h2 class="text-lg text-center font-semibold mt-8">
+                        {{$mesesanio[intval(explode("-",$mes)[1])]}} - {{ explode("-",$mes)[0]}} </h2>
+
+                    @foreach ($pagosPorMes as $pago)
+                        <div class="px-4">
+                            <div class="flex items-center justify-between border-y-2 mt-1">
+                                <div class = "">
+                                    <label class="text-xl font-semibold">{{ $pago->concepto }}</label>
+                                    <p class="text-sm pl-4 text-gray-500">
+                                        <span class="font-bold">Estado: </span>
+                                        {{ $pago->estado }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-lg text-right font-bold ">${{ $pago->valor_pago }}</p>
+                                    <label class="text-sm text-gray-500">
+                                        <span class="font-bold">Fecha:</span>
+                                        {{ $pago->fecha_pago }}
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                 @endforeach
             </div>
 

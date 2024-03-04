@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"otro_comentario":"[\"$1000 , visa\"]","ubicacion_sala":"Lata","anios_contrato":"3","monto_contrato":"1000","bono_hospedaje_qori_loyalty":true,"bono_hospedaje_internacional":false,"contrato_id":"QT","cliente_id":7,"user_id":1,"updated_at":"2024-03-01T20:36:48.000000Z","created_at":"2024-03-01T20:36:48.000000Z","id":6}
+=======
+{"otro_comentario":"[\"$3000 , visa\"]","ubicacion_sala":"Edificio Urban Plaza","anios_contrato":"4","monto_contrato":"3000","bono_hospedaje_qori_loyalty":true,"bono_hospedaje_internacional":false,"contrato_id":"QT","cliente_id":2,"user_id":1,"updated_at":"2024-03-01T20:30:48.000000Z","created_at":"2024-03-01T20:30:48.000000Z","id":1}
+>>>>>>> 6daced48882a23a8adc9d194cc2ac62506c506f6

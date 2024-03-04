@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"otro_comentario":"[\"$4000 , visa\"]","ubicacion_sala":"quito","anios_contrato":"4","monto_contrato":"4000","bono_hospedaje_qori_loyalty":true,"bono_hospedaje_internacional":false,"contrato_id":"QT","cliente_id":2,"user_id":1,"updated_at":"2024-03-01T20:07:58.000000Z","created_at":"2024-03-01T20:07:58.000000Z","id":2}
-=======
-{"valor_pagare":4000,"fecha_fin_pagare":"2026-03-01","valor_total_credito_directo":"5000","meses_credito_directo":"24","abono_credito_directo":"1000","otro_comentario":"","ubicacion_sala":"Quito","anios_contrato":"3","monto_contrato":"5000","bono_hospedaje_qori_loyalty":true,"bono_hospedaje_internacional":true,"contrato_id":"QT","cliente_id":1,"user_id":1,"updated_at":"2024-03-01T15:01:30.000000Z","created_at":"2024-03-01T15:01:30.000000Z","id":1}
->>>>>>> 048fe5654d705d30888aa0dd38ec3a8d23f3c9ef
+{"otro_comentario":"[\"$1000 , visa\"]","ubicacion_sala":"Lata","anios_contrato":"3","monto_contrato":"1000","bono_hospedaje_qori_loyalty":true,"bono_hospedaje_internacional":false,"contrato_id":"QT","cliente_id":7,"user_id":1,"updated_at":"2024-03-01T20:36:48.000000Z","created_at":"2024-03-01T20:36:48.000000Z","id":6}

@@ -1,1 +1,0 @@
-{"id":9,"created_at":null,"updated_at":null,"valor_pago":"210.00","fecha_pago":"2024-08-01","concepto":"Participaci\u00f3n ContratoQT","estado":"Pendiente","vendedor_id":2}

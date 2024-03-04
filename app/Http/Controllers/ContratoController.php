@@ -50,7 +50,7 @@ class ContratoController extends Controller
         ]);
     }
     public function add_vendedor($contratoId)
-    { 
+    {
         return view('contratos.contrato_vendedores', [
             "contratoId" => $contratoId,
             "vendedores" => Vendedor::where('rol', "Vendedor")->get(),
@@ -67,17 +67,17 @@ class ContratoController extends Controller
         $contrato->closer2_id = $request->closer2;
         $contrato->jefe_sala_id = $request->jefe_de_sala;
         $contrato->save();
-        $vendedor = Vendedor::find($request->vendedor); 
-        $closer1 = Vendedor::find($request->closer1); 
-        $closer2 = Vendedor::find($request->closer2); 
-        $jefeDeSala = Vendedor::find($request->jefe_de_sala); 
+        $vendedor = Vendedor::find($request->vendedor);
+        $closer1 = Vendedor::find($request->closer1);
+        $closer2 = Vendedor::find($request->closer2);
+        $jefeDeSala = Vendedor::find($request->jefe_de_sala);
         $controlerPV = new PagoVendedorController();
 
-        $utils = new Utils(); 
-        $utils->agregarPago($vendedor, $contrato, $controlerPV); 
-        $utils->agregarPago($closer1, $contrato, $controlerPV); 
-        $utils->agregarPago($closer2, $contrato, $controlerPV); 
-        $utils->agregarPago($jefeDeSala, $contrato, $controlerPV); 
+        $utils = new Utils();
+        $utils->agregarPago($vendedor, $contrato, $controlerPV);
+        $utils->agregarPago($closer1, $contrato, $controlerPV);
+        $utils->agregarPago($closer2, $contrato, $controlerPV);
+        $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
 
         return to_route('contrato.index');
     }
@@ -94,7 +94,6 @@ class ContratoController extends Controller
         $bonoQory = $bonoQoryInt = $contienePagare = $contieneCreditoDirecto = false;
         date_default_timezone_set('America/Guayaquil');
         $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date("Y-m-d");
-        // Variable para rastrear errores
         $formasPago = $request->input('formas_pago');
         $tieneUsuario = $request->usuario_previo;
         $numero_sucesivo = $request->input('numero_sucesivo');
@@ -235,19 +234,24 @@ class ContratoController extends Controller
 
             //Creación del cliente            
             if ($tieneUsuario == "") {
-                $cliente = new Cliente();
-                $cliente->nombres = $nombres;
-                $cliente->email = $email;
-                $cliente->apellidos = $apellidos;
-                $cliente->ciudad = $ciudad;
-                $cliente->cedula = $numCedula;
-                $cliente->provincia = $provincia;
-                $cliente->numTelefonico = "";
-                $cliente->fecha_nacimiento = null;
-                $cliente->activo = true;
                 $controler = new ClienteController();
-                $cliente->cliente_user =  $controler->obtenerNick($nombres, $apellidos);
-                $persona = $request->user()->clientes()->create($cliente->toArray());
+                $clienteExiste = Cliente::where('cedula', $numCedula);
+                if (isset($clienteExiste)) {
+                    $persona = $clienteExiste->get();
+                } else {
+                    $cliente = new Cliente();
+                    $cliente->nombres = $nombres;
+                    $cliente->email = $email;
+                    $cliente->apellidos = $apellidos;
+                    $cliente->ciudad = $ciudad;
+                    $cliente->cedula = $numCedula;
+                    $cliente->provincia = $provincia;
+                    $cliente->numTelefonico = "";
+                    $cliente->fecha_nacimiento = null;
+                    $cliente->activo = true;
+                    $cliente->cliente_user =  $controler->obtenerNick($nombres, $apellidos);
+                    $persona = $request->user()->clientes()->create($cliente->toArray());
+                }
             } else {
                 $persona = Cliente::where('id', $tieneUsuario)->get();
             }
@@ -276,10 +280,19 @@ class ContratoController extends Controller
             $contrato->monto_contrato = $montoContrato;
             $contrato->bono_hospedaje_qori_loyalty = $bonoQory;
             $contrato->bono_hospedaje_internacional = $bonoQoryInt;
-            $contrato->contrato_id = "QT"; 
-            $contrato->cliente_id = json_decode($persona, true)['id'];
+            $contrato->contrato_id = "QT";
+            $personaArray = json_decode($persona, true);
+
+            if (isset($personaArray['id'])) {
+                $contrato->cliente_id = $personaArray['id'];
+            } elseif (isset($personaArray[0]['id'])) {
+                $contrato->cliente_id = $personaArray[0]['id'];
+            } else {
+                $contrato->cliente_id = null;
+            }
+
             $contratoIngresado = $request->user()->contratos()->create($contrato->toArray());
-            file_put_contents("urlAgregarVendedoresContrato.txt", $contratoIngresado);
+
             return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
 
             //return route('contrato.vendedores', ['contrato' => $contrato]);
@@ -422,16 +435,13 @@ class DocumentGenerator
             if (!mkdir($rutaCarpeta, 0777, true)) {
                 throw new Exception("Error al crear la carpeta"); // Lanza una excepción en caso de error
             }
-        } else {
-            return $rutaCarpeta;
         }
+        return $rutaCarpeta;
     }
 
     public function generarDiferimiento($contrato, $numero_sucesivo, $ciudad, $numCedula, $fechaActual, $nombre_cliente, $rutaSaveContrato)
     {
         global $meses;
-
-
         list($ano, $mes, $dia) = explode('-', $fechaActual);
         $fechaFormateada = $dia . " de " . $meses[intval($mes)]  . " del " . $ano;
         $templateWord = new TemplateProcessor(resource_path("docs/DIFERIMIENTO QORIT.docx"));
@@ -707,14 +717,16 @@ class DocumentGenerator
     }
 }
 
-class Utils{
-    public function agregarPago($vendedor, $contrato, $controlerPV){
-         
-        $pagoVendedor = new PagoVendedor(); 
-        $pagoVendedor->valor_pago = $controlerPV->obtenerValorPago($vendedor->porcentaje_ventas); 
+class Utils
+{
+    public function agregarPago($vendedor, $contrato, $controlerPV)
+    {
+
+        $pagoVendedor = new PagoVendedor();
+        $pagoVendedor->valor_pago = $controlerPV->obtenerValorPago($vendedor->porcentaje_ventas);
         $pagoVendedor->fecha_pago = new DateTime('now');
-        $pagoVendedor->concepto = "Participación Contrato". $contrato->contrato_id;
-        $pagoVendedor->estado = "Pendiente"; 
+        $pagoVendedor->concepto = "Participación Contrato" . $contrato->contrato_id;
+        $pagoVendedor->estado = "Pendiente";
         $vendedor->pagosVendedor()->save($pagoVendedor);
     }
 }

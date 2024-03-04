@@ -99,6 +99,7 @@ class ClienteController extends Controller
             'ciudad' => ['required', 'min:5', 'max:255'],
             'provincia' => ['required', 'min:5', 'max:255'],
             'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
+            'fecha_nacimiento' => ['required', 'date'],
         ]);
         $cliente->update($validated);
         return to_route('vendedores.pagosPendientes');

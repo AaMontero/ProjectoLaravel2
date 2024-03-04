@@ -40,8 +40,8 @@
         </div>
         <!-- Chat -->
         <div id="abrirchat"
-            class="relative w-1/2 bg-white dark:bg-slate-200 rounded-lg px-8 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
-            style="border-color: #4a5568; display:none;">
+            class="relative w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
+            style="display:none;">
             <h3 class="text-xl font-semibold mb-4">Chat</h3>
             <button onclick="cerrarChat()" class="absolute top-6 right-4 text-gray-600 hover:text-gray-800">
                 <!-- Icono de cierre (X) -->
@@ -53,65 +53,31 @@
             </button>
 
             <!-- Historial de mensajes -->
-            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-6 py-8" style="border-color: #4a5568;">
+            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-6 space-y-4" >
                 <!-- Historial de mensajes -->
+                <div class="flex items-center bg-gray-200 p-4 rounded-lg shadow-md mt-4">
                 <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                <div id="telefono-chat"></div>
-                <div id="historial-mensajes">
+                <div id="telefono-chat" class="ml-4"></div>
+                </div>
+                <div id="historial-mensajes" class="bg-gray-200 p-4 rounded-lg mb-4">
                     <ul id="miLista">
                     </ul>
                 </div>
                 <!-- Campo de texto para escribir -->
                 <form id="mensajeForm" class="mt-4">
                     <input type="text" id="mensajeInput"
-                        class="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                        placeholder="Escribe un mensaje...">
+                        class="w-4/5 border rounded-md py-2 px-5 focus:outline-none focus:border-blue-500"
+                        placeholder="Escribe un mensaje..." >
                     <button type="submit"
-                        class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
+                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Obtener la lista
-        var lista = document.getElementById("miLista");
-        var telefonoEmisor = "593987411818"
 
-        function crearLineaChat(elemento) {
-            
-            var nuevoElemento = document.createElement("div");
-            var elementoH1 = document.createElement("h1");
-            var horaElemento = document.createElement("p");
-            console.log("El elemento es: " + elemento['mensaje_recibido']);
-            elementoH1.textContent = elemento['mensaje_recibido'];
-            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            horaElemento.style.fontSize = "12px"; // Tamaño de fuente para la hora
-            horaElemento.style.color = "#999"; // Color de la hora
-            horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaj
-            nuevoElemento.style.borderRadius = "10px";
-            console.log("El elemento es: " + elemento['mensaje_recibido']);
-            elementoH1.textContent = "elemento['mensaje_recibido']";
-            nuevoElemento.style.borderRadius = "5px";
-            nuevoElemento.style.padding = "5px";
-            nuevoElemento.style.marginBottom = "10px";
-            nuevoElemento.style.backgroundColor = '#CCC9C9';
-            nuevoElemento.style.fontFamily = "Arial, sans-serif";
-            nuevoElemento.style.fontSize = "20px"; // Tamaño de fuente
-            nuevoElemento.style.lineHeight = "1.5";
 
-            nuevoElemento.style.color = 'blue';
-            nuevoElemento.appendChild(elementoH1);
-            nuevoElemento.appendChild(horaElemento);
-
-            if (elemento['telefono_wa'] == telefonoEmisor) {
-                nuevoElemento.style.color = 'red'; // Cambiar a color rojo
-                nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
-
-            }
-            return nuevoElemento;
-
-        }
         function formatearHora(fechaHoraString) {
             var fechaHora = new Date(fechaHoraString);
             var hora = fechaHora.getHours();
@@ -120,6 +86,131 @@
             var minutosFormato = (minutos < 10 ? '0' : '') + minutos; // Agregar un cero delante si los minutos son menores que 10
             return horaFormato + ':' + minutosFormato;
         }
+        // Obtener la lista
+        var lista = document.getElementById("miLista");
+        var telefonoEmisor = "593987411818";
+
+
+
+        // function crearLineaChat(elemento) {
+
+        //     var nuevoElemento = document.createElement("div");
+        //     var elementoH1 = document.createElement("h1");
+        //     var horaElemento = document.createElement("p");
+        //     var otroElemento = document.createElement("div");
+
+        //     console.log("El elemento es: " + elemento['mensaje_recibido']);
+        //     console.log("el telefono es: "+ elemento['telefono_wa']);
+
+        //     // elementoH1.textContent = elemento['mensaje_recibido'];
+        //     horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+        //     //Estilos de la fecha
+        //     horaElemento.style.fontSize = "12px"; // Tamaño de fuente para la hora
+        //     horaElemento.style.color = "#999"; // Color de la hora
+        //     horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaje
+        //     // Estilos del div y del h1
+        //     nuevoElemento.style.border = "1px solid black";
+        //     nuevoElemento.style.borderRadius = "10px"
+        //     nuevoElemento.style.borderRadius = "5px";
+        //     nuevoElemento.style.padding = "5px";
+        //     nuevoElemento.style.marginBottom = "10px";
+        //     nuevoElemento.style.backgroundColor = '#CCC9C9';
+        //     nuevoElemento.style.fontFamily = "Arial, sans-serif";
+        //     nuevoElemento.style.fontSize = "20px"; // Tamaño de fuente
+        //     nuevoElemento.style.lineHeight = "1.5";
+        //     nuevoElemento.style.marginRight = "50px";
+        //     nuevoElemento.style.marginLeft = "100px"
+        //     nuevoElemento.style.backgroundColor = "transparent";
+
+        //     otroElemento.style.color = "white";
+
+        //     // Aplicar estilos al div del mensaje recibido
+        //      // Margen inferior del div
+
+        //     nuevoElemento.appendChild(elementoH1);
+        //     nuevoElemento.appendChild(horaElemento);
+
+        //     if (elemento['telefono_wa'] == telefonoEmisor) {
+        //         nuevoElemento.style.color = 'red'; // Cambiar a color rojo
+        //         nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
+
+        //     }
+        //     return nuevoElemento;
+        //     return otroElemento;
+
+        // }
+        function crearMensajeRecibido(elemento) {
+
+            var divGrande = document.createElement("div");
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h1");
+            var horaElemento = document.createElement("p");
+
+            console.log("El elemento es: " + elemento['mensaje_recibido']);
+            console.log("el telefono es: "+ elemento['telefono_wa']);
+
+            elementoH1.textContent = elemento['mensaje_recibido'];
+            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+            //Estilos de la fecha
+            horaElemento.style.fontSize = "12px";
+            horaElemento.style.color = "#999";
+            horaElemento.style.marginTop = "6px";
+            // Estilos del div y del h1
+            nuevoElemento.style.borderRadius = "10px";
+            nuevoElemento.style.padding = "5px";
+            nuevoElemento.style.marginBottom = "10px";
+            nuevoElemento.style.backgroundColor = '#CCC9C9';
+            nuevoElemento.style.fontFamily = "Arial, sans-serif";
+            nuevoElemento.style.fontSize = "20px";
+            nuevoElemento.style.lineHeight = "1";
+            nuevoElemento.style.color = 'Black';
+            nuevoElemento.style.textAlign = 'justify';
+            nuevoElemento.style.marginRight = "100px";
+            elementoH1.style.marginLeft = '10px';
+            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+
+
+            nuevoElemento.appendChild(elementoH1);
+            nuevoElemento.appendChild(horaElemento);
+            divGrande.appendChild(nuevoElemento);
+
+            return divGrande;
+        }
+
+        function crearMensajeEnviado(elemento) {
+            var divGrande = document.createElement("div");
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h1");
+            var horaElemento = document.createElement("p");
+
+            elementoH1.textContent = elemento['mensaje_recibido'];
+            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+            //Estilos de la fecha
+            horaElemento.style.fontSize = '12px';
+            horaElemento.style.color = '#999';
+            horaElemento.style.marginTop = "6px";
+            // Estilos del div y del h1
+            nuevoElemento.style.borderRadius = "10px";
+            nuevoElemento.style.padding = "5px";
+            nuevoElemento.style.marginBottom = "10px";
+            nuevoElemento.style.backgroundColor = '#CCC9C9';
+            nuevoElemento.style.fontFamily = "Arial, sans-serif";
+            nuevoElemento.style.fontSize = "20px";
+            nuevoElemento.style.lineHeight = "1";
+            nuevoElemento.style.color = 'red';
+            nuevoElemento.style.textAlign = 'right';
+            nuevoElemento.style.marginLeft = "300px";
+            elementoH1.style.marginRight = '10px';
+            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+
+
+            nuevoElemento.appendChild(elementoH1);
+            nuevoElemento.appendChild(horaElemento);
+            divGrande.appendChild(nuevoElemento);
+
+            return divGrande;
+        }
+
 
         function abrirchat(telefono, mensajes) {
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
@@ -133,15 +224,14 @@
 
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
-                    var nuevoElemento = document.createElement("h1");
-                    nuevoElemento.textContent = elemento['mensaje_recibido'];
-                    nuevoElemento.style.color = 'blue';
-                    if (elemento['telefono_wa'] == telefonoEmisor) {
-                        nuevoElemento.style.color = 'red'; // Cambiar a color rojo
-                        nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
+
+                   var elementoCreado;
+
+                   if (elemento['telefono_wa'] == telefonoEmisor) {
+                        elementoCreado = crearMensajeEnviado(elemento);
+                    } else {
+                        elementoCreado = crearMensajeRecibido(elemento);
                     }
-                    nuevoElemento.textContent = elemento['mensaje_recibido'];
-                    var elementoCreado = crearLineaChat(elemento);
                     lista.appendChild(elementoCreado);
 
                 });
@@ -163,6 +253,9 @@
             chat.style.display = 'none';
             document.getElementById("miLista").innerText = "";
         }
+
     </script>
 
 </x-app-layout>
+
+

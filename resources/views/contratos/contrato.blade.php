@@ -239,9 +239,9 @@
             <h2 class = "ml-8">Contratos Registrados</h2>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
 
-                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
+                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto" >
 
-                    <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
+                    <table x-show="mostrarModal" @click.away="mostrarModal = false" class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " >
 
                         <thead>
                             <tr>
@@ -297,13 +297,33 @@
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $contrato->otro_comentario? str_replace('"','',$contrato->otro_comentario ):'NO' }}</td>
                                     <!--Id del Cliente-->
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $contrato->cliente_id }}
+                                    {{-- modal dinamico --}}
+                                    <td x-show="mostrarModal" @click.away="mostrarModal = false" class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        <div x-data="{ mostrarModal: false }">
+                                            <button @click="mostrarModal = true; cargarInformacionCliente('{{ $contrato->cliente_id }}')">
+                                                {{ $contrato->cliente_id }}
+                                            </button>
+                                            
+                                            <!-- Modal -->
+                                            <div x-show="mostrarModal" @click.away="mostrarModal = false" 
+                                                style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
+                                                <h2>INFORMACION DEL CLIENTE</h2>
+                                                <p>Nombre: <span id="nombreCliente"></span></p>
+                                                <p>Apellidos: <span id="apellidosCliente"></span></p>
+                                                <p>Numero Telefono: <span id="numTelefonico"></span></p>
+                                                <p>Fecha nacimiento: <span id="fecha_nacimiento"></span></p>
+                                                <p>Email: <span id="email"></span></p>
+                                                
+                                                <!-- Agrega más detalles según sea necesario -->
+                                                <button @click="mostrarModal = false"></button>
+                                            </div>
+                                        </div
                                     </td>
+                                    {{-- --- --}}
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $contrato->vendedor_id }}
                                     </td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    <td  class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $contrato->closer_id }}
                                     </td>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
@@ -316,13 +336,22 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        
+                        <div x-show="mostrarModal" @click.away="mostrarModal = false" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
+                            <div id="detallesCliente">
+                                
+                                <!-- Agrega más detalles según tu estructura de datos -->
+                            </div>
+                        </div>
+                        
                     </table>
                 </div>
             </div>
         </div>
     </div>
     {{-- Tabla para visualizar los contratos hechos  --}}
-
+    
+    
 
     <script>
         var listaFormasPago = [];
@@ -449,6 +478,38 @@
                 }
             });
         });
+
+        window.mostrarDetallesCliente = function(clienteId) {
+        // Hacer una solicitud AJAX para obtener los detalles del cliente
+        fetch(`/cliente/${clienteId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Actualizar la variable mostrarModal y la variable del cliente
+                mostrarModal = true;
+                $store.cliente = data.cliente;
+            })
+            .catch(error => {
+                console.error('Error al obtener detalles del cliente', error);
+            });
+    };
+        
+    // Obtener los datos de los clientes en el modal
+    function cargarInformacionCliente(clienteId) {
+    axios.get('/cliente/' + clienteId)
+        .then(response => {
+            console.log(response.data);  // Agrega esta línea para imprimir la respuesta en la consola
+            document.getElementById('nombreCliente').innerText = response.data.nombres;
+            document.getElementById('apellidosCliente').innerText = response.data.apellidos;
+            document.getElementById('numTelefonico').innerText = response.data.numTelefonico;
+            document.getElementById('fecha_nacimiento').innerText = response.data.fecha_nacimiento;
+            document.getElementById('email').innerText = response.data.email;
+        })
+        .catch(error => {
+            console.error('Error al cargar información del cliente:', error);
+        });
+}
+
+
     </script>
 
 </x-app-layout>

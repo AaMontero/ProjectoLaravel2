@@ -14,6 +14,7 @@ use DateInterval;
 use NumberFormatter;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PagoVendedorController;
+use App\Models\User;
 
 $meses = array(
     1 => 'Enero',
@@ -34,9 +35,11 @@ $meses = array(
 $cliente_constructor;
 class ContratoController extends Controller
 {
-
     public function index()
     {
+        $contratos = Contrato::orderBy('created_at', 'desc')->get();
+        $clientes = Cliente::all();
+    
         return view('contratos.contrato', [
             "contratos" => Contrato::with('Cliente')->get(),
             "contratos" => Contrato::orderBy('created_at', 'desc')->get(),
@@ -44,6 +47,18 @@ class ContratoController extends Controller
             "vendedores" => Vendedor::all(), 
         ]);
     }
+   
+    // Obtener los datos del cliente para el modal
+    public function obtenerDetallesCliente($id)
+    {
+        $cliente = Cliente::find($id);
+
+        return response()->json($cliente);
+    }
+
+
+    
+    
 
     public function add_contrato(Cliente $cliente)
     {

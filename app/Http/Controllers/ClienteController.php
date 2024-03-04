@@ -11,6 +11,18 @@ class ClienteController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+     public function obtenerDetallesCliente($clienteId)
+     {
+         // Obtener detalles del cliente desde la base de datos u otra fuente
+         $cliente = Cliente::find($clienteId);
+            
+         return view('contratos.contrato', ['cliente' => $cliente]);
+
+     }
+     
+
     public function index(Request $request)
     {
         $provinciasEcuador = [

@@ -1,8 +1,1 @@
-<<<<<<< HEAD
-Paula
-=======
-<<<<<<< HEAD
-=======
-Erick David
->>>>>>> e735ef69306b57a9af7acb0bb8a30b50443be2f6
->>>>>>> 048fe5654d705d30888aa0dd38ec3a8d23f3c9ef
+Erick Daniel

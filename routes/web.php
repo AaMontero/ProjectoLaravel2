@@ -94,8 +94,9 @@ Route::middleware('auth')->group(function () {
 
 
     //Rutas para los contratos y clientes
-    Route::get('contrato/index', [ContratoController::class, 'index'])
-        ->name('contrato.index');
+    Route::get('/contrato/index/', [ContratoController::class, 'index'])->name('contrato.index');
+
+
     Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
         ->name('contrato.agregar');
     Route::post('/contrato', [ContratoController::class, 'store'])
@@ -115,6 +116,11 @@ Route::middleware('auth')->group(function () {
     // });
 
     Route::get('chat', [WhatsAppController::class, 'index']);
+
+        // routes/web.php
+    Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
+
+
 });
 
 require __DIR__ . '/auth.php';

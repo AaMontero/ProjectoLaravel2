@@ -5,7 +5,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Vendedores - Editar') }}
             </h2>
-            
+
         </div>
     </x-slot>
     <div class="py-2">
@@ -15,7 +15,8 @@
                     <!--Form para introducir un cliente-->
                     <form method="POST" class ="p-4" enctype="multipart/form-data"
                         action = "{{ route('vendedor.update', $vendedor) }} ">
-                        @csrf @method('PUT')
+                        @csrf
+                        @method('PUT')
                         <label class="mt-1 p-0 ml-4 font-bold">Nombres:</label>
                         <input type="text" name="nombres"
                             class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
@@ -28,7 +29,8 @@
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Rol') }}</option>
                             @foreach ($roles as $rol)
-                                <option value="{{ $rol }}" {{ old('provincia', $vendedor->rol) == $rol ? 'selected' : '' }}>
+                                <option value="{{ $rol }}"
+                                    {{ old('rol', $vendedor->rol) == $rol ? 'selected' : '' }}>
                                     {{ $rol }}
                                 </option>
                             @endforeach
@@ -40,14 +42,31 @@
                             <option value="" disabled selected>
                                 {{ __('Seleccione el porcentaje') }}</option>
                             @foreach ($porcentajes as $porcentaje)
-                                <option value="{{ $porcentaje }}" {{ old('porcentaje', $vendedor->porcentaje_ventas) == $porcentaje ? 'selected' : '' }}>
+                                <option value="{{ $porcentaje }}"
+                                    {{ old('porcentaje', $vendedor->porcentaje_ventas) == $porcentaje ? 'selected' : '' }}>
                                     {{ $porcentaje }}
                                 </option>
                             @endforeach
                         </select>
+                        <label class="mt-1 p-0 ml-4 font-bold">Estado:</label>
+                        <select name="activo"
+                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            placeholder="{{ __('Seleccione el estado') }}">
+                            <option value="" disabled selected>
+                                {{ __('Seleccione el estado') }}
+                            </option>
+                            @foreach ($estados as $estado)
+                                <option value="{{ $estado == 'Activo' ? 1 : 0 }}"
+                                    {{ old('estado', $vendedor->estado) == $estado ? 'selected' : '' }}>
+                                    {{ ucfirst($estado) }}
+                                </option>
+                            @endforeach
+                        </select>
+
                         <x-input-error :messages="$errors->get('message')" />
                         <x-primary-button
-                            class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Editar Cliente</x-primary-button>
+                            class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Editar
+                            Vendedor</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />
                 </div>
 

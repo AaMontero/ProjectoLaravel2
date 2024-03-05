@@ -76,26 +76,28 @@
     </div>
     <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <h2 class = "ml-8">Cliente Registrados</h2>
+            <h2 class = "ml-8">Vendedores Registrados</h2>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
-                <div class="p-6 text-gray-900 dark:text-gray-100 ">
-                    <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300">
+                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto" >
+                    <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300"  style="overflow-x: auto;">
                         <thead>
-                            <tr> <!--Etiquetas de la tabla de clientes-->
+                            <tr> 
                                 <th class="py-2 px-4 border-b text-center ">ID</th>
                                 <th class="py-2 px-4 border-b text-center ">Nombres</th>
                                 <th class="py-2 px-4 border-b text-center ">Rol</th>
                                 <th class="py-2 px-4 border-b text-center ">Porcentaje Ventas</th>
+                                <th class="py-2 px-4 border-b text-center ">Estado</th>
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($vendedores as $vendedor)
-                                <tr> <!--Tabla que muestra los clientes-->
+                                <tr> 
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->nombres }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->rol }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
+                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->activo == "1"? "Activo":"Inactivo"  }}</td>
                                     <td class = "text-right pr-6">
                                         <x-dropdown class="origin-top absolute ">
                                             <x-slot name="trigger">

@@ -16,28 +16,25 @@
     </style>
     <div class="flex space-x-8">
         <!-- Notificaciones -->
-        <div id="notificaciones"
-            class="w-1/2 bg-white dark:bg-slate-200 rounded-lg px-8 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl">
+        <div id="notificaciones" class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto" style="max-height: 700px; border-radius: 10px;">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
+                @php
+                    $ultimoMensaje = $mensajesTelefono->last(); // Obtener el último mensaje
+                    $leido = $ultimoMensaje['leido']; // Verificar si el último mensaje está marcado como leído
+                @endphp
                 <div class="space-y-4">
-                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
-                        data-telefono="{{ $telefono }}"
-                        class="notificacion-clicable bg-gray-100 dark:bg-gray-800 rounded-lg mb-4 p-4 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
-
+                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})" data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_recibido'] }}" class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                        <div class="font-bold text-gray-800 dark:text-gray-200">{{ $telefono }}</div>
-                        <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                            @foreach ($mensajesTelefono as $mensaje)
-                                <div class="notificacion-mensaje flex items-center space-x-2">
-                                    <div>{{ $mensaje->mensaje_recibido }}</div>
-                                </div>
-                            @endforeach
-                        </div>
+                        <div class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">{{ $telefono }}</div>
+                        @if (!$leido)
+                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2">Nuevo</span>
+                        @endif
                     </div>
                 </div>
             @endforeach
         </div>
+
         <!-- Chat -->
         <div id="abrirchat"
             class="relative w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
@@ -59,7 +56,7 @@
                 <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                 <div id="telefono-chat" class="ml-4"></div>
                 </div>
-                <div id="historial-mensajes" class="bg-gray-200 p-4 rounded-lg mb-4">
+                <div id="historial-mensajes" class="bg-gray-200 p-4 rounded-lg mb-4  overflow-auto" style="max-height: 480px;">
                     <ul id="miLista">
                     </ul>
                 </div>
@@ -76,8 +73,6 @@
     </div>
 
     <script>
-
-
         function formatearHora(fechaHoraString) {
             var fechaHora = new Date(fechaHoraString);
             var hora = fechaHora.getHours();
@@ -89,8 +84,6 @@
         // Obtener la lista
         var lista = document.getElementById("miLista");
         var telefonoEmisor = "593987411818";
-
-
 
         // function crearLineaChat(elemento) {
 
@@ -139,6 +132,7 @@
         //     return otroElemento;
 
         // }
+
         function crearMensajeRecibido(elemento) {
 
             var divGrande = document.createElement("div");
@@ -160,8 +154,8 @@
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
             nuevoElemento.style.backgroundColor = '#CCC9C9';
-            nuevoElemento.style.fontFamily = "Arial, sans-serif";
-            nuevoElemento.style.fontSize = "20px";
+            nuevoElemento.style.fontFamily = "Monserrat";
+            nuevoElemento.style.fontSize = "18px";
             nuevoElemento.style.lineHeight = "1";
             nuevoElemento.style.color = 'Black';
             nuevoElemento.style.textAlign = 'justify';
@@ -194,8 +188,8 @@
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
             nuevoElemento.style.backgroundColor = '#CCC9C9';
-            nuevoElemento.style.fontFamily = "Arial, sans-serif";
-            nuevoElemento.style.fontSize = "20px";
+            nuevoElemento.style.fontFamily = "Monserrat";
+            nuevoElemento.style.fontSize = "18px";
             nuevoElemento.style.lineHeight = "1";
             nuevoElemento.style.color = 'red';
             nuevoElemento.style.textAlign = 'right';
@@ -211,10 +205,36 @@
             return divGrande;
         }
 
-
         function abrirchat(telefono, mensajes) {
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
+
+            // Ordenar mensajes por fecha y hora
+            mensajes.sort(function(a, b) {
+                return new Date(a.fecha_hora) - new Date(b.fecha_hora);
+            });
+
+            // Eliminar el icono "Nuevo" de la notificación correspondiente
+            var notificacion = document.querySelector(`[data-telefono="${telefono}"]`);
+            if (notificacion) {
+
+                var mensajesGuardados = localStorage.getItem('mensajesLeidos');
+                    if (!mensajesGuardados) {
+                        mensajesGuardados = [];
+                    } else {
+                        mensajesGuardados = JSON.parse(mensajesGuardados);
+                    }
+                // Verificar si el teléfono ya ha sido leído
+                if (!mensajesGuardados.includes(telefono)) {
+                mensajesGuardados.push(telefono);
+                localStorage.setItem('mensajesLeidos', JSON.stringify(mensajesGuardados));
+                var nuevoElemento = notificacion.querySelector('.bg-red-500');
+                if (nuevoElemento) {
+                    nuevoElemento.remove();
+                    }
+                }
+            }
+
 
             if (lista.childElementCount > 0) { // La lista tiene hijos, la vaciamos
                 while (lista.firstChild) {
@@ -235,7 +255,9 @@
                     lista.appendChild(elementoCreado);
 
                 });
+                lista.scrollTop = lista.scrollHeight;
             }
+
 
             console.log('mensajes chat: ', mensajes);
 

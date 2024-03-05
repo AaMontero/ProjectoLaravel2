@@ -89,6 +89,9 @@
         </script>
     </div>
 
+
+    
+
     <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
             <h2 class = "ml-8">Cliente Registrados</h2>

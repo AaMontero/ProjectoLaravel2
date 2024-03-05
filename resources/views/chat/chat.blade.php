@@ -195,7 +195,9 @@
             nuevoElemento.style.textAlign = 'right';
             nuevoElemento.style.marginLeft = "300px";
             elementoH1.style.marginRight = '10px';
-            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)"; 
+            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+
+
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
@@ -215,30 +217,21 @@
             // Eliminar el icono "Nuevo" de la notificación correspondiente
             var notificacion = document.querySelector(`[data-telefono="${telefono}"]`);
             if (notificacion) {
-
-                var mensajesGuardados = localStorage.getItem('mensajesLeidos');
-                    if (!mensajesGuardados) {
-                        mensajesGuardados = [];
-                    } else {
-                        mensajesGuardados = JSON.parse(mensajesGuardados);
-                    }
-                // Verificar si el teléfono ya ha sido leído
-                if (!mensajesGuardados.includes(telefono)) {
-                mensajesGuardados.push(telefono);
-                localStorage.setItem('mensajesLeidos', JSON.stringify(mensajesGuardados));
                 var nuevoElemento = notificacion.querySelector('.bg-red-500');
                 if (nuevoElemento) {
                     nuevoElemento.remove();
-                    }
                 }
             }
+             // Limpiar la lista de mensajes existentes
+                lista.innerHTML = '';
 
-
-            if (lista.childElementCount > 0) { // La lista tiene hijos, la vaciamos
-                while (lista.firstChild) {
-                    lista.removeChild(lista.firstChild);
-                }
-            }
+            // Mostrar el teléfono del chat actual
+            document.getElementById("telefono-chat").textContent = telefono;
+            // if (lista.childElementCount > 0) { // La lista tiene hijos, la vaciamos
+            //     while (lista.firstChild) {
+            //         lista.removeChild(lista.firstChild);
+            //     }
+            // }
 
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
@@ -257,15 +250,16 @@
             }
 
 
-            console.log('mensajes chat: ', mensajes);
+             console.log('mensajes chat: ', mensajes);
+             VentanaChat.style.display = 'block';
 
-            if (VentanaChat.style.display === 'none') {
-                VentanaChat.style.display = 'block';
-                document.getElementById("telefono-chat").textContent = telefono;
-            } else {
-                VentanaChat.style.display = 'none';
-            }
-        }
+        //     if (VentanaChat.style.display === 'none') {
+        //         VentanaChat.style.display = 'block';
+        //         document.getElementById("telefono-chat").textContent = telefono;
+        //     } else {
+        //         VentanaChat.style.display = 'none';
+        //     }
+         }
 
 
         function cerrarChat() {

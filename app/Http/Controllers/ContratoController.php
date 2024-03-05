@@ -43,7 +43,7 @@ class ContratoController extends Controller
         return view('contratos.contrato', [
             "contratos" => Contrato::with('Cliente')->get(),
             "contratos" => Contrato::orderBy('created_at', 'desc')->get(),
-            "clientes" => Cliente::all(), 
+            "clientes" => $clientes, 
             "vendedores" => Vendedor::all(), 
         ]);
     }

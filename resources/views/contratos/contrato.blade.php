@@ -242,8 +242,12 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
 
                     <table x-show="mostrarModal" @click.away="mostrarModal = false"
+<<<<<<< HEAD
+                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
+=======
                         class="w-100 bg-white dark:bg-gray-800 border border-gray-300    ">
 
+>>>>>>> 61490521c2adea86521054bb1649a389ca0a73f2
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ubicacion Sala</th>
@@ -263,7 +267,7 @@
 
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody x-cloak>
                             @foreach ($contratos as $contrato)
                                 <tr>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
@@ -293,56 +297,82 @@
                                     </td>
                                     <!--Id del Cliente-->
                                     {{-- modal dinamico --}}
-                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"
+                                    <td x-show="mostrarModal" @click.away="mostrarModal = false" 
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }">
-                                            <button @click="mostrarModal = true; ">
+                                        <div x-data="{ mostrarModal: false }" >
+                                            <button @click="mostrarModal = true; " >
                                                 {{ $contrato->cliente_id }}
                                             </button>
                                             <!-- Modal -->
-                                            <div x-show="mostrarModal" @click.away="mostrarModal = false"
-                                                style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
-                                                <h3>Información del cliente</h3>
-                                                @foreach ($clientes as $cliente)
-                                                    @if ($cliente->id == $contrato->cliente_id)
-                                                        <p>Nombre: <span>{{ $cliente->nombres }}</span></p>
-                                                        <p>Apellidos: <span>{{ $cliente->apellidos }}</span></p>
-                                                        <p>Numero Telefono:
-                                                            <span>{{ $cliente->numTelefonico }}</span>
-                                                        </p>
-                                                        <p>Fecha nacimiento:
-                                                            <span>{{ $cliente->fecha_nacimiento }}</span>
-                                                        </p>
-                                                        <p>Email: <span>{{ $cliente->email }}</span></p>
-                                                    @endif
-                                                @endforeach
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
+                                                x-transition:enter-start="opacity-0"
+                                                x-transition:enter-end="opacity-100"
+                                                x-transition:leave="ease-in duration-300"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" @click.away="mostrarModal = false">
+                                                <!-- Fondo oscuro -->
+                                                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
+                                                    @click="mostrarModal = false"></div>
 
+                                                <!-- Modal -->
+                                                <div
+                                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
+                                                    <h3>Información del cliente</h3>
+                                                    @foreach ($clientes as $cliente)
+                                                        @if ($cliente->id == $contrato->cliente_id)
+                                                            <p><strong>Nombres:
+                                                                </strong><span>{{ $cliente->nombres }}</span></p>
+                                                            <p><strong>Apellidos: </strong>
+                                                                <span>{{ $cliente->apellidos }}</span></p>
+                                                            <p><strong>Numero de telefono: </strong>
+                                                                <span>{{ $cliente->numTelefonico }}</span></p>
+                                                            <p><strong>Nacimiento: </strong>
+                                                                <span>{{ $cliente->fecha_nacimiento }}</span></p>
+                                                            <p><strong>Email: </strong>
+                                                                <span>{{ $cliente->email }}</span></p>
+                                                        @endif
+                                                    @endforeach
 
-                                                <!-- Agrega más detalles según sea necesario -->
-                                                <button @click = "mostrarModal = false"></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
                                     {{-- --- --}}
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }">
+                                        <div x-data="{ mostrarModal: false }" x-cloak>
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->vendedor_id }}
                                             </button>
-                                            <div x-show="mostrarModal" @click.away="mostrarModal = false"
-                                                style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
-                                                <h3>Información del Vendedor</h3>
-                                                @foreach ($vendedores as $vendedor)
-                                                    @if ($vendedor->id == $contrato->vendedor_id)
-                                                        <p>Nombre: <span>{{ $vendedor->nombres }}</span></p>
-                                                        <p>Rol: <span>{{ $vendedor->rol }}</span></p>
-                                                        <p>Porcentaje de Ventas:
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
-                                                    @endif
-                                                @endforeach
-                                                <button @click = "mostrarModal = false"></button>
+                                            <!-- Modal -->
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
+                                                x-transition:enter-start="opacity-0"
+                                                x-transition:enter-end="opacity-100"
+                                                x-transition:leave="ease-in duration-300"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" @click.away="mostrarModal = false">
+                                                <!-- Fondo oscuro -->
+                                                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
+                                                    @click="mostrarModal = false"></div>
+
+                                                <!-- Modal -->
+                                                <div
+                                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
+                                                    <h3>Información del Vendedor</h3>
+
+                                                    @foreach ($vendedores as $vendedor)
+                                                        @if ($vendedor->id == $contrato->vendedor_id)
+                                                            <p><strong>Nombre
+                                                                    :</strong><span>{{ $vendedor->nombres }}</span></p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Porcentaje de Ventas:</strong>
+                                                                <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                            </p>
+                                                        @endif
+                                                    @endforeach
+
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -352,19 +382,34 @@
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->closer_id }}
                                             </button>
-                                            <div x-show="mostrarModal" @click.away="mostrarModal = false"
-                                                style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
-                                                <h3>Información del Closer</h3>
-                                                @foreach ($vendedores as $vendedor)
-                                                    @if ($vendedor->id == $contrato->closer_id)
-                                                        <p>Nombre: <span>{{ $vendedor->nombres }}</span></p>
-                                                        <p>Rol: <span>{{ $vendedor->rol }}</span></p>
-                                                        <p>Porcentaje de Ventas:
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
-                                                    @endif
-                                                @endforeach
-                                                <button @click = "mostrarModal = false"></button>
+                                            <!-- Modal -->
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
+                                                x-transition:enter-start="opacity-0"
+                                                x-transition:enter-end="opacity-100"
+                                                x-transition:leave="ease-in duration-300"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" @click.away="mostrarModal = false">
+                                                <!-- Fondo oscuro -->
+                                                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
+                                                    @click="mostrarModal = false"></div>
+
+                                                <!-- Modal -->
+                                                <div
+                                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
+                                                    <h3>Información del Closer</h3>
+                                                    @foreach ($vendedores as $vendedor)
+                                                        @if ($vendedor->id == $contrato->closer_id)
+                                                            <p><strong>Nombre:
+                                                                </strong><span>{{ $vendedor->nombres }}</span></p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Porcentaje de ventas:</strong>
+                                                                <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                            </p>
+                                                        @endif
+                                                    @endforeach
+
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -374,19 +419,34 @@
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->closer2_id }}
                                             </button>
-                                            <div x-show="mostrarModal" @click.away="mostrarModal = false"
-                                                style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
-                                                <h3>Información del Closer</h3>
-                                                @foreach ($vendedores as $vendedor)
-                                                    @if ($vendedor->id == $contrato->closer2_id)
-                                                        <p>Nombre: <span>{{ $vendedor->nombres }}</span></p>
-                                                        <p>Rol: <span>{{ $vendedor->rol }}</span></p>
-                                                        <p>Porcentaje de Ventas:
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
-                                                    @endif
-                                                @endforeach
-                                                <button @click = "mostrarModal = false"></button>
+                                            <!-- Modal -->
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
+                                                x-transition:enter-start="opacity-0"
+                                                x-transition:enter-end="opacity-100"
+                                                x-transition:leave="ease-in duration-300"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" @click.away="mostrarModal = false">
+                                                <!-- Fondo oscuro -->
+                                                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
+                                                    @click="mostrarModal = false"></div>
+
+                                                <!-- Modal -->
+                                                <div
+                                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
+                                                    <h3>Información del Closer</h3>
+                                                    @foreach ($vendedores as $vendedor)
+                                                        @if ($vendedor->id == $contrato->closer2_id)
+                                                            <p><strong>Nombre:
+                                                                </strong><span>{{ $vendedor->nombres }}</span></p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Porcentaje de ventas: </strong>
+                                                                <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                            </p>
+                                                        @endif
+                                                    @endforeach
+
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -396,6 +456,38 @@
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->jefe_sala_id }}
                                             </button>
+
+                                            <!-- Modal -->
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
+                                                x-transition:enter-start="opacity-0"
+                                                x-transition:enter-end="opacity-100"
+                                                x-transition:leave="ease-in duration-300"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" @click.away="mostrarModal = false">
+                                                <!-- Fondo oscuro -->
+                                                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
+                                                    @click="mostrarModal = false"></div>
+
+                                                <!-- Modal -->
+                                                <div
+                                                    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
+                                                    <h3>Información del jefe de sala</h3>
+                                                    </h3>
+                                                    @foreach ($vendedores as $vendedor)
+                                                        @if ($vendedor->id == $contrato->jefe_sala_id)
+                                                            <p><strong>Nombre :</strong>
+                                                                <span>{{ $vendedor->nombres }}</span></p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Porcentaje de ventas :</strong>
+                                                                <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                            </p>
+                                                        @endif
+                                                    @endforeach
+
+
+                                                </div>
+
                                             <div x-show="mostrarModal" @click.away="mostrarModal = false"
                                                 style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
                                                 <h3>Información del <J class="Sala"></J>
@@ -410,6 +502,7 @@
                                                     @endif
                                                 @endforeach
                                                 <button @click = "mostrarModal = false"></button>
+
                                             </div>
                                         </div>
                                     </td>
@@ -422,7 +515,7 @@
                             style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
                             <div id="detallesCliente">
 
-                                <!-- Agrega más detalles según tu estructura de datos -->
+                               
                             </div>
                         </div>
 
@@ -431,7 +524,7 @@
             </div>
         </div>
     </div>
-    {{-- Tabla para visualizar los contratos hechos  --}}
+
 
 
 
@@ -455,6 +548,7 @@
                 forma.value = "";
                 document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
                 alert("Se agregó: " + cadena);
+                console.log('asdas');
             }
         }
 
@@ -560,6 +654,17 @@
                 }
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+        // Obtener el contenedor del modal
+        const modalContainer = document.querySelector('[x-data="{ mostrarModal: false }"]');
+
+        // Mostrar el modal después de cargar la página
+        modalContainer.style.display = 'block';
+
+        // Inicializar Alpine.js manualmente solo para este contenedor
+        Alpine.initializeComponent(modalContainer);
+    });
     </script>
 
 </x-app-layout>

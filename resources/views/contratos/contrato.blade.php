@@ -242,26 +242,19 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
 
                     <table x-show="mostrarModal" @click.away="mostrarModal = false"
-                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
+                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300    ">
 
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ubicacion Sala</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Años Cont.</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Monto Cont.</th>
-                                <!-- Credito Directo-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Valor del Credito </th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Abono</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap"># Meses</th>
-
-                                <!-- Valor Pagare-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Valor del Pagare</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Fecha Fin</th>
-
-                                <!-- Otros metodos de Pago-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Otro</th>
-
-                                <!--Id del Cliente-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Id Cliente</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Vendedor</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 1 </th>
@@ -405,7 +398,8 @@
                                             </button>
                                             <div x-show="mostrarModal" @click.away="mostrarModal = false"
                                                 style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
-                                                <h3>Información del <J class="Sala"></J></h3>
+                                                <h3>Información del <J class="Sala"></J>
+                                                </h3>
                                                 @foreach ($vendedores as $vendedor)
                                                     @if ($vendedor->id == $contrato->jefe_sala_id)
                                                         <p>Nombre: <span>{{ $vendedor->nombres }}</span></p>

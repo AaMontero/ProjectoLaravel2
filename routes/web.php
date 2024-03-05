@@ -90,7 +90,8 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.datos_vendedor');
     Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
         ->name('vendedores.pagosPendientes');
-
+    Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
+        ->name('vendedor.update');
 
     //Rutas para Pagos de Vendedores 
     Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
@@ -128,10 +129,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('chat', [WhatsAppController::class, 'index']);
 
-        // routes/web.php
+    // routes/web.php
     Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
-
-
 });
 
 require __DIR__ . '/auth.php';

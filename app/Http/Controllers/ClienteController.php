@@ -114,7 +114,8 @@ class ClienteController extends Controller
             'fecha_nacimiento' => ['required', 'date'],
         ]);
         $cliente->update($validated);
-        return to_route('vendedores.pagosPendientes');
+        return to_route('clientes.index')
+        ->with('status', __('Actualizacion realizada exitosamente'));
     }
 
     /**

@@ -39,15 +39,15 @@ class ContratoController extends Controller
     {
         $contratos = Contrato::orderBy('created_at', 'desc')->get();
         $clientes = Cliente::all();
-    
+
         return view('contratos.contrato', [
             "contratos" => Contrato::with('Cliente')->get(),
             "contratos" => Contrato::orderBy('created_at', 'desc')->get(),
-            "clientes" => $clientes, 
-            "vendedores" => Vendedor::all(), 
+            "clientes" => $clientes,
+            "vendedores" => Vendedor::all(),
         ]);
     }
-   
+
     // Obtener los datos del cliente para el modal
     public function obtenerDetallesCliente($id)
     {
@@ -57,8 +57,8 @@ class ContratoController extends Controller
     }
 
 
-    
-    
+
+
 
     public function add_contrato(Cliente $cliente)
     {
@@ -131,10 +131,14 @@ class ContratoController extends Controller
         $formasPagoLista = explode(",", $fomasPagoSinComillas2);
         foreach ($formasPagoLista as $elem) {
             $elemDividido = explode(" ", $elem);
-            if (count($elemDividido) <= 4) {
-                $valNum = explode(" con ", $elem)[0];
-                $valText =  explode(" con ", $elem)[1];
-                array_push($listaOtros, [$valNum, $valText]);
+        
+            // Verifica si $elemDividido tiene al menos dos elementos antes de acceder a ellos
+            if (count($elemDividido) >= 2) {
+                $valNum = $elemDividido[0];
+                $valText = implode(" ", array_slice($elemDividido, 1));
+        
+                // Agrega el elemento al array bidimensional
+                $listaOtros[] = [$valNum, $valText];
             }
         }
         $StringOtrosFormaPago = "";
@@ -247,28 +251,42 @@ class ContratoController extends Controller
             }
 
             //Creación del cliente            
-            if ($tieneUsuario == "") {
-                $controler = new ClienteController();
-                $clienteExiste = Cliente::where('cedula', $numCedula);
-                if (isset($clienteExiste)) {
-                    $persona = $clienteExiste->get();
-                } else {
+            if (empty($tieneUsuario)) {
+                // Si $tieneUsuario está vacío, busca un cliente por cédula
+                $clienteExiste = Cliente::where('cedula', $numCedula)->first();
+            
+                if (!$clienteExiste) {
+                    // Si no existe el cliente, crea uno nuevo asociándolo al usuario actual
+                    $controler = new ClienteController();
                     $cliente = new Cliente();
                     $cliente->nombres = $nombres;
-                    $cliente->email = $email;
                     $cliente->apellidos = $apellidos;
                     $cliente->ciudad = $ciudad;
                     $cliente->cedula = $numCedula;
                     $cliente->provincia = $provincia;
                     $cliente->numTelefonico = "";
                     $cliente->fecha_nacimiento = null;
+                    $cliente->email = $email;
                     $cliente->activo = true;
-                    $cliente->cliente_user =  $controler->obtenerNick($nombres, $apellidos);
-                    $persona = $request->user()->clientes()->create($cliente->toArray());
+                    $cliente->cliente_user = $controler->obtenerNick($nombres, $apellidos);
+            
+                    // Asociar el cliente al usuario actual
+                    $cliente->user()->associate(auth()->user());
+            
+                    $cliente->save();
+            
+                    $persona = $cliente;
+                } else {
+                    // Si ya existe el cliente, asigna el cliente existente a $persona
+                    $persona = $clienteExiste;
                 }
             } else {
-                $persona = Cliente::where('id', $tieneUsuario)->get();
+                // Si $tieneUsuario no está vacío, busca el cliente por el ID proporcionado
+                $persona = Cliente::find($tieneUsuario);
             }
+        
+            
+            
 
 
             //Creación del contrato
@@ -285,7 +303,7 @@ class ContratoController extends Controller
                 $contrato->valor_pagare = $valorPagare;
                 $contrato->fecha_fin_pagare = $fechaVencimiento;
                 $contrato->meses_credito_directo = 1;
-            } else if ($StringOtrosFormaPago != "") { // Se ejecuta cuando hay otra opción de pago 
+            } else if ($StringOtrosFormaPago != "") { // Se ejecuta cuando hay otra opción de pago
 
             }
             $contrato->otro_comentario = $StringOtrosFormaPago;
@@ -297,9 +315,9 @@ class ContratoController extends Controller
             $contrato->contrato_id = "QT";
             $personaArray = json_decode($persona, true);
 
-            if (isset($personaArray['id'])) {
+            if (!empty($personaArray) && isset($personaArray['id'])) {
                 $contrato->cliente_id = $personaArray['id'];
-            } elseif (isset($personaArray[0]['id'])) {
+            } elseif (!empty($personaArray) && isset($personaArray[0]['id'])) {
                 $contrato->cliente_id = $personaArray[0]['id'];
             } else {
                 $contrato->cliente_id = null;
@@ -395,9 +413,11 @@ class ContratoController extends Controller
             $errores[] = $errorCiudad;
         }
         if (strpos($email, "@") === false) {
-            $errorCorreo = "El formato del correo ingresado no es válido";
+            $errorCorreo = "El formato del correo ingresado no es valido";
             $errores[] = $errorCorreo;
         }
+        
+        
         if (strlen($cedula) !== 10) {
             $errorCedula = "El formato del correo ingresado no es válido";
             $errores[] = $errorCedula;

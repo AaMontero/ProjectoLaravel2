@@ -34,7 +34,7 @@
                             class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
                             {{ $telefono }}</div>
                         @if (!$leido)
-                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2">Nuevo</span>
+                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
                         @endif
                     </div>
                 </div>

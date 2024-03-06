@@ -34,7 +34,8 @@
                             class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
                             {{ $telefono }}</div>
                         @if (!$leido)
-                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
+                            <span
+                                class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
                         @endif
                     </div>
                 </div>
@@ -74,14 +75,69 @@
                     <input type="text" id="mensajeInput" name = "mensajeEnvio"
                         class="w-4/5 border rounded-md py-2 px-5 focus:outline-none focus:border-blue-500"
                         placeholder="Escribe un mensaje...">
-                    <button type="submit"
+
+                    <button type="button" onclick="enviarFormulario()"
                         class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
+                    <!-- <button type="button" onclick="enviarFormulario()"
+                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>-->
+                    <!--<button type="submit"
+                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
+                    -->
                 </form>
             </div>
         </div>
     </div>
 
     <script>
+        function enviarFormulario() {
+            llamadaAjax()
+                .then((respuesta) => {
+                    try {
+
+                        console.log(respuesta);
+                        var objeto = JSON.parse(respuesta);
+                        console.log(objeto.id_numCliente);
+                        var lista = document.getElementById("miLista");
+                        lista.appendChild(crearMensajeEnviado(objeto));
+                        document.getElementById("mensajeInput").value = ""; 
+                    } catch (error) {
+                        console.error("Error al analizar el JSON:", error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error en la llamada AJAX:", error);
+                });
+        }
+
+        function llamadaAjax() {
+            return new Promise((resolve, reject) => {
+                const textoIngresado = document.getElementById("mensajeInput").value;
+                const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
+                console.log("El numero que esta abierto es: " + numeroAbierto);
+                const url =
+                    'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
+                    numeroAbierto + '&mensajeEnvio=' +
+                    textoIngresado;
+
+                fetch(url)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+                        }
+                        return response.text();
+                    })
+                    .then((responseData) => {
+                        //console.log(responseData);
+                        resolve(responseData);
+                    })
+                    .catch((error) => {
+                        console.error("Error en la llamada fetch:", error);
+                        reject(error);
+                    });
+            });
+        }
+
+
         function formatearHora(fechaHoraString) {
             var fechaHora = new Date(fechaHoraString);
             var hora = fechaHora.getHours();

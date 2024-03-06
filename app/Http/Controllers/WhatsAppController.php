@@ -49,62 +49,19 @@ class WhatsAppController extends Controller
                 'Authorization: Bearer EAA0cGBz1VmwBOyPIAWVggBulUedn4Bxeq1VzHNHxZBW25Hh11bfuZBOz704eaq7MP06LgoRzKSuCaJFw6ZCWsA8pb6dqrqC3yaruT2hhopjoCF7mTO4nMyNG7XyQ5OcLPSujzHzAqcPksvlQLk3igDh2FnXyZA803qaiIdzJO1x09euof8c2XYBZBy9VNfcr3haXmD4HOVJByZBIlYLTQZD'
             ),
         ));
-
-
         $response = curl_exec($curl);
         $whatsApp = new WhatsApp();
-        $whatsApp->mensaje_enviado  = $mensaje;
+        $whatsApp->mensaje_enviado = $mensaje;
         $whatsApp->id_wa = "asdasdasd";
         $whatsApp->telefono_wa = "593987411818";
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->visto = true;
         $whatsApp->save();
         curl_close($curl);
-        echo $response;
+        return json_encode($whatsApp);
     }
-    public function envia(Request $request)
-    {
 
-        $enviado = "Texto";
-        //$telefonoCliente = $request->input('telefonoCliente');
-        $telefonoCliente = '593979345051';
-        //token que nos da facebook
-        $token = 'EAA0cGBz1VmwBO7JfpWGn8eR74d51Kk36ahQtEDTUo8nMow9Hytfmvpe2jCzWkQQrA1JzzDlN6aXen9myp9m75dYcLh7scSXdayhdmTwbjhMJzMb9UrgFqfFNzhxDSZCdPNtTSCq5y4gGS2Woi1gPHudZCp5jOivjJjAuiVY8qTwH50lQJIp6heMGp3yJpb';
-        // nuestro telefono
-        $telefonoID = '258780720641927';
-        //url a donde se manda el mensaje
-        $url = 'https://graph.facebook.com/v18.0/258780720641927/messages';
-
-        //CONFIGURACION DEL MENSAJE
-        $mensaje = ''
-            . '{'
-            . '"messaging_product": "whatsapp", '
-            . '"recipient_type": "individual",'
-            . '"to": "' . $telefonoCliente . '", '
-            . '"type": "text", '
-            . '"text": '
-            . '{'
-            . '     "body":  "' . $enviado . '",'
-            . '     "preview_url": true, '
-            . '} '
-            . '}';
-
-        //declaramos las cabeceras
-        $header = array("Authorization: Bearer " . $token, "Content-Type: application/json");
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($curl);
-        //file_put_contents("response.txt", $response);
-        $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
-        $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
-        return view('chat.chat', ['mensajes' => $mensajes]);
-    }
     public function webhook(Request $request)
     {
 
@@ -145,6 +102,7 @@ class WhatsAppController extends Controller
         $whatsApp->timestamp_wa = $timestamp;
         $whatsApp->mensaje_enviado  = $mensaje;
         $whatsApp->id_wa = $id;
+        $whatsApp->visto = false;
         $whatsApp->telefono_wa = $telefonoUser;
         $whatsApp->id_numCliente = $telefonoUser;
         $whatsApp->fecha_hora = new DateTime('now');

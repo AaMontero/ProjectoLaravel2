@@ -131,7 +131,8 @@ Route::middleware('auth')->group(function () {
     //Route::post('/webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
 
-    Route::get('chat', [WhatsAppController::class, 'index']);
+    Route::get('chat', [WhatsAppController::class, 'index'])
+        ->name('chat.chat');
     // routes/web.php
     Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
 });

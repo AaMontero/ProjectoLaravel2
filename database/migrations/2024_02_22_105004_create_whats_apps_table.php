@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('id_wa', 1000)->default('');
             $table->bigInteger('timestamp_wa')->nullable();
             $table->string('telefono_wa', 50)->default('');
+            $table->boolean("visto")->default(false); 
             $table->timestamps();
         });
     }

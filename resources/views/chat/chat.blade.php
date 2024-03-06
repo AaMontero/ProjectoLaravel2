@@ -93,13 +93,10 @@
             llamadaAjax()
                 .then((respuesta) => {
                     try {
-
-                        console.log(respuesta);
                         var objeto = JSON.parse(respuesta);
-                        console.log(objeto.id_numCliente);
                         var lista = document.getElementById("miLista");
                         lista.appendChild(crearMensajeEnviado(objeto));
-                        document.getElementById("mensajeInput").value = ""; 
+                        document.getElementById("mensajeInput").value = "";
                     } catch (error) {
                         console.error("Error al analizar el JSON:", error);
                     }
@@ -113,7 +110,7 @@
             return new Promise((resolve, reject) => {
                 const textoIngresado = document.getElementById("mensajeInput").value;
                 const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-                console.log("El numero que esta abierto es: " + numeroAbierto);
+                
                 const url =
                     'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
                     numeroAbierto + '&mensajeEnvio=' +

@@ -18,7 +18,7 @@
 
 
                     @role('admin')
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="no-underline">
+                    <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
@@ -130,7 +130,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="no-underline" >
+            <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline" >
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
@@ -145,8 +145,8 @@
             <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
                 {{ __('Contracts') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
-                {{ __('Contracts') }}
+            <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                {{ __('Vendedores') }}
             </x-responsive-nav-link>
             
 

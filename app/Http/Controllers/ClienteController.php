@@ -13,15 +13,13 @@ class ClienteController extends Controller
      */
 
 
-     public function obtenerDetallesCliente($clienteId)
-     {
-         // Obtener detalles del cliente desde la base de datos u otra fuente
-         $cliente = Cliente::find($clienteId);
-            
-         return view('contratos.contrato', ['cliente' => $cliente]);
+    public function obtenerDetallesCliente($clienteId)
+    {
+        // Obtener detalles del cliente desde la base de datos u otra fuente
+        $cliente = Cliente::find($clienteId);
+        return view('contratos.contrato', ['cliente' => $cliente]);
+    }
 
-     }
-     
 
     public function index(Request $request)
     {
@@ -32,7 +30,7 @@ class ClienteController extends Controller
         ];
 
         return view('clientes.index', [
-            "clientes" => Cliente::with('user')->get(),
+            "clientes" => Cliente::with('user')->latest()->paginate(10),
             "provincias" => $provinciasEcuador,
         ]);
     }
@@ -115,7 +113,7 @@ class ClienteController extends Controller
         ]);
         $cliente->update($validated);
         return to_route('clientes.index')
-        ->with('status', __('Actualizacion realizada exitosamente'));
+            ->with('status', __('Actualizacion realizada exitosamente'));
     }
 
     /**

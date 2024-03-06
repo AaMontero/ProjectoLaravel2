@@ -242,6 +242,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
 
                     <table x-show="mostrarModal" @click.away="mostrarModal = false"
+                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ubicacion Sala</th>
@@ -291,7 +292,7 @@
                                     </td>
                                     <!--Id del Cliente-->
                                     {{-- modal dinamico --}}
-                                    <td x-show="mostrarModal" @click.away="mostrarModal = false" 
+                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         <div x-data="{ mostrarModal: false }" >
                                             <button @click="mostrarModal = true; " >
@@ -509,7 +510,7 @@
                             style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
                             <div id="detallesCliente">
 
-                               
+
                             </div>
                         </div>
 

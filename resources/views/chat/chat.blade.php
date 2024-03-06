@@ -16,7 +16,9 @@
     </style>
     <div class="flex space-x-8">
         <!-- Notificaciones -->
-        <div id="notificaciones" class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto" style="max-height: 700px; border-radius: 10px;">
+        <div id="notificaciones"
+            class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
+            style="max-height: 700px; border-radius: 10px;">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
                 @php
@@ -24,11 +26,15 @@
                     $leido = $ultimoMensaje['leido']; // Verificar si el último mensaje está marcado como leído
                 @endphp
                 <div class="space-y-4">
-                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})" data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_recibido'] }}" class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
+                        data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_recibido'] }}"
+                        class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                        <div class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">{{ $telefono }}</div>
+                        <div
+                            class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
+                            {{ $telefono }}</div>
                         @if (!$leido)
-                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2">Nuevo</span>
+                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
                         @endif
                     </div>
                 </div>
@@ -50,21 +56,24 @@
             </button>
 
             <!-- Historial de mensajes -->
-            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-6 space-y-4" >
+            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-6 space-y-4">
                 <!-- Historial de mensajes -->
                 <div class="flex items-center bg-gray-200 p-4 rounded-lg shadow-md mt-4">
-                <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                <div id="telefono-chat" class="ml-4"></div>
+                    <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
+                    <div id="telefono-chat" class="ml-4"></div>
                 </div>
-                <div id="historial-mensajes" class="bg-gray-200 p-4 rounded-lg mb-4  overflow-auto" style="max-height: 480px;">
+                <div id="historial-mensajes" class="bg-gray-200 p-4 rounded-lg mb-4  overflow-auto"
+                    style="max-height: 480px;">
                     <ul id="miLista">
                     </ul>
                 </div>
                 <!-- Campo de texto para escribir -->
-                <form id="mensajeForm" class="mt-4">
-                    <input type="text" id="mensajeInput"
+                <form id="mensajeForm" class="mt-4" method = "GET" action={{ route('chat.envia') }}>
+                    @csrf
+                    <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
+                    <input type="text" id="mensajeInput" name = "mensajeEnvio"
                         class="w-4/5 border rounded-md py-2 px-5 focus:outline-none focus:border-blue-500"
-                        placeholder="Escribe un mensaje..." >
+                        placeholder="Escribe un mensaje...">
                     <button type="submit"
                         class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
                 </form>
@@ -78,7 +87,8 @@
             var hora = fechaHora.getHours();
             var minutos = fechaHora.getMinutes();
             var horaFormato = (hora < 10 ? '0' : '') + hora; // Agregar un cero delante si la hora es menor que 10
-            var minutosFormato = (minutos < 10 ? '0' : '') + minutos; // Agregar un cero delante si los minutos son menores que 10
+            var minutosFormato = (minutos < 10 ? '0' : '') +
+                minutos; // Agregar un cero delante si los minutos son menores que 10
             return horaFormato + ':' + minutosFormato;
         }
         // Obtener la lista
@@ -141,7 +151,7 @@
             var horaElemento = document.createElement("p");
 
             console.log("El elemento es: " + elemento['mensaje_recibido']);
-            console.log("el telefono es: "+ elemento['telefono_wa']);
+            console.log("el telefono es: " + elemento['telefono_wa']);
 
             elementoH1.textContent = elemento['mensaje_recibido'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
@@ -208,6 +218,8 @@
         function abrirchat(telefono, mensajes) {
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
+            document.getElementById("numeroEnvioOculto").value = telefono;
+            console.log("El telefono que esta entrando es: " + telefono);
 
             // Ordenar mensajes por fecha y hora
             mensajes.sort(function(a, b) {
@@ -236,9 +248,9 @@
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
 
-                   var elementoCreado;
+                    var elementoCreado;
 
-                   if (elemento['telefono_wa'] == telefonoEmisor) {
+                    if (elemento['telefono_wa'] == telefonoEmisor) {
                         elementoCreado = crearMensajeEnviado(elemento);
                     } else {
                         elementoCreado = crearMensajeRecibido(elemento);
@@ -267,9 +279,6 @@
             chat.style.display = 'none';
             document.getElementById("miLista").innerText = "";
         }
-
     </script>
 
 </x-app-layout>
-
-

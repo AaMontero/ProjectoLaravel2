@@ -95,7 +95,30 @@
 
     <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <h2 class = "ml-8">Cliente Registrados</h2>
+            <div class = "flex">
+                <h2 class = "ml-20 pt-4 w-1/2"> Clientes Registrados </h2>
+                <div class="pb-2 w-1/2 flex">
+                    <div class = "w-1/2">
+                    </div>
+                    <div class="flex items-center w-1/2 mr-4">
+                        <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
+                            <div class = "w-3/4 flex">
+                                <div class = "w-full pr-5">
+                                    <label for="num_dias"
+                                        class="block text-sm font-medium text-gray-700">Cedula:</label>
+                                    <input type="number" name="num_dias" id="num_dias"
+                                        class="mt-1 p-2 border rounded-md w-full">
+                                </div>
+
+                            </div>
+                            <div class = "w-1/4">
+                                <input type="submit" value="Buscar"
+                                    class="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
                     <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
@@ -116,7 +139,8 @@
                         <tbody>
                             @foreach ($clientes as $cliente)
                                 <tr> <!--Tabla que muestra los clientes-->
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">{{ $cliente->cedula }}
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $cliente->cedula }}
                                     </td>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $cliente->nombres }}</td>

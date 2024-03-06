@@ -56,9 +56,8 @@
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
                             nuevo cliente</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />
+                    </form>
                 </div>
-
-                </form>
             </div>
         </div>
         <script>
@@ -74,62 +73,87 @@
             }
         </script>
     </div>
-    <div class="py-2 ">
-        <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <h2 class = "ml-8">Vendedores Registrados</h2>
-            <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
-                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto" >
-                    <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300"  style="overflow-x: auto;">
-                        <thead>
-                            <tr>
-                                <th class="py-2 px-4 border-b text-center ">ID</th>
-                                <th class="py-2 px-4 border-b text-center ">Nombres</th>
-                                <th class="py-2 px-4 border-b text-center ">Rol</th>
-                                <th class="py-2 px-4 border-b text-center ">Porcentaje Ventas</th>
-                                <th class="py-2 px-4 border-b text-center ">Estado</th>
-                                <th class="py-2 px-4 border-b text-center ">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($vendedores as $vendedor)
-                                <tr>
-                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->nombres }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->rol }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $vendedor->activo == "1"? "Activo":"Inactivo"  }}</td>
-                                    <td class = "text-right pr-6">
-                                        <x-dropdown class="origin-top absolute ">
-                                            <x-slot name="trigger">
-                                                <button>
-                                                    <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                                    </svg>
-                                                </button>
-                                            </x-slot>
-                                            <x-slot name="content">
-                                                <?php
 
-                                                ?>
-                                                <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
-                                                    {{ __('Editar Vendedor') }}
-                                                </x-dropdown-link>
+    <div class="max-w mx-auto px-2 lg:px-20 mb-4">
+        <div class = "flex">
+            <h2 class = "ml-20 pt-4 w-1/2"> Vendedores Registrados </h2>
+            <div class="pb-2 w-1/2 flex">
+                <div class = "w-1/2">
 
+                </div>
+                <div class="flex items-center w-1/2 mr-4">
+                    <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
+                        <div class = "w-3/4 flex">
+                            <div class = "w-full pr-5">
+                                <label for="num_dias" class="block text-sm font-medium text-gray-700">Cedula:</label>
+                                <input type="number" name="num_dias" id="num_dias"
+                                    class="mt-1 p-2 border rounded-md w-full">
+                            </div>
 
-                                            </x-slot>
-                                        </x-dropdown>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        </div>
+                        <div class = "w-1/4">
+                            <input type="submit" value="Buscar"
+                                class="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+
+        <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
+            <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
+                <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300" style="overflow-x: auto;">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b text-center ">ID</th>
+                            <th class="py-2 px-4 border-b text-center ">Nombres</th>
+                            <th class="py-2 px-4 border-b text-center ">Rol</th>
+                            <th class="py-2 px-4 border-b text-center ">Porcentaje Ventas</th>
+                            <th class="py-2 px-4 border-b text-center ">Estado</th>
+                            <th class="py-2 px-4 border-b text-center ">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($vendedores as $vendedor)
+                            <tr>
+                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
+                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->nombres }}</td>
+                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->rol }}</td>
+                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    {{ $vendedor->activo == '1' ? 'Activo' : 'Inactivo' }}</td>
+                                <td class = "text-right pr-6">
+                                    <x-dropdown class="origin-top absolute ">
+                                        <x-slot name="trigger">
+                                            <button>
+                                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                                </svg>
+                                            </button>
+                                        </x-slot>
+                                        <x-slot name="content">
+                                            <?php
+                                            
+                                            ?>
+                                            <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
+                                                {{ __('Editar Vendedor') }}
+                                            </x-dropdown-link>
+
+
+                                        </x-slot>
+                                    </x-dropdown>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
     <script>
         function abrirAgregarVendedor() {
             var VentanaAgregarContrato = document.getElementById("idAgregarVendedor");

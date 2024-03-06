@@ -39,15 +39,15 @@ class ContratoController extends Controller
     {
         $contratos = Contrato::orderBy('created_at', 'desc')->get();
         $clientes = Cliente::all();
-    
+
         return view('contratos.contrato', [
             "contratos" => Contrato::with('Cliente')->get(),
             "contratos" => Contrato::orderBy('created_at', 'desc')->get(),
-            "clientes" => $clientes, 
-            "vendedores" => Vendedor::all(), 
+            "clientes" => $clientes,
+            "vendedores" => Vendedor::all(),
         ]);
     }
-   
+
     // Obtener los datos del cliente para el modal
     public function obtenerDetallesCliente($id)
     {
@@ -57,8 +57,8 @@ class ContratoController extends Controller
     }
 
 
-    
-    
+
+
 
     public function add_contrato(Cliente $cliente)
     {
@@ -246,7 +246,7 @@ class ContratoController extends Controller
                 echo ("Los documentos se generaron correctamente. \n");
             }
 
-            //Creación del cliente            
+            //Creación del cliente
             if ($tieneUsuario == "") {
                 $controler = new ClienteController();
                 $clienteExiste = Cliente::where('cedula', $numCedula);
@@ -285,7 +285,7 @@ class ContratoController extends Controller
                 $contrato->valor_pagare = $valorPagare;
                 $contrato->fecha_fin_pagare = $fechaVencimiento;
                 $contrato->meses_credito_directo = 1;
-            } else if ($StringOtrosFormaPago != "") { // Se ejecuta cuando hay otra opción de pago 
+            } else if ($StringOtrosFormaPago != "") { // Se ejecuta cuando hay otra opción de pago
 
             }
             $contrato->otro_comentario = $StringOtrosFormaPago;
@@ -297,9 +297,9 @@ class ContratoController extends Controller
             $contrato->contrato_id = "QT";
             $personaArray = json_decode($persona, true);
 
-            if (isset($personaArray['id'])) {
+            if (!empty($personaArray) && isset($personaArray['id'])) {
                 $contrato->cliente_id = $personaArray['id'];
-            } elseif (isset($personaArray[0]['id'])) {
+            } elseif (!empty($personaArray) && isset($personaArray[0]['id'])) {
                 $contrato->cliente_id = $personaArray[0]['id'];
             } else {
                 $contrato->cliente_id = null;

@@ -81,7 +81,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto" >
                     <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300"  style="overflow-x: auto;">
                         <thead>
-                            <tr> 
+                            <tr>
                                 <th class="py-2 px-4 border-b text-center ">ID</th>
                                 <th class="py-2 px-4 border-b text-center ">Nombres</th>
                                 <th class="py-2 px-4 border-b text-center ">Rol</th>
@@ -92,7 +92,7 @@
                         </thead>
                         <tbody>
                             @foreach ($vendedores as $vendedor)
-                                <tr> 
+                                <tr>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->nombres }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->rol }}</td>
@@ -112,7 +112,7 @@
                                             </x-slot>
                                             <x-slot name="content">
                                                 <?php
-                                                
+
                                                 ?>
                                                 <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
                                                     {{ __('Editar Vendedor') }}
@@ -140,5 +140,6 @@
             }
         }
     </script>
-    @include('layouts.footer')
+
 </x-app-layout>
+@include('layouts.footer')

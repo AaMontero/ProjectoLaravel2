@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\WhatsApp;
 use DateTime;
 use Exception;
@@ -8,6 +9,8 @@ use Illuminate\Http\Request;
 
 class WhatsAppController extends Controller
 {
+
+
     public function index()
     {
         $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
@@ -16,9 +19,9 @@ class WhatsAppController extends Controller
 
     public function enviarPHP(Request $request)
     {
-        $mensaje = $request->mensajeEnvio; 
-        $numeroEnviar = $request->numeroEnvio; 
-        if(strncmp($numeroEnviar, '0', strlen('0')) === 0){
+        $mensaje = $request->mensajeEnvio;
+        $numeroEnviar = $request->numeroEnvio;
+        if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
         $telefonoEnviaID = "258780720641927";
@@ -49,15 +52,13 @@ class WhatsAppController extends Controller
 
 
         $response = curl_exec($curl);
-        $mensajeenv = new Whatsapp(); 
-        $mensajeenv->mensaje_recibido = $mensaje; 
-        $mensajeenv->id_wa = "asdasdasd"; 
-        $mensajeenv->telefono_wa = "593987411818"; 
-        $mensajeenv->id_numCliente = $numeroEnviar ; 
-        $mensajeenv->fechaHora = new DateTime('now'); 
-        $mensajeenv->create(); 
-
-
+        $whatsApp = new WhatsApp();
+        $whatsApp->mensaje_enviado  = $mensaje;
+        $whatsApp->id_wa = "asdasdasd";
+        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->id_numCliente = $numeroEnviar;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->save();
         curl_close($curl);
         echo $response;
     }
@@ -100,13 +101,13 @@ class WhatsAppController extends Controller
         //file_put_contents("response.txt", $response);
         $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-        
+
         $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
         return view('chat.chat', ['mensajes' => $mensajes]);
     }
     public function webhook(Request $request)
     {
-        
+
         try {
             $verifyToken = 'TokenPruebaValidacion';
             $query = $request->query();
@@ -131,21 +132,23 @@ class WhatsAppController extends Controller
       */
     public function recibe()
     {
-        //LEEMOS LOS DATOS ENVIADOS POR WHATSAPP
         $respuesta = file_get_contents("php://input");
-        //echo file_put_contents("text.txt", "Hola");
-        //SI NO HAY DATOS NOS SALIMOS
         if ($respuesta == null) {
             exit;
         }
-        //CONVERTIMOS EL JSON EN ARRAY DE PHP
         $respuesta = json_decode($respuesta, true);
-        //EXTRAEMOS EL TELEFONO DEL ARRAY
-        $mensaje = "Telefono:" . $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['from'] . "\n";
-        //EXTRAEMOS EL MENSAJE DEL ARRAY
-        $mensaje .= "Mensaje:" . $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
-        //GUARDAMOS EL MENSAJE Y LA RESPUESTA EN EL ARCHIVO text.txt
-
+        $telefonoUser =  $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['from'];
+        $mensaje =  $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
+        $id = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['id'];
+        $timestamp = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['timestamp'];
+        $whatsApp = new WhatsApp();
+        $whatsApp->timestamp_wa = $timestamp;
+        $whatsApp->mensaje_enviado  = $mensaje;
+        $whatsApp->id_wa = $id;
+        $whatsApp->telefono_wa = $telefonoUser;
+        $whatsApp->id_numCliente = $telefonoUser;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->save();
     }
 
     public function notificacionMensaje()
@@ -181,5 +184,14 @@ class WhatsAppController extends Controller
     public function destroy(WhatsApp $whatsApp)
     {
         //
+    }
+}
+class Utils
+{
+    function convertirMinNoTilde($mensaje)
+    {
+        $mensaje = mb_strtolower($mensaje, 'UTF-8');
+        $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
+        return $mensaje;
     }
 }

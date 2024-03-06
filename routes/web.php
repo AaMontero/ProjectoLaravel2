@@ -9,6 +9,8 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
+use App\Http\Controllers\WhatsAppApiController;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\WhatsApp;
 
 /*
@@ -60,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])
         ->name('clientes.edit'); //Acceder a la página de editar
     Route::get('/clientes',        [ClienteController::class, 'index'])
+        ->withoutMiddleware([VerifyCsrfToken::class])
         ->name('clientes.index'); //Mostrar Clientes
     Route::post('clientes',        [ClienteController::class, 'store'])
         ->name('clientes.store'); //Agregar Cliente
@@ -125,14 +128,17 @@ Route::middleware('auth')->group(function () {
     //Chat WhatsApp
     // Route::prefix('whatsapp')->group(function () {
     //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
-    Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
     //Route::post('/webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
 
     Route::get('chat', [WhatsAppController::class, 'index']);
-
     // routes/web.php
     Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
 });
+//Autentifiación para conectarse con APIS (No necesita estar logeado)
+Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
+Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
 require __DIR__ . '/auth.php';

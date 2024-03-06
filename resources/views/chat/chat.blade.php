@@ -27,7 +27,7 @@
                 @endphp
                 <div class="space-y-4">
                     <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
-                        data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_recibido'] }}"
+                        data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}"
                         class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                         <div
@@ -95,53 +95,6 @@
         var lista = document.getElementById("miLista");
         var telefonoEmisor = "593987411818";
 
-        // function crearLineaChat(elemento) {
-
-        //     var nuevoElemento = document.createElement("div");
-        //     var elementoH1 = document.createElement("h1");
-        //     var horaElemento = document.createElement("p");
-        //     var otroElemento = document.createElement("div");
-
-        //     console.log("El elemento es: " + elemento['mensaje_recibido']);
-        //     console.log("el telefono es: "+ elemento['telefono_wa']);
-
-        //     // elementoH1.textContent = elemento['mensaje_recibido'];
-        //     horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-        //     //Estilos de la fecha
-        //     horaElemento.style.fontSize = "12px"; // Tamaño de fuente para la hora
-        //     horaElemento.style.color = "#999"; // Color de la hora
-        //     horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaje
-        //     // Estilos del div y del h1
-        //     nuevoElemento.style.border = "1px solid black";
-        //     nuevoElemento.style.borderRadius = "10px"
-        //     nuevoElemento.style.borderRadius = "5px";
-        //     nuevoElemento.style.padding = "5px";
-        //     nuevoElemento.style.marginBottom = "10px";
-        //     nuevoElemento.style.backgroundColor = '#CCC9C9';
-        //     nuevoElemento.style.fontFamily = "Arial, sans-serif";
-        //     nuevoElemento.style.fontSize = "20px"; // Tamaño de fuente
-        //     nuevoElemento.style.lineHeight = "1.5";
-        //     nuevoElemento.style.marginRight = "50px";
-        //     nuevoElemento.style.marginLeft = "100px"
-        //     nuevoElemento.style.backgroundColor = "transparent";
-
-        //     otroElemento.style.color = "white";
-
-        //     // Aplicar estilos al div del mensaje recibido
-        //      // Margen inferior del div
-
-        //     nuevoElemento.appendChild(elementoH1);
-        //     nuevoElemento.appendChild(horaElemento);
-
-        //     if (elemento['telefono_wa'] == telefonoEmisor) {
-        //         nuevoElemento.style.color = 'red'; // Cambiar a color rojo
-        //         nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
-
-        //     }
-        //     return nuevoElemento;
-        //     return otroElemento;
-
-        // }
 
         function crearMensajeRecibido(elemento) {
 
@@ -149,17 +102,11 @@
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
             var horaElemento = document.createElement("p");
-
-            console.log("El elemento es: " + elemento['mensaje_recibido']);
-            console.log("el telefono es: " + elemento['telefono_wa']);
-
-            elementoH1.textContent = elemento['mensaje_recibido'];
+            elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            //Estilos de la fecha
             horaElemento.style.fontSize = "12px";
             horaElemento.style.color = "#999";
             horaElemento.style.marginTop = "6px";
-            // Estilos del div y del h1
             nuevoElemento.style.borderRadius = "10px";
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
@@ -172,8 +119,6 @@
             nuevoElemento.style.marginRight = "100px";
             elementoH1.style.marginLeft = '10px';
             nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
-
-
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
@@ -186,14 +131,11 @@
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
             var horaElemento = document.createElement("p");
-
-            elementoH1.textContent = elemento['mensaje_recibido'];
+            elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            //Estilos de la fecha
             horaElemento.style.fontSize = '12px';
             horaElemento.style.color = '#999';
             horaElemento.style.marginTop = "6px";
-            // Estilos del div y del h1
             nuevoElemento.style.borderRadius = "10px";
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
@@ -203,11 +145,9 @@
             nuevoElemento.style.lineHeight = "1";
             nuevoElemento.style.color = 'red';
             nuevoElemento.style.textAlign = 'right';
-            nuevoElemento.style.marginLeft = "300px";
+            nuevoElemento.style.marginLeft = "100px";
             elementoH1.style.marginRight = '10px';
             nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
-
-
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
@@ -219,7 +159,6 @@
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
             document.getElementById("numeroEnvioOculto").value = telefono;
-            console.log("El telefono que esta entrando es: " + telefono);
 
             // Ordenar mensajes por fecha y hora
             mensajes.sort(function(a, b) {
@@ -234,16 +173,11 @@
                     nuevoElemento.remove();
                 }
             }
-             // Limpiar la lista de mensajes existentes
-                lista.innerHTML = '';
+            // Limpiar la lista de mensajes existentes
+            lista.innerHTML = '';
 
             // Mostrar el teléfono del chat actual
             document.getElementById("telefono-chat").textContent = telefono;
-            // if (lista.childElementCount > 0) { // La lista tiene hijos, la vaciamos
-            //     while (lista.firstChild) {
-            //         lista.removeChild(lista.firstChild);
-            //     }
-            // }
 
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
@@ -261,17 +195,15 @@
                 lista.scrollTop = lista.scrollHeight;
             }
 
+            VentanaChat.style.display = 'block';
 
-             console.log('mensajes chat: ', mensajes);
-             VentanaChat.style.display = 'block';
-
-        //     if (VentanaChat.style.display === 'none') {
-        //         VentanaChat.style.display = 'block';
-        //         document.getElementById("telefono-chat").textContent = telefono;
-        //     } else {
-        //         VentanaChat.style.display = 'none';
-        //     }
-         }
+            //     if (VentanaChat.style.display === 'none') {
+            //         VentanaChat.style.display = 'block';
+            //         document.getElementById("telefono-chat").textContent = telefono;
+            //     } else {
+            //         VentanaChat.style.display = 'none';
+            //     }
+        }
 
 
         function cerrarChat() {

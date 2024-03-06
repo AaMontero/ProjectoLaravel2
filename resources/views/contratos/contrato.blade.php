@@ -242,12 +242,6 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
 
                     <table x-show="mostrarModal" @click.away="mostrarModal = false"
-<<<<<<< HEAD
-                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
-=======
-                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300    ">
-
->>>>>>> 61490521c2adea86521054bb1649a389ca0a73f2
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ubicacion Sala</th>
@@ -525,9 +519,6 @@
         </div>
     </div>
 
-
-
-
     <script>
         var listaFormasPago = [];
         var pagareBoolean = false;
@@ -659,11 +650,7 @@
         // Obtener el contenedor del modal
         const modalContainer = document.querySelector('[x-data="{ mostrarModal: false }"]');
 
-        // Mostrar el modal después de cargar la página
-        modalContainer.style.display = 'block';
-
-        // Inicializar Alpine.js manualmente solo para este contenedor
-        Alpine.initializeComponent(modalContainer);
+      
     });
     </script>
 

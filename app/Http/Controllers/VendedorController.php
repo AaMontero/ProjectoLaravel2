@@ -72,7 +72,7 @@ class VendedorController extends Controller
         ]);
         $request->user()->vendedores()->create($validated);
         return redirect()->route('vendedor.index')
-            ->with('status', __('Inserción realizada exitosamente'));
+        ;
     }
 
     /**
@@ -80,7 +80,7 @@ class VendedorController extends Controller
      */
     public function show(Vendedor $vendedor)
     {
-        //
+        
     }
 
     /**
@@ -114,7 +114,6 @@ class VendedorController extends Controller
             "activo" => ['required']
         ]);
         $vendedor->update($validated);
-        return to_route('vendedor.index');
     }
 
     /**

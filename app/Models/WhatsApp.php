@@ -18,6 +18,7 @@ class WhatsApp extends Model
         'id_wa',
         'timestamp_wa',
         'telefono_wa',
+        'id_numCliente'
     ];
 
     protected $casts = [

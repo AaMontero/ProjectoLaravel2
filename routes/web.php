@@ -9,6 +9,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
+use App\Models\WhatsApp;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,12 +104,8 @@ Route::middleware('auth')->group(function () {
     Route::get('pagoVendedores/revertirPago/{pago}', [PagoVendedorController::class, 'quitarPagado'])
         ->name('pagoVendedor.revertirPago');
 
-
-
     //Rutas para los contratos y clientes
     Route::get('/contrato/index/', [ContratoController::class, 'index'])->name('contrato.index');
-
-
     Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
         ->name('contrato.agregar');
     Route::post('/contrato', [ContratoController::class, 'store'])
@@ -119,12 +116,17 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.add_vendedores');
 
 
-    Route::get('chat', [WhatsAppController::class, 'index']);
+    Route::get('chat', [WhatsAppController::class, 'index'])
+        ->name('chat.chat');
+    Route::get('/enviaWpp', [WhatsAppController::class, 'enviarPHP'])
+        ->name('chat.envia');
+    Route::post('chat/obtenerMensajes', [WhatsappController::class, 'recibe'])
+        ->name('chat.recibe');
     //Chat WhatsApp
     // Route::prefix('whatsapp')->group(function () {
     //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
-    //     Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
-    //     Route::post('webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
+    Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
+    //Route::post('/webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
 
     Route::get('chat', [WhatsAppController::class, 'index']);

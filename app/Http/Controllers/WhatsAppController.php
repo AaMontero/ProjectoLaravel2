@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\tasks;
 use App\Models\WhatsApp;
 use DateTime;
 use Exception;
+use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Pusher\Pusher;
+
 
 class WhatsAppController extends Controller
 {
@@ -89,7 +94,7 @@ class WhatsAppController extends Controller
       */
     public function recibe()
     {
-        $respuesta = file_get_contents("php://input");
+       $respuesta = file_get_contents("php://input");
         if ($respuesta == null) {
             exit;
         }
@@ -109,10 +114,42 @@ class WhatsAppController extends Controller
         $whatsApp->save();
     }
 
-    public function notificacionMensaje()
+    public function notificacionMensaje(Request $request)
     {
         $mensajes = WhatsApp::all();
-        return view('chat.chat', compact('mensajes')); // Pasa los mensajes a la vista 'dashboard'
+        // Crea una nueva tarea
+    $task = new tasks;
+    $task->title = $request->title;
+    $task->description = $request->description;
+    $task->save();
+
+    // Crea un nuevo mensaje
+    $message = new Message;
+    $message->from = Auth::user()->id;
+    $message->message = $request->title;
+    $message->save();
+
+    // Envía una notificación utilizando Pusher
+    $options = [
+        'cluster' => 'sa1',
+        'useTLS' => true
+    ];
+
+    $pusher = new Pusher(
+        env('PUSHER_APP_KEY'),
+        env('PUSHER_APP_SECRET'),
+        env('PUSHER_APP_ID'),
+        $options
+    );
+
+    $data = ['from' => $message->from];
+    $pusher->trigger('my-channel', 'my-event', $data);
+
+    // Obtener todos los mensajes de WhatsApp;
+
+    // Devolver la vista con los mensajes
+    return view('chat.chat', compact('mensajes'));
+         // Pasa los mensajes a la vista 'dashboard'
     }
 
     public function show(WhatsApp $whatsApp)

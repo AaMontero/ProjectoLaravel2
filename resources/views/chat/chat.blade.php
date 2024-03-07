@@ -88,6 +88,7 @@
         </div>
     </div>
 
+
     <script>
         function enviarFormulario() {
             llamadaAjax()
@@ -110,7 +111,7 @@
             return new Promise((resolve, reject) => {
                 const textoIngresado = document.getElementById("mensajeInput").value;
                 const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-                
+
                 const url =
                     'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
                     numeroAbierto + '&mensajeEnvio=' +
@@ -264,6 +265,8 @@
             chat.style.display = 'none';
             document.getElementById("miLista").innerText = "";
         }
+
+
     </script>
 
 </x-app-layout>

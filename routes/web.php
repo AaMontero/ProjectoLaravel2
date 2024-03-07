@@ -97,7 +97,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update');
 
-    //Rutas para Pagos de Vendedores 
+    //Rutas para Pagos de Vendedores
     Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
         ->name('pagoVendedor.edit');
     Route::put('pagoVendedor/{pago}', [PagoVendedorController::class, 'update'])
@@ -130,6 +130,8 @@ Route::middleware('auth')->group(function () {
     //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
     //Route::post('/webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
+
+    Route::post('notificaion', [WhatsappController::class, 'recibe']);
 
     Route::get('chat', [WhatsAppController::class, 'index'])
         ->name('chat.chat');

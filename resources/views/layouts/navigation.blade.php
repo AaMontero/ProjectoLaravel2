@@ -1,6 +1,9 @@
+
 @if (session('status'))
     <div class="bg-green-600 text-green-100 text-center text-lg font-bold p-2">{{ session('status') }}</div>
 @endif
+<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,7 +32,7 @@
                     </x-nav-link>
                     <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
                         {{ __('Clients') }}
-                    </x-nav-link> 
+                    </x-nav-link>
                     <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
                         {{ __('Contracts') }}
                     </x-nav-link>
@@ -38,9 +41,9 @@
                     </x-nav-link>
                     @endrole
 
-                    
+
                     @role('vendedor')
-               
+
                     <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                         {{ __('Vendedor') }}
                     </x-nav-link>
@@ -69,9 +72,71 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                     </div> --}}
-                    
+
                 </div>
+
             </div>
+
+                        <!-- Vista donde se muestra el div de notificaciones -->
+                        <div>
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item dropdown mr-1 mt-3">
+                                    <a class="nav-link" href="{{ route('chat.chat')}}">
+                                        <i class="fas fa-bell text-black"></i>
+                                        <span id="notification-counter" class="badge badge-danger pending">0</span>
+                                    </a>
+                                    <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: none;">
+                                        <!-- Aquí se mostrarán las notificaciones en tiempo real -->
+                                        <div id="notificaciones">
+                                            <!-- Las notificaciones se insertarán aquí dinámicamente -->
+                                            <a href="{{ route('chat.chat')}}" id="notification-link" class="notification-link">Ver notificación</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+            <!-- Script para escuchar eventos de Pusher y mostrar notificaciones -->
+            <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            @push('javascript')
+            <script>
+               $(document).ready(function() {
+                var pusher = new Pusher('217450e1ce096539fb1c', {
+                    cluster: 'sa1'
+                });
+
+                var channel = pusher.subscribe('whatsapp-channel');
+
+                channel.bind('whatsapp-event', function(data) {
+                    // Incrementar el contador de notificaciones
+                    var counterElement = $('#notification-counter');
+                    var currentCount = parseInt(counterElement.text());
+                    counterElement.text(currentCount + 1);
+
+                    // Mostrar la notificación y el enlace
+                    var notificationDiv = $('<div class="notification"></div>');
+                    var notificationText = $('<span></span>').text(data.mensaje);
+                    var notificationLink = $('<a href="#"></a>').text('Ver notificación');
+                    notificationLink.on('click', function() {
+                        // Redirigir a la nueva ruta
+                        window.location.href = '{{ route('chat.chat') }}';
+                    });
+                    notificationDiv.append(notificationText);
+                    notificationDiv.append(notificationLink);
+                    $('#notificaciones').append(notificationDiv);
+
+                    // Agregar un console.log() para verificar los datos recibidos
+                    console.log('Nuevo evento de WhatsApp recibido:', data);
+                });
+
+                // Restablecer el contador de notificaciones cuando se abra la nueva ruta
+                $('#notification-link').on('click', function() {
+                    $('#notification-counter').text('0');
+                });
+            });
+            </script>
+            @endpush
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -148,7 +213,7 @@
             <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
                 {{ __('Contracts') }}
             </x-responsive-nav-link>
-            
+
 
         </div>
 
@@ -176,11 +241,11 @@
                 </form>
             </div>
         </div>
-        
+
     </div>
-   
-    
+
+
 </nav>
-
-
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+@stack('javascript')
 

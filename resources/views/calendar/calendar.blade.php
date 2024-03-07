@@ -317,6 +317,7 @@ body {
                         });
                     },
                     eventTextColor: '#ffffff',
+
                     eventClick: function(event) {
                         $('#editarModal').modal('show');
 

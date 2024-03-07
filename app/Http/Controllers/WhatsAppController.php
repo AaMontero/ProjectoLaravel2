@@ -118,16 +118,11 @@ class WhatsAppController extends Controller
     {
         $mensajes = WhatsApp::all();
         // Crea una nueva tarea
-    $task = new tasks;
-    $task->title = $request->title;
-    $task->description = $request->description;
-    $task->save();
+        $mensaje = new WhatsApp;
+        $mensaje->id_numCliente = $request->id_numCliente;
+        $mensaje->mensaje_recibido = $request->mensaje_recibido;
+        $mensaje->save();
 
-    // Crea un nuevo mensaje
-    $message = new Message;
-    $message->from = Auth::user()->id;
-    $message->message = $request->title;
-    $message->save();
 
     // Envía una notificación utilizando Pusher
     $options = [
@@ -142,8 +137,11 @@ class WhatsAppController extends Controller
         $options
     );
 
-    $data = ['from' => $message->from];
-    $pusher->trigger('my-channel', 'my-event', $data);
+    $data = [
+        'id_numCliente' => $mensaje->id_numCliente,
+        'mensaje_recibido' => $mensaje->mensaje_recibido
+    ];
+    $pusher->trigger('whatsapp-channel', 'whatsapp-event', $data);
 
     // Obtener todos los mensajes de WhatsApp;
 

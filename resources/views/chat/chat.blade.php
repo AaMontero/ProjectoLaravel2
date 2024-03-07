@@ -16,9 +16,7 @@
     </style>
     <div class="flex space-x-8">
         <!-- Notificaciones -->
-        <div id="notificaciones"
-            class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
-            style="max-height: 700px; border-radius: 10px;">
+        <div id="notificaciones" class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto" style="max-height: 700px; border-radius: 10px;">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
                 @php
@@ -26,16 +24,13 @@
                     $leido = $ultimoMensaje['leido']; // Verificar si el último mensaje está marcado como leído
                 @endphp
                 <div class="space-y-4">
-                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
-                        data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}"
-                        class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})" data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}" class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105" id="notificacion-{{ $ultimoMensaje->id }}">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                        <div
-                            class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
-                            {{ $telefono }}</div>
+                        <div class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
+                            {{ $telefono }}
+                        </div>
                         @if (!$leido)
-                            <span
-                                class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
+                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
                         @endif
                     </div>
                 </div>
@@ -250,6 +245,22 @@
             }
 
             VentanaChat.style.display = 'block';
+
+            if (mensajes.length > 0) {
+    const mensajeId = mensajes[0].id; // Obtener el ID del mensaje
+    const mensajeElemento = document.querySelector(`#notificacion-${mensajeId}`);
+
+    if (mensajeElemento) {
+        mensajeElemento.classList.remove('bg-gray-100', 'dark:bg-gray-800'); // Quitar el estilo de mensaje no leído
+        mensajeElemento.classList.add('bg-gray-200', 'dark:bg-gray-600'); // Agregar el estilo de mensaje leído
+
+        // Eliminar el span "Nuevo"
+        const spanNuevo = mensajeElemento.querySelector('.span-nuevo');
+        if (spanNuevo) {
+            spanNuevo.remove();
+        }
+    }
+}
 
             //     if (VentanaChat.style.display === 'none') {
             //         VentanaChat.style.display = 'block';

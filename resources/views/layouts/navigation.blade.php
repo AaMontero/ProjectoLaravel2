@@ -79,8 +79,8 @@
 
                         <!-- Vista donde se muestra el div de notificaciones -->
                         <div>
-                            <ul class="navbar-nav mr-auto">
-                                <li class="nav-item dropdown mr-1 mt-3">
+                            <ul class="navbar-nav mr-1">
+                                <li class="nav-item dropdown mt-3">
                                     <a class="nav-link" href="{{ route('chat.chat')}}">
                                         <i class="fas fa-bell text-black"></i>
                                         <span id="notification-counter" class="badge badge-danger pending">0</span>
@@ -99,6 +99,7 @@
             <!-- Script para escuchar eventos de Pusher y mostrar notificaciones -->
             <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
             @push('javascript')
             <script>
                $(document).ready(function() {
@@ -109,26 +110,26 @@
                 var channel = pusher.subscribe('whatsapp-channel');
 
                 channel.bind('whatsapp-event', function(data) {
-                    // Incrementar el contador de notificaciones
-                    var counterElement = $('#notification-counter');
-                    var currentCount = parseInt(counterElement.text());
-                    counterElement.text(currentCount + 1);
+                // Incrementar el contador de notificaciones
+                var counterElement = $('#notification-counter');
+                var currentCount = parseInt(counterElement.text());
+                counterElement.text(currentCount + 1);
 
-                    // Mostrar la notificación y el enlace
-                    var notificationDiv = $('<div class="notification"></div>');
-                    var notificationText = $('<span></span>').text(data.mensaje);
-                    var notificationLink = $('<a href="#"></a>').text('Ver notificación');
-                    notificationLink.on('click', function() {
-                        // Redirigir a la nueva ruta
-                        window.location.href = '{{ route('chat.chat') }}';
-                    });
-                    notificationDiv.append(notificationText);
-                    notificationDiv.append(notificationLink);
-                    $('#notificaciones').append(notificationDiv);
-
-                    // Agregar un console.log() para verificar los datos recibidos
-                    console.log('Nuevo evento de WhatsApp recibido:', data);
+                // Mostrar la notificación y el enlace
+                var notificationDiv = $('<div class="notification"></div>');
+                var notificationText = $('<span></span>').text(data.mensaje);
+                var notificationLink = $('<a href="#"></a>').text('Ver notificación');
+                notificationLink.on('click', function() {
+                    // Redirigir a la nueva ruta
+                    window.location.href = '{{ route('chat.chat') }}';
                 });
+                notificationDiv.append(notificationText);
+                notificationDiv.append(notificationLink);
+                $('#notificaciones').append(notificationDiv);
+
+                // Agregar un console.log() para verificar los datos recibidos
+                console.log('Nuevo evento de WhatsApp recibido:', data);
+            });
 
                 // Restablecer el contador de notificaciones cuando se abra la nueva ruta
                 $('#notification-link').on('click', function() {

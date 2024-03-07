@@ -52,7 +52,7 @@
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('message')" />
-                        <x-primary-button
+                        <x-primary-button 
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
                             nuevo cliente</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />
@@ -87,7 +87,9 @@
                                 <th class="py-2 px-4 border-b text-center ">Rol</th>
                                 <th class="py-2 px-4 border-b text-center ">Porcentaje Ventas</th>
                                 <th class="py-2 px-4 border-b text-center ">Estado</th>
+                                @role('admin')
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -99,6 +101,7 @@
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
                                     <td class="py-2 px-4 border-b text-center">{{ $vendedor->activo == "1"? "Activo":"Inactivo"  }}</td>
                                     <td class = "text-right pr-6">
+                                        @role('admin')
                                         <x-dropdown class="origin-top absolute ">
                                             <x-slot name="trigger">
                                                 <button>
@@ -121,6 +124,7 @@
 
                                             </x-slot>
                                         </x-dropdown>
+                                        @endrole
                                     </td>
                                 </tr>
                             @endforeach

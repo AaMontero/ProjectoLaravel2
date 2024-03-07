@@ -71,9 +71,9 @@ class VendedorController extends Controller
             'porcentaje_ventas' => ['required', 'min:5', 'max:255']
         ]);
         $request->user()->vendedores()->create($validated);
-
-        return redirect()->route('vendedor.index')
-        ;
+        
+        return to_route('vendedor.index') 
+        ->with('status', __('Vendedor creado exitosamente'));
     }
 
     /**
@@ -114,7 +114,10 @@ class VendedorController extends Controller
             "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
             "activo" => ['required']
         ]);
+        
         $vendedor->update($validated);
+        return to_route('vendedor.index') 
+        ->with('status', __('Actualizado   exitosamente'));
     }
 
     /**

@@ -108,8 +108,6 @@
                         @if (!empty($errorProvincia))
                             <span class="text-red-500">{{ $errorProvincia }}</span>
                         @endif
-
-
                         <!-- Ubicacion de la sala -->
 
                         <label for="ubicacion_sala" class="mt-1 p-0 ml-4 font-bold">Ubicación de la sala</label>
@@ -241,7 +239,7 @@
 
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
 
-                    <table x-show="mostrarModal" @click.away="mostrarModal = false"
+                    <table 
                         class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
                         <thead>
                             <tr>
@@ -292,14 +290,14 @@
                                     </td>
                                     <!--Id del Cliente-->
                                     {{-- modal dinamico --}}
-                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"
+                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"  
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }" >
+                                        <div x-data="{ mostrarModal: false }" x-cloak>
                                             <button @click="mostrarModal = true; " >
                                                 {{ $contrato->cliente_id }}
                                             </button>
                                             <!-- Modal -->
-                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300" 
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
                                                 x-transition:leave="ease-in duration-300"
@@ -310,7 +308,7 @@
                                                     @click="mostrarModal = false"></div>
 
                                                 <!-- Modal -->
-                                                <div
+                                                <div x-cloak
                                                     style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
                                                     <h3>Información del cliente</h3>
                                                     @foreach ($clientes as $cliente)
@@ -373,7 +371,7 @@
                                     </td>
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }">
+                                        <div x-data="{ mostrarModal: false }" >
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->closer_id }}
                                             </button>
@@ -647,12 +645,7 @@
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-        // Obtener el contenedor del modal
-        const modalContainer = document.querySelector('[x-data="{ mostrarModal: false }"]');
 
-      
-    });
     </script>
 
 </x-app-layout>

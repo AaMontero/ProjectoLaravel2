@@ -110,6 +110,7 @@
                 var channel = pusher.subscribe('whatsapp-channel');
 
                 channel.bind('whatsapp-event', function(data) {
+                    console.log('Datos recibidos:', data);
                 // Incrementar el contador de notificaciones
                 var counterElement = $('#notification-counter');
                 var currentCount = parseInt(counterElement.text());
@@ -128,7 +129,7 @@
                 $('#notificaciones').append(notificationDiv);
 
                 // Agregar un console.log() para verificar los datos recibidos
-                console.log('Nuevo evento de WhatsApp recibido:', data);
+
             });
 
                 // Restablecer el contador de notificaciones cuando se abra la nueva ruta
@@ -248,5 +249,5 @@
 
 </nav>
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-@stack('javascript')
+
 

@@ -52,7 +52,7 @@
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('message')" />
-                        <x-primary-button
+                        <x-primary-button 
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
                             nuevo cliente</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />

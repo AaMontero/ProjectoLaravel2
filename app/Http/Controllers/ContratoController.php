@@ -97,7 +97,8 @@ class ContratoController extends Controller
         $utils->agregarPago($closer2, $contrato, $controlerPV);
         $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
 
-        return to_route('contrato.index');
+        return to_route('contrato.index') 
+        ->with('status', __('Contrato creado exitosamente'));
     }
     public function create(Request $request)
     {

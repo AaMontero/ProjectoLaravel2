@@ -170,6 +170,13 @@
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Apellidos</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Teléfono</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">F. Nacimiento</th>
+                                <th class="py-2 px-4 border-b text-center ">Email</th>
+                                <th class="py-2 px-4 border-b text-center ">Provincia</th>
+                                <th class="py-2 px-4 border-b text-center ">Ciudad</th>
+                                <th class="py-2 px-4 border-b text-center ">Estado</th>
+                                @role('admin')
+                                <th class="py-2 px-4 border-b text-center ">Opciones</th>
+                                @endrole
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Email</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Provincia</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ciudad</th>
@@ -205,6 +212,7 @@
                                         @endif
                                     </td>
                                     <td class = "text-right pr-6">
+                                        @role('admin')
                                         <x-dropdown class="origin-top absolute ">
                                             <x-slot name="trigger">
                                                 <button>
@@ -220,15 +228,17 @@
                                                 <?php
                                                 
                                                 ?>
+                                                
                                                 <x-dropdown-link :href="route('contrato.agregar', $cliente)">
                                                     {{ __('Agregar Contrato') }}
                                                 </x-dropdown-link>
                                                 <x-dropdown-link :href="route('clientes.edit', $cliente)">
                                                     {{ __('Editar Cliente') }}
                                                 </x-dropdown-link>
-
+                                              
                                             </x-slot>
                                         </x-dropdown>
+                                        @endrole
                                     </td>
                                 </tr>
                             @endforeach

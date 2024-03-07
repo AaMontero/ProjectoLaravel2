@@ -48,8 +48,15 @@ class RegisteredUserController extends Controller
              'password' => Hash::make($request->password),
          ]);
          
-         // Asignar el rol al usuario
-        $user->assignRole($request->rol);
+         // Asignar segun el rol seleccionado
+        // $user->assignRole($request->rol);
+
+        // Asignar el rol de vendedor al usuario por defecto
+        $vendedorRole = Role::where('name', 'vendedor')->first();
+        if ($vendedorRole) {
+            $user->assignRole($vendedorRole);
+        }
+
 
         event(new Registered($user));
          Auth::login($user);

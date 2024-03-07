@@ -39,6 +39,9 @@
                     <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                         {{ __('Vendedor') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
+                        {{ __('Asignar rol') }}
+                    </x-nav-link>
                     @endrole
 
 
@@ -197,6 +200,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            @role('admin')
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="no-underline" >
             <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline" >
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
@@ -215,8 +220,31 @@
             <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                 {{ __('Vendedores') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
+                {{ __('Asignar rol') }}
+            </x-responsive-nav-link>
+            @endrole
 
+            @role('vendedor')
+            <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                {{ __('Vendedor') }}
+            </x-responsive-nav-link>
+            @endrole
 
+            @role('asesor')
+            <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
+                {{ __('Paquetes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
+                {{ __('Calendar') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
+                {{ __('Clients') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
+                {{ __('Contracts') }}
+            </x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->

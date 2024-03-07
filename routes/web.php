@@ -9,6 +9,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
+use App\Http\Controllers\RolController;
 use App\Http\Controllers\WhatsAppApiController;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\WhatsApp;
@@ -73,9 +74,11 @@ Route::middleware('auth')->group(function () {
 
     //Ruta para el calendario
     Route::get('calendar/index', [CalendarController::class, 'index'])
-        ->name('calendar.index');
+        ->name('calendar.index')
+        ->middleware('checkRole:admin,asesor');
     Route::post('/calendar', [CalendarController::class, 'store'])
-        ->name('calendar.store');
+        ->name('calendar.store')
+        ->middleware('checkRole:admin');
     Route::patch('calendar/update/{id}', [CalendarController::class, 'update'])
         ->name('calendar.update');
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])
@@ -137,6 +140,13 @@ Route::middleware('auth')->group(function () {
         ->name('chat.chat');
     // routes/web.php
     Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
+
+    // rutas de roles
+    Route::get('/rol', [RolController::class, 'index'])->name('roles.rol')->middleware('checkRole:admin')
+    ->middleware('checkRole:admin');
+    Route::put('/roles/{user}', [RolController::class, 'asignarRol'])->name('roles.asignar-rol')
+    ->middleware('checkRole:admin');
+
 });
 //Autentifiación para conectarse con APIS (No necesita estar logeado)
 Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])

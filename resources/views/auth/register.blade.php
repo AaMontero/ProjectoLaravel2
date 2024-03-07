@@ -39,16 +39,6 @@
         </div>
 
         
-     
-        <div class="mt-4">
-            <x-input-label for="rol" :value="__('Role')" />
-            <select name="rol" id="rol" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                @foreach($roles as $rol)
-                    <option value="{{ $rol->name }}">{{ $rol->name }}</option>
-                @endforeach
-            </select>
-            <x-input-error :messages="$errors->get('rol')" class="mt-2" />
-        </div>
         
         
 

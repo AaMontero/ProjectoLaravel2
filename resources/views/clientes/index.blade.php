@@ -91,7 +91,7 @@
     </div>
 
 
-    
+
 
     <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
@@ -101,10 +101,10 @@
                     <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
                         <thead>
                             <tr> <!--Etiquetas de la tabla de clientes-->
-                                <th class="py-2 px-4 border-b text-center ">Cedula</th>
-                                <th class="py-2 px-4 border-b text-center ">Nombres</th>
-                                <th class="py-2 px-4 border-b text-center ">Apellidos</th>
-                                <th class="py-2 px-4 border-b text-center ">Teléfono</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Cedula</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Nombres</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Apellidos</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Teléfono</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">F. Nacimiento</th>
                                 <th class="py-2 px-4 border-b text-center ">Email</th>
                                 <th class="py-2 px-4 border-b text-center ">Provincia</th>
@@ -113,22 +113,33 @@
                                 @role('admin')
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
                                 @endrole
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Email</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Provincia</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ciudad</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Estado</th>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($clientes as $cliente)
                                 <tr> <!--Tabla que muestra los clientes-->
-                                    <td class="py-2 px-4 border-b text-center">{{ $cliente->cedula }}</td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">{{ $cliente->cedula }}
+                                    </td>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $cliente->nombres }}</td>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $cliente->apellidos }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $cliente->numTelefonico }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $cliente->fecha_nacimiento }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $cliente->email }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $cliente->provincia }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $cliente->ciudad }}</td>
-                                    <td class="py-2 px-4 border-b text-center">
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $cliente->numTelefonico }}</td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $cliente->fecha_nacimiento }}</td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">{{ $cliente->email }}
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $cliente->provincia }}</td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $cliente->ciudad }}</td>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         @if ($cliente->activo == 1)
                                             Activo
                                         @else
@@ -171,6 +182,11 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class = "ml-20 mr-20">
+        <p class="ml-5 flex justify-center items-center list-none space-x-2">
+            {{ $clientes->appends([]) }}
+        </p>
     </div>
 
 </x-app-layout>

@@ -16,7 +16,7 @@ class VendedorController extends Controller
 
     {
         return view('vendedor.index', [
-            "vendedores" => Vendedor::with('pagosVendedor')->get(),
+            "vendedores" => Vendedor::with('pagosVendedor')->latest()->paginate(10),
             "roles" => [
                 'Vendedor', 'Closer', 'Jefe de Sala'
             ],

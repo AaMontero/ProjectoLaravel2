@@ -13,15 +13,15 @@ class WhatsApp extends Model
 
     protected $fillable = [
         'fecha_hora',
-        'mensaje_recibido',
         'mensaje_enviado',
         'id_wa',
         'timestamp_wa',
         'telefono_wa',
-        'id_numCliente'
+        'id_numCliente', 
+        'visto', 
     ];
 
     protected $casts = [
-        'fecha_hora' => 'datetime', // Esto convierte automáticamente el valor en un objeto DateTime
+        'fecha_hora' => 'datetime', 
     ];
 }

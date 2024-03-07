@@ -10,6 +10,8 @@ use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\WhatsAppApiController;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\WhatsApp;
 
 /*
@@ -61,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])
         ->name('clientes.edit'); //Acceder a la página de editar
     Route::get('/clientes',        [ClienteController::class, 'index'])
+        ->withoutMiddleware([VerifyCsrfToken::class])
         ->name('clientes.index'); //Mostrar Clientes
     Route::post('clientes',        [ClienteController::class, 'store'])
         ->name('clientes.store'); //Agregar Cliente
@@ -97,7 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update');
 
-    //Rutas para Pagos de Vendedores 
+    //Rutas para Pagos de Vendedores
     Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
         ->name('pagoVendedor.edit');
     Route::put('pagoVendedor/{pago}', [PagoVendedorController::class, 'update'])
@@ -128,12 +131,13 @@ Route::middleware('auth')->group(function () {
     //Chat WhatsApp
     // Route::prefix('whatsapp')->group(function () {
     //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
-    Route::get('webhook', [WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
     //Route::post('/webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
     // });
 
-    Route::get('chat', [WhatsAppController::class, 'index']);
+    Route::post('notificaion', [WhatsappController::class, 'recibe']);
 
+    Route::get('chat', [WhatsAppController::class, 'index'])
+        ->name('chat.chat');
     // routes/web.php
     Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
 
@@ -144,5 +148,10 @@ Route::middleware('auth')->group(function () {
     ->middleware('checkRole:admin');
 
 });
+//Autentifiación para conectarse con APIS (No necesita estar logeado)
+Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
+Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
 require __DIR__ . '/auth.php';

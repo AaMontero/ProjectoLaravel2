@@ -16,9 +16,7 @@
     </style>
     <div class="flex space-x-8">
         <!-- Notificaciones -->
-        <div id="notificaciones"
-            class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
-            style="max-height: 700px; border-radius: 10px;">
+        <div id="notificaciones" class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto" style="max-height: 700px; border-radius: 10px;">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
                 @php
@@ -26,13 +24,11 @@
                     $leido = $ultimoMensaje['leido']; // Verificar si el último mensaje está marcado como leído
                 @endphp
                 <div class="space-y-4">
-                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
-                        data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_recibido'] }}"
-                        class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})" data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}" class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105" id="notificacion-{{ $ultimoMensaje->id }}">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                        <div
-                            class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
-                            {{ $telefono }}</div>
+                        <div class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
+                            {{ $telefono }}
+                        </div>
                         @if (!$leido)
                             <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
                         @endif
@@ -74,14 +70,67 @@
                     <input type="text" id="mensajeInput" name = "mensajeEnvio"
                         class="w-4/5 border rounded-md py-2 px-5 focus:outline-none focus:border-blue-500"
                         placeholder="Escribe un mensaje...">
-                    <button type="submit"
+
+                    <button type="button" onclick="enviarFormulario()"
                         class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
+                    <!-- <button type="button" onclick="enviarFormulario()"
+                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>-->
+                    <!--<button type="submit"
+                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
+                    -->
                 </form>
             </div>
         </div>
     </div>
 
+
     <script>
+        function enviarFormulario() {
+            llamadaAjax()
+                .then((respuesta) => {
+                    try {
+                        var objeto = JSON.parse(respuesta);
+                        var lista = document.getElementById("miLista");
+                        lista.appendChild(crearMensajeEnviado(objeto));
+                        document.getElementById("mensajeInput").value = "";
+                    } catch (error) {
+                        console.error("Error al analizar el JSON:", error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error en la llamada AJAX:", error);
+                });
+        }
+
+        function llamadaAjax() {
+            return new Promise((resolve, reject) => {
+                const textoIngresado = document.getElementById("mensajeInput").value;
+                const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
+
+                const url =
+                    'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
+                    numeroAbierto + '&mensajeEnvio=' +
+                    textoIngresado;
+
+                fetch(url)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+                        }
+                        return response.text();
+                    })
+                    .then((responseData) => {
+                        //console.log(responseData);
+                        resolve(responseData);
+                    })
+                    .catch((error) => {
+                        console.error("Error en la llamada fetch:", error);
+                        reject(error);
+                    });
+            });
+        }
+
+
         function formatearHora(fechaHoraString) {
             var fechaHora = new Date(fechaHoraString);
             var hora = fechaHora.getHours();
@@ -95,53 +144,6 @@
         var lista = document.getElementById("miLista");
         var telefonoEmisor = "593987411818";
 
-        // function crearLineaChat(elemento) {
-
-        //     var nuevoElemento = document.createElement("div");
-        //     var elementoH1 = document.createElement("h1");
-        //     var horaElemento = document.createElement("p");
-        //     var otroElemento = document.createElement("div");
-
-        //     console.log("El elemento es: " + elemento['mensaje_recibido']);
-        //     console.log("el telefono es: "+ elemento['telefono_wa']);
-
-        //     // elementoH1.textContent = elemento['mensaje_recibido'];
-        //     horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-        //     //Estilos de la fecha
-        //     horaElemento.style.fontSize = "12px"; // Tamaño de fuente para la hora
-        //     horaElemento.style.color = "#999"; // Color de la hora
-        //     horaElemento.style.marginTop = "5px"; // Margen superior para separar la hora del mensaje
-        //     // Estilos del div y del h1
-        //     nuevoElemento.style.border = "1px solid black";
-        //     nuevoElemento.style.borderRadius = "10px"
-        //     nuevoElemento.style.borderRadius = "5px";
-        //     nuevoElemento.style.padding = "5px";
-        //     nuevoElemento.style.marginBottom = "10px";
-        //     nuevoElemento.style.backgroundColor = '#CCC9C9';
-        //     nuevoElemento.style.fontFamily = "Arial, sans-serif";
-        //     nuevoElemento.style.fontSize = "20px"; // Tamaño de fuente
-        //     nuevoElemento.style.lineHeight = "1.5";
-        //     nuevoElemento.style.marginRight = "50px";
-        //     nuevoElemento.style.marginLeft = "100px"
-        //     nuevoElemento.style.backgroundColor = "transparent";
-
-        //     otroElemento.style.color = "white";
-
-        //     // Aplicar estilos al div del mensaje recibido
-        //      // Margen inferior del div
-
-        //     nuevoElemento.appendChild(elementoH1);
-        //     nuevoElemento.appendChild(horaElemento);
-
-        //     if (elemento['telefono_wa'] == telefonoEmisor) {
-        //         nuevoElemento.style.color = 'red'; // Cambiar a color rojo
-        //         nuevoElemento.style.textAlign = 'right'; // Alinear a la derecha
-
-        //     }
-        //     return nuevoElemento;
-        //     return otroElemento;
-
-        // }
 
         function crearMensajeRecibido(elemento) {
 
@@ -149,17 +151,11 @@
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
             var horaElemento = document.createElement("p");
-
-            console.log("El elemento es: " + elemento['mensaje_recibido']);
-            console.log("el telefono es: " + elemento['telefono_wa']);
-
-            elementoH1.textContent = elemento['mensaje_recibido'];
+            elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            //Estilos de la fecha
             horaElemento.style.fontSize = "12px";
             horaElemento.style.color = "#999";
             horaElemento.style.marginTop = "6px";
-            // Estilos del div y del h1
             nuevoElemento.style.borderRadius = "10px";
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
@@ -172,8 +168,6 @@
             nuevoElemento.style.marginRight = "100px";
             elementoH1.style.marginLeft = '10px';
             nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
-
-
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
@@ -186,14 +180,11 @@
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h1");
             var horaElemento = document.createElement("p");
-
-            elementoH1.textContent = elemento['mensaje_recibido'];
+            elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            //Estilos de la fecha
             horaElemento.style.fontSize = '12px';
             horaElemento.style.color = '#999';
             horaElemento.style.marginTop = "6px";
-            // Estilos del div y del h1
             nuevoElemento.style.borderRadius = "10px";
             nuevoElemento.style.padding = "5px";
             nuevoElemento.style.marginBottom = "10px";
@@ -203,11 +194,9 @@
             nuevoElemento.style.lineHeight = "1";
             nuevoElemento.style.color = 'red';
             nuevoElemento.style.textAlign = 'right';
-            nuevoElemento.style.marginLeft = "300px";
+            nuevoElemento.style.marginLeft = "100px";
             elementoH1.style.marginRight = '10px';
             nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
-
-
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
@@ -219,7 +208,6 @@
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
             document.getElementById("numeroEnvioOculto").value = telefono;
-            console.log("El telefono que esta entrando es: " + telefono);
 
             // Ordenar mensajes por fecha y hora
             mensajes.sort(function(a, b) {
@@ -234,16 +222,11 @@
                     nuevoElemento.remove();
                 }
             }
-             // Limpiar la lista de mensajes existentes
-                lista.innerHTML = '';
+            // Limpiar la lista de mensajes existentes
+            lista.innerHTML = '';
 
             // Mostrar el teléfono del chat actual
             document.getElementById("telefono-chat").textContent = telefono;
-            // if (lista.childElementCount > 0) { // La lista tiene hijos, la vaciamos
-            //     while (lista.firstChild) {
-            //         lista.removeChild(lista.firstChild);
-            //     }
-            // }
 
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
@@ -261,17 +244,31 @@
                 lista.scrollTop = lista.scrollHeight;
             }
 
+            VentanaChat.style.display = 'block';
 
-             console.log('mensajes chat: ', mensajes);
-             VentanaChat.style.display = 'block';
+            if (mensajes.length > 0) {
+    const mensajeId = mensajes[0].id; // Obtener el ID del mensaje
+    const mensajeElemento = document.querySelector(`#notificacion-${mensajeId}`);
 
-        //     if (VentanaChat.style.display === 'none') {
-        //         VentanaChat.style.display = 'block';
-        //         document.getElementById("telefono-chat").textContent = telefono;
-        //     } else {
-        //         VentanaChat.style.display = 'none';
-        //     }
-         }
+    if (mensajeElemento) {
+        mensajeElemento.classList.remove('bg-gray-100', 'dark:bg-gray-800'); // Quitar el estilo de mensaje no leído
+        mensajeElemento.classList.add('bg-gray-200', 'dark:bg-gray-600'); // Agregar el estilo de mensaje leído
+
+        // Eliminar el span "Nuevo"
+        const spanNuevo = mensajeElemento.querySelector('.span-nuevo');
+        if (spanNuevo) {
+            spanNuevo.remove();
+        }
+    }
+}
+
+            //     if (VentanaChat.style.display === 'none') {
+            //         VentanaChat.style.display = 'block';
+            //         document.getElementById("telefono-chat").textContent = telefono;
+            //     } else {
+            //         VentanaChat.style.display = 'none';
+            //     }
+        }
 
 
         function cerrarChat() {
@@ -279,6 +276,8 @@
             chat.style.display = 'none';
             document.getElementById("miLista").innerText = "";
         }
+
+
     </script>
 
 </x-app-layout>

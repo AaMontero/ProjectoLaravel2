@@ -1,13 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\tasks;
 use App\Models\WhatsApp;
 use DateTime;
 use Exception;
+use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Pusher\Pusher;
+
 
 class WhatsAppController extends Controller
 {
+
+
     public function index()
     {
         $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
@@ -16,9 +24,9 @@ class WhatsAppController extends Controller
 
     public function enviarPHP(Request $request)
     {
-        $mensaje = $request->mensajeEnvio; 
-        $numeroEnviar = $request->numeroEnvio; 
-        if(strncmp($numeroEnviar, '0', strlen('0')) === 0){
+        $mensaje = $request->mensajeEnvio;
+        $numeroEnviar = $request->numeroEnvio;
+        if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
         $telefonoEnviaID = "258780720641927";
@@ -46,67 +54,22 @@ class WhatsAppController extends Controller
                 'Authorization: Bearer EAA0cGBz1VmwBOyPIAWVggBulUedn4Bxeq1VzHNHxZBW25Hh11bfuZBOz704eaq7MP06LgoRzKSuCaJFw6ZCWsA8pb6dqrqC3yaruT2hhopjoCF7mTO4nMyNG7XyQ5OcLPSujzHzAqcPksvlQLk3igDh2FnXyZA803qaiIdzJO1x09euof8c2XYBZBy9VNfcr3haXmD4HOVJByZBIlYLTQZD'
             ),
         ));
-
-
         $response = curl_exec($curl);
-        $mensajeenv = new Whatsapp(); 
-        $mensajeenv->mensaje_recibido = $mensaje; 
-        $mensajeenv->id_wa = "asdasdasd"; 
-        $mensajeenv->telefono_wa = "593987411818"; 
-        $mensajeenv->id_numCliente = $numeroEnviar ; 
-        $mensajeenv->fechaHora = new DateTime('now'); 
-        $mensajeenv->create(); 
-
-
+        $whatsApp = new WhatsApp();
+        $whatsApp->mensaje_enviado = $mensaje;
+        $whatsApp->id_wa = "asdasdasd";
+        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->id_numCliente = $numeroEnviar;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->visto = true;
+        $whatsApp->save();
         curl_close($curl);
-        echo $response;
+        return json_encode($whatsApp);
     }
-    public function envia(Request $request)
-    {
 
-        $enviado = "Texto";
-        //$telefonoCliente = $request->input('telefonoCliente');
-        $telefonoCliente = '593979345051';
-        //token que nos da facebook
-        $token = 'EAA0cGBz1VmwBO7JfpWGn8eR74d51Kk36ahQtEDTUo8nMow9Hytfmvpe2jCzWkQQrA1JzzDlN6aXen9myp9m75dYcLh7scSXdayhdmTwbjhMJzMb9UrgFqfFNzhxDSZCdPNtTSCq5y4gGS2Woi1gPHudZCp5jOivjJjAuiVY8qTwH50lQJIp6heMGp3yJpb';
-        // nuestro telefono
-        $telefonoID = '258780720641927';
-        //url a donde se manda el mensaje
-        $url = 'https://graph.facebook.com/v18.0/258780720641927/messages';
-
-        //CONFIGURACION DEL MENSAJE
-        $mensaje = ''
-            . '{'
-            . '"messaging_product": "whatsapp", '
-            . '"recipient_type": "individual",'
-            . '"to": "' . $telefonoCliente . '", '
-            . '"type": "text", '
-            . '"text": '
-            . '{'
-            . '     "body":  "' . $enviado . '",'
-            . '     "preview_url": true, '
-            . '} '
-            . '}';
-
-        //declaramos las cabeceras
-        $header = array("Authorization: Bearer " . $token, "Content-Type: application/json");
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($curl);
-        //file_put_contents("response.txt", $response);
-        $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-        
-        $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
-        return view('chat.chat', ['mensajes' => $mensajes]);
-    }
     public function webhook(Request $request)
     {
-        
+
         try {
             $verifyToken = 'TokenPruebaValidacion';
             $query = $request->query();
@@ -131,27 +94,60 @@ class WhatsAppController extends Controller
       */
     public function recibe()
     {
-        //LEEMOS LOS DATOS ENVIADOS POR WHATSAPP
-        $respuesta = file_get_contents("php://input");
-        //echo file_put_contents("text.txt", "Hola");
-        //SI NO HAY DATOS NOS SALIMOS
+       $respuesta = file_get_contents("php://input");
         if ($respuesta == null) {
             exit;
         }
-        //CONVERTIMOS EL JSON EN ARRAY DE PHP
         $respuesta = json_decode($respuesta, true);
-        //EXTRAEMOS EL TELEFONO DEL ARRAY
-        $mensaje = "Telefono:" . $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['from'] . "\n";
-        //EXTRAEMOS EL MENSAJE DEL ARRAY
-        $mensaje .= "Mensaje:" . $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
-        //GUARDAMOS EL MENSAJE Y LA RESPUESTA EN EL ARCHIVO text.txt
-
+        $telefonoUser =  $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['from'];
+        $mensaje =  $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
+        $id = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['id'];
+        $timestamp = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['timestamp'];
+        $whatsApp = new WhatsApp();
+        $whatsApp->timestamp_wa = $timestamp;
+        $whatsApp->mensaje_enviado  = $mensaje;
+        $whatsApp->id_wa = $id;
+        $whatsApp->visto = false;
+        $whatsApp->telefono_wa = $telefonoUser;
+        $whatsApp->id_numCliente = $telefonoUser;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->save();
     }
 
-    public function notificacionMensaje()
+    public function notificacionMensaje(Request $request)
     {
         $mensajes = WhatsApp::all();
-        return view('chat.chat', compact('mensajes')); // Pasa los mensajes a la vista 'dashboard'
+        // Crea una nueva tarea
+        $mensaje = new WhatsApp;
+        $mensaje->id_numCliente = $request->id_numCliente;
+        $mensaje->mensaje_recibido = $request->mensaje_recibido;
+        $mensaje->save();
+
+
+    // Envía una notificación utilizando Pusher
+    $options = [
+        'cluster' => 'sa1',
+        'useTLS' => true
+    ];
+
+    $pusher = new Pusher(
+        env('PUSHER_APP_KEY'),
+        env('PUSHER_APP_SECRET'),
+        env('PUSHER_APP_ID'),
+        $options
+    );
+
+    $data = [
+        'id_numCliente' => $mensaje->id_numCliente,
+        'mensaje_recibido' => $mensaje->mensaje_recibido
+    ];
+    $pusher->trigger('whatsapp-channel', 'whatsapp-event', $data);
+
+    // Obtener todos los mensajes de WhatsApp;
+
+    // Devolver la vista con los mensajes
+    return view('chat.chat', compact('mensajes'));
+         // Pasa los mensajes a la vista 'dashboard'
     }
 
     public function show(WhatsApp $whatsApp)
@@ -181,5 +177,14 @@ class WhatsAppController extends Controller
     public function destroy(WhatsApp $whatsApp)
     {
         //
+    }
+}
+class Utils
+{
+    function convertirMinNoTilde($mensaje)
+    {
+        $mensaje = mb_strtolower($mensaje, 'UTF-8');
+        $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
+        return $mensaje;
     }
 }

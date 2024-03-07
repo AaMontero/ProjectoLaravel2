@@ -8,8 +8,9 @@
     </x-slot>
 
     {{-- @include('chat.chat')  --}}
-    @yield('content')
+
 
 
 </x-app-layout>
 @include('layouts.footer')
+

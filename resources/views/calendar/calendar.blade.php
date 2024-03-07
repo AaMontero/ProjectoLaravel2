@@ -207,7 +207,7 @@ body {
 
 
 
-        
+
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
@@ -266,57 +266,57 @@ body {
 
 
                            // Obtener los valores de los campos
-var title = $('#title').val();
-var start_date = $('#start_date').val();
-var end_date = $('#end_date').val();
-var author = $('#author').val();
-var note = $('#note').val();
+                            var title = $('#title').val();
+                            var start_date = $('#start_date').val();
+                            var end_date = $('#end_date').val();
+                            var author = $('#author').val();
+                            var note = $('#note').val();
 
-// Verificar si algún campo está vacío
-if (!title || !start_date || !end_date || !author || !note) {
-    // Mostrar mensaje de error
-    swal("Error", "Todos los campos son obligatorios", "error");
-} else {
-    // Realizar la solicitud AJAX solo si todos los campos están llenos
-    $.ajax({
-        url: "{{ route('calendar.store') }}",
-        type: "POST",
-        dataType: 'json',
-        data: {
-            title: title,
-            start_date: start_date,
-            end_date: end_date,
-            author: author,
-            note: note,
-            user_id: {{ auth()->id() }}
-        },
-        success: function(response) {
-            $('#eventoModal').modal('hide')
-            $('#calendar').fullCalendar('renderEvent', {
-                'title': response.title,
-                'author': response.author,
-                'note': response.note,
-                'start': response.start_date,
-                'end': response.end_date,
-            });
+                            // Verificar si algún campo está vacío
+                            if (!title || !start_date || !end_date || !author || !note) {
+                                // Mostrar mensaje de error
+                                swal("Error", "Todos los campos son obligatorios", "error");
+                            } else {
+                                // Realizar la solicitud AJAX solo si todos los campos están llenos
+                                $.ajax({
+                                    url: "{{ route('calendar.store') }}",
+                                    type: "POST",
+                                    dataType: 'json',
+                                    data: {
+                                        title: title,
+                                        start_date: start_date,
+                                        end_date: end_date,
+                                        author: author,
+                                        note: note,
+                                        user_id: {{ auth()->id() }}
+                                    },
+                                    success: function(response) {
+                                        $('#eventoModal').modal('hide')
+                                        $('#calendar').fullCalendar('renderEvent', {
+                                            'title': response.title,
+                                            'author': response.author,
+                                            'note': response.note,
+                                            'start': response.start_date,
+                                            'end': response.end_date,
+                                        });
 
-            swal("¡Éxito!", "¡Evento Guardado Correctamente!", "success")
-                .then(function() {
-                    location.reload(); // Recargar la página después del mensaje de éxito
-                });
-        },
-        error: function(error) {
-            if (error.responseJSON.errors) {
-                $('#titleError').html(error.responseJSON.errors.title)
-            }
-        },
-    });
-}
+                                        swal("¡Éxito!", "¡Evento Guardado Correctamente!", "success")
+                                            .then(function() {
+                                                location.reload(); // Recargar la página después del mensaje de éxito
+                                            });
+                                    },
+                                    error: function(error) {
+                                        if (error.responseJSON.errors) {
+                                            $('#titleError').html(error.responseJSON.errors.title)
+                                        }
+                                    },
+                                });
+                            }
 
 
                         });
                     },
-
+                    eventTextColor: '#ffffff',
                     eventClick: function(event) {
                         $('#editarModal').modal('show');
 

@@ -2,10 +2,8 @@
 @if (session('status'))
     <div class="bg-green-600 text-green-100 text-center text-lg font-bold p-2">{{ session('status') }}</div>
 @endif
-<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,6 +80,7 @@
             </div>
 
                  <!-- Vista donde se muestra el div de notificaciones -->
+
             <div>
                <ul class="navbar-nav mr-1">
                    <li class="nav-item dropdown mt-3">
@@ -98,6 +97,8 @@
             </div>
 
             <!-- Script para escuchar eventos de Pusher y mostrar notificaciones -->
+            <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             @push('javascript')
             <script>
             $(document).ready(function() {

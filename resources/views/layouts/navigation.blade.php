@@ -4,6 +4,8 @@
 @endif
 <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +48,6 @@
 
 
                     @role('vendedor')
-
                     <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                         {{ __('Vendedor') }}
                     </x-nav-link>
@@ -80,32 +81,26 @@
 
             </div>
 
-                        <!-- Vista donde se muestra el div de notificaciones -->
-                        <div>
-                            <ul class="navbar-nav mr-1">
-                                <li class="nav-item dropdown mt-3">
-                                    <a class="nav-link" href="{{ route('chat.chat')}}">
-                                        <i class="fas fa-bell text-black"></i>
-                                        <span id="notification-counter" class="badge badge-danger pending">0</span>
-                                    </a>
-                                    <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: none;">
-                                        <!-- Aquí se mostrarán las notificaciones en tiempo real -->
-                                        <div id="notificaciones">
-                                            <!-- Las notificaciones se insertarán aquí dinámicamente -->
-                                            <a href="{{ route('chat.chat')}}" id="notification-link" class="notification-link">Ver notificación</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                 <!-- Vista donde se muestra el div de notificaciones -->
+            <div>
+               <ul class="navbar-nav mr-1">
+                   <li class="nav-item dropdown mt-3">
+                        <a class="nav-link" href="{{ route('chat.chat') }}">
+                             <i class="fas fa-bell text-black"></i>
+                            <span id="notification-counter" class="badge badge-danger pending">0</span>
+                        </a>
+                        <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: none;">
+                       <!-- Aquí se mostrarán las notificaciones en tiempo real -->
+                            <div id="notificaciones"></div>
                         </div>
+                    </li>
+                 </ul>
+            </div>
 
             <!-- Script para escuchar eventos de Pusher y mostrar notificaciones -->
-            <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
             @push('javascript')
             <script>
-               $(document).ready(function() {
+            $(document).ready(function() {
                 var pusher = new Pusher('217450e1ce096539fb1c', {
                     cluster: 'sa1'
                 });
@@ -133,7 +128,7 @@
 
                 // Agregar un console.log() para verificar los datos recibidos
 
-            });
+                 });
 
                 // Restablecer el contador de notificaciones cuando se abra la nueva ruta
                 $('#notification-link').on('click', function() {
@@ -201,7 +196,7 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @role('admin')
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="no-underline" >
+
             <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline" >
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
@@ -274,8 +269,4 @@
 
     </div>
 
-
 </nav>
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-
-

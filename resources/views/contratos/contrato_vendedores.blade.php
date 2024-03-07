@@ -15,7 +15,7 @@
                     <form method="POST" class ="p-4" enctype="multipart/form-data"
                         action = "{{ route('contrato.add_vendedores') }} ">
                         @csrf
-                        <input type="hidden" value ="{{$contratoId}}" name = "contratoId">
+                        <input type="hidden" value ="{{ $contratoId }}" name = "contratoId">
                         <label class="mt-1 p-0 ml-4 font-bold">Vendedor:</label>
                         <select name="vendedor"
                             class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
@@ -23,10 +23,10 @@
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Vendedor') }}</option>
                             @foreach ($vendedores as $vendedor)
-                                <h1>{{$vendedor->nombres}}</h1>
-                                <option value="{{$vendedor->id }}"
+                                <h1>{{ $vendedor->nombres }}</h1>
+                                <option value="{{ $vendedor->id }}"
                                     {{ old('vendedor') == $vendedor ? 'selected' : '' }}>
-                                    {{ $vendedor->id. ".- ". $vendedor->nombres }}
+                                    {{ $vendedor->id . '.- ' . $vendedor->nombres }}
                                 </option>
                             @endforeach
                         </select>
@@ -37,9 +37,8 @@
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Closer 1') }}</option>
                             @foreach ($closers as $closer)
-                                <option value="{{ $closer->id}}"
-                                    {{ old('closer') == $closer ? 'selected' : '' }}>
-                                    {{ $closer->id. ".- ".  $closer->nombres }}
+                                <option value="{{ $closer->id }}" {{ old('closer') == $closer ? 'selected' : '' }}>
+                                    {{ $closer->id . '.- ' . $closer->nombres }}
                                 </option>
                             @endforeach
                         </select>
@@ -47,11 +46,11 @@
                         <select name="closer2"
                             class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Closer 2') }}">
-                            <option value="" disabled selected>
-                                {{ __('Seleccione el Closer 2') }}</option>
+                            <option value="" selected>
+                                {{ __('No seleccionado') }}</option>
                             @foreach ($closers as $closer)
                                 <option value="{{ $closer->id }}" {{ old('closer') == $closer ? 'selected' : '' }}>
-                                    {{ $closer->id. ".- ".  $closer->nombres }}
+                                    {{ $closer->id . '.- ' . $closer->nombres }}
                                 </option>
                             @endforeach
                         </select>
@@ -62,9 +61,9 @@
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Jefe de Sala') }}</option>
                             @foreach ($jefes_sala as $jefeSala)
-                                <option value="{{$jefeSala->id }}"
+                                <option value="{{ $jefeSala->id }}"
                                     {{ old('jefeSala') == $jefeSala ? 'selected' : '' }}>
-                                    {{ $jefeSala->id. ".- ".  $jefeSala->nombres }}
+                                    {{ $jefeSala->id . '.- ' . $jefeSala->nombres }}
                                 </option>
                             @endforeach
                         </select>

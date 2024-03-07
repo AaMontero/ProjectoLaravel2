@@ -20,38 +20,69 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form method="POST" action = "{{ route('clientes.update', $cliente) }} ">
                         @csrf @method('PUT')
+                        <!--Bloque para Cédula-->
                         <label class="mt-1 p-1 ml-4 font-bold">Cédula:</label>
-                        <input type="text" name="cedula"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                        <input readonly type="text" name="cedula"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese la cédula') }}" value="{{ old('cedula', $cliente->cedula) }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">Nombres:</label>
+                        @error('cedula')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Nombres-->
+                        <label class="mt-3 p-0 ml-4 font-bold">Nombres:</label>
                         <input type="text" name="nombres"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese los nombres') }}"
                             value="{{ old('nombres', $cliente->nombres) }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">Apellidos:</label>
+                        @error('nombres')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Apellidos-->
+                        <label class="mt-3 p-0 ml-4 font-bold">Apellidos:</label>
                         <input type="text" name="apellidos"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese los apellidos') }}"
                             value="{{ old('apellidos', $cliente->apellidos) }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">Número Telefónico:</label>
+                        @error('apellidos')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Número Telefonico-->
+                        <label class="mt-3 p-0 ml-4 font-bold">Número Telefónico:</label>
                         <input type="text" name="numTelefonico"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese el número telefónico') }}"
                             value="{{ old('numTelefonico', $cliente->numTelefonico) }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">Fecha de Nacimiento:</label>
+                        @error('numTelefonico')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Fecha de nacimiento-->
+                        <label class="mt-3 p-0 ml-4 font-bold">Fecha de Nacimiento:</label>
                         <input type="date" name="fecha_nacimiento"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese su Fecha de Nacimiento') }}"
                             value="{{ old('numTelefonico', $cliente->fecha_nacimiento) }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">Email:</label>
+                        @error('fecha_nacimiento')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Email-->
+                        <label class="mt-3 p-0 ml-4 font-bold">Email:</label>
                         <input type="email" name="email"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese el correo electrónico') }}"
                             value="{{ old('email', $cliente->email) }}">
+                        @error('email')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Provincia-->
                         <label class="mt-1 p-0 ml-4 font-bold">Provincia:</label>
                         <select name="provincia"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione la provincia') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione la provincia') }}</option>
@@ -62,10 +93,19 @@
                                 </option>
                             @endforeach
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Ciudad:</label>
+                        @error('provincia')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!--Bloque para Ciudad-->
+                        <label class="mt-3 p-0 ml-4 font-bold">Ciudad:</label>
                         <input type="text" name="ciudad"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese la ciudad') }}" value="{{ old('ciudad', $cliente->ciudad) }}">
+                        @error('ciudad')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <x-primary-button class="mt-4">Actualizar Cliente</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />
                     </form>

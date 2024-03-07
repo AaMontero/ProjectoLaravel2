@@ -21,12 +21,14 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-    $errorNombres = $errorCedula = $errorApellidos = $errorUbicacionSala = $errorCiudad = $errorCorreo = $erroraniosContrato = $errorMontoContrato = $errorProvincia = '';
+    
     ?>
 
 
     <div class="py-2">
-        <div id="idAgregarContrato" class="max-w mx-auto sm:px-6 lg:px-20 mb-4 "style="display: none;"> <!-- -->
+        <div id="idAgregarContrato"
+            class="max-w mx-auto sm:px-6 lg:px-20 mb-4 "style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
+            <!-- -->
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('contrato.store') }}" method="POST" class="p-4">
@@ -45,103 +47,103 @@
 
                         <!-- Nombres -->
 
-                        <label for="nombres" class="mt-1 p-0 ml-4 font-bold">Nombres</label>
-                        <input type="text" id="nombres" name="nombres" value="{{ $nombres }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorNombres))
-                            <span class="text-red-500">{{ $errorNombres }}</span>
-                        @endif
-
+                        <label for="nombres" class="mt-0.5 p-0 ml-4 font-bold">Nombres</label>
+                        <input type="text" id="nombres" name="nombres" value="{{ old('nombres') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('nombres')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Apellidos -->
 
-                        <label for="apellidos" class="mt-1 p-0 ml-4 font-bold">Apellidos</label>
-                        <input type="text" id="apellidos" name="apellidos" value="{{ $apellidos }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorApellidos))
-                            <span class="text-red-500">{{ $errorApellidos }}</span>
-                        @endif
-
+                        <label for="apellidos" class="mt-3 p-0 ml-4 font-bold">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos" value="{{ old('apellidos') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('apellidos')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Cédula -->
 
-                        <label for="cedula" class="mt-1 p-0 ml-4 font-bold">Cédula</label>
-                        <input type="text" id="cedula" name="cedula" value="{{ $cedula }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorCedula))
-                            <span class="text-red-500">{{ $errorCedula }}</span>
-                        @endif
-
+                        <label for="cedula" class="mt-3 p-0 ml-4 font-bold">Cédula</label>
+                        <input type="text" id="cedula" name="cedula" value="{{ old('cedula') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('cedula')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Email -->
 
-                        <label for="email" class="mt-1 p-0 ml-4 font-bold">Email</label>
-                        <input type="text" id="email" name="email" value="{{ $email }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorCorreo))
-                            <span class="text-red-500">{{ $errorCorreo }}</span>
-                        @endif
-
+                        <label for="email" class="mt-3 p-0 ml-4 font-bold">Email</label>
+                        <input type="text" id="email" name="email" value="{{ old('email') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('email')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Ciudad -->
 
-                        <label for="ciudad" class="mt-1 p-0 ml-4 font-bold">Ciudad</label>
-                        <input type="text" id="ciudad" name="ciudad" value="{{ $ciudad }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorCiudad))
-                            <span class="text-red-500">{{ $errorCiudad }}</span>
-                        @endif
-
+                        <label for="ciudad" class="mt-3 p-0 ml-4 font-bold">Ciudad</label>
+                        <input type="text" id="ciudad" name="ciudad" value="{{ old('ciudad') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('ciudad')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Provincia -->
                         <?php
                         $provincias = ['Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi', 'El Oro', 'Esmeraldas', 'Galápagos', 'Guayas', 'Imbabura', 'Loja', 'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana', 'Pastaza', 'Pichincha', 'Santa Elena', 'Santo Domingo', 'Sucumbíos', 'Tungurahua', 'Zamora Chinchipe'];
                         ?>
 
-                        <label for="provincia" class="mt-1 p-0 ml-4 font-bold">Provincia</label>
+                        <label for="provincia" class="mt-3 p-0 ml-4 font-bold">Provincia</label>
                         <select id="provincia" name="provincia"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
                             @foreach ($provincias as $p)
                                 <option value="{{ $p }}" {{ $p === $provincia ? 'selected' : '' }}>
                                     {{ $p }}</option>
                             @endforeach
                         </select>
-                        @if (!empty($errorProvincia))
-                            <span class="text-red-500">{{ $errorProvincia }}</span>
-                        @endif
-
+                        @error('provincia')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Ubicacion de la sala -->
 
-                        <label for="ubicacion_sala" class="mt-1 p-0 ml-4 font-bold">Ubicación de la sala</label>
+                        <label for="ubicacion_sala" class="mt-3 p-0 ml-4 font-bold">Ubicación de la sala</label>
                         <input type="text" id="ubicacion_sala" name="ubicacion_sala"
-                            value="{{ $ubicacionSala }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorUbicacionSala))
-                            <span class="text-red-500">{{ $errorUbicacionSala }}</span>
-                        @endif
+                            value="{{ old('ubicacion_sala') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
 
-
+                        @error('ubicacion_sala')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Años del contrato -->
 
-                        <label for="anios_contrato" class="mt-1 p-0 ml-4 font-bold">Años del contrato</label>
+                        <label for="anios_contrato" class="mt-3 p-0 ml-4 font-bold">Años del contrato</label>
                         <input type="number" id="anios_contrato" name="anios_contrato"
-                            value="{{ $aniosContrato }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($erroraniosContrato))
-                            <span class="text-red-500">{{ $erroraniosContrato }}</span>
-                        @endif
-
+                            value="{{ old('anios_contrato') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('anios_contrato')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Monto del contrato -->
 
-                        <label for="monto_contrato" class="mt-1 p-0 ml-4 font-bold">Monto del contrato</label>
+                        <label for="monto_contrato" class="mt-3 p-0 ml-4 font-bold">Monto del contrato</label>
                         <input type="number" id="monto_contrato" name="monto_contrato"
-                            value="{{ $montoContrato }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorMontoContrato))
-                            <span class="text-red-500">{{ $errorMontoContrato }}</span>
-                        @endif
-
+                            value="{{ old('monto_contrato') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('monto_contrato')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <label class="mt-1 p- ml-4 font-bold">Forma de pago:</label>
                         <!-- Forma de pago (añadir más de una) -->
                         <div class="mt-2 mb-2 ml-8">
@@ -210,20 +212,27 @@
                         <div class = "mb-2">
                             <label class="inline-flex items-center mt-1 p-0  font-bold">Bono hospedaje Qory
                                 Loyalty</label>
-                            <input type="checkbox" name="bono_hospedaje" id="bono_hospedaje_checkbox" value="1"
+                            <input type="checkbox" name="bono_hospedaje"
+                                id="bono_hospedaje_checkbox"value="{{ old('bono_hospedaje_checkbox') }}"
                                 class="ml-2">
                         </div>
-
+                        @error('bono_hospedaje')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Bono de hospedaje internacional Qory Loyalty -->
                         <div class = "mb-2">
                             <label class="inline-flex items-center mt-1 p-0 font-bold">Bono de hospedaje internacional
                                 Qory
                                 Loyalty</label>
                             <input type="checkbox" name="bono_hospedaje_internacional"
-                                id="bono_hospedaje_internacional_checkbox" value="{{ $bonoQoryInt }}"
-                                class="ml-2">
+                                id="bono_hospedaje_internacional_checkbox"
+                                value="{{ old('bono_hospedaje_internacional') }}" class="ml-2">
                         </div>
-
+                        @error('bono_hospedaje_internacional')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Aquí está el botón para ejecutar el código -->
                         <button type="submit"
                             class="mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">Generar
@@ -245,8 +254,8 @@
                         <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
                             <div class = "w-3/4 flex">
                                 <div class = "w-full pr-5">
-                                    <label for="num_dias"
-                                        class="block text-sm font-medium text-gray-700"># Contrato:</label>
+                                    <label for="num_dias" class="block text-sm font-medium text-gray-700">#
+                                        Contrato:</label>
                                     <input type="number" name="num_dias" id="num_dias"
                                         class="mt-1 p-2 border rounded-md w-full">
                                 </div>
@@ -268,6 +277,7 @@
                         class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
                         <thead>
                             <tr>
+                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Contrato ID</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ubicacion Sala</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Años Cont.</th>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Monto Cont.</th>
@@ -288,6 +298,8 @@
                         <tbody x-cloak>
                             @foreach ($contratos as $contrato)
                                 <tr>
+                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                        {{ $contrato->contrato_id }}</td>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         {{ $contrato->ubicacion_sala }}</td>
                                     <td class="py-2 px-4 border-b text-center whitespace-nowrap">

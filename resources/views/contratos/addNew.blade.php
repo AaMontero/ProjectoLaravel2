@@ -21,7 +21,6 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-    $errorNombres = $errorCedula = $errorApellidos = $errorUbicacionSala = $errorCiudad = $errorCorreo = $erroraniosContrato = $errorMontoContrato = $errorProvincia = '';
     ?>
 
 
@@ -61,41 +60,44 @@
                         <!-- Provincia -->
                         <input type="hidden" id="provincia" name="provincia" value="{{ $cliente->provincia }}"
                             class="border rounded-md px-3 py-2 w-full" readonly="readonly">
+
+
                         <!-- Ubicacion de la sala -->
 
-                        <label for="ubicacion_sala" class="mt-1 p-0 ml-4 font-bold">Ubicación de la sala</label>
-                        <input type="text" id="ubicacion_sala" name="ubicacion_sala" value="{{ $ubicacionSala }}"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorUbicacionSala))
-                            <span class="text-red-500">{{ $errorUbicacionSala }}</span>
-                        @endif
-
-
+                        <label for="ubicacion_sala" class="mt-0.5 p-0 ml-4 font-bold">Ubicación de la sala</label>
+                        <input type="text" id="ubicacion_sala" name="ubicacion_sala"
+                            value="{{ old('ubicacion_sala') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('ubicacion_sala')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Años del contrato -->
 
-                        <label for="anios_contrato" class="mt-1 p-0 ml-4 font-bold">Años del contrato</label>
+                        <label for="anios_contrato" class="mt-3 p-0 ml-4 font-bold">Años del contrato</label>
                         <input type="number" id="anios_contrato" name="anios_contrato"
-                            value="{{ $aniosContrato }}" 
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($erroraniosContrato))
-                            <span class="text-red-500">{{ $erroraniosContrato }}</span>
-                        @endif
-
+                            value="{{ old('anios_contrato') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('anios_contrato')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Monto del contrato -->
 
-                        <label for="monto_contrato" class="mt-1 p-0 ml-4 font-bold">Monto del contrato</label>
+                        <label for="monto_contrato" class="mt-3 p-0 ml-4 font-bold">Monto del contrato</label>
                         <input type="number" id="monto_contrato" name="monto_contrato"
-                            value="{{ $montoContrato }}" 
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
-                        @if (!empty($errorMontoContrato))
-                            <span class="text-red-500">{{ $errorMontoContrato }}</span>
-                        @endif
+                            value="{{ old('monto_contrato') }}"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
+                        @error('monto_contrato')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <label class="mt-1 p- ml-4 font-bold"">Forma de pago:</label>
                         <!-- Forma de pago (añadir más de una) -->
                         <div class="mt-2 mb-2 ml-8">
-                            
+
                             <div class="mt-2 italic">
                                 <input type="checkbox" name="forma_pago" value="{{ $pagareBoolean }}"
                                     id="pagareCheckbox" class="mr-2"> Pagaré
@@ -131,7 +133,8 @@
                                     <option value="24">24</option>
                                     <option value="36">36</option>
                                 </select>
-                                <label for="fechaInicioCredDir" class="mr-2 mt-1 p-0 ml-4 font-bold">Fecha de Inicio:</label>
+                                <label for="fechaInicioCredDir" class="mr-2 mt-1 p-0 ml-4 font-bold">Fecha de
+                                    Inicio:</label>
                                 <input type="date" id="fecha_inicio_cred_dir" name="fechaInicioCredDir"
                                     class="border rounded-md px-3 py-2 mr-2">
                                 <button onclick="functionAgregarCreditoDirecto()"
@@ -157,20 +160,29 @@
 
                         <!-- Bono hospedaje Qory Loyalty -->
                         <div class="mb-2">
-                            <label class="inline-flex items-center mt-1 p-0  font-bold">Bono hospedaje Qory Loyalty</label>
-                            <input type="checkbox" name="bono_hospedaje" id="bono_hospedaje_checkbox" value="1"
-                                class="ml-2">
+                            <label class="inline-flex items-center mt-1 p-0  font-bold">Bono hospedaje Qory
+                                Loyalty</label>
+                            <input type="checkbox" name="bono_hospedaje" id="bono_hospedaje_checkbox"
+                                value="{{ old('bono_hospedaje_checkbox') }}" class="ml-2">
                         </div>
+                        @error('bono_hospedaje')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
 
                         <!-- Bono de hospedaje internacional Qory Loyalty -->
                         <div class="mb-2">
-                            <label class="inline-flex items-center mt-1 p-0  font-bold">Bono de hospedaje internacional Qory
+                            <label class="inline-flex items-center mt-1 p-0  font-bold">Bono de hospedaje internacional
+                                Qory
                                 Loyalty</label>
                             <input type="checkbox" name="bono_hospedaje_internacional"
-                                id="bono_hospedaje_internacional_checkbox" value="{{ $bonoQoryInt }}"
-                                class="ml-2">
+                                id="bono_hospedaje_internacional_checkbox"
+                                value="{{ old('bono_hospedaje_internacional') }}" class="ml-2">
                         </div>
-
+                        @error('bono_hospedaje_internacional')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Aquí está el botón para ejecutar el código -->
                         <button type="submit"
                             class="mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">Generar

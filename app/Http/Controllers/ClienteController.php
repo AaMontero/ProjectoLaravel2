@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ClienteController extends Controller
 {
@@ -49,25 +50,26 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'cedula' => ['required', 'min:8', 'max:20'],
-            'nombres' => ['required', 'min:5', 'max:255'],
-            'apellidos' => ['required', 'min:5', 'max:255'],
-            'numTelefonico' => ['required', 'min:7', 'max:12'],
-            'email' => ['required', 'email', 'min:5', 'max:255'],
-            'ciudad' => ['required', 'min:5', 'max:255'],
-            'provincia' => ['required', 'min:5', 'max:255'],
-            'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
-            'fecha_nacimiento' => ['required', 'date', 'before_or_equal:' .
-                now()->subYears(18)->format('Y-m-d')],
+        try {
+            $validated = $request->validate([
+                'cedula' => ['required', 'min:10', 'max:10'],
+                'nombres' => ['required', 'min:5', 'max:255'],
+                'apellidos' => ['required', 'min:5', 'max:255'],
+                'numTelefonico' => ['required', 'min:7', 'max:12'],
+                'email' => ['required', 'email', 'min:5', 'max:255'],
+                'ciudad' => ['required', 'min:5', 'max:255'],
+                'provincia' => ['required', 'min:5', 'max:255'],
+                'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
+                'fecha_nacimiento' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
+            ]);
+            $clienteUser = $this->obtenerNick($request->nombres, $request->apellidos);
+            $validated['cliente_user'] = $clienteUser;
+            $request->user()->clientes()->create($validated);
 
-
-        ]);
-        $clienteUser = $this->obtenerNick($request->nombres, $request->apellidos);
-        $validated['cliente_user'] = $clienteUser;
-        $request->user()->clientes()->create($validated);
-        return redirect()->route('clientes.index')
-            ->with('status', __('Inserción realizada exitosamente'));
+            return redirect()->route('clientes.index')->with('status', __('Inserción realizada exitosamente'));
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
+        }
     }
 
     /**
@@ -101,7 +103,7 @@ class ClienteController extends Controller
     {
 
         $validated = $request->validate([
-            'cedula' => ['required', 'min:8', 'max:20'],
+            'cedula' => ['required', 'min:10', 'max:10'],
             'nombres' => ['required', 'min:5', 'max:255'],
             'apellidos' => ['required', 'min:5', 'max:255'],
             'numTelefonico' => ['required', 'min:7', 'max:12'],

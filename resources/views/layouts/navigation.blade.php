@@ -41,8 +41,9 @@
                         {{ __('Vendedor') }}
                     </x-nav-link>
                     <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
-                        {{ __('Asignar rol') }}
+                        {{ __('Administracion') }}
                     </x-nav-link>
+                    
                     @endrole
 
 

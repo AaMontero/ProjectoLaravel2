@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Clients') }}
+                {{ __('Clients Register') }}
             </h2>
             <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar un nuevo cliente</span>
@@ -118,51 +118,13 @@
                 </form>
             </div>
         </div>
-        <script>
-            function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
-                var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
 
-                if (ventanaAgregarPaquete.style.display === 'none') {
-                    ventanaAgregarPaquete.style.display = 'block';
-                } else {
-                    ventanaAgregarPaquete.style.display = 'none';
-                }
-
-            }
-        </script>
     </div>
-      
-           
+
+
    <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <div class = "flex">
-                <h2 class = "ml-20 pt-4 w-1/2"> Clientes Registrados </h2>
-                <div class="pb-2 w-1/2 flex">
-                    <div class = "w-1/2">
-                    </div>
-<<<<<<< HEAD
-=======
-                    {{-- Buscador --}}
-                    <div class="flex items-center w-1/2 mr-4">
-                        <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
-                            <div class = "w-3/4 flex">
-                                <div class = "w-full pr-5">
-                                    <label for="num_dias"
-                                        class="block text-sm font-medium text-gray-700">Cedula:</label>
-                                    <input type="number" name="num_dias" id="num_dias"
-                                        class="mt-1 p-2 border rounded-md w-full">
-                                </div>
 
-                            </div>
-                            <div class = "w-1/4">
-                                <input type="submit" value="Buscar"
-                                    class="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer">
-                            </div>
-                        </form>
-                    </div>
->>>>>>> a1ab4c46175e62838e5d3ef1ef406280f5e01e62
-                </div>
-            </div>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
                     <table id="clientes" class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
@@ -222,10 +184,7 @@
                                                     </svg>
                                                 </button>
                                             </x-slot>
-                                            <x-slot name="content">
-                                                <?php
-
-                                                ?>
+                                            <x-slot name="content" id="cliente">
 
                                                 <x-dropdown-link :href="route('contrato.agregar', $cliente)">
                                                     {{ __('Agregar Contrato') }}
@@ -247,14 +206,14 @@
         </div>
     </div>
 
-    
-    <div class = "ml-20 mr-20">
+
+    {{-- <div class = "ml-20 mr-20">
         <p class="ml-5 flex justify-center items-center list-none space-x-2">
             {{ $clientes->appends([]) }}
         </p>
-    </div>
+    </div> --}}
 
-    
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -264,13 +223,29 @@
 <!-- DataTables Bootstrap 4 Integration -->
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
- 
-   
-<script>	
+
+
+<script>
      $(document).ready(function() {
         $('#clientes').DataTable();
     });
-   </script>
-   
+    $('#clientes').DataTable({
+    columnDefs: [
+        { orderable: false, targets: -1 } // Ignorar la última columna (donde está el dropdown)
+    ]
+    });
+    function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
+                var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
+
+                if (ventanaAgregarPaquete.style.display === 'none') {
+                    ventanaAgregarPaquete.style.display = 'block';
+                } else {
+                    ventanaAgregarPaquete.style.display = 'none';
+                }
+
+            }
+
+</script>
+
 </x-app-layout>
 @include('layouts.footer')

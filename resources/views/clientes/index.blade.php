@@ -118,11 +118,7 @@
                 </form>
             </div>
         </div>
-        <script>
-            function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
-                $('#clientes').DataTable();
-                var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
-
+       
     </div>
 
 
@@ -224,8 +220,6 @@
 <!-- DataTables Bootstrap 4 Integration -->
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
-
-
 <script>
      $(document).ready(function() {
         $('#clientes').DataTable();
@@ -235,6 +229,7 @@
         { orderable: false, targets: -1 } // Ignorar la última columna (donde está el dropdown)
     ]
     });
+   
     function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
                 var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
 

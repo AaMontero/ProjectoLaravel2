@@ -305,7 +305,7 @@
                                     {{-- modal dinamico --}}
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }">
+                                        <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->cliente_id }}
                                             </button>
@@ -350,7 +350,7 @@
                                     {{-- --- --}}
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }" x-cloak>
+                                        <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->vendedor_id }}
                                             </button>
@@ -388,7 +388,7 @@
                                     </td>
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }" >
+                                        <div x-data="{ mostrarModal: false }"x-init="mostrarModal">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->closer_id }}
                                             </button>
@@ -425,7 +425,7 @@
                                     </td>
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }">
+                                        <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->closer2_id }}
                                             </button>
@@ -462,7 +462,7 @@
                                     </td>
                                     <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        <div x-data="{ mostrarModal: false }">
+                                        <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->jefe_sala_id }}
                                             </button>
@@ -547,10 +547,25 @@
 <!-- DataTables Bootstrap 4 Integration -->
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     <script>
-        $(document).ready(function() {
-        $('#contrato_id').DataTable();
-         });
-
+        // $(document).ready(function() {
+        // $('#contrato_id').DataTable();
+        //  });
+         $(document).ready(function() {
+       $('#contrato_id').DataTable({
+           "columnDefs": [
+               {
+                   "targets": '_all', // Todas las columnas
+                   "orderable": true, // Hace que todas las columnas sean ordenables
+                   "searchable": true // Hace que todas las columnas sean buscables
+               },
+               {
+                   "targets": [-1, -2, -3, -4, -5], // Últimas 5 columnas
+                   "orderable": false, // Hace que estas columnas no sean ordenables
+                   "searchable": false // Hace que estas columnas no sean buscables
+               }
+           ]
+       });
+   });
         var listaFormasPago = [];
         var pagareBoolean = false;
         var creditoDirectoBoolean = false;
@@ -684,6 +699,11 @@
 
 
         });
+
+        function mostrarModal() {
+            
+    }
+    
     </script>
 
 </x-app-layout>

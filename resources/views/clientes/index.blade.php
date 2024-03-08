@@ -2,6 +2,7 @@
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <x-slot name="header">
         <link rel="shortcut icon" href="#">
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Clients') }}
@@ -130,17 +131,17 @@
             }
         </script>
     </div>
-
-
-
-
-    <div class="py-2 ">
+      
+           
+   <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
             <div class = "flex">
                 <h2 class = "ml-20 pt-4 w-1/2"> Clientes Registrados </h2>
                 <div class="pb-2 w-1/2 flex">
                     <div class = "w-1/2">
                     </div>
+<<<<<<< HEAD
+=======
                     {{-- Buscador --}}
                     <div class="flex items-center w-1/2 mr-4">
                         <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
@@ -159,11 +160,12 @@
                             </div>
                         </form>
                     </div>
+>>>>>>> a1ab4c46175e62838e5d3ef1ef406280f5e01e62
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
-                    <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
+                    <table id="clientes" class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
                         <thead>
                             <tr> <!--Etiquetas de la tabla de clientes-->
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Cedula</th>
@@ -178,7 +180,6 @@
                                 @role('admin')
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
                                 @endrole
-
                             </tr>
                         </thead>
                         <tbody>
@@ -245,11 +246,31 @@
             </div>
         </div>
     </div>
+
+    
     <div class = "ml-20 mr-20">
         <p class="ml-5 flex justify-center items-center list-none space-x-2">
             {{ $clientes->appends([]) }}
         </p>
     </div>
 
+    
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables jQuery Plugin -->
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Bootstrap 4 Integration -->
+<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+ 
+   
+<script>	
+     $(document).ready(function() {
+        $('#clientes').DataTable();
+    });
+   </script>
+   
 </x-app-layout>
 @include('layouts.footer')

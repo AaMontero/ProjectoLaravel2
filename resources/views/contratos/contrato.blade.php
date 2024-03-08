@@ -550,6 +550,14 @@
         $(document).ready(function() {
         $('#contrato_id').DataTable();
          });
+        $('#contrato_id').DataTable({
+        columnDefs: [
+        {
+            orderable: false,
+            targets:[-1, -2, -3, -5 ],
+
+        }]
+        });
 
         var listaFormasPago = [];
         var pagareBoolean = false;

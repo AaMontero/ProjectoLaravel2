@@ -21,10 +21,11 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-    
+
     ?>
 
 
+{{-- Formualrio --}}
     <div class="py-2">
         <div id="idAgregarContrato"
             class="max-w mx-auto sm:px-6 lg:px-20 mb-4 "style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
@@ -243,20 +244,20 @@
             </div>
         </div>
     </div>
+{{-- tablas --}}
     <div class="py-2">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
             <div class = "flex">
                 <h2 class = "ml-20 pt-4 w-1/2"> Contratos Registrados </h2>
                 <div class="pb-2 w-1/2 flex">
-                    <div class = "w-1/2">
-                    </div>
+                    {{-- Busqueda --}}
                     <div class="flex items-center w-1/2 mr-4">
-                        <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
-                            <div class = "w-3/4 flex">
-                                <div class = "w-full pr-5">
-                                    <label for="num_dias" class="block text-sm font-medium text-gray-700">#
+                        <form id="form-buscar-contrato" action="{{ route('buscar_contrato') }}" method="GET" class="flex w-full">
+                            <div class ="w-3/4 flex">
+                                <div class ="w-full pr-5">
+                                    <label for="contrato_id" class="block text-sm font-medium text-gray-700">#
                                         Contrato:</label>
-                                    <input type="number" name="num_dias" id="num_dias"
+                                    <input type="text" name="contrato_id" id="contrato_id"
                                         class="mt-1 p-2 border rounded-md w-full">
                                 </div>
 
@@ -267,14 +268,12 @@
                             </div>
                         </form>
                     </div>
+
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
-
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
-
-                    <table 
-                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
+                    <table id="tabla-contratos" class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Contrato ID</th>
@@ -327,14 +326,14 @@
                                     </td>
                                     <!--Id del Cliente-->
                                     {{-- modal dinamico --}}
-                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"  
+                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         <div x-data="{ mostrarModal: false }">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->cliente_id }}
                                             </button>
                                             <!-- Modal -->
-                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300" 
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
                                                 x-transition:leave="ease-in duration-300"
@@ -545,7 +544,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-
                         <div x-show="mostrarModal" @click.away="mostrarModal = false"
                             style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
                             <div id="detallesCliente">
@@ -565,6 +563,56 @@
         </p>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('form-buscar-contrato').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evitar el envío del formulario por defecto
+
+            // Obtener el valor del campo de entrada
+            var contratoId = document.getElementById('contrato_id').value;
+
+            // Realizar una solicitud AJAX
+            fetch('/buscar_contrato?id=' + contratoId)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    // Limpiar la tabla
+                    var tablaContratos = document.getElementById('tabla-contratos');
+                    var tbody = tablaContratos.getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = '';
+
+                    // Si se encontraron resultados, agregarlos a la tabla
+                    if (data) {
+                        var fila = tbody.insertRow();
+                            fila.insertCell().textContent = data.contrato_id;
+                            fila.insertCell().textContent = data.ubicacion_sala;
+                            fila.insertCell().textContent = data.anios_contrato;
+                            fila.insertCell().textContent = "$" + data.monto_contrato;
+                            fila.insertCell().textContent = "$" + (data.valor_total_credito_directo ? data.valor_total_credito_directo : 'NO');
+                            fila.insertCell().textContent = "$" + (data.abono_credito_directo ? data.abono_credito_directo : 'NO');
+                            fila.insertCell().textContent = data.meses_credito_directo ? data.meses_credito_directo : 'NO';
+                            fila.insertCell().textContent = "$" + (data.valor_pagare ? data.valor_pagare : 'NO');
+                            fila.insertCell().textContent = data.fecha_fin_pagare ? data.fecha_fin_pagare : 'NO';
+                            fila.insertCell().textContent = data.otro_comentario ? data.otro_comentario.replace(/"/g,) : 'NO';
+                            fila.insertCell().textContent = data.id_cliente;
+                            fila.insertCell().textContent = data.vendedor_id;
+                            fila.insertCell().textContent = data.closer_1_id;
+                            fila.insertCell().textContent = data.closer_2_id;
+                            fila.insertCell().textContent = data.jefe_sala_id;
+                    } else {
+                        // Si no se encontraron resultados, mostrar un mensaje en la tabla
+                        var fila = tbody.insertRow();
+                        var celda = fila.insertCell();
+                        celda.textContent = 'No se encontraron contratos';
+                        celda.colSpan = 4; // Colspan para ocupar todas las columnas
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+            });
+        });
+
         var listaFormasPago = [];
         var pagareBoolean = false;
         var creditoDirectoBoolean = false;

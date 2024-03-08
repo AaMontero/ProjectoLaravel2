@@ -56,7 +56,22 @@ class ContratoController extends Controller
 
         return response()->json($cliente);
     }
+    //Busqueda en el contrato
+    public function buscarContrato(Request $request)
+{
+    $contratoId = $request->input('id');
 
+    // Buscar el contrato por su ID en la base de datos
+    $contrato = Contrato::where('contrato_id', $contratoId)->first();
+
+    // Si se encuentra el contrato, devolver los datos en formato JSON
+    if ($contrato) {
+        return response()->json($contrato);
+    }
+
+    // Si no se encuentra el contrato, devolver una respuesta JSON vacía
+    return response()->json(null);
+}
 
 
 
@@ -97,7 +112,7 @@ class ContratoController extends Controller
         $utils->agregarPago($closer2, $contrato, $controlerPV);
         $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
 
-        return to_route('contrato.index') 
+        return to_route('contrato.index')
         ->with('status', __('Contrato creado exitosamente'));
     }
     public function create(Request $request)
@@ -111,8 +126,8 @@ class ContratoController extends Controller
         $utils = new Utils();
         $numero_sucesivo = $utils->obtenerNumeroMayor();
         date_default_timezone_set('America/Guayaquil');
-        $formasPago = $request->input('formas_pago'); //Lista Formas de Pago 
-        //Inicializacion de variables 
+        $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
+        //Inicializacion de variables
         $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $cedula = $contratoId = $formasPago = $pagareText = $montoCuotaPagare = "";
         $aniosContrato = $montoContrato = 0;
         $bonoQory = $bonoQoryInt = $contienePagare = $contieneCreditoDirecto = false;
@@ -266,7 +281,7 @@ class ContratoController extends Controller
                 echo ("Los documentos se generaron correctamente. \n");
             }
 
-            //Creación del cliente            
+            //Creación del cliente
             if (empty($tieneUsuario)) {
                 // Si $tieneUsuario está vacío, busca un cliente por cédula
                 $clienteExiste = Cliente::where('cedula', $numCedula)->first();

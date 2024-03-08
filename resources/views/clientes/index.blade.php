@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.bootstrap5.css">
     <x-slot name="header">
         <link rel="shortcut icon" href="#">
-       
+
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Clients Register') }}
@@ -118,10 +118,6 @@
                 </form>
             </div>
         </div>
-        <script>
-            function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
-                $('#clientes').DataTable();
-                var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
 
     </div>
 

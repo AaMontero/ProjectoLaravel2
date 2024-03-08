@@ -3,7 +3,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Contracts') }}
+                {{ __('Contracts Register') }}
             </h2>
             <div onclick="abrirVentanaAgregarContrato()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar un nuevo contrato</span>
@@ -21,10 +21,11 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-    
+
     ?>
 
 
+{{-- Formualrio --}}
     <div class="py-2">
         <div id="idAgregarContrato"
             class="max-w mx-auto sm:px-6 lg:px-20 mb-4 "style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
@@ -243,38 +244,13 @@
             </div>
         </div>
     </div>
+{{-- tablas --}}
     <div class="py-2">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <div class = "flex">
-                <h2 class = "ml-20 pt-4 w-1/2"> Contratos Registrados </h2>
-                <div class="pb-2 w-1/2 flex">
-                    <div class = "w-1/2">
-                    </div>
-                    <div class="flex items-center w-1/2 mr-4">
-                        <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
-                            <div class = "w-3/4 flex">
-                                <div class = "w-full pr-5">
-                                    <label for="num_dias" class="block text-sm font-medium text-gray-700">#
-                                        Contrato:</label>
-                                    <input type="number" name="num_dias" id="num_dias"
-                                        class="mt-1 p-2 border rounded-md w-full">
-                                </div>
 
-                            </div>
-                            <div class = "w-1/4">
-                                <input type="submit" value="Buscar"
-                                    class="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
-
                 <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
-
-                    <table 
-                        class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
+                    <table id="contrato_id" class="w-100 bg-white dark:bg-gray-800 border border-gray-300 ">
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b text-center whitespace-nowrap">Contrato ID</th>
@@ -327,14 +303,14 @@
                                     </td>
                                     <!--Id del Cliente-->
                                     {{-- modal dinamico --}}
-                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"  
+                                    <td x-show="mostrarModal" @click.away="mostrarModal = false"
                                         class="py-2 px-4 border-b text-center whitespace-nowrap">
                                         <div x-data="{ mostrarModal: false }">
                                             <button @click="mostrarModal = true; ">
                                                 {{ $contrato->cliente_id }}
                                             </button>
                                             <!-- Modal -->
-                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300" 
+                                            <div x-show="mostrarModal" x-transition:enter="ease-out duration-300"
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
                                                 x-transition:leave="ease-in duration-300"
@@ -545,7 +521,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-
                         <div x-show="mostrarModal" @click.away="mostrarModal = false"
                             style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
                             <div id="detallesCliente">
@@ -559,12 +534,23 @@
             </div>
         </div>
     </div>
-    <div class = "ml-20 mr-20">
+    {{-- <div class = "ml-20 mr-20">
         <p class="ml-5 flex justify-center items-center list-none space-x-2">
             {{ $contratos->appends([]) }}
         </p>
-    </div>
+    </div> --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables jQuery Plugin -->
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Bootstrap 4 Integration -->
+<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        $(document).ready(function() {
+        $('#contrato_id').DataTable();
+         });
+
         var listaFormasPago = [];
         var pagareBoolean = false;
         var creditoDirectoBoolean = false;

@@ -5,7 +5,7 @@
        
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Clients') }}
+                {{ __('Clients Register') }}
             </h2>
             <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar un nuevo cliente</span>
@@ -123,17 +123,9 @@
                 $('#clientes').DataTable();
                 var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
 
-                if (ventanaAgregarPaquete.style.display === 'none') {
-                    ventanaAgregarPaquete.style.display = 'block';
-                } else {
-                    ventanaAgregarPaquete.style.display = 'none';
-                }
-
-            }
-        </script>
     </div>
-      
-           
+
+
    <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
@@ -195,10 +187,7 @@
                                                     </svg>
                                                 </button>
                                             </x-slot>
-                                            <x-slot name="content">
-                                                <?php
-
-                                                ?>
+                                            <x-slot name="content" id="cliente">
 
                                                 <x-dropdown-link :href="route('contrato.agregar', $cliente)">
                                                     {{ __('Agregar Contrato') }}
@@ -220,14 +209,12 @@
         </div>
     </div>
 
-    
     {{-- <div class = "ml-20 mr-20">
         <p class="ml-5 flex justify-center items-center list-none space-x-2">
             {{ $clientes->appends([]) }}
         </p>
     </div> --}}
 
-    
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -237,13 +224,29 @@
 <!-- DataTables Bootstrap 4 Integration -->
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
- 
-   
-<script>	
+
+
+<script>
      $(document).ready(function() {
         $('#clientes').DataTable();
     });
-   </script>
-   
+    $('#clientes').DataTable({
+    columnDefs: [
+        { orderable: false, targets: -1 } // Ignorar la última columna (donde está el dropdown)
+    ]
+    });
+    function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
+                var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
+
+                if (ventanaAgregarPaquete.style.display === 'none') {
+                    ventanaAgregarPaquete.style.display = 'block';
+                } else {
+                    ventanaAgregarPaquete.style.display = 'none';
+                }
+
+            }
+
+</script>
+
 </x-app-layout>
 @include('layouts.footer')

@@ -246,21 +246,7 @@
 
             VentanaChat.style.display = 'block';
 
-            if (mensajes.length > 0) {
-    const mensajeId = mensajes[0].id; // Obtener el ID del mensaje
-    const mensajeElemento = document.querySelector(`#notificacion-${mensajeId}`);
 
-    if (mensajeElemento) {
-        mensajeElemento.classList.remove('bg-gray-100', 'dark:bg-gray-800'); // Quitar el estilo de mensaje no leído
-        mensajeElemento.classList.add('bg-gray-200', 'dark:bg-gray-600'); // Agregar el estilo de mensaje leído
-
-        // Eliminar el span "Nuevo"
-        const spanNuevo = mensajeElemento.querySelector('.span-nuevo');
-        if (spanNuevo) {
-            spanNuevo.remove();
-        }
-    }
-}
 
             //     if (VentanaChat.style.display === 'none') {
             //         VentanaChat.style.display = 'block';

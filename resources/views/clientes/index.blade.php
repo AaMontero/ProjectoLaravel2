@@ -140,6 +140,27 @@
                 <div class="pb-2 w-1/2 flex">
                     <div class = "w-1/2">
                     </div>
+<<<<<<< HEAD
+=======
+                    {{-- Buscador --}}
+                    <div class="flex items-center w-1/2 mr-4">
+                        <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
+                            <div class = "w-3/4 flex">
+                                <div class = "w-full pr-5">
+                                    <label for="num_dias"
+                                        class="block text-sm font-medium text-gray-700">Cedula:</label>
+                                    <input type="number" name="num_dias" id="num_dias"
+                                        class="mt-1 p-2 border rounded-md w-full">
+                                </div>
+
+                            </div>
+                            <div class = "w-1/4">
+                                <input type="submit" value="Buscar"
+                                    class="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer">
+                            </div>
+                        </form>
+                    </div>
+>>>>>>> a1ab4c46175e62838e5d3ef1ef406280f5e01e62
                 </div>
             </div>
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
@@ -159,7 +180,6 @@
                                 @role('admin')
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
                                 @endrole
-                                
                             </tr>
                         </thead>
                         <tbody>
@@ -204,16 +224,16 @@
                                             </x-slot>
                                             <x-slot name="content">
                                                 <?php
-                                                
+
                                                 ?>
-                                                
+
                                                 <x-dropdown-link :href="route('contrato.agregar', $cliente)">
                                                     {{ __('Agregar Contrato') }}
                                                 </x-dropdown-link>
                                                 <x-dropdown-link :href="route('clientes.edit', $cliente)">
                                                     {{ __('Editar Cliente') }}
                                                 </x-dropdown-link>
-                                              
+
                                             </x-slot>
                                         </x-dropdown>
                                         @endrole

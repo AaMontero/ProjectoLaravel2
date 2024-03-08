@@ -141,6 +141,7 @@
                 <div class="pb-2 w-1/2 flex">
                     <div class = "w-1/2">
                     </div>
+                    {{-- Buscador --}}
                     <div class="flex items-center w-1/2 mr-4">
                         <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex w-full">
                             <div class = "w-3/4 flex">
@@ -177,11 +178,7 @@
                                 @role('admin')
                                 <th class="py-2 px-4 border-b text-center ">Opciones</th>
                                 @endrole
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Email</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Provincia</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Ciudad</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Estado</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Opciones</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -226,16 +223,16 @@
                                             </x-slot>
                                             <x-slot name="content">
                                                 <?php
-                                                
+
                                                 ?>
-                                                
+
                                                 <x-dropdown-link :href="route('contrato.agregar', $cliente)">
                                                     {{ __('Agregar Contrato') }}
                                                 </x-dropdown-link>
                                                 <x-dropdown-link :href="route('clientes.edit', $cliente)">
                                                     {{ __('Editar Cliente') }}
                                                 </x-dropdown-link>
-                                              
+
                                             </x-slot>
                                         </x-dropdown>
                                         @endrole

@@ -64,7 +64,7 @@ Route::middleware('auth')->group(function () {
         ->name('clientes.edit'); //Acceder a la página de editar
     Route::get('/clientes',        [ClienteController::class, 'index'])
         ->withoutMiddleware([VerifyCsrfToken::class])
-        ->name('clientes.index'); //Mostrar Clientes
+        ->name('clientes.index'); //Mostrar Clientes vendedor
     Route::post('clientes',        [ClienteController::class, 'store'])
         ->name('clientes.store'); //Agregar Cliente
     Route::put('clientes/{cliente}', [ClienteController::class, 'update'])
@@ -96,7 +96,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
         ->name('vendedor.datos_vendedor');
     Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
-        ->name('vendedores.pagosPendientes');
+        ->name('vendedores.pagosPendientes')
+        ->middleware('checkRole:admin');//admin
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update');
 
@@ -113,7 +114,7 @@ Route::middleware('auth')->group(function () {
     //Rutas para los contratos y clientes
     Route::get('/contrato/index/', [ContratoController::class, 'index'])->name('contrato.index');
     Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
-        ->name('contrato.agregar');
+        ->name('contrato.agregar'); //asesor
     Route::post('/contrato', [ContratoController::class, 'store'])
         ->name('contrato.store');
     Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])

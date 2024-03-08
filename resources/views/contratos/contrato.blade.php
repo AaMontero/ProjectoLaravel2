@@ -547,6 +547,7 @@
 <!-- DataTables Bootstrap 4 Integration -->
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     <script>
+<<<<<<< HEAD
         // $(document).ready(function() {
         // $('#contrato_id').DataTable();
         //  });
@@ -566,6 +567,18 @@
            ]
        });
    });
+        $(document).ready(function() {
+        $('#contrato_id').DataTable();
+         });
+        $('#contrato_id').DataTable({
+        columnDefs: [
+        {
+            orderable: false,
+            targets:[-1, -2, -3, -5 ],
+
+        }]
+        });
+
         var listaFormasPago = [];
         var pagareBoolean = false;
         var creditoDirectoBoolean = false;
@@ -703,7 +716,7 @@
         function mostrarModal() {
             
     }
-    
+
     </script>
 
 </x-app-layout>

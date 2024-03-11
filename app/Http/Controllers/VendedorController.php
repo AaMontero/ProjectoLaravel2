@@ -14,16 +14,19 @@ class VendedorController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-
     {
         return view('vendedor.index', [
-            "vendedores" => Vendedor::with('pagosVendedor')->latest()->paginate(10),
+            "vendedores" => Vendedor::with('pagosVendedor')
+                ->orderBy('activo', 'desc') // Ordenar por estado (activo primero)
+                ->latest()
+                ->paginate(10),
             "roles" => [
                 'Vendedor', 'Closer', 'Jefe de Sala'
             ],
             "porcentajes" => ['4% Fijo', 'Variable1', 'Variable2'],
         ]);
     }
+
 
 
     public function datosVendedor($vendedorId)
@@ -54,9 +57,6 @@ class VendedorController extends Controller
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
@@ -79,16 +79,11 @@ class VendedorController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Vendedor $vendedor)
     {
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Vendedor $vendedor)
     {
         return view('vendedor.editar', [
@@ -113,7 +108,7 @@ class VendedorController extends Controller
                 "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
                 "activo" => ['required']
             ]);
-            $vendedor->activo = $request->activo; 
+            $vendedor->activo = $request->activo;
             $vendedor->update($validated);
             return to_route('vendedor.index')
                 ->with('status', __('Actualizado   exitosamente'));
@@ -122,9 +117,7 @@ class VendedorController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Vendedor $vendedor)
     {
         //

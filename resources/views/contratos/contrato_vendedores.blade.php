@@ -16,9 +16,9 @@
                         action = "{{ route('contrato.add_vendedores') }} ">
                         @csrf
                         <input type="hidden" value ="{{ $contratoId }}" name = "contratoId">
-                        <label class="mt-1 p-0 ml-4 font-bold">Vendedor:</label>
+                        <label class="mt-3 p-0 ml-4 font-bold">Vendedor:</label>
                         <select name="vendedor"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Vendedor') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Vendedor') }}</option>
@@ -29,10 +29,15 @@
                                     {{ $vendedor->id . '.- ' . $vendedor->nombres }}
                                 </option>
                             @endforeach
+
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Closer 1:</label>
-                        <select name="closer1"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                        @error('vendedor')
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 p-0 ml-4 font-bold">Closer 1:</label>
+                        <select name="closer1" id = "closer1"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Closer') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Closer 1') }}</option>
@@ -42,9 +47,13 @@
                                 </option>
                             @endforeach
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Closer 2:</label>
-                        <select name="closer2"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                        @error('closer1')
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 p-0 ml-4 font-bold">Closer 2:</label>
+                        <select name="closer2" id = "closer2"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Closer 2') }}">
                             <option value="" selected>
                                 {{ __('No seleccionado') }}</option>
@@ -54,9 +63,13 @@
                                 </option>
                             @endforeach
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Jefe de Sala:</label>
+                        @error('duplicado')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 p-0 ml-4 font-bold">Jefe de Sala:</label>
                         <select name="jefe_de_sala"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Jefe de Sala') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Jefe de Sala') }}</option>
@@ -67,11 +80,13 @@
                                 </option>
                             @endforeach
                         </select>
-
-                        <x-input-error :messages="$errors->get('message')" />
+                        @error('jefe_de_sala')
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <x-primary-button
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
-                            nuevo cliente</x-primary-button>
+                            vendedores</x-primary-button>
                         <x-input-error :messages="$errors->get('message')" />
                 </div>
 

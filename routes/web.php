@@ -42,9 +42,6 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/paquetes/{paquete}', function ($paquete) {
-        return ('Este es el paquete: ' . $paquete);
-    });
 
     //Rutas para paquetes
     Route::get('/paquetes/{paquete}/edit', [PaqueteController::class, 'edit'])

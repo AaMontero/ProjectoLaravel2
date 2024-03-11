@@ -21,11 +21,11 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-
+    
     ?>
 
 
-{{-- Formualrio --}}
+    {{-- Formualrio --}}
     <div class="py-2">
         <div id="idAgregarContrato"
             class="max-w mx-auto sm:px-6 lg:px-20 mb-4 "style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
@@ -244,7 +244,7 @@
             </div>
         </div>
     </div>
-{{-- tablas --}}
+    {{-- tablas --}}
     <div class="py-2">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
 
@@ -539,44 +539,41 @@
             {{ $contratos->appends([]) }}
         </p>
     </div> --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables jQuery Plugin -->
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables jQuery Plugin -->
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
-<!-- DataTables Bootstrap 4 Integration -->
-<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <!-- DataTables Bootstrap 4 Integration -->
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     <script>
-<<<<<<< HEAD
         // $(document).ready(function() {
         // $('#contrato_id').DataTable();
         //  });
-         $(document).ready(function() {
-       $('#contrato_id').DataTable({
-           "columnDefs": [
-               {
-                   "targets": '_all', // Todas las columnas
-                   "orderable": true, // Hace que todas las columnas sean ordenables
-                   "searchable": true // Hace que todas las columnas sean buscables
-               },
-               {
-                   "targets": [-1, -2, -3, -4, -5], // Últimas 5 columnas
-                   "orderable": false, // Hace que estas columnas no sean ordenables
-                   "searchable": false // Hace que estas columnas no sean buscables
-               }
-           ]
-       });
-   });
         $(document).ready(function() {
-        $('#contrato_id').DataTable();
-         });
+            $('#contrato_id').DataTable({
+                "columnDefs": [{
+                        "targets": '_all', // Todas las columnas
+                        "orderable": true, // Hace que todas las columnas sean ordenables
+                        "searchable": true // Hace que todas las columnas sean buscables
+                    },
+                    {
+                        "targets": [-1, -2, -3, -4, -5], // Últimas 5 columnas
+                        "orderable": false, // Hace que estas columnas no sean ordenables
+                        "searchable": false // Hace que estas columnas no sean buscables
+                    }
+                ]
+            });
+        });
+        $(document).ready(function() {
+            $('#contrato_id').DataTable();
+        });
         $('#contrato_id').DataTable({
-        columnDefs: [
-        {
-            orderable: false,
-            targets:[-1, -2, -3, -5 ],
+            columnDefs: [{
+                orderable: false,
+                targets: [-1, -2, -3, -5],
 
-        }]
+            }]
         });
 
         var listaFormasPago = [];
@@ -712,11 +709,6 @@
 
 
         });
-
-        function mostrarModal() {
-            
-    }
-
     </script>
 
 </x-app-layout>

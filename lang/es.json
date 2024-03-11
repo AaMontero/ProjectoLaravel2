@@ -252,6 +252,11 @@
     "You're logged in!": "¡Usted está conectado!",
     "Your email address is unverified.": "Su dirección de correo electrónico no está verificada.",
     "Calendar":"Calendario",
+    "Contracts Register":"Contratos Registrados",
+    "Sign in":"Registrarse ",
+    "Sellers Register":"Vendedores Registrados",
     "Contracts":"Contratos",
-    "Sign in":"Registrarse "
+    "Clients Register":"Clientes Registrados",
+    "clients":"Clientes"
+
 }

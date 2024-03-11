@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.vendedores');
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
         ->name('contrato.add_vendedores');
+
     Route::get('buscar_contrato', [ContratoController::class, 'buscarContrato' ])
         ->name('buscar_contrato');
 

@@ -17,14 +17,18 @@
                         action = "{{ route('vendedor.update', $vendedor) }} ">
                         @csrf
                         @method('PUT')
-                        <label class="mt-1 p-0 ml-4 font-bold">Nombres:</label>
+                        <label class="mt-0.5 p-0 ml-4 font-bold">Nombres:</label>
                         <input type="text" name="nombres"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class=" block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese los nombres') }}"
                             value="{{ old('nombres', $vendedor->nombres) }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">ROL:</label>
+                        @error('nombres')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class=" mt-3 p-0 ml-4 font-bold">Rol:</label>
                         <select name="rol"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class=" block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Rol del Vendedor') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Rol') }}</option>
@@ -35,39 +39,50 @@
                                 </option>
                             @endforeach
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Porcentajes:</label>
+                        @error('rol')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class=" mt-3 p-0 ml-4 font-bold">Porcentajes:</label>
                         <select name="porcentaje_ventas"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class=" block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el % del Vendedor') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el porcentaje') }}</option>
                             @foreach ($porcentajes as $porcentaje)
                                 <option value="{{ $porcentaje }}"
-                                    {{ old('porcentaje', $vendedor->porcentaje_ventas) == $porcentaje ? 'selected' : '' }}>
+                                    {{ old('porcentaje_ventas', $vendedor->porcentaje_ventas) == $porcentaje ? 'selected' : '' }}>
                                     {{ $porcentaje }}
                                 </option>
                             @endforeach
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Estado:</label>
+                        @error('porcentaje_ventas')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 p-0 ml-4 font-bold">Estado:</label>
                         <select name="activo"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el estado') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el estado') }}
                             </option>
                             @foreach ($estados as $estado)
                                 <option value="{{ $estado == 'Activo' ? 1 : 0 }}"
-                                    {{ old('estado', $vendedor->estado) == $estado ? 'selected' : '' }}>
+                                    {{ old('activo', $vendedor->activo) == ($estado == 'Activo' ? 1 : 0) ? 'selected' : '' }}>
                                     {{ ucfirst($estado) }}
                                 </option>
                             @endforeach
                         </select>
 
-                        <x-input-error :messages="$errors->get('message')" />
+                        @error('activo')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <x-primary-button
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Editar
                             Vendedor</x-primary-button>
-                        <x-input-error :messages="$errors->get('message')" />
+
                 </div>
 
                 </form>

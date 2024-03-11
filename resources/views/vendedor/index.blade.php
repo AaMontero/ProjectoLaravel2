@@ -16,20 +16,25 @@
     </x-slot>
 
     <div class="py-2">
-        <div id="idAgregarVendedor" class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4" style="display:none">
+        <div id="idAgregarVendedor" class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4"
+            style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <!--Form para introducir un cliente-->
                     <form method="POST" class ="p-4" enctype="multipart/form-data"
                         action = "{{ route('vendedor.store') }} ">
                         @csrf
-                        <label class="mt-1 p-0 ml-4 font-bold">Nombres:</label>
+                        <label class="mt-0.5 ml-4 font-bold">Nombres:</label>
                         <input type="text" name="nombres"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Ingrese los nombres') }}" value="{{ old('nombres') }}">
-                        <label class="mt-1 p-0 ml-4 font-bold">ROL:</label>
+                        @error('nombres')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 ml-4 font-bold">Rol:</label>
                         <select name="rol"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el Rol del Vendedor') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el Rol') }}</option>
@@ -39,9 +44,13 @@
                                 </option>
                             @endforeach
                         </select>
-                        <label class="mt-1 p-0 ml-4 font-bold">Porcentajes:</label>
+                        @error('rol')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 ml-4 font-bold">Porcentajes:</label>
                         <select name="porcentaje_ventas"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el % del Vendedor') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el porcentaje') }}</option>
@@ -51,11 +60,13 @@
                                 </option>
                             @endforeach
                         </select>
-                        <x-input-error :messages="$errors->get('message')" />
+                        @error('porcentaje_ventas')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <x-primary-button
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
-                            nuevo cliente</x-primary-button>
-                        <x-input-error :messages="$errors->get('message')" />
+                            nuevo vendedor</x-primary-button>
                     </form>
                 </div>
             </div>

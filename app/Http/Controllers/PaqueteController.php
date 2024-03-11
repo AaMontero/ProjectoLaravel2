@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Paquete;
 use App\Models\CaracteristicaPaquete;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class PaqueteController extends Controller
 {
@@ -74,36 +75,39 @@ class PaqueteController extends Controller
      */
     public function store(Request $request)
     {
-
-        $validated = $request->validate([
-            'message' => ['required', 'min:3', 'max:255'],
-            'nombre_paquete' => ['required', 'min:5', 'max:255'],
-            'num_dias' => ['required', 'integer', 'min:1'],
-            'num_noches' => ['required', 'integer', 'min:1'],
-            'precio_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
-            'precio_no_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
-            'imagen_paquete' => ['required', 'min:3', 'max:255'],
-        ]);
-
-        if ($request->hasFile('imagen_paquete')) {
-            $file = $request->file('imagen_paquete');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . "." . $extension;
-            $file->move('uploads/paquetes/', $filename);
-            $validated['imagen_paquete'] = $filename;
-        }
-
-        $paquete = $request->user()->paquetes()->create($validated);
-        $listaCaracteristicas = json_decode($request->get('lista_caracteristicas'));
-        foreach ($listaCaracteristicas as $caracteristica) {
-            CaracteristicaPaquete::create([
-                'paquete_id' => $paquete->id,
-                'descripcion' => $caracteristica[0],
-                'lugar' => $caracteristica[1],
+        try {
+            $validated = $request->validate([
+                'message' => ['required', 'min:3', 'max:255'],
+                'nombre_paquete' => ['required', 'min:5', 'max:255'],
+                'num_dias' => ['required', 'integer', 'min:1'],
+                'num_noches' => ['required', 'integer', 'min:1'],
+                'precio_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
+                'precio_no_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
+                'imagen_paquete' => ['required', 'min:3', 'max:255'],
             ]);
+
+            if ($request->hasFile('imagen_paquete')) {
+                $file = $request->file('imagen_paquete');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . "." . $extension;
+                $file->move('uploads/paquetes/', $filename);
+                $validated['imagen_paquete'] = $filename;
+            }
+
+            $paquete = $request->user()->paquetes()->create($validated);
+            $listaCaracteristicas = json_decode($request->get('lista_caracteristicas'));
+            foreach ($listaCaracteristicas as $caracteristica) {
+                CaracteristicaPaquete::create([
+                    'paquete_id' => $paquete->id,
+                    'descripcion' => $caracteristica[0],
+                    'lugar' => $caracteristica[1],
+                ]);
+            }
+            return to_route('paquetes.paquetes')
+                ->with('status',  __('Insertion done successfully'));
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
         }
-        return to_route('paquetes.paquetes')
-            ->with('status',  __('Insertion done successfully'));
     }
 
     public function show(Paquete $paquete)
@@ -146,7 +150,7 @@ class PaqueteController extends Controller
                 $tempCar = CaracteristicaPaquete::find($caracteristica->id);
                 $tempCar->descripcion = $caracteristica->descripcion;
                 $tempCar->lugar = $caracteristica->lugar;
-                $tempCar->save();   
+                $tempCar->save();
             }
         } else {
         }

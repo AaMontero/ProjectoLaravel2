@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PagoVendedor;
-use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PagoVendedorController extends Controller
 {
@@ -52,9 +52,11 @@ class PagoVendedorController extends Controller
 
         $validated = $request->validate([
             'valor_pago' => ['required', 'numeric', 'min:0.01', 'max:99999.99'],
-            'fecha_pago' => ['required', 'date', 'after_or_equal:today'],
+            'fecha_pago' => ['required', 'date'],
             'concepto' => ['required', 'min:5', 'max:255'],
-            'estado' => ['required']
+            'estado' => ['required'],
+            'closer1' => ['required', Rule::unique('tu_tabla')->ignore($pago->id)],
+            'closer2' => ['required', Rule::unique('tu_tabla')->ignore($pago->id)],
         ]);
         $pago->update($validated);
         return redirect()->route('vendedores.pagosPendientes')

@@ -245,6 +245,7 @@
         </div>
     </div>
     {{-- tablas --}}
+
     <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
         <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
             <div id="users">
@@ -267,6 +268,10 @@
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 1 </th>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 2</th>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Jefe Sala</th>
+
+    <div class="py-2">
+        <div class="max-w mx-auto px-2 lg:px-20 mb-4">
+
 
                         </tr>
                     </thead>
@@ -534,10 +539,6 @@
         };
 
         var userList = new List('users', options);
-
-
-
-
         var listaFormasPago = [];
         var pagareBoolean = false;
         var creditoDirectoBoolean = false;
@@ -672,10 +673,6 @@
 
 
         });
-
-        function mostrarModal() {
-
-        }
     </script>
 
 </x-app-layout>

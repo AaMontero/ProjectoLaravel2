@@ -6,6 +6,7 @@ use App\Models\Vendedor;
 use App\Models\PagoVendedor;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class VendedorController extends Controller
 {
@@ -63,17 +64,19 @@ class VendedorController extends Controller
 
     public function store(Request $request)
     {
+        try {
+            $validated = $request->validate([
+                'nombres' => ['required', 'min:5', 'max:255'],
+                'rol' => ['required', 'min:5', 'max:255'],
+                'porcentaje_ventas' => ['required', 'min:5', 'max:255']
+            ]);
 
-        $validated = $request->validate([
-
-            'nombres' => ['required', 'min:5', 'max:255'],
-            'rol' => ['required', 'min:5', 'max:255'],
-            'porcentaje_ventas' => ['required', 'min:5', 'max:255']
-        ]);
-        $request->user()->vendedores()->create($validated);
-        
-        return to_route('vendedor.index') 
-        ->with('status', __('Vendedor creado exitosamente'));
+            $request->user()->vendedores()->create($validated);
+            return to_route('vendedor.index')
+                ->with('status', __('Vendedor creado exitosamente'));
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
+        }
     }
 
     /**
@@ -81,7 +84,6 @@ class VendedorController extends Controller
      */
     public function show(Vendedor $vendedor)
     {
-        
     }
 
     /**
@@ -104,20 +106,20 @@ class VendedorController extends Controller
      */
     public function update(Request $request, Vendedor $vendedor)
     {
-        //
-        $estadoReq =  $request->estado;
-        $vendedor->activo = $request->activo;
-        file_put_contents("estadoLlega.txt", $estadoReq);
-        $validated = $request->validate([
-            "nombres" => ['required', 'min:5', 'max:255'],
-            "rol" => ['required', 'min:5', 'max:255'],
-            "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
-            "activo" => ['required']
-        ]);
-        
-        $vendedor->update($validated);
-        return to_route('vendedor.index') 
-        ->with('status', __('Actualizado   exitosamente'));
+        try {
+            $validated = $request->validate([
+                "nombres" => ['required', 'min:5', 'max:255'],
+                "rol" => ['required', 'min:5', 'max:255'],
+                "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
+                "activo" => ['required']
+            ]);
+            $vendedor->activo = $request->activo; 
+            $vendedor->update($validated);
+            return to_route('vendedor.index')
+                ->with('status', __('Actualizado   exitosamente'));
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
+        }
     }
 
     /**

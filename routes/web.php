@@ -10,9 +10,8 @@ use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\WhatsAppApiController;
 use App\Http\Middleware\VerifyCsrfToken;
-use App\Models\WhatsApp;
+
 
 /*
 |--------------------------------------------------------------------------

@@ -202,20 +202,15 @@
                 </table>
 
 
-                    </div>
-                </div>
             </div>
-
-   
-        
+        </div>
     </div>
 
-
-    <div class = "ml-20 mr-20">
-        <p class="ml-5 flex justify-center items-center list-none space-x-2">
-            {{ $clientes->appends([]) }}
-        </p>
-    </div>
+<div class = "ml-20 mr-20">
+    <p class="ml-5 flex justify-center items-center list-none space-x-2">
+        {{ $clientes->appends([]) }}
+    </p>
+</div>
 
  {{-- buscador --}}
  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>

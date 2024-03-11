@@ -58,20 +58,20 @@ class ContratoController extends Controller
     }
     //Busqueda en el contrato
     public function buscarContrato(Request $request)
-{
-    $contratoId = $request->input('id');
+    {
+        $contratoId = $request->input('id');
 
-    // Buscar el contrato por su ID en la base de datos
-    $contrato = Contrato::where('contrato_id', $contratoId)->first();
+        // Buscar el contrato por su ID en la base de datos
+        $contrato = Contrato::where('contrato_id', $contratoId)->first();
 
-    // Si se encuentra el contrato, devolver los datos en formato JSON
-    if ($contrato) {
-        return response()->json($contrato);
+        // Si se encuentra el contrato, devolver los datos en formato JSON
+        if ($contrato) {
+            return response()->json($contrato);
+        }
+
+        // Si no se encuentra el contrato, devolver una respuesta JSON vacía
+        return response()->json(null);
     }
-
-    // Si no se encuentra el contrato, devolver una respuesta JSON vacía
-    return response()->json(null);
-}
 
 
 
@@ -86,13 +86,25 @@ class ContratoController extends Controller
     {
         return view('contratos.contrato_vendedores', [
             "contratoId" => $contratoId,
-            "vendedores" => Vendedor::where('rol', "Vendedor")->get(),
-            "closers" => Vendedor::where('rol', "Closer")->get(),
-            "jefes_sala" => Vendedor::where('rol', "Jefe de Sala")->get(),
+            "vendedores" => Vendedor::where('rol', "Vendedor")->where('activo', 1)->get(),
+            "closers" => Vendedor::where('rol', "Closer")->where('activo', 1)->get(),
+            "jefes_sala" => Vendedor::where('rol', "Jefe de Sala")->where('activo', 1)->get(),
         ]);
     }
     public function add_vendedores_DB(Request $request)
     {
+
+        $request->validate([
+            'vendedor' => 'required',
+            'closer1' => 'required',
+            'jefe_de_sala' => 'required',
+        ]);
+        if (!empty($errores)) {
+            return redirect()->back()->withErrors($errores)->withInput();
+        }
+        if ($request->closer1 == $request->closer2) {
+            return redirect()->back()->withErrors(['duplicado' => __('Los closers no pueden ser los mismos.')])->withInput();
+        }
         $contratoId = $request->contratoId;
         $contrato = Contrato::find($contratoId);
         $contrato->vendedor_id = $request->vendedor;
@@ -105,7 +117,6 @@ class ContratoController extends Controller
         $closer2 = Vendedor::find($request->closer2);
         $jefeDeSala = Vendedor::find($request->jefe_de_sala);
         $controlerPV = new PagoVendedorController();
-
         $utils = new Utils();
         $utils->agregarPago($vendedor, $contrato, $controlerPV);
         $utils->agregarPago($closer1, $contrato, $controlerPV);
@@ -113,7 +124,7 @@ class ContratoController extends Controller
         $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
 
         return to_route('contrato.index')
-        ->with('status', __('Contrato creado exitosamente'));
+            ->with('status', __('Contrato creado exitosamente'));
     }
     public function create(Request $request)
     {

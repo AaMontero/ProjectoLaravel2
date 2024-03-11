@@ -17,62 +17,91 @@
     </x-slot>
 
     <div class="py-2">
-        <div id="idAgregarPaquete" class="max-w-7xl mx-auto sm:px lg:px-8 pb-2" style="display: none;">
+        <div id="idAgregarPaquete" class="max-w-7xl mx-auto sm:px lg:px-8 pb-2"
+            style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form method="POST" action = "{{ route('paquetes.store') }} " enctype="multipart/form-data">
                         @csrf
-                        <p class="mt-1 p-1 ml-4">Nombre del paquete:</p>
-                        <input type="text" name="nombre_paquete"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}" value="{{ old('nombre_paquete') }}">
+                        <label class="mt-0.5 font-bold p-0 ml-4" for="nombre_paquete">Nombre del paquete:</label>
+                        <input type="text" name="nombre_paquete" id="nombre_paquete"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa el nombre del paquete') }}" value="{{ old('nombre_paquete') }}">
+                        @error('nombre_paquete')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 font-bold p-0 ml-4" for="message">Descripción del paquete:</label>
+                        <input type="text" name="message" id="message"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa la descripcion del paquete') }}" value="{{ old('message') }}">
+                        @error('message')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 font-bold p-0 ml-4" for="num_dias">Número de días:</label>
+                        <input type="number" name="num_dias" id="num_dias"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa el número de días') }}" value="{{ old('num_dias') }}">
+                        @error('num_dias')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 font-bold p-0 ml-4" for="num_noches">Número de noches:</label>
+                        <input type="number" name="num_noches" id="num_noches"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa el número de noches') }}" value="{{ old('num_noches') }}">
+                        @error('num_noches')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 font-bold p-0 ml-4" for="precio_afiliado">Precio Afiliados:</label>
+                        <input type="number" name="precio_afiliado" id="precio_afiliado" step="0.01"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa el precio de afiliado') }}"
+                            value="{{ old('precio_afiliado') }}">
+                        @error('precio_afiliado')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 font-bold p-0 ml-4" for="precio_no_afiliado">Precio no afiliados:</label>
+                        <input type="number" name="precio_no_afiliado" id="precio_no_afiliado" step="0.01"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa el precio de no afiliados') }}"
+                            value="{{ old('precio_no_afiliado') }}">
+                        @error('precio_no_afiliado')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <label class="mt-3 font-bold p-0 ml-4" for="imagen_paquete">Imagen del paquete:</label>
+                        <input type="file" name="imagen_paquete" id="imagen_paquete" class="form-control mb-2"
+                            value="{{ old('imagen_paquete') }}">
+                        @error('imagen_paquete')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <input type="hidden" id="lista_caracteristicas" name="lista_caracteristicas">
 
-                        {{-- message --}}
-                        <p class="mt-1 p-1 ml-4">Descripción del paquete</p>
-                        <input type="text" name="message"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}" value="{{ old('message') }}">
-
-                        <p class="mt-1 p-1 ml-4">Número de días: </p>
-                        <input type="number" name="num_dias"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}" value="{{ old('num_dias') }}">
-
-
-                        <p class="mt-1 p-1 ml-4">Número de noches:</p>
-                        <input type="number" name="num_noches"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}" value="{{ old('num_noches') }}">
-
-                        <p class="mt-1 p-1 ml-4">Precio Afiliados:</p>
-                        <input type="number" name="precio_afiliado" step="0.01"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}" value="{{ old('precio_afiliado') }}">
-
-                        <p class="mt-1 p-1 ml-4">Precio no afiliados:</p>
-                        <input type="number" name="precio_no_afiliado" step="0.01"
-                            class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}" value="{{ old('precio_no_afiliado') }}">
-                        <p class="mt-1 p-1 ml-4">Imagen del paquete:</p>
-                        <input type="file" name="imagen_paquete" class ="form-control mb-2"
-                            value = "{{ old('imagen_paquete') }}">
-                        <input type="hidden" id = "lista_caracteristicas" name = "lista_caracteristicas">
                         <div>
-                            <p class="mt-1 p-1 ml-4">Agregar Característica</p>
+                            <label class="mt-1 p-0 ml-4 font-bold" for="lugar_caracteristica">Agregar
+                                Característica</label>
                             <div class="flex">
-                                <input type = "text" name="lugar_caracteristica" id ="lugar_caracteristica"
-                                    class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                                <input type="text" name="lugar_caracteristica" id="lugar_caracteristica"
+                                    class="mr-2 mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     placeholder="{{ __('Lugar') }}" value="{{ old('ciudad_caracteristica') }}">
+
                                 <input type="text" name="caracteristica" id="caracteristica"
-                                    class="mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                                    class=" mr-2 mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     placeholder="{{ __('Ingrese su característica aquí') }}"
                                     value="{{ old('caracteristica') }}">
+
                                 <button type="button" onclick="agregarCaracteristica()"
                                     class="ml-2 h-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
                                     Agregar
                                 </button>
                             </div>
                         </div>
+
                         <script>
                             function abrirVentanaAgregarPaquete() {
 
@@ -116,7 +145,7 @@
                                 console.log(listaCaracteristicas);
                             }
                         </script>
-                        <x-input-error :messages="$errors->get('message')" />
+                        
                         <x-primary-button class='mt-4'>Agregar nuevo paquete</x-primary-button>
                     </form>
                 </div>

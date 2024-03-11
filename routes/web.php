@@ -10,9 +10,8 @@ use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\WhatsAppApiController;
 use App\Http\Middleware\VerifyCsrfToken;
-use App\Models\WhatsApp;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -43,9 +42,6 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/paquetes/{paquete}', function ($paquete) {
-        return ('Este es el paquete: ' . $paquete);
-    });
 
     //Rutas para paquetes
     Route::get('/paquetes/{paquete}/edit', [PaqueteController::class, 'edit'])

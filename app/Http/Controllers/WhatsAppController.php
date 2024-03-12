@@ -51,7 +51,7 @@ class WhatsAppController extends Controller
             ]),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Bearer EAA0cGBz1VmwBOyPIAWVggBulUedn4Bxeq1VzHNHxZBW25Hh11bfuZBOz704eaq7MP06LgoRzKSuCaJFw6ZCWsA8pb6dqrqC3yaruT2hhopjoCF7mTO4nMyNG7XyQ5OcLPSujzHzAqcPksvlQLk3igDh2FnXyZA803qaiIdzJO1x09euof8c2XYBZBy9VNfcr3haXmD4HOVJByZBIlYLTQZD'
+                'Authorization: Bearer EAA0cGBz1VmwBO096gyE0HhX9NQ5oGXMgjJhnAn0GmksXM6u7BOt6dZAAveaF6bL2PkDMvhI2SqnjZB4BaFJWORz1prg9eURJsnnduEjhRhUhjvkhxmPtDqDbd6nSePeMCd9PGDJZA9mJTUxEzvPZC7R33zYG3b54VZChJzoyW5ACbnO9nNOXKfuuk8SxPtaYUoZCX459QrNvuvWwnWXNHs'
             ),
         ));
         $response = curl_exec($curl);
@@ -94,7 +94,7 @@ class WhatsAppController extends Controller
       */
     public function recibe()
     {
-       $respuesta = file_get_contents("php://input");
+        $respuesta = file_get_contents("php://input");
         if ($respuesta == null) {
             exit;
         }
@@ -111,7 +111,32 @@ class WhatsAppController extends Controller
         $whatsApp->telefono_wa = $telefonoUser;
         $whatsApp->id_numCliente = $telefonoUser;
         $whatsApp->fecha_hora = new DateTime('now');
-        $whatsApp->save();
+        //$whatsApp->save();
+        $options = [
+            'cluster' => 'sa1',
+            'useTLS' => true
+        ];
+
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+        file_put_contents("archivo.txt", "Esta llegando a Pusher");
+        $data = [
+            'id_numCliente' => $telefonoUser,
+            'mensaje_recibido' => $mensaje
+        ];
+        try {
+            $pusher->trigger('whatsapp-channel', 'whatsapp-event', $data);
+            file_put_contents("archivo.txt", "Evento Pusher enviado con éxito.\n", FILE_APPEND);
+        } catch (\Pusher\PusherException $e) {
+            file_put_contents("archivo.txt", "Error al enviar el evento Pusher: " . $e->getMessage() . "\n", FILE_APPEND);
+        }
+        if ($whatsApp->save()) {
+            return response()->json(['status' => true, 'message' => 'Task Added Successfully']);
+        }
     }
 
     public function notificacionMensaje(Request $request)
@@ -124,30 +149,9 @@ class WhatsAppController extends Controller
         $mensaje->save();
 
 
-    // Envía una notificación utilizando Pusher
-    $options = [
-        'cluster' => 'sa1',
-        'useTLS' => true
-    ];
-
-    $pusher = new Pusher(
-        env('PUSHER_APP_KEY'),
-        env('PUSHER_APP_SECRET'),
-        env('PUSHER_APP_ID'),
-        $options
-    );
-
-    $data = [
-        'id_numCliente' => $mensaje->id_numCliente,
-        'mensaje_recibido' => $mensaje->mensaje_recibido
-    ];
-    $pusher->trigger('whatsapp-channel', 'whatsapp-event', $data);
-
-    // Obtener todos los mensajes de WhatsApp;
-
-    // Devolver la vista con los mensajes
-    return view('chat.chat', compact('mensajes'));
-         // Pasa los mensajes a la vista 'dashboard'
+        // Devolver la vista con los mensajes
+        return view('chat.chat', compact('mensajes'));
+        // Pasa los mensajes a la vista 'dashboard'
     }
 
     public function show(WhatsApp $whatsApp)

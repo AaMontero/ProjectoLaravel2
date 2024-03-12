@@ -1,5 +1,5 @@
 <x-app-layout>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
     <x-slot name="header">
         <link rel="shortcut icon" href="#">
 
@@ -121,115 +121,108 @@
 
     </div>
 
+    <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
+        <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
+            <div id="users">
+                <input class="search mb-4" placeholder="Buscar" />
+                <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
+                    <thead>
+                        <tr> <!--Etiquetas de la tabla de clientes-->
+                            <th class="py-2 px-4 border-b text-center whitespace-nowrap">Cedula</th>
+                            <th class="py-2 px-4 border-b text-center whitespace-nowrap">Nombres</th>
+                            <th class="py-2 px-4 border-b text-center whitespace-nowrap">Apellidos</th>
+                            <th class="py-2 px-4 border-b text-center whitespace-nowrap">Teléfono</th>
+                            <th class="py-2 px-4 border-b text-center whitespace-nowrap">F. Nacimiento</th>
+                            <th class="py-2 px-4 border-b text-center ">Email</th>
+                            <th class="py-2 px-4 border-b text-center ">Provincia</th>
+                            <th class="py-2 px-4 border-b text-center ">Ciudad</th>
+                            <th class="py-2 px-4 border-b text-center ">Estado</th>
+                            @role('admin')
+                            <th class="py-2 px-4 border-b text-center ">Opciones</th>
+                            @endrole
+                        </tr>
+                    </thead>
+                    <tbody class="list">
+                        @foreach ($clientes as $cliente)
+                            <tr> <!--Tabla que muestra los clientes-->
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    {{ $cliente->cedula }}
+                                </td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap nombres">
+                                    {{ $cliente->nombres }}</td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap apellidos">
+                                    {{ $cliente->apellidos }}</td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    {{ $cliente->numTelefonico }}</td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    {{ $cliente->fecha_nacimiento }}</td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap email">
+                                    {{ $cliente->email }}
+                                </td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    {{ $cliente->provincia }}</td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    {{ $cliente->ciudad }}</td>
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                    @if ($cliente->activo == 1)
+                                        Activo
+                                    @else
+                                        Inactivo
+                                    @endif
+                                </td>
+                                <td class = "text-right pr-6">
+                                    @role('admin')
+                                    <x-dropdown class="origin-top absolute ">
+                                        <x-slot name="trigger">
+                                            <button>
+                                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                                </svg>
+                                            </button>
+                                        </x-slot>
+                                        <x-slot name="content" id="cliente">
 
-   <div class="py-2 ">
-        <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
-                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
-                    <table id="clientes" class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
-                        <thead>
-                            <tr> <!--Etiquetas de la tabla de clientes-->
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Cedula</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Nombres</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Apellidos</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">Teléfono</th>
-                                <th class="py-2 px-4 border-b text-center whitespace-nowrap">F. Nacimiento</th>
-                                <th class="py-2 px-4 border-b text-center ">Email</th>
-                                <th class="py-2 px-4 border-b text-center ">Provincia</th>
-                                <th class="py-2 px-4 border-b text-center ">Ciudad</th>
-                                <th class="py-2 px-4 border-b text-center ">Estado</th>
-                                @role('admin')
-                                <th class="py-2 px-4 border-b text-center ">Opciones</th>
-                                @endrole
+                                            <x-dropdown-link :href="route('contrato.agregar', $cliente)">
+                                                {{ __('Agregar Contrato') }}
+                                            </x-dropdown-link>
+                                            <x-dropdown-link :href="route('clientes.edit', $cliente)">
+                                                {{ __('Editar Cliente') }}
+                                            </x-dropdown-link>
+
+                                        </x-slot>
+                                    </x-dropdown>
+                                    @endrole
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($clientes as $cliente)
-                                <tr> <!--Tabla que muestra los clientes-->
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->cedula }}
-                                    </td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->nombres }}</td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->apellidos }}</td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->numTelefonico }}</td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->fecha_nacimiento }}</td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">{{ $cliente->email }}
-                                    </td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->provincia }}</td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        {{ $cliente->ciudad }}</td>
-                                    <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                        @if ($cliente->activo == 1)
-                                            Activo
-                                        @else
-                                            Inactivo
-                                        @endif
-                                    </td>
-                                    <td class = "text-right pr-6">
-                                        @role('admin')
-                                        <x-dropdown class="origin-top absolute ">
-                                            <x-slot name="trigger">
-                                                <button>
-                                                    <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                                    </svg>
-                                                </button>
-                                            </x-slot>
-                                            <x-slot name="content" id="cliente">
+                        @endforeach
+                    </tbody>
+                </table>
 
-                                                <x-dropdown-link :href="route('contrato.agregar', $cliente)">
-                                                    {{ __('Agregar Contrato') }}
-                                                </x-dropdown-link>
-                                                <x-dropdown-link :href="route('clientes.edit', $cliente)">
-                                                    {{ __('Editar Cliente') }}
-                                                </x-dropdown-link>
 
-                                            </x-slot>
-                                        </x-dropdown>
-                                        @endrole
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
 
-    {{-- <div class = "ml-20 mr-20">
-        <p class="ml-5 flex justify-center items-center list-none space-x-2">
-            {{ $clientes->appends([]) }}
-        </p>
-    </div> --}}
+<div class = "ml-20 mr-20">
+    <p class="ml-5 flex justify-center items-center list-none space-x-2">
+        {{ $clientes->appends([]) }}
+    </p>
+</div>
+
+ {{-- buscador --}}
+ <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+|<script>
+        // buscador
+        var options = {
+            valueNames: ['nombres', 'apellidos', 'email']
+        };
+
+        var userList = new List('users', options);
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- DataTables jQuery Plugin -->
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
-<!-- DataTables Bootstrap 4 Integration -->
-<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-
-<script>
-     $(document).ready(function() {
-        $('#clientes').DataTable();
-    });
-    $('#clientes').DataTable({
-    columnDefs: [
-        { orderable: false, targets: -1 } // Ignorar la última columna (donde está el dropdown)
-    ]
-    });
-   
     function abrirVentanaAgregarPaquete() { // Funcion para desplegar el menú
                 var ventanaAgregarPaquete = document.getElementById("idAgregarCliente");
 

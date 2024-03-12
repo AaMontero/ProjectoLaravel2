@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RecibirMensaje;
 use App\Models\tasks;
 use App\Models\WhatsApp;
 use DateTime;
@@ -10,7 +11,6 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Pusher\Pusher;
-
 
 class WhatsAppController extends Controller
 {
@@ -51,7 +51,7 @@ class WhatsAppController extends Controller
             ]),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Bearer EAA0cGBz1VmwBO096gyE0HhX9NQ5oGXMgjJhnAn0GmksXM6u7BOt6dZAAveaF6bL2PkDMvhI2SqnjZB4BaFJWORz1prg9eURJsnnduEjhRhUhjvkhxmPtDqDbd6nSePeMCd9PGDJZA9mJTUxEzvPZC7R33zYG3b54VZChJzoyW5ACbnO9nNOXKfuuk8SxPtaYUoZCX459QrNvuvWwnWXNHs'
+                'Authorization: Bearer EAA0cGBz1VmwBO4A6DDeewvO916Exi5FQjVwMqCspVC8GSiZBkRclhJJd2iPKRZADL99DWVDxDUxE1GL9jU9h5F68jPGjpx5LTc0xhNSSwuQfJb0htNHOlZCqltVTlxnRXRG9xvmVVQPegZC9jpFv2wFLOjvayGNdYZAtilQyHYddoetjm3NbkAmWbmdiGqJMW5RuDyHkZB7VsLbIlvXMXl'
             ),
         ));
         $response = curl_exec($curl);
@@ -111,32 +111,9 @@ class WhatsAppController extends Controller
         $whatsApp->telefono_wa = $telefonoUser;
         $whatsApp->id_numCliente = $telefonoUser;
         $whatsApp->fecha_hora = new DateTime('now');
-        //$whatsApp->save();
-        $options = [
-            'cluster' => 'sa1',
-            'useTLS' => true
-        ];
-
-        $pusher = new Pusher(
-            env('PUSHER_APP_KEY'),
-            env('PUSHER_APP_SECRET'),
-            env('PUSHER_APP_ID'),
-            $options
-        );
-        file_put_contents("archivo.txt", "Esta llegando a Pusher");
-        $data = [
-            'id_numCliente' => $telefonoUser,
-            'mensaje_recibido' => $mensaje
-        ];
-        try {
-            $pusher->trigger('whatsapp-channel', 'whatsapp-event', $data);
-            file_put_contents("archivo.txt", "Evento Pusher enviado con éxito.\n", FILE_APPEND);
-        } catch (\Pusher\PusherException $e) {
-            file_put_contents("archivo.txt", "Error al enviar el evento Pusher: " . $e->getMessage() . "\n", FILE_APPEND);
-        }
-        if ($whatsApp->save()) {
-            return response()->json(['status' => true, 'message' => 'Task Added Successfully']);
-        }
+        $whatsApp->save();
+        $event = new RecibirMensaje($telefonoUser, $mensaje, $whatsApp->fecha_hora);
+        event($event);
     }
 
     public function notificacionMensaje(Request $request)

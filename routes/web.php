@@ -146,7 +146,7 @@ Route::middleware('auth')->group(function () {
     ->middleware('checkRole:admin');
     Route::put('/roles/{user}', [RolController::class, 'asignarRol'])->name('roles.asignar-rol')
     ->middleware('checkRole:admin');
-
+    Route::post('save_task', [PusherPruebaControlller::class, 'save_task']);
 });
     //Autentifiación para conectarse con APIS (No necesita estar logeado)
     Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])

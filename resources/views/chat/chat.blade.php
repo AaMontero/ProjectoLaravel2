@@ -1,22 +1,22 @@
 <x-app-layout>
+    <x-slot name="header">
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    </x-slot>
     <style>
-        /* Estilo para las notificaciones clicables */
         .notificacion-clicable {
             cursor: pointer;
-            /* Cambia el cursor al pasar sobre las notificaciones */
             transition: background-color 0.3s;
-            /* Transición suave para el cambio de color de fondo */
         }
 
-        /* Cambia el color de fondo al pasar el ratón sobre las notificaciones */
         .notificacion-clicable:hover {
             background-color: rgba(0, 0, 0, 0.1);
-            /* Cambia el color de fondo al pasar el ratón */
         }
     </style>
     <div class="flex space-x-8">
         <!-- Notificaciones -->
-        <div id="notificaciones" class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto" style="max-height: 700px; border-radius: 10px;">
+        <div id="notificaciones"
+            class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
+            style="max-height: 700px; border-radius: 10px;">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
                 @php
@@ -24,13 +24,18 @@
                     $leido = $ultimoMensaje['leido']; // Verificar si el último mensaje está marcado como leído
                 @endphp
                 <div class="space-y-4">
-                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})" data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}" class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105" id="notificacion-{{ $ultimoMensaje->id }}">
+                    <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
+                        data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}"
+                        class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105"
+                        id="notificacion-{{ $ultimoMensaje->id }}">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
-                        <div class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
+                        <div
+                            class="font-bold text-gray-{{ $leido ? '800' : '600' }} dark:text-gray-{{ $leido ? '200' : '400' }} ml-4">
                             {{ $telefono }}
                         </div>
                         @if (!$leido)
-                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
+                            <span
+                                class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
                         @endif
                     </div>
                 </div>
@@ -52,13 +57,13 @@
             </button>
 
             <!-- Historial de mensajes -->
-            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-6 space-y-4">
+            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-4 space-y-4">
                 <!-- Historial de mensajes -->
-                <div class="flex items-center bg-gray-200 p-4 rounded-lg shadow-md mt-4">
+                <div class="flex items-center bg-gray-200 p-2 rounded-lg shadow-md">
                     <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                     <div id="telefono-chat" class="ml-4"></div>
                 </div>
-                <div id="historial-mensajes" class="bg-gray-200 p-4 rounded-lg mb-4  overflow-auto"
+                <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4  overflow-auto"
                     style="max-height: 480px;">
                     <ul id="miLista">
                     </ul>
@@ -73,13 +78,10 @@
 
                     <button type="button" onclick="enviarFormulario()"
                         class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
-                    <!-- <button type="button" onclick="enviarFormulario()"
-                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>-->
-                    <!--<button type="submit"
-                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
-                    -->
+
                 </form>
             </div>
+            <script></script>
         </div>
     </div>
 
@@ -146,28 +148,40 @@
 
 
         function crearMensajeRecibido(elemento) {
-
             var divGrande = document.createElement("div");
             var nuevoElemento = document.createElement("div");
-            var elementoH1 = document.createElement("h1");
-            var horaElemento = document.createElement("p");
+            var elementoH1 = document.createElement("h4");
+            var horaElemento = document.createElement("small");
             elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            horaElemento.style.fontSize = "12px";
-            horaElemento.style.color = "#999";
-            horaElemento.style.marginTop = "6px";
-            nuevoElemento.style.borderRadius = "10px";
-            nuevoElemento.style.padding = "5px";
-            nuevoElemento.style.marginBottom = "10px";
-            nuevoElemento.style.backgroundColor = '#CCC9C9';
-            nuevoElemento.style.fontFamily = "Monserrat";
-            nuevoElemento.style.fontSize = "18px";
-            nuevoElemento.style.lineHeight = "1";
-            nuevoElemento.style.color = 'Black';
-            nuevoElemento.style.textAlign = 'justify';
-            nuevoElemento.style.marginRight = "100px";
+
+            horaElemento.style = `
+        font-size: 12px;
+        color: #515151;
+        margin-left: 10px;
+        `;
+
+            nuevoElemento.style = `
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background-color: #ffffff;
+        font-family: Monserrat;
+        font-size: 15px;
+        padding-right:10px; 
+        line-height: 1;
+        color: #00000;
+        margin-right: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
+            if (elemento['mensaje_enviado'].length < 20) {
+                nuevoElemento.style.display = "flex";
+                var dimensionCuadro = 100 + elemento['mensaje_enviado'].length * 10; 
+                nuevoElemento.style.width = dimensionCuadro +'px';
+                horaElemento.style.textAlign  = "end"; 
+                
+            } else {
+                nuevoElemento.style.display = "inline-block";
+            }
             elementoH1.style.marginLeft = '10px';
-            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
@@ -176,31 +190,42 @@
         }
 
         function crearMensajeEnviado(elemento) {
+            // Crear elementos DOM
             var divGrande = document.createElement("div");
             var nuevoElemento = document.createElement("div");
-            var elementoH1 = document.createElement("h1");
-            var horaElemento = document.createElement("p");
+            var elementoH1 = document.createElement("h4");
+            var horaElemento = document.createElement("small");
+            divGrande.style = `width: 100%; background-color: black;`;
+            // Configurar contenido y estilos
             elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
-            horaElemento.style.fontSize = '12px';
-            horaElemento.style.color = '#999';
-            horaElemento.style.marginTop = "6px";
-            nuevoElemento.style.borderRadius = "10px";
-            nuevoElemento.style.padding = "5px";
-            nuevoElemento.style.marginBottom = "10px";
-            nuevoElemento.style.backgroundColor = '#CCC9C9';
-            nuevoElemento.style.fontFamily = "Monserrat";
-            nuevoElemento.style.fontSize = "18px";
-            nuevoElemento.style.lineHeight = "1";
-            nuevoElemento.style.color = 'red';
-            nuevoElemento.style.textAlign = 'right';
-            nuevoElemento.style.marginLeft = "100px";
+
+            divGrande.style = `text-align: right; `;
+            horaElemento.style = ` 
+        font-size: 12px;
+        color: #515151;
+        margin-right: 10px;
+        `;
+
+            nuevoElemento.style = `
+            display: inline-block; 
+            
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background-color: #dcf8c6;
+        font-family: Monserrat;
+        font-size: 15px;
+        line-height: 1;
+        color: #00000;
+        padding-left: 20px; 
+        text-align: right;
+        margin-left: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
             elementoH1.style.marginRight = '10px';
-            nuevoElemento.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+            // Construir la estructura del mensaje
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
-
             return divGrande;
         }
 
@@ -230,30 +255,17 @@
 
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
-
                     var elementoCreado;
-
                     if (elemento['telefono_wa'] == telefonoEmisor) {
                         elementoCreado = crearMensajeEnviado(elemento);
                     } else {
                         elementoCreado = crearMensajeRecibido(elemento);
                     }
                     lista.appendChild(elementoCreado);
-
                 });
                 lista.scrollTop = lista.scrollHeight;
             }
-
             VentanaChat.style.display = 'block';
-
-
-
-            //     if (VentanaChat.style.display === 'none') {
-            //         VentanaChat.style.display = 'block';
-            //         document.getElementById("telefono-chat").textContent = telefono;
-            //     } else {
-            //         VentanaChat.style.display = 'none';
-            //     }
         }
 
 
@@ -262,8 +274,23 @@
             chat.style.display = 'none';
             document.getElementById("miLista").innerText = "";
         }
+        //Recibir los mensajes en tiempo real
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('217450e1ce096539fb1c', {
+            cluster: 'sa1'
+        });
+        var channel = pusher.subscribe('whatsapp-channel');
+        channel.bind('whatsapp-event', function(data) {
+            var objeto = {
+                mensaje_enviado: data['mensaje'],
+                fecha_hora: data['horaMensaje'],
+                numero: data['usuario']
+            }
+            var lista = document.getElementById("miLista");
+            lista.appendChild(crearMensajeRecibido(objeto));
 
 
+        });
     </script>
 
 </x-app-layout>

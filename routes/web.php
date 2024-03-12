@@ -47,7 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/paquetes/{paquete}/edit', [PaqueteController::class, 'edit'])
         ->name('paquetes.edit'); // Acceder al formulario edit
     Route::get('/paquetes', [PaqueteController::class,  'index'])
-        ->name('paquetes.paquetes'); //Mostrar Paquetes
+        ->name('paquetes.paquetes') //Mostrar Paquetes
+        ->middleware('checkRole:admin,asesor,superAdmin');
     Route::post('/paquetes', [PaqueteController::class, 'store'])
         ->name('paquetes.store'); //Agregar Paquetes
     Route::put('paquetes/{paquete}',  [PaqueteController::class, 'update'])
@@ -71,10 +72,10 @@ Route::middleware('auth')->group(function () {
     //Ruta para el calendario
     Route::get('calendar/index', [CalendarController::class, 'index'])
         ->name('calendar.index')
-        ->middleware('checkRole:admin,asesor');
+        ->middleware('checkRole:admin,asesor,superAdmin');
     Route::post('/calendar', [CalendarController::class, 'store'])
         ->name('calendar.store')
-        ->middleware('checkRole:admin');
+        ->middleware('checkRole:admin,superAdmin');
     Route::patch('calendar/update/{id}', [CalendarController::class, 'update'])
         ->name('calendar.update');
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])
@@ -90,10 +91,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
         ->name('vendedor.edit');
     Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
-        ->name('vendedor.datos_vendedor');
+        ->name('vendedor.datos_vendedor')
+        ->middleware('checkRole:admin,asesor,superAdmin');
     Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
         ->name('vendedores.pagosPendientes')
-        ->middleware('checkRole:admin');//admin
+        ->middleware('checkRole:admin,superAdmin');//admin
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update');
 
@@ -142,10 +144,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/cliente/{id}', [ContratoController::class, 'obtenerDetallesCliente']);
 
     // rutas de roles
-    Route::get('/rol', [RolController::class, 'index'])->name('roles.rol')->middleware('checkRole:admin')
-    ->middleware('checkRole:admin');
+    Route::get('/rol', [RolController::class, 'index'])->name('roles.rol')
+    ->middleware('checkRole:admin,superAdmin');
     Route::put('/roles/{user}', [RolController::class, 'asignarRol'])->name('roles.asignar-rol')
-    ->middleware('checkRole:admin');
+    ->middleware('checkRole:superAdmin');
     Route::post('save_task', [PusherPruebaControlller::class, 'save_task']);
 });
     //Autentifiación para conectarse con APIS (No necesita estar logeado)

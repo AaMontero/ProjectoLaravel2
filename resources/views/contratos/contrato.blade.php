@@ -453,8 +453,8 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="pagination flex justify-center mt-4">
-                    <!-- Aquí va tu estructura de paginación -->
+                <div class="pagination flex justify-center mt-2">
+                    
                     <div class="pagination "></div>
                 </div>
             </div>

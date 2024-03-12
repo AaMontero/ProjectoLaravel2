@@ -137,9 +137,10 @@
                             <th class="py-2 px-4 border-b text-center ">Provincia</th>
                             <th class="py-2 px-4 border-b text-center ">Ciudad</th>
                             <th class="py-2 px-4 border-b text-center ">Estado</th>
-                            @role('admin')
+                            @role('admin|superAdmin|host')
                             <th class="py-2 px-4 border-b text-center ">Opciones</th>
                             @endrole
+                           
                         </tr>
                     </thead>
                     <tbody class="list">
@@ -171,7 +172,7 @@
                                     @endif
                                 </td>
                                 <td class = "text-right pr-6">
-                                    @role('admin')
+                                    @role('admin|superAdmin')
                                     <x-dropdown class="origin-top absolute ">
                                         <x-slot name="trigger">
                                             <button>
@@ -195,13 +196,33 @@
                                         </x-slot>
                                     </x-dropdown>
                                     @endrole
+                                    @role('host|admin|superAdmin')
+                                    <x-dropdown class="origin-top absolute ">
+                                        <x-slot name="trigger">
+                                            <button>
+                                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                                </svg>
+                                            </button>
+                                        </x-slot>
+                                        <x-slot name="content" id="cliente">
+
+                                            <x-dropdown-link :href="route('contrato.agregar', $cliente)">
+                                                {{ __('Agregar Contrato') }}
+                                            </x-dropdown-link>
+                                        </x-slot>
+                                    </x-dropdown>
+                                    @endrole
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <div class="pagination flex justify-center mt-4">
-                    <!-- Aquí va tu estructura de paginación -->
+                <div class="pagination flex justify-center mt-2">
+                    
                     <div class="pagination "></div>
                 </div>
                 

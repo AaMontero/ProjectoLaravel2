@@ -216,8 +216,8 @@
     <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
         <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
             <div id="users">
-                <input class="search mb-4" placeholder="Buscar" />
-                <table>
+                <input class="search " placeholder="Buscar" />
+                <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
                     <thead>
                         <tr>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Contrato ID</th>
@@ -276,7 +276,7 @@
                             <!--Id del Cliente-->
                             {{-- modal dinamico --}}
                             <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
+                                <div x-data="{ mostrarModal: false }">
                                     <button @click="mostrarModal = true; ">
                                         {{ $contrato->cliente_id }}
                                     </button>
@@ -286,7 +286,7 @@
                                         <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;" @click="mostrarModal = false"></div>
 
                                         <!-- Modal -->
-                                        <div x-cloak style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
+                                        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 2000;">
                                             <h3>Información del cliente</h3>
                                             @foreach ($clientes as $cliente)
                                             @if ($cliente->id == $contrato->cliente_id)
@@ -313,7 +313,7 @@
                             </td>
                             {{-- --- --}}
                             <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
+                                <div x-data="{ mostrarModal: false }">
                                     <button @click="mostrarModal = true; ">
                                         {{ $contrato->vendedor_id }}
                                     </button>
@@ -343,7 +343,7 @@
                                 </div>
                             </td>
                             <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
+                                <div x-data="{ mostrarModal: false }">
                                     <button @click="mostrarModal = true; ">
                                         {{ $contrato->closer_id }}
                                     </button>
@@ -372,7 +372,7 @@
                                 </div>
                             </td>
                             <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
+                                <div x-data="{ mostrarModal: false }">
                                     <button @click="mostrarModal = true; ">
                                         {{ $contrato->closer2_id }}
                                     </button>
@@ -401,7 +401,7 @@
                                 </div>
                             </td>
                             <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                <div x-data="{ mostrarModal: false }" x-init="mostrarModal">
+                                <div x-data="{ mostrarModal: false }">
                                     <button @click="mostrarModal = true; ">
                                         {{ $contrato->jefe_sala_id }}
                                     </button>
@@ -453,25 +453,51 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                <div class="pagination flex justify-center mt-4">
+                    <!-- Aquí va tu estructura de paginación -->
+                    <div class="pagination "></div>
+                </div>
             </div>
         </div>
     </div>
+    <style>
+        .pagination li {
+      display: inline-block;
+      padding: 5px;
+    }
+    
+    .pagination a {
+      display: inline-block;
+      padding: 10px 15px; /* Ajusta el relleno según sea necesario */
+      background-color: #4a4a4a; /* Color de fondo del botón */
+      color: #fff; /* Color del texto del botón */
+      border-radius: 5px; /* Bordes redondeados */
+      text-decoration: none; /* Eliminar subrayado del enlace */
+      transition: background-color 0.3s ease; /* Efecto de transición al pasar el ratón */
+    }
+    
+    .pagination a:hover {
+      background-color: #555; /* Cambia el color de fondo al pasar el ratón */
+    }
+    
+    </style>
 
 
     {{-- paginacion --}}
-    <div class="ml-20 mr-20">
+    {{-- <div class="ml-20 mr-20">
         <p class="ml-5 flex justify-center items-center list-none space-x-2">
             {{ $contratos->appends([]) }}
         </p>
-    </div>
+    </div> --}}
 
     {{-- buscador --}}
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
     <script>
         // buscador
         var options = {
-            valueNames: ['contrato_id', 'ubicacion', 'años']
+            valueNames: ['contrato_id', 'ubicacion', 'años'],
+            page: 10, // Número de elementos por página
+        pagination: true // Habilitar paginación
         };
 
         var userList = new List('users', options);

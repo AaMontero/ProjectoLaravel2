@@ -148,10 +148,18 @@ Route::middleware('auth')->group(function () {
     ->middleware('checkRole:admin');
 
 });
-//Autentifiación para conectarse con APIS (No necesita estar logeado)
-Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
-    ->withoutMiddleware([VerifyCsrfToken::class]);
-Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
-    ->withoutMiddleware([VerifyCsrfToken::class]);
+    //Autentifiación para conectarse con APIS (No necesita estar logeado)
+    Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
+        ->withoutMiddleware([VerifyCsrfToken::class]);
+    Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
+        ->withoutMiddleware([VerifyCsrfToken::class]);
+
+    //terminos y condiciones
+    Route::get('/politicas-privacidad', function () {
+        return view('layouts.politicas');
+    })->name('politicas');
+    Route::get('/terminos-condiciones', function () {
+        return view('layouts.terminos');
+    })->name('terminos');
 
 require __DIR__ . '/auth.php';

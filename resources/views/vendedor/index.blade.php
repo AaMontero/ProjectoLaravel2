@@ -1,5 +1,5 @@
 <x-app-layout>
-    {{-- <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'> --}}
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -126,12 +126,35 @@
                 @endforeach
                   </tbody>
                 </table>
-              
+                <div class="pagination flex justify-center mt-4">
+                    <!-- Aquí va tu estructura de paginación -->
+                    <div class="pagination "></div>
+                </div>
               </div>
         </div>
        
     </div>
+    <style>
+        .pagination li {
+      display: inline-block;
+      padding: 5px;
+    }
     
+    .pagination a {
+      display: inline-block;
+      padding: 10px 15px; /* Ajusta el relleno según sea necesario */
+      background-color: #4a4a4a; /* Color de fondo del botón */
+      color: #fff; /* Color del texto del botón */
+      border-radius: 5px; /* Bordes redondeados */
+      text-decoration: none; /* Eliminar subrayado del enlace */
+      transition: background-color 0.3s ease; /* Efecto de transición al pasar el ratón */
+    }
+    
+    .pagination a:hover {
+      background-color: #555; /* Cambia el color de fondo al pasar el ratón */
+    }
+    
+    </style>
 
     
 
@@ -139,7 +162,9 @@
         <script>
             // buscador
         var options = {
-            valueNames: ['nombres', 'rol', 'estado']
+            valueNames: ['nombres', 'rol', 'estado'],
+            page: 10, // Número de elementos por página
+        pagination: true // Habilitar paginación
         };
 
         var userList = new List('users', options);
@@ -155,11 +180,11 @@
             }
         }
     </script>
-    <div class = "ml-20 mr-20">
+    {{-- <div class = "ml-20 mr-20">
         <p class="ml-5 flex justify-center items-center list-none space-x-2">
             {{ $vendedores->appends([]) }}
         </p>
-    </div>
+    </div> --}}
 
 </x-app-layout>
 @include('layouts.footer')

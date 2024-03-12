@@ -1,5 +1,5 @@
 <x-app-layout>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <x-slot name="header">
         <link rel="shortcut icon" href="#">
 
@@ -145,7 +145,7 @@
                     <tbody class="list">
                         @foreach ($clientes as $cliente)
                             <tr> <!--Tabla que muestra los clientes-->
-                                <td class="py-2 px-4 border-b text-center whitespace-nowrap">
+                                <td class="py-2 px-4 border-b text-center whitespace-nowrap cedula">
                                     {{ $cliente->cedula }}
                                 </td>
                                 <td class="py-2 px-4 border-b text-center whitespace-nowrap nombres">
@@ -200,24 +200,49 @@
                         @endforeach
                     </tbody>
                 </table>
-
-
+                <div class="pagination flex justify-center mt-4">
+                    <!-- Aquí va tu estructura de paginación -->
+                    <div class="pagination "></div>
+                </div>
+                
             </div>
         </div>
     </div>
+<style>
+    .pagination li {
+  display: inline-block;
+  padding: 5px;
+}
 
-<div class = "ml-20 mr-20">
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px; /* Ajusta el relleno según sea necesario */
+  background-color: #4a4a4a; /* Color de fondo del botón */
+  color: #fff; /* Color del texto del botón */
+  border-radius: 5px; /* Bordes redondeados */
+  text-decoration: none; /* Eliminar subrayado del enlace */
+  transition: background-color 0.3s ease; /* Efecto de transición al pasar el ratón */
+}
+
+.pagination a:hover {
+  background-color: #555; /* Cambia el color de fondo al pasar el ratón */
+}
+
+</style>
+{{-- <div class = "ml-20 mr-20">
     <p class="ml-5 flex justify-center items-center list-none space-x-2">
         {{ $clientes->appends([]) }}
     </p>
-</div>
+</div> --}}
 
  {{-- buscador --}}
  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 |<script>
         // buscador
         var options = {
-            valueNames: ['nombres', 'apellidos', 'email']
+            valueNames: ['nombres', 'apellidos', 'email', 'cedula'],
+            page: 10, // Número de elementos por página
+        pagination: true // Habilitar paginación
         };
 
         var userList = new List('users', options);

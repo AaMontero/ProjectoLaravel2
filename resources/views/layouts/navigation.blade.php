@@ -43,7 +43,7 @@
                     <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                         {{ __('Administracion') }}
                     </x-nav-link>
-                    
+
                     @endrole
 
 
@@ -87,7 +87,7 @@
                    <li class="nav-item dropdown mt-3">
                         <a class="nav-link" href="{{ route('chat.chat') }}">
                              <i class="fas fa-bell text-black"></i>
-                            <span id="notification-counter" class="badge badge-danger pending">0</span>
+                            <span id="notification-counter" class="badge badge-danger pending"> 0</span>
                         </a>
                         <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: none;">
                        <!-- Aquí se mostrarán las notificaciones en tiempo real -->

@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\RecibirMensaje;
-use App\Models\tasks;
 use App\Models\WhatsApp;
 use DateTime;
 use Exception;
-use App\Models\Message;
+use App\Models\Notificacion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Pusher\Pusher;
+
 
 class WhatsAppController extends Controller
 {
@@ -18,7 +16,7 @@ class WhatsAppController extends Controller
 
     public function index()
     {
-        $mensajes = WhatsApp::all(); // Por ejemplo, aquí obtienes todos los mensajes de tu modelo
+        $mensajes = WhatsApp::all();
         return view('chat.chat', ['mensajes' => $mensajes]);
     }
 
@@ -113,6 +111,8 @@ class WhatsAppController extends Controller
         $whatsApp->fecha_hora = new DateTime('now');
         $whatsApp->save();
         $event = new RecibirMensaje($telefonoUser, $mensaje, $whatsApp->fecha_hora);
+        $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
+        $this->crearNotificacion($cadenaNotificacion, $mensaje);
         event($event);
     }
 
@@ -158,6 +158,15 @@ class WhatsAppController extends Controller
     public function destroy(WhatsApp $whatsApp)
     {
         //
+    }
+    public function crearNotificacion($mensaje, $comentario)
+    {
+        $notificacion = new Notificacion;
+        $notificacion->descripcion = $mensaje;
+        $notificacion->comentario = $comentario;
+        $notificacion->visto = false;
+        $notificacion->tipo = "chat"; 
+        $notificacion->save();
     }
 }
 class Utils

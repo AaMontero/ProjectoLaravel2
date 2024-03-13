@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
         // $user->assignRole($request->rol);
 
         // Asignar el rol de vendedor al usuario por defecto
-        $vendedorRole = Role::where('name', 'vendedor')->first();
+        $vendedorRole = Role::where('name', 'asesor')->first();
         if ($vendedorRole) {
             $user->assignRole($vendedorRole);
         }

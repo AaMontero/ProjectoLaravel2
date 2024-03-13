@@ -31,7 +31,7 @@ class ClienteController extends Controller
         ];
 
         return view('clientes.index', [
-            "clientes" => Cliente::with('user')->latest()->paginate(10),
+            "clientes" => Cliente::all(),
             "provincias" => $provinciasEcuador,
         ]);
     }

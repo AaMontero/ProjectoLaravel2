@@ -14,11 +14,11 @@ class AdminUserSeeder extends Seeder
         // Comando para ejeccutar el seeder = php artisan db:seed --class=AdminUserSeeder
         $adminUser = User::firstOrCreate([
             'name' => 'Administrador',
-            'email' => 'admin@example.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
         ]);
 
         // Asignar el rol de administrador al usuario
-        $adminUser->assignRole('admin');
+        $adminUser->assignRole('superAdmin');
     }
 }

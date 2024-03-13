@@ -174,10 +174,11 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
             if (elemento['mensaje_enviado'].length < 20) {
                 nuevoElemento.style.display = "flex";
-                var dimensionCuadro = 100 + elemento['mensaje_enviado'].length * 10; 
-                nuevoElemento.style.width = dimensionCuadro +'px';
-                horaElemento.style.textAlign  = "end"; 
-                
+                var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
+                nuevoElemento.style.width = dimensionCuadro + 'px';
+                horaElemento.style.marginTop = "20px";
+                horaElemento.style.marginLeft = "35px";
+
             } else {
                 nuevoElemento.style.display = "inline-block";
             }
@@ -200,16 +201,15 @@
             elementoH1.textContent = elemento['mensaje_enviado'];
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
 
-            divGrande.style = `text-align: right; `;
+            divGrande.style = `display: flex; justify-content: flex-end; `;
             horaElemento.style = ` 
         font-size: 12px;
         color: #515151;
-        margin-right: 10px;
+        margin-left: 30px;
+
         `;
 
-            nuevoElemento.style = `
-            display: inline-block; 
-            
+            nuevoElemento.style = `    
         border-radius: 10px;
         margin-bottom: 8px;
         background-color: #dcf8c6;
@@ -217,15 +217,24 @@
         font-size: 15px;
         line-height: 1;
         color: #00000;
-        padding-left: 20px; 
+        padding-left: 10px; 
         text-align: right;
-        margin-left: 100px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
+            if (elemento['mensaje_enviado'].length < 20) {
+                nuevoElemento.style.display = "flex";
+                var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
+                nuevoElemento.style.width = dimensionCuadro + 'px';
+                horaElemento.style.marginTop = "20px";
+
+            } else {
+                nuevoElemento.style.display = "inline-block";
+                horaElemento.style.marginRight = "10px";
+            }
             elementoH1.style.marginRight = '10px';
-            // Construir la estructura del mensaje
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);
             divGrande.appendChild(nuevoElemento);
+
             return divGrande;
         }
 
@@ -233,6 +242,7 @@
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
             document.getElementById("numeroEnvioOculto").value = telefono;
+            elementos = document.getElementById("historial-mensajes");
 
             // Ordenar mensajes por fecha y hora
             mensajes.sort(function(a, b) {
@@ -263,8 +273,11 @@
                     }
                     lista.appendChild(elementoCreado);
                 });
-                lista.scrollTop = lista.scrollHeight;
             }
+            setTimeout(function() {
+                elementos.scrollTop = elementos.scrollHeight;
+            }, 100);
+
             VentanaChat.style.display = 'block';
         }
 

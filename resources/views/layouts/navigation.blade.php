@@ -87,45 +87,61 @@
             </div>
 
             <!-- Script para escuchar eventos de Pusher y mostrar notificaciones -->
-            <script src="https://js.pusher.com/7.0/pusher.min.js">
-            
+            <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
+            <x-slot name="header">
+                <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+            </x-slot>
+            <script>
+                console.log("HOLA COMO VAMOS");
+                Pusher.logToConsole = true;
+                var pusher = new Pusher('217450e1ce096539fb1c', {
+                    cluster: 'sa1'
+                });
+                console.log("Esta llegando un mensaje");
+                var channel = pusher.subscribe('whatsapp-channel');
+                channel.bind('whatsapp-event', function() {
+                    console.log("Esta llegando");
+                    document.getElementById("notification-counter").innerText(5); 
+                    // var currentCount = parseInt(counterElement.text());
+                    // counterElement.text(currentCount + 1);
+                    // $('#notification-link').on('click', function() {
+                    //     $('#notification-counter').text(1);
+                    // });
+
+                });
+
+                /*
+                                    $(document).ready(function() {
+                                        var pusher = new Pusher('217450e1ce096539fb1c', {
+                                            cluster: 'sa1'
+                                        });
+                                        var channel = pusher.subscribe('whatsapp-channel');
+
+                                        channel.bind('whatsapp-event', function(data) {
+                                            console.log("Esta entrando a las notificaciones");
+                                            console.log('Datos recibidos:', data);
+                                            // Incrementar el contador de notificaciones
+                                            var counterElement = $('#notification-counter');
+                                            var currentCount = parseInt(counterElement.text());
+                                            counterElement.text(currentCount + 1);
+
+                                            // Mostrar la notificación y el enlace
+                                            var notificationDiv = $('<div class="notification"></div>');
+                                            var notificationText = $('<span></span>').text(data.mensaje);
+                                            var notificationLink = $('<a href="#"></a>').text('Ver notificación');
+                                            notificationLink.on('click', function() {
+                                                // Redirigir a la nueva ruta
+                                                window.location.href = '{{ route('chat.chat') }}';
+                                            });
+                                            notificationDiv.append(notificationText);
+                                            notificationDiv.append(notificationLink);
+                                            $('#notificaciones').append(notificationDiv);
+                                        });
+                                        // Restablecer el contador de notificaciones cuando se abra la nueva ruta
+                                        
+                                    });*/
             </script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            @push('javascript')
-                <script>
-                    $(document).ready(function() {
-                        var pusher = new Pusher('217450e1ce096539fb1c', {
-                            cluster: 'sa1'
-                        });
-                        var channel = pusher.subscribe('whatsapp-channel');
-
-                        channel.bind('whatsapp-event', function(data) {
-                            console.log("Esta entrando a las notificaciones");
-                            console.log('Datos recibidos:', data);
-                            // Incrementar el contador de notificaciones
-                            var counterElement = $('#notification-counter');
-                            var currentCount = parseInt(counterElement.text());
-                            counterElement.text(currentCount + 1);
-
-                            // Mostrar la notificación y el enlace
-                            var notificationDiv = $('<div class="notification"></div>');
-                            var notificationText = $('<span></span>').text(data.mensaje);
-                            var notificationLink = $('<a href="#"></a>').text('Ver notificación');
-                            notificationLink.on('click', function() {
-                                // Redirigir a la nueva ruta
-                                window.location.href = '{{ route('chat.chat') }}';
-                            });
-                            notificationDiv.append(notificationText);
-                            notificationDiv.append(notificationLink);
-                            $('#notificaciones').append(notificationDiv);
-                        });
-                        // Restablecer el contador de notificaciones cuando se abra la nueva ruta
-                        $('#notification-link').on('click', function() {
-                            $('#notification-counter').text('0');
-                        });
-                    });
-                </script>
-            @endpush
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">

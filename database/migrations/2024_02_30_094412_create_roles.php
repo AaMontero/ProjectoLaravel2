@@ -16,9 +16,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $role1 = Role::create(['name' => 'admin']);
-        $role2 = Role::create(['name' => 'host']);
-        $role3 = Role::create(['name' => 'asesor']);
+        $role1 = Role::create(['name' => 'Administrador']);
+        $role2 = Role::create(['name' => 'Host']);
+        $role3 = Role::create(['name' => 'Asesor']);
         $role3 = Role::create(['name' => 'superAdmin']);
         // $user = User::find(1);
         // $user->assignRole($role1);

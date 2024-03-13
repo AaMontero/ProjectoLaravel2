@@ -2,15 +2,18 @@
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <x-slot name="header">
         <div x-data="{ showModal: false }" x-cloak class="flex items-center gap-5">
+            @role('superAdmin')
             <x-nav-link  :href="route('roles.rol')" 
             class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                 {{ __('Asignar roles') }}
             </x-nav-link>
+            @endrole
             <x-nav-link href="{{ route('vendedores.pagosPendientes') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                 {{ __('Pagos pendientes') }}
             </x-nav-link>
         </div>
     </x-slot>
+    @role('superAdmin')
     <div class="py-2">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
             <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
@@ -60,7 +63,7 @@
             </div>
         </div>
     </div>
-
+    @endrole
 </x-app-layout>
 
 @include('layouts.footer')

@@ -1,9 +1,8 @@
-
 @if (session('status'))
     <div class="bg-green-600 text-green-100 text-center text-lg font-bold p-2">{{ session('status') }}</div>
 @endif
-    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
@@ -19,6 +18,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
 
 
                     @role('admin')
@@ -43,101 +43,84 @@
                     <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                         {{ __('Administracion') }}
                     </x-nav-link>
-
                     @endrole
 
 
-                    @role('vendedor')
-                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
-                        {{ __('Vendedor') }}
+                    @role('host')
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
+                        {{ __('Clients') }}
                     </x-nav-link>
                     @endrole
 
                     @role('asesor')
-                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
-                        {{ __('Paquetes') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
-                        {{ __('Calendar') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
-                        {{ __('Clients') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
-                        {{ __('Contracts') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
+                            {{ __('Paquetes') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                            {{ __('Vendedor') }}
+                        </x-nav-link>
                     @endrole
-
-                    {{-- <div class="mt-4 flex">
-                        <svg id="moon" class="setMode h-4 w-4 text-gray-400 hover:text-gray-500 cursor-pointer" fill="none" @click="toggle" :class="{'block': !show, 'hidden': show}" x-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                        <svg id="sun" class="setMode h-5 w-5 text-yellow-200 hover:text-yellow-300 cursor-pointer" fill="none" @click="toggle" :class="{'hidden': !show, 'block': show}" x-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                    </div> --}}
-
                 </div>
 
             </div>
 
-                 <!-- Vista donde se muestra el div de notificaciones -->
+            <!-- Vista donde se muestra el div de notificaciones -->
             <div>
-               <ul class="navbar-nav mr-1">
-                   <li class="nav-item dropdown mt-3">
+                <ul class="navbar-nav mr-1">
+                    <li class="nav-item dropdown mt-3">
                         <a class="nav-link" href="{{ route('chat.chat') }}">
+
                              <i class="fas fa-bell text-black"></i>
                             <span id="notification-counter" class="badge badge-danger pending"> 0</span>
                         </a>
-                        <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: none;">
-                       <!-- Aquí se mostrarán las notificaciones en tiempo real -->
+                        <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown"
+                            style="display: none;">
+                            <!-- Aquí se mostrarán las notificaciones en tiempo real -->
                             <div id="notificaciones"></div>
                         </div>
                     </li>
-                 </ul>
+                </ul>
             </div>
 
             <!-- Script para escuchar eventos de Pusher y mostrar notificaciones -->
-            <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+            <script src="https://js.pusher.com/7.0/pusher.min.js">
+
+            </script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             @push('javascript')
-            <script>
-            $(document).ready(function() {
-                var pusher = new Pusher('217450e1ce096539fb1c', {
-                    cluster: 'sa1'
-                });
+                <script>
+                    $(document).ready(function() {
+                        var pusher = new Pusher('217450e1ce096539fb1c', {
+                            cluster: 'sa1'
+                        });
+                        var channel = pusher.subscribe('whatsapp-channel');
 
-                var channel = pusher.subscribe('whatsapp-channel');
+                        channel.bind('whatsapp-event', function(data) {
+                            console.log("Esta entrando a las notificaciones");
+                            console.log('Datos recibidos:', data);
+                            // Incrementar el contador de notificaciones
+                            var counterElement = $('#notification-counter');
+                            var currentCount = parseInt(counterElement.text());
+                            counterElement.text(currentCount + 1);
 
-                channel.bind('whatsapp-event', function(data) {
-                    console.log('Datos recibidos:', data);
-                // Incrementar el contador de notificaciones
-                var counterElement = $('#notification-counter');
-                var currentCount = parseInt(counterElement.text());
-                counterElement.text(currentCount + 1);
-
-                // Mostrar la notificación y el enlace
-                var notificationDiv = $('<div class="notification"></div>');
-                var notificationText = $('<span></span>').text(data.mensaje);
-                var notificationLink = $('<a href="#"></a>').text('Ver notificación');
-                notificationLink.on('click', function() {
-                    // Redirigir a la nueva ruta
-                    window.location.href = '{{ route('chat.chat') }}';
-                });
-                notificationDiv.append(notificationText);
-                notificationDiv.append(notificationLink);
-                $('#notificaciones').append(notificationDiv);
-
-                // Agregar un console.log() para verificar los datos recibidos
-
-                 });
-
-                // Restablecer el contador de notificaciones cuando se abra la nueva ruta
-                $('#notification-link').on('click', function() {
-                    $('#notification-counter').text('0');
-                });
-            });
-            </script>
+                            // Mostrar la notificación y el enlace
+                            var notificationDiv = $('<div class="notification"></div>');
+                            var notificationText = $('<span></span>').text(data.mensaje);
+                            var notificationLink = $('<a href="#"></a>').text('Ver notificación');
+                            notificationLink.on('click', function() {
+                                // Redirigir a la nueva ruta
+                                window.location.href = '{{ route('chat.chat') }}';
+                            });
+                            notificationDiv.append(notificationText);
+                            notificationDiv.append(notificationLink);
+                            $('#notificaciones').append(notificationDiv);
+                        });
+                        // Restablecer el contador de notificaciones cuando se abra la nueva ruta
+                        $('#notification-link').on('click', function() {
+                            $('#notification-counter').text('0');
+                        });
+                    });
+                </script>
             @endpush
 
             <!-- Settings Dropdown -->
@@ -170,7 +153,8 @@
 
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
-                                                this.closest('form').submit();" class="no-underline">
+                                                this.closest('form').submit();"
+                                class="no-underline">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -197,50 +181,49 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @role('admin')
-
-            <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline" >
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
-                {{ __('Paquetes') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
-                {{ __('Calendar') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
-                {{ __('Clients') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
-                {{ __('Contracts') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
-                {{ __('Vendedores') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
-                {{ __('Asignar rol') }}
-            </x-responsive-nav-link>
+            @role('admin|superAdmin')
+                <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
+                    {{ __('Paquetes') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
+                    {{ __('Calendar') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
+                    {{ __('Clients') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
+                    {{ __('Contracts') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                    {{ __('Vendedores') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
+                    {{ __('Asignar rol') }}
+                </x-responsive-nav-link>
             @endrole
 
-            @role('vendedor')
-            <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
-                {{ __('Vendedor') }}
-            </x-responsive-nav-link>
+            @role('host')
+                <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                    {{ __('Clientes') }}
+                </x-responsive-nav-link>
             @endrole
 
             @role('asesor')
-            <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
-                {{ __('Paquetes') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
-                {{ __('Calendar') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
-                {{ __('Clients') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
-                {{ __('Contracts') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
+                    {{ __('Paquetes') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
+                    {{ __('Calendar') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
+                    {{ __('Clients') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
+                    {{ __('Contracts') }}
+                </x-responsive-nav-link>
             @endrole
         </div>
 

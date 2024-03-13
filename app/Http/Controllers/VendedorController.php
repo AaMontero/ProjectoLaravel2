@@ -16,10 +16,11 @@ class VendedorController extends Controller
     public function index()
     {
         return view('vendedor.index', [
-            "vendedores" => Vendedor::with('pagosVendedor')
-                ->orderBy('activo', 'desc') // Ordenar por estado (activo primero)
-                ->latest()
-                ->paginate(10),
+            // "vendedores" => Vendedor::with('pagosVendedor')
+            //     ->orderBy('activo', 'desc') // Ordenar por estado (activo primero)
+            //     ->latest()
+            //     ->paginate(10),
+                "vendedores" => Vendedor::all(),
             "roles" => [
                 'Vendedor', 'Closer', 'Jefe de Sala'
             ],

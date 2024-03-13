@@ -24,38 +24,38 @@
 
 
 
-                    @role('admin')
-                        <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
-                            {{ __('Paquetes') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
-                            {{ __('Calendar') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
-                            {{ __('Clients') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
-                            {{ __('Contracts') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
-                            {{ __('Vendedor') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
-                            {{ __('Administracion') }}
-                        </x-nav-link>
+                    @role('Administrador|superAdmin')
+                    <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
+                        {{ __('Paquetes') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
+                        {{ __('Calendar') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
+                        {{ __('Clients') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
+                        {{ __('Contracts') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                        {{ __('Vendedor') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
+                        {{ __('Administracion') }}
+                    </x-nav-link>
                     @endrole
 
 
-                    @role('host')
-                        <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
-                            {{ __('Clients') }}
-                        </x-nav-link>
+                    @role('Host')
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
+                        {{ __('Clients') }}
+                    </x-nav-link>
                     @endrole
 
-                    @role('asesor')
+                    @role('Asesor')
                         <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                             {{ __('Paquetes') }}
                         </x-nav-link>
@@ -225,7 +225,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @role('admin|superAdmin')
+            @role('Administrador|superAdmin')
                 <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
@@ -249,24 +249,18 @@
                 </x-responsive-nav-link>
             @endrole
 
-            @role('host')
+            @role('Host')
                 <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                     {{ __('Clientes') }}
                 </x-responsive-nav-link>
             @endrole
 
-            @role('asesor')
+            @role('Asesor')
                 <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                     {{ __('Paquetes') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
-                    {{ __('Calendar') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
-                    {{ __('Clients') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
-                    {{ __('Contracts') }}
+                <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
+                    {{ __('Ventas') }}
                 </x-responsive-nav-link>
             @endrole
         </div>

@@ -5,7 +5,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Sellers Register') }}
             </h2>
-            @role('admin|superAdmin')
+            @role('Administrador|superAdmin')
             <div onclick="abrirAgregarVendedor()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar Nuevo Vendedor</span>
                 <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
@@ -119,7 +119,7 @@
                                     <x-dropdown-link :href="route('vendedor.datos_vendedor', $vendedor->id)">
                                         {{ __('Ver ventas') }}
                                     </x-dropdown-link>
-                                    @role('admin|superAdmin')
+                                    @role('Administrador|superAdmin')
                                     <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
                                         {{ __('Editar Vendedor') }}
                                     </x-dropdown-link>

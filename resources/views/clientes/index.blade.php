@@ -137,7 +137,7 @@
                             <th class="py-2 px-4 border-b text-center ">Provincia</th>
                             <th class="py-2 px-4 border-b text-center ">Ciudad</th>
                             <th class="py-2 px-4 border-b text-center ">Estado</th>
-                            @role('admin|superAdmin|host')
+                            @role('Administrador|superAdmin|Host')
                             <th class="py-2 px-4 border-b text-center ">Opciones</th>
                             @endrole
                            
@@ -172,7 +172,7 @@
                                     @endif
                                 </td>
                                 <td class = "text-right pr-6">
-                                    @role('admin|superAdmin')
+                                    @role('Administrador|superAdmin')
                                     <x-dropdown class="origin-top absolute ">
                                         <x-slot name="trigger">
                                             <button>
@@ -196,7 +196,7 @@
                                         </x-slot>
                                     </x-dropdown>
                                     @endrole
-                                    @role('host|admin|superAdmin')
+                                    @role('Host|Administrador|superAdmin')
                                     <x-dropdown class="origin-top absolute ">
                                         <x-slot name="trigger">
                                             <button>

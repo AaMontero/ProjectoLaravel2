@@ -96,7 +96,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('checkRole:Administrador,Asesor,superAdmin');
     Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
         ->name('vendedores.pagosPendientes')
-        ->middleware('checkRole:Administrador,superAdmin');//admin
+        ->middleware('checkRole:Administrador,superAdmin'); //admin
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update');
 
@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
 
     // rutas de roles
     Route::get('/rol', [RolController::class, 'index'])->name('roles.rol')
-    ->middleware('checkRole:Administrador,superAdmin');
+        ->middleware('checkRole:Administrador,superAdmin');
     Route::put('/roles/{user}', [RolController::class, 'asignarRol'])->name('roles.asignar-rol')
         ->middleware('checkRole:superAdmin');
     Route::post('save_task', [PusherPruebaControlller::class, 'save_task']);

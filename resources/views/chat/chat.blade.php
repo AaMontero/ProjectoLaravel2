@@ -60,7 +60,7 @@
             <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-4 space-y-4">
                 <!-- Historial de mensajes -->
                 <div class="flex items-center bg-gray-200 p-2 rounded-lg shadow-md">
-                    <img src="{{ asset('resources\images\iconoCircular.png') }}" alt="User" class="w-8 h-8 rounded-full">
+                    <img src="{{ asset('images\logoFondoNegro.jpeg') }}" alt="User" class="w-8 h-8 rounded-full">
                     <div id="telefono-chat" class="ml-4"></div>
                 </div>
                 <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4  overflow-auto"
@@ -145,6 +145,67 @@
         var lista = document.getElementById("miLista");
         var telefonoEmisor = "593987411818";
 
+        function crearMensajeImgRecibido(elemento) {
+            console.log(elemento['mensaje_enviado']);
+            datosImg = JSON.parse(elemento['mensaje_enviado']);
+            urlImg = datosImg.ruta
+            msnImg = datosImg.textoImagen;
+            var divGrande = document.createElement("div");
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h4");
+            var horaElemento = document.createElement("small");
+            var imagenElemento = document.createElement("img");
+            elementoH1.textContent = msnImg;
+            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+            imagenElemento.src = urlImg;
+            imagenElemento.style = `
+            width: 350px; 
+            height: auto;
+            margin-bottom: 5px;
+            margin-left:5px; 
+            `;
+
+            // Estilos para la hora
+            horaElemento.style = `
+        font-size: 12px;
+        color: #515151;
+        margin-left: 10px;
+    `;
+
+            // Estilos para el nuevo elemento
+            nuevoElemento.style = `
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background-color: #ffffff;
+        font-family: Monserrat;
+        font-size: 15px;
+        padding-right: 10px;
+        line-height: 1;
+        color: #00000;
+        margin-right: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    `;
+
+            // Ajuste de dimensiones del cuadro según la longitud del mensaje
+            if (elemento['mensaje_enviado'].length < 20) {
+                nuevoElemento.style.display = "flex";
+                var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
+                nuevoElemento.style.width = dimensionCuadro + 'px';
+                horaElemento.style.marginTop = "20px";
+                horaElemento.style.marginLeft = "35px";
+            } else {
+                nuevoElemento.style.display = "inline-block";
+            }
+            // Estilos para el elemento H1
+            elementoH1.style.marginLeft = '10px';
+            // Agregar elementos al nuevo elemento
+            nuevoElemento.appendChild(elementoH1);
+            nuevoElemento.appendChild(horaElemento);
+            nuevoElemento.appendChild(imagenElemento); // Agregar imagen al nuevo elemento
+            divGrande.appendChild(nuevoElemento);
+
+            return divGrande;
+        }
 
         function crearMensajeRecibido(elemento) {
             var divGrande = document.createElement("div");
@@ -268,7 +329,13 @@
                     if (elemento['telefono_wa'] == telefonoEmisor) {
                         elementoCreado = crearMensajeEnviado(elemento);
                     } else {
-                        elementoCreado = crearMensajeRecibido(elemento);
+                        if (elemento['mensaje_enviado'].startsWith('{')) {
+                            console.log("Mensaje que abre el metodo:" + elemento['mensaje_enviado']);
+                            elementoCreado = crearMensajeImgRecibido(elemento);
+                        } else {
+                            elementoCreado = crearMensajeRecibido(elemento);
+                        }
+
                     }
                     lista.appendChild(elementoCreado);
                 });

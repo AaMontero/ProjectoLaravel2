@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vendedor;
 use App\Models\PagoVendedor;
+use App\Models\UserAction;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
@@ -72,7 +73,17 @@ class VendedorController extends Controller
                 'porcentaje_ventas' => ['required', 'min:5', 'max:255']
             ]);
 
-            $request->user()->vendedores()->create($validated);
+             // Crear el vendedor
+             $vendedor = $request->user()->vendedores()->create($validated);
+
+              // Crear un registro en la tabla de UserAction
+            UserAction::create([
+            'user_id' => $request->user()->id,
+            'action' => 'crear', // Acción de inserción
+            'entity_type' => 'vendedor', // Tipo de entidad
+            'entity_id' => $vendedor->id, // ID del vendedor creado
+      
+        ]);
             return to_route('vendedor.index')
                 ->with('status', __('Vendedor creado exitosamente'));
         } catch (ValidationException $e) {
@@ -100,23 +111,51 @@ class VendedorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vendedor $vendedor)
-    {
-        try {
-            $validated = $request->validate([
-                "nombres" => ['required', 'min:5', 'max:255'],
-                "rol" => ['required', 'min:5', 'max:255'],
-                "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
-                "activo" => ['required']
-            ]);
-            $vendedor->activo = $request->activo;
-            $vendedor->update($validated);
-            return to_route('vendedor.index')
-                ->with('status', __('Actualizado   exitosamente'));
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->validator->errors())->withInput();
-        }
-    }
+    
+     public function update(Request $request, Vendedor $vendedor)
+     {
+         try {
+             $validated = $request->validate([
+                 "nombres" => ['required', 'min:5', 'max:255'],
+                 "rol" => ['required', 'min:5', 'max:255'],
+                 "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
+                 "activo" => ['required']
+             ]);
+     
+             // Obtener el vendedor antes de la actualización
+             $vendedorAnterior = $vendedor->getAttributes();
+     
+             // Actualizar el vendedor con los datos validados
+             $vendedor->update($validated);
+     
+             // Obtener el vendedor después de la actualización
+             $vendedorActualizado = $vendedor->refresh();
+     
+             // Comparar los datos antes y después de la actualización para detectar cambios
+             $modifiedData = array_diff_assoc($vendedorActualizado->getAttributes(), $vendedorAnterior);
+     
+             // Crear un registro en UserAction si hay datos modificados
+             if (!empty($modifiedData)) {
+                 UserAction::create([
+                     'user_id' => $request->user()->id,
+                     'action' => 'actualizar',
+                     'entity_type' => 'vendedor',
+                     'entity_id' => $vendedor->id,
+                     'modified_data' => json_encode($modifiedData),
+                     // Otros campos relevantes
+                 ]);
+             }
+     
+             // Redireccionar a la vista de índice de vendedores con un mensaje de éxito
+             return redirect()->route('vendedor.index')
+                 ->with('status', __('Actualizado exitosamente'));
+         } catch (ValidationException $e) {
+             // Manejar errores de validación devolviendo a la vista anterior con errores
+             return redirect()->back()->withErrors($e->validator->errors())->withInput();
+         }
+     }
+     
+    
 
 
     public function destroy(Vendedor $vendedor)

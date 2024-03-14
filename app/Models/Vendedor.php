@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vendedor extends Model
 {
     protected $fillable = [
-        'nombres', 'rol','porcentaje_ventas', 'user_id'
+        'nombres', 'rol','porcentaje_ventas', 'activo', 'user_id'
     ]; 
 
     public function pagosVendedor(){

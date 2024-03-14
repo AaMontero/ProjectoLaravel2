@@ -150,6 +150,19 @@ Route::middleware('auth')->group(function () {
         ->middleware('checkRole:superAdmin');
     Route::post('save_task', [PusherPruebaControlller::class, 'save_task']);
 
+
+    //terminos y condiciones
+    Route::get('/politicas-privacidad', function () {
+        return view('layouts.politicas');
+    })->name('politicas');
+    Route::get('/terminos-condiciones', function () {
+        return view('layouts.terminos');
+    })->name('terminos');
+     //Log
+     Route::get('/log', [UserActionsController::class, 'index'])
+     ->name('log')
+     ->middleware('checkRole:superAdmin');
+
     //Notificaciones 
     Route::get('/cambiarEstadoNot/{notificacion}', [NotificacionController::class, 'leido'])
         ->name('notificacion.marcar_leido');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\UserAction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -64,7 +65,19 @@ class ClienteController extends Controller
             ]);
             $clienteUser = $this->obtenerNick($request->nombres, $request->apellidos);
             $validated['cliente_user'] = $clienteUser;
-            $request->user()->clientes()->create($validated);
+            
+            // Crear un cliente
+            $cliente = $request->user()->clientes()->create($validated);
+            
+            // Crear un registro en la tabla de UserAction
+            UserAction::create([
+                'user_id' => $request->user()->id,
+                'action' => 'crear',
+                'entity_type' => 'cliente',
+                'entity_id' => $cliente->id,
+                // Otros campos relevantes que desees registrar en el log
+            ]);
+        
 
             return redirect()->route('clientes.index')->with('status', __('Inserción realizada exitosamente'));
         } catch (ValidationException $e) {
@@ -101,7 +114,6 @@ class ClienteController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
-
         $validated = $request->validate([
             'cedula' => ['required', 'min:10', 'max:10'],
             'nombres' => ['required', 'min:5', 'max:255'],
@@ -113,10 +125,33 @@ class ClienteController extends Controller
             'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
             'fecha_nacimiento' => ['required', 'date'],
         ]);
+    
+        // Guardar los datos originales del cliente antes de la actualización
+        $originalData = $cliente->getAttributes();
+    
+        // Actualizar el cliente
         $cliente->update($validated);
-        return to_route('clientes.index')
-            ->with('status', __('Actualizacion realizada exitosamente'));
+    
+        // Obtener los datos modificados del cliente
+        $modifiedData = array_diff_assoc($cliente->getAttributes(), $originalData);
+    
+        // Convertir los datos modificados a JSON
+        $modifiedDataJson = json_encode($modifiedData);
+    
+        // Crear un registro en la tabla UserAction
+        UserAction::create([
+            'user_id' => $request->user()->id,
+            'action' => 'actualizar',
+            'entity_type' => 'cliente',
+            'entity_id' => $cliente->id,
+            'modified_data' => $modifiedDataJson,
+        ]);
+    
+        return redirect()->route('clientes.index')
+            ->with('status', __('Actualización realizada exitosamente'));
     }
+    
+    
 
     /**
      * Remove the specified resource from storage.

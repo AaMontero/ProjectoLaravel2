@@ -172,7 +172,7 @@
                                     @endif
                                 </td>
                                 <td class = "text-right pr-6">
-                                    @role('Administrador|superAdmin')
+                                    @role('Administrador|superAdmin|Host')
                                     <x-dropdown class="origin-top absolute ">
                                         <x-slot name="trigger">
                                             <button>
@@ -189,33 +189,15 @@
                                             <x-dropdown-link :href="route('contrato.agregar', $cliente)">
                                                 {{ __('Agregar Contrato') }}
                                             </x-dropdown-link>
+                                            @role('Administrador|superAdmin')
                                             <x-dropdown-link :href="route('clientes.edit', $cliente)">
                                                 {{ __('Editar Cliente') }}
                                             </x-dropdown-link>
-
+                                            @endrole
                                         </x-slot>
                                     </x-dropdown>
                                     @endrole
-                                    @role('Host|Administrador|superAdmin')
-                                    <x-dropdown class="origin-top absolute ">
-                                        <x-slot name="trigger">
-                                            <button>
-                                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                                </svg>
-                                            </button>
-                                        </x-slot>
-                                        <x-slot name="content" id="cliente">
-
-                                            <x-dropdown-link :href="route('contrato.agregar', $cliente)">
-                                                {{ __('Agregar Contrato') }}
-                                            </x-dropdown-link>
-                                        </x-slot>
-                                    </x-dropdown>
-                                    @endrole
+                                    
                                 </td>
                             </tr>
                         @endforeach

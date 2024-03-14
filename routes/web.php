@@ -11,8 +11,10 @@ use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\User_actions;
+use App\Http\Controllers\UserActionsController;
 use App\Http\Middleware\VerifyCsrfToken;
-
+use App\Models\UserAction;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +48,8 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para paquetes
     Route::get('/paquetes/{paquete}/edit', [PaqueteController::class, 'edit'])
-        ->name('paquetes.edit'); // Acceder al formulario edit
+        ->name('paquetes.edit') // Acceder al formulario edit
+        ->middleware('checkRole:Administrador,superAdmin');
     Route::get('/paquetes', [PaqueteController::class,  'index'])
         ->name('paquetes.paquetes') //Mostrar Paquetes
         ->middleware('checkRole:Administrador,Asesor,superAdmin');
@@ -55,7 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::put('paquetes/{paquete}',  [PaqueteController::class, 'update'])
         ->name("paquetes.update"); //Editar Paquetes
     Route::delete('paquetes/{paquete}', [PaqueteController::class, 'destroy'])
-        ->name('paquetes.destroy'); //Eliminar Paquetes
+        ->name('paquetes.destroy') //Eliminar Paquetes
+        ->middleware('checkRole:Administrador,superAdmin');
 
     //Ruta para clientes
     Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])
@@ -145,6 +149,19 @@ Route::middleware('auth')->group(function () {
     Route::put('/roles/{user}', [RolController::class, 'asignarRol'])->name('roles.asignar-rol')
         ->middleware('checkRole:superAdmin');
     Route::post('save_task', [PusherPruebaControlller::class, 'save_task']);
+
+
+    //terminos y condiciones
+    Route::get('/politicas-privacidad', function () {
+        return view('layouts.politicas');
+    })->name('politicas');
+    Route::get('/terminos-condiciones', function () {
+        return view('layouts.terminos');
+    })->name('terminos');
+     //Log
+     Route::get('/log', [UserActionsController::class, 'index'])
+     ->name('log')
+     ->middleware('checkRole:superAdmin');
 
     //Notificaciones 
     Route::get('/cambiarEstadoNot/{notificacion}', [NotificacionController::class, 'leido'])

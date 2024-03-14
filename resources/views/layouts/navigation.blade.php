@@ -46,6 +46,11 @@
                     <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                         {{ __('Administracion') }}
                     </x-nav-link>
+                    @role('superAdmin')
+                    <x-nav-link :href="route('log')" :active="request()->routeIs('log.*')" class="no-underline">
+                        {{ __('Log') }}
+                    </x-nav-link>
+                    @endrole
                     @endrole
 
 
@@ -246,6 +251,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                     {{ __('Asignar rol') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log.*')" class="no-underline">
+                    {{ __('Log') }}
                 </x-responsive-nav-link>
             @endrole
 

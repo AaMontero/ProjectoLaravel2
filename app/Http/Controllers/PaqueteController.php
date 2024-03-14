@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Paquete;
 use App\Models\CaracteristicaPaquete;
+use App\Models\UserAction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -103,6 +104,16 @@ class PaqueteController extends Controller
                     'lugar' => $caracteristica[1],
                 ]);
             }
+
+
+            // Crear un registro en la tabla UserAction
+            UserAction::create([
+                'user_id' => $request->user()->id,
+                'action' => 'crear', // Acción de creación
+                'entity_type' => 'paquete', // Tipo de entidad
+                'entity_id' => $paquete->id, // ID del paquete creado
+            ]);
+
             return to_route('paquetes.paquetes')
                 ->with('status',  __('Insertion done successfully'));
         } catch (ValidationException $e) {
@@ -155,6 +166,26 @@ class PaqueteController extends Controller
         } else {
         }
 
+        // Crear un registro en la tabla UserAction solo si hay datos modificados
+        $originalData = $paquete->getOriginal();
+        $modifiedData = [];
+        foreach ($validated as $key => $value) {
+            if ($originalData[$key] != $value) {
+                $modifiedData[$key] = $value;
+            }
+        }
+
+        if (!empty($modifiedData)) {
+            UserAction::create([
+                'user_id' => $request->user()->id,
+                'action' => 'editar',
+                'entity_type' => 'paquete',
+                'entity_id' => $paquete->id,
+                'modified_data' => json_encode($modifiedData),
+                // Otros campos relevantes que desees registrar en el log
+            ]);
+        }
+
         $paquete->update($validated);
         return to_route('paquetes.paquetes')
             ->with('status', __('Package updated successfully'));
@@ -165,8 +196,24 @@ class PaqueteController extends Controller
      */
     public function destroy(Paquete $paquete)
     {
+        // Guardar los datos del paquete antes de eliminarlo
+        $paqueteEliminado = $paquete->toArray();
+        
+        // Crear un registro en la tabla UserAction antes de eliminar el paquete
+        UserAction::create([
+            'user_id' => auth()->id(),
+            'action' => 'eliminar',
+            'entity_type' => 'paquete',
+            'entity_id' => $paquete->id,
+            'modified_data' => json_encode($paqueteEliminado),
+            // Otros campos relevantes que desees registrar en el log
+        ]);
+    
         $paquete->delete();
-        return to_route('paquetes.paquetes')
+        
+        return redirect()->route('paquetes.paquetes')
             ->with('status', __('Package deleted successfully'));
     }
+    
+
 }

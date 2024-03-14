@@ -14,6 +14,7 @@ use DateInterval;
 use NumberFormatter;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PagoVendedorController;
+use App\Models\UserAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -363,6 +364,15 @@ class ContratoController extends Controller
 
             $contratoIngresado = $request->user()->contratos()->create($contrato->toArray());
 
+            // Crear un registro en la tabla de registros
+            UserAction::create([
+            'user_id' => $request->user()->id,
+            'action' => 'crear', // Acción de crear contrato
+            'entity_type' => 'contrato', // Tipo de entidad
+            'entity_id' => $contratoIngresado->id, // ID del contrato creado
+            'modified_data' => json_encode(['contrato' => $contratoIngresado->toArray()]), // Datos modificados
+            // Otros campos relevantes que desees registrar en el log
+             ]);
             return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
 
             //return route('contrato.vendedores', ['contrato' => $contrato]);

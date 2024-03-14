@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class tasks extends Model
+class Notificacion extends Model
 {
     use HasFactory;
+    protected $fillable = ['descripcion', 'comentario', 'visto', 'tipo'];
 }

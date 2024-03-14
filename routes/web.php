@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaqueteController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
@@ -124,7 +125,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
         ->name('contrato.add_vendedores');
 
-    Route::get('buscar_contrato', [ContratoController::class, 'buscarContrato' ])
+    Route::get('buscar_contrato', [ContratoController::class, 'buscarContrato'])
         ->name('buscar_contrato');
 
 
@@ -134,11 +135,6 @@ Route::middleware('auth')->group(function () {
         ->name('chat.envia');
     Route::post('chat/obtenerMensajes', [WhatsappController::class, 'recibe'])
         ->name('chat.recibe');
-    //Chat WhatsApp
-    // Route::prefix('whatsapp')->group(function () {
-    //     Route::post('enviar', [WhatsAppController::class,'enviar'])->name('whatsapp.enviar');
-    //Route::post('/webhook', [WhatsAppController::class, 'recibir'])->name('whatsapp.recibir');
-    // });
 
     Route::post('notificaion', [WhatsappController::class, 'recibe']);
 
@@ -151,26 +147,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/rol', [RolController::class, 'index'])->name('roles.rol')
     ->middleware('checkRole:Administrador,superAdmin');
     Route::put('/roles/{user}', [RolController::class, 'asignarRol'])->name('roles.asignar-rol')
-    ->middleware('checkRole:superAdmin');
+        ->middleware('checkRole:superAdmin');
     Route::post('save_task', [PusherPruebaControlller::class, 'save_task']);
+
+    //Notificaciones 
+    Route::get('/cambiarEstadoNot/{notificacion}', [NotificacionController::class, 'leido'])
+        ->name('notificacion.marcar_leido');
 });
-    //Autentifiación para conectarse con APIS (No necesita estar logeado)
-    Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
-        ->withoutMiddleware([VerifyCsrfToken::class]);
-    Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
-        ->withoutMiddleware([VerifyCsrfToken::class]);
+//Autentifiación para conectarse con APIS (No necesita estar logeado)
+Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
+Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
-    //terminos y condiciones
-    Route::get('/politicas-privacidad', function () {
-        return view('layouts.politicas');
-    })->name('politicas');
-    Route::get('/terminos-condiciones', function () {
-        return view('layouts.terminos');
-    })->name('terminos');
-     //Log
-     Route::get('/log', [UserActionsController::class, 'index'])
-     ->name('log')
-     ->middleware('checkRole:superAdmin');
 
+
+
+//terminos y condiciones
+Route::get('/politicas-privacidad', function () {
+    return view('layouts.politicas');
+})->name('politicas');
+Route::get('/terminos-condiciones', function () {
+    return view('layouts.terminos');
+})->name('terminos');
 
 require __DIR__ . '/auth.php';

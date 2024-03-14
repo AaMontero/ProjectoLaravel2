@@ -6,6 +6,9 @@
 
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
+    @php
+
+    @endphp
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
@@ -70,18 +73,33 @@
             </div>
 
             <!-- Vista donde se muestra el div de notificaciones -->
-            <div>
-                <ul class="navbar-nav mr-1">
+            <div id = "navNotificaciones">
+                <ul class="navbar-nav mr-1 ">
                     <li class="nav-item dropdown mt-3">
-                        <a class="nav-link" href="{{ route('chat.chat') }}">
-
-                             <i class="fas fa-bell text-black"></i>
-                            <span id="notification-counter" class="badge badge-danger pending"> 0</span>
+                        <a class="nav-link cursor-pointer">
+                            <i class="fas fa-bell text-black"></i>
+                            <span id="notification-counter" class="badge badge-danger pending">
+                                {{ $notificaciones->count() }}
+                            </span>
                         </a>
-                        <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown"
-                            style="display: none;">
+                        <div id="notifications-container" class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <!-- Aquí se mostrarán las notificaciones en tiempo real -->
-                            <div id="notificaciones"></div>
+                            <div id="notificaciones">
+                                @foreach ($notificaciones as $notificacion)
+                                    <a href="{{ route('notificacion.marcar_leido', $notificacion) }}"
+                                        class = "text-black">
+                                        <div
+                                            class="bg-gray-100 dark:bg-gray-700 px-2 mx-2 rounded-lg shadow-md mb-2 cursor-pointer">
+                                            <strong
+                                                class="text-lg font-semibold">{{ $notificacion->descripcion }}</strong>
+                                            <br>
+                                            <small class="text-sm text-gray-600 dark:text-gray-300">
+                                                {{ $notificacion->comentario }}
+                                            </small>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -94,54 +112,64 @@
                 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
             </x-slot>
             <script>
-                console.log("HOLA COMO VAMOS");
                 Pusher.logToConsole = true;
                 var pusher = new Pusher('217450e1ce096539fb1c', {
                     cluster: 'sa1'
                 });
-                console.log("Esta llegando un mensaje");
+                contadorNotificaciones = document.getElementById("notification-counter")
                 var channel = pusher.subscribe('whatsapp-channel');
-                channel.bind('whatsapp-event', function() {
-                    console.log("Esta llegando");
-                    document.getElementById("notification-counter").innerText(5);
-                    // var currentCount = parseInt(counterElement.text());
-                    // counterElement.text(currentCount + 1);
-                    // $('#notification-link').on('click', function() {
-                    //     $('#notification-counter').text(1);
-                    // });
+                channel.bind('whatsapp-event', function(data) {
+                    crearNotificacion("Mensaje de : " + data['usuario'], data['mensaje'],
+                        "chat");
+                    contadorNotificaciones.innerText = document.getElementById("notificaciones").children.length;
+                });
+                document.addEventListener("DOMContentLoaded", function() {
+                    var enlaceNotificaciones = document.querySelector("#navNotificaciones .nav-link");
+                    var contenedorNotificaciones = document.getElementById("notifications-container");
+                    enlaceNotificaciones.addEventListener("click", function() {
+                        if (contadorNotificaciones.innerText != 0) {
+                            if (contenedorNotificaciones.style.display == "block") {
+                                contenedorNotificaciones.style.display = "none";
+                            } else {
+                                contenedorNotificaciones.style.display = "block";
+                            }
+
+                        }
+                    });
 
                 });
 
-                /*
-                                    $(document).ready(function() {
-                                        var pusher = new Pusher('217450e1ce096539fb1c', {
-                                            cluster: 'sa1'
-                                        });
-                                        var channel = pusher.subscribe('whatsapp-channel');
+                function crearNotificacion(descripcion, comentario, tipo) {
+                    var listaNotificaciones = document.getElementById("notificaciones");
+                    var a = document.createElement("a");
+                    if (tipo == "chat") {
+                        a.href = "{{ route('chat.chat') }}";
+                    }
 
-                                        channel.bind('whatsapp-event', function(data) {
-                                            console.log("Esta entrando a las notificaciones");
-                                            console.log('Datos recibidos:', data);
-                                            // Incrementar el contador de notificaciones
-                                            var counterElement = $('#notification-counter');
-                                            var currentCount = parseInt(counterElement.text());
-                                            counterElement.text(currentCount + 1);
+                    a.classList.add("text-black");
 
-                                            // Mostrar la notificación y el enlace
-                                            var notificationDiv = $('<div class="notification"></div>');
-                                            var notificationText = $('<span></span>').text(data.mensaje);
-                                            var notificationLink = $('<a href="#"></a>').text('Ver notificación');
-                                            notificationLink.on('click', function() {
-                                                // Redirigir a la nueva ruta
-                                                window.location.href = '{{ route('chat.chat') }}';
-                                            });
-                                            notificationDiv.append(notificationText);
-                                            notificationDiv.append(notificationLink);
-                                            $('#notificaciones').append(notificationDiv);
-                                        });
-                                        // Restablecer el contador de notificaciones cuando se abra la nueva ruta
+                    var notificacion = document.createElement("div");
+                    notificacion.classList.add("bg-gray-100", "dark:bg-gray-700", "px-2", "mx-2", "rounded-lg", "shadow-md", "mb-2",
+                        "cursor-pointer");
+                    notificacion.addEventListener("click", function() {
+                        abrirNotificacion(parametro);
+                    });
 
-                                    });*/
+                    var descripcionH4 = document.createElement("strong");
+                    descripcionH4.classList.add("text-lg", "font-semibold");
+                    descripcionH4.textContent = descripcion;
+
+                    var comentarioSmall = document.createElement("small");
+                    comentarioSmall.classList.add("text-sm", "text-gray-600", "dark:text-gray-300");
+                    comentarioSmall.textContent = comentario;
+
+                    notificacion.appendChild(descripcionH4);
+                    notificacion.appendChild(document.createElement("br"));
+                    notificacion.appendChild(comentarioSmall);
+
+                    a.appendChild(notificacion);
+                    listaNotificaciones.appendChild(a);
+                }
             </script>
 
             <!-- Settings Dropdown -->

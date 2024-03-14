@@ -60,7 +60,7 @@
             <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-4 space-y-4">
                 <!-- Historial de mensajes -->
                 <div class="flex items-center bg-gray-200 p-2 rounded-lg shadow-md">
-                    <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
+                    <img src="{{ asset('resources\images\iconoCircular.png') }}" alt="User" class="w-8 h-8 rounded-full">
                     <div id="telefono-chat" class="ml-4"></div>
                 </div>
                 <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4  overflow-auto"
@@ -108,7 +108,6 @@
             return new Promise((resolve, reject) => {
                 const textoIngresado = document.getElementById("mensajeInput").value;
                 const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-
                 const url =
                     'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
                     numeroAbierto + '&mensajeEnvio=' +

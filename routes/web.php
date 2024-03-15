@@ -54,7 +54,8 @@ Route::middleware('auth')->group(function () {
         ->name('paquetes.paquetes') //Mostrar Paquetes
         ->middleware('checkRole:Administrador,Asesor,superAdmin');
     Route::post('/paquetes', [PaqueteController::class, 'store'])
-        ->name('paquetes.store'); //Agregar Paquetes
+        ->name('paquetes.store') //Agregar Paquetes
+        ->middleware('checkRole:Administrador,superAdmin,Host');
     Route::put('paquetes/{paquete}',  [PaqueteController::class, 'update'])
         ->name("paquetes.update"); //Editar Paquetes
     Route::delete('paquetes/{paquete}', [PaqueteController::class, 'destroy'])

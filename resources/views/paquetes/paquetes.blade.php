@@ -6,6 +6,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Packages') }}
             </h2>
+            @role('Administrador|superAdmin')
             <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar un nuevo paquete</span>
                 <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
@@ -13,6 +14,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
             </div>
+            @endrole
         </div>
     </x-slot>
 

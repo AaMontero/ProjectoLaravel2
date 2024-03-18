@@ -189,6 +189,12 @@ class WhatsAppController extends Controller
         }
     }
 
+    public function leerMensajesUsuario($numeroUsuario)
+    {
+        Whatsapp::where('id_numCliente', $numeroUsuario)
+            ->update(['visto' => 1]);
+    }
+
     public function notificacionMensaje(Request $request)
     {
         $mensajes = WhatsApp::all();

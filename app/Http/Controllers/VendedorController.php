@@ -21,7 +21,7 @@ class VendedorController extends Controller
             //     ->orderBy('activo', 'desc') // Ordenar por estado (activo primero)
             //     ->latest()
             //     ->paginate(10),
-                "vendedores" => Vendedor::all(),
+            "vendedores" => Vendedor::all()->where("activo", true),
             "roles" => [
                 'Vendedor', 'Closer', 'Jefe de Sala'
             ],
@@ -73,17 +73,17 @@ class VendedorController extends Controller
                 'porcentaje_ventas' => ['required', 'min:5', 'max:255']
             ]);
 
-             // Crear el vendedor
-             $vendedor = $request->user()->vendedores()->create($validated);
+            // Crear el vendedor
+            $vendedor = $request->user()->vendedores()->create($validated);
 
-              // Crear un registro en la tabla de UserAction
+            // Crear un registro en la tabla de UserAction
             UserAction::create([
-            'user_id' => $request->user()->id,
-            'action' => 'crear', // Acción de inserción
-            'entity_type' => 'vendedor', // Tipo de entidad
-            'entity_id' => $vendedor->id, // ID del vendedor creado
-      
-        ]);
+                'user_id' => $request->user()->id,
+                'action' => 'crear', // Acción de inserción
+                'entity_type' => 'vendedor', // Tipo de entidad
+                'entity_id' => $vendedor->id, // ID del vendedor creado
+
+            ]);
             return to_route('vendedor.index')
                 ->with('status', __('Vendedor creado exitosamente'));
         } catch (ValidationException $e) {
@@ -111,51 +111,51 @@ class VendedorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    
-     public function update(Request $request, Vendedor $vendedor)
-     {
-         try {
-             $validated = $request->validate([
-                 "nombres" => ['required', 'min:5', 'max:255'],
-                 "rol" => ['required', 'min:5', 'max:255'],
-                 "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
-                 "activo" => ['required']
-             ]);
-     
-             // Obtener el vendedor antes de la actualización
-             $vendedorAnterior = $vendedor->getAttributes();
-     
-             // Actualizar el vendedor con los datos validados
-             $vendedor->update($validated);
-     
-             // Obtener el vendedor después de la actualización
-             $vendedorActualizado = $vendedor->refresh();
-     
-             // Comparar los datos antes y después de la actualización para detectar cambios
-             $modifiedData = array_diff_assoc($vendedorActualizado->getAttributes(), $vendedorAnterior);
-     
-             // Crear un registro en UserAction si hay datos modificados
-             if (!empty($modifiedData)) {
-                 UserAction::create([
-                     'user_id' => $request->user()->id,
-                     'action' => 'actualizar',
-                     'entity_type' => 'vendedor',
-                     'entity_id' => $vendedor->id,
-                     'modified_data' => json_encode($modifiedData),
-                     // Otros campos relevantes
-                 ]);
-             }
-     
-             // Redireccionar a la vista de índice de vendedores con un mensaje de éxito
-             return redirect()->route('vendedor.index')
-                 ->with('status', __('Actualizado exitosamente'));
-         } catch (ValidationException $e) {
-             // Manejar errores de validación devolviendo a la vista anterior con errores
-             return redirect()->back()->withErrors($e->validator->errors())->withInput();
-         }
-     }
-     
-    
+
+    public function update(Request $request, Vendedor $vendedor)
+    {
+        try {
+            $validated = $request->validate([
+                "nombres" => ['required', 'min:5', 'max:255'],
+                "rol" => ['required', 'min:5', 'max:255'],
+                "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
+                "activo" => ['required']
+            ]);
+
+            // Obtener el vendedor antes de la actualización
+            $vendedorAnterior = $vendedor->getAttributes();
+
+            // Actualizar el vendedor con los datos validados
+            $vendedor->update($validated);
+
+            // Obtener el vendedor después de la actualización
+            $vendedorActualizado = $vendedor->refresh();
+
+            // Comparar los datos antes y después de la actualización para detectar cambios
+            $modifiedData = array_diff_assoc($vendedorActualizado->getAttributes(), $vendedorAnterior);
+
+            // Crear un registro en UserAction si hay datos modificados
+            if (!empty($modifiedData)) {
+                UserAction::create([
+                    'user_id' => $request->user()->id,
+                    'action' => 'actualizar',
+                    'entity_type' => 'vendedor',
+                    'entity_id' => $vendedor->id,
+                    'modified_data' => json_encode($modifiedData),
+                    // Otros campos relevantes
+                ]);
+            }
+
+            // Redireccionar a la vista de índice de vendedores con un mensaje de éxito
+            return redirect()->route('vendedor.index')
+                ->with('status', __('Actualizado exitosamente'));
+        } catch (ValidationException $e) {
+            // Manejar errores de validación devolviendo a la vista anterior con errores
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
+        }
+    }
+
+
 
 
     public function destroy(Vendedor $vendedor)
@@ -165,7 +165,12 @@ class VendedorController extends Controller
 
     public function pagosPendientes()
     {
+        $pagosPendientes = PagoVendedor::where('estado', 'pendiente')->get();
+        $pagosPendientesPorVendedor = $pagosPendientes->groupBy('vendedor_id');
+        $vendedores = Vendedor::all();
         return view('vendedor.pagos_pendientes', [
+            'vendedores' => $vendedores,
+            'pagosPendientesPorVendedor' => $pagosPendientesPorVendedor,
             'pagosPendientes' => PagoVendedor::where('estado', "Pendiente")
                 ->orderBy('fecha_pago', 'desc')
                 ->get(),
@@ -173,5 +178,22 @@ class VendedorController extends Controller
                 ->orderBy('fecha_pago', 'desc')
                 ->get()
         ]);
+    }
+
+
+    public function cambiarActivo(Vendedor $vendedor)
+    {
+
+        if ($vendedor->activo == "1") {
+            file_put_contents("vendedorIF.txt", "entra al if");
+            $vendedor->activo = 0;
+            $vendedor->update();
+        } elseif ($vendedor->activo == "0") {
+            file_put_contents("vendedorELSE.txt", "entra al else");
+            $vendedor->activo = 1;
+            $vendedor->update();
+        }
+        return to_route('vendedor.index')
+            ->with('status', __('Se ha cambiado el estado del vendedor'));;
     }
 }

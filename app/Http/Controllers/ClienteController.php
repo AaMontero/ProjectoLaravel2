@@ -63,21 +63,30 @@ class ClienteController extends Controller
                 'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
                 'fecha_nacimiento' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
             ]);
+
+            //Validación si ya existe un cliente con el mismo email o número de cédula 
+            $existingCliente = Cliente::where('email', $validated['email'])
+                ->orWhere('cedula', $validated['cedula'])
+                ->first();
+
+            if ($existingCliente) {
+                return redirect()->back()
+                    ->withErrors(['email' => 'Este correo electrónico ya está registrado.', 'cedula' => 'Este número de cédula ya está registrado.'])
+                    ->withInput();
+            }
+
             $clienteUser = $this->obtenerNick($request->nombres, $request->apellidos);
             $validated['cliente_user'] = $clienteUser;
-            
-            // Crear un cliente
             $cliente = $request->user()->clientes()->create($validated);
-            
+
             // Crear un registro en la tabla de UserAction
             UserAction::create([
                 'user_id' => $request->user()->id,
                 'action' => 'crear',
                 'entity_type' => 'cliente',
                 'entity_id' => $cliente->id,
-                // Otros campos relevantes que desees registrar en el log
             ]);
-        
+
 
             return redirect()->route('clientes.index')->with('status', __('Inserción realizada exitosamente'));
         } catch (ValidationException $e) {
@@ -85,9 +94,6 @@ class ClienteController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Cliente $cliente)
     {
         //
@@ -125,19 +131,24 @@ class ClienteController extends Controller
             'activo' => ['nullable', 'boolean', 'in:0,1', 'default' => 1],
             'fecha_nacimiento' => ['required', 'date'],
         ]);
-    
+
+        //Validar que no haya un cliente con el mismo numero de cédula o correo. 
+        $existingCliente = Cliente::where('email', $validated['email'])
+            ->where('id', '!=', $cliente->id)
+            ->first();
+        if ($existingCliente) {
+            return redirect()->back()->withErrors(['email' => 'Este correo electrónico ya está registrado.'])->withInput();
+        }
+
+
         // Guardar los datos originales del cliente antes de la actualización
         $originalData = $cliente->getAttributes();
-    
         // Actualizar el cliente
         $cliente->update($validated);
-    
         // Obtener los datos modificados del cliente
         $modifiedData = array_diff_assoc($cliente->getAttributes(), $originalData);
-    
         // Convertir los datos modificados a JSON
         $modifiedDataJson = json_encode($modifiedData);
-    
         // Crear un registro en la tabla UserAction
         UserAction::create([
             'user_id' => $request->user()->id,
@@ -146,12 +157,12 @@ class ClienteController extends Controller
             'entity_id' => $cliente->id,
             'modified_data' => $modifiedDataJson,
         ]);
-    
+
         return redirect()->route('clientes.index')
             ->with('status', __('Actualización realizada exitosamente'));
     }
-    
-    
+
+
 
     /**
      * Remove the specified resource from storage.

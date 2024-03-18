@@ -14,15 +14,10 @@ class RolController extends Controller
     public function index()
 
     {
-          // Obtener detalles del usuario desde la base de datos 
-          $user = User::all();
-          $roles = Role::all();
-
-        //   return view('auth.register', compact('roles'));   
-        //   return view('roles.rol', ['user' => $user]);
-          
+        // Obtener detalles del usuario desde la base de datos 
+        $user = User::all();
+        $roles = Role::all();
         return view('roles.rol', ['user' => $user, 'roles' => $roles]);
-
     }
 
 
@@ -30,10 +25,10 @@ class RolController extends Controller
     {
         try {
             $rolId = $request->input('rol_id');
-    
+
             // Asignar el rol al usuario
             $user->syncRoles([$rolId]);
-    
+
             // Crear un registro en la tabla de registros
             UserAction::create([
                 'user_id' => $request->user()->id,
@@ -41,13 +36,12 @@ class RolController extends Controller
                 'entity_type' => 'user', // Tipo de entidad
                 'entity_id' => $user->id, // ID del usuario al que se le asigna el rol
                 'modified_data' => json_encode(['rol_id' => $rolId]), // Datos modificados
-              
+
             ]);
-    
+
             return redirect()->route('roles.rol')->with('status', 'Rol asignado exitosamente');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al asignar el rol')->withInput();
         }
     }
-    
 }

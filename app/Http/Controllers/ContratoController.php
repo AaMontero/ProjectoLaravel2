@@ -58,23 +58,6 @@ class ContratoController extends Controller
 
         return response()->json($cliente);
     }
-    //Busqueda en el contrato
-    public function buscarContrato(Request $request)
-    {
-        $contratoId = $request->input('id');
-
-        // Buscar el contrato por su ID en la base de datos
-        $contrato = Contrato::where('contrato_id', $contratoId)->first();
-
-        // Si se encuentra el contrato, devolver los datos en formato JSON
-        if ($contrato) {
-            return response()->json($contrato);
-        }
-
-        // Si no se encuentra el contrato, devolver una respuesta JSON vacía
-        return response()->json(null);
-    }
-
 
 
 
@@ -366,13 +349,13 @@ class ContratoController extends Controller
 
             // Crear un registro en la tabla de registros
             UserAction::create([
-            'user_id' => $request->user()->id,
-            'action' => 'crear', // Acción de crear contrato
-            'entity_type' => 'contrato', // Tipo de entidad
-            'entity_id' => $contratoIngresado->id, // ID del contrato creado
-            'modified_data' => json_encode(['contrato' => $contratoIngresado->toArray()]), // Datos modificados
-            // Otros campos relevantes que desees registrar en el log
-             ]);
+                'user_id' => $request->user()->id,
+                'action' => 'crear', // Acción de crear contrato
+                'entity_type' => 'contrato', // Tipo de entidad
+                'entity_id' => $contratoIngresado->id, // ID del contrato creado
+                'modified_data' => json_encode(['contrato' => $contratoIngresado->toArray()]), // Datos modificados
+                // Otros campos relevantes que desees registrar en el log
+            ]);
             return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
 
             //return route('contrato.vendedores', ['contrato' => $contrato]);

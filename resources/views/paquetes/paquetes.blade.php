@@ -145,7 +145,7 @@
                                 console.log(listaCaracteristicas);
                             }
                         </script>
-                        
+
                         <x-primary-button class='mt-4'>Agregar nuevo paquete</x-primary-button>
                     </form>
                 </div>
@@ -302,13 +302,22 @@
                             </x-dropdown-link>
 
                             <!-- Formulario para eliminar el paquete -->
-                            <form method="POST" action="{{ route('paquetes.destroy', $paquete) }}">
-                                @csrf @method('DELETE')
-                                <x-dropdown-link :href="route('paquetes.destroy', $paquete)"
-                                    onclick="event.preventDefault(); this.closest('form').submit()">
+                            <form id="deleteForm" method="POST" action="{{ route('paquetes.destroy', $paquete) }}">
+                                @csrf
+                                @method('DELETE')
+                                <x-dropdown-link :href="route('paquetes.destroy', $paquete)" onclick="return confirmDelete(event)">
                                     {{ __('Eliminar Paquete') }}
                                 </x-dropdown-link>
                             </form>
+
+                            <script>
+                                function confirmDelete(event) {
+                                    if (confirm('¿Deseas eliminar este paquete?')) {
+                                        event.target.closest('form').submit();
+                                    }
+                                    return false;
+                                }
+                            </script>
                         </x-slot>
                     </x-dropdown>
                 </div>

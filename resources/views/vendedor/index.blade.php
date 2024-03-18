@@ -6,13 +6,13 @@
                 {{ __('Sellers Register') }}
             </h2>
             @role('Administrador|superAdmin')
-            <div onclick="abrirAgregarVendedor()" class="cursor-pointer flex items-center">
-                <span class="mr-2">Agregar Nuevo Vendedor</span>
-                <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </div>
+                <div onclick="abrirAgregarVendedor()" class="cursor-pointer flex items-center">
+                    <span class="mr-2">Agregar Nuevo Vendedor</span>
+                    <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
             @endrole
         </div>
     </x-slot>
@@ -90,86 +90,97 @@
                             <th class="py-2 px-4 border-b text-center ">Estado</th>
                             <th class="py-2 px-4 border-b text-center ">Opciones</th>
                         </tr>
-                  <!-- IMPORTANT, class="list" have to be at tbody -->
-                  <tbody class="list">
-                    @foreach ($vendedores as $vendedor)
-                    <tr>
-                        <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
-                        <td class="py-2 px-4 border-b text-center nombres">{{ $vendedor->nombres }}</td>
-                        <td class="py-2 px-4 border-b text-center rol">{{ $vendedor->rol }}</td>
-                        <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
-                        <td class="py-2 px-4 border-b text-center estado">
-                            {{ $vendedor->activo == '1' ? 'Activo' : 'Inactivo' }}</td>
-                        <td class = "text-right pr-6">
-                            <x-dropdown class="origin-top absolute ">
-                                <x-slot name="trigger">
-                                    <button>
-                                        <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                        </svg>
-                                    </button>
-                                </x-slot>
-                                <x-slot name="content">
-                                    <?php
-        
-                                    ?>
-                                    <x-dropdown-link :href="route('vendedor.datos_vendedor', $vendedor->id)">
-                                        {{ __('Ver ventas') }}
-                                    </x-dropdown-link>
-                                    @role('Administrador|superAdmin')
-                                    <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
-                                        {{ __('Editar Vendedor') }}
-                                    </x-dropdown-link>
-                                    @endrole
-                                </x-slot>
-                            </x-dropdown>
-                        </td>
-                    </tr>
-                @endforeach
-                  </tbody>
+                        <!-- IMPORTANT, class="list" have to be at tbody -->
+                    <tbody class="list">
+                        @foreach ($vendedores as $vendedor)
+                            <tr>
+                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
+                                <td class="py-2 px-4 border-b text-center nombres">{{ $vendedor->nombres }}</td>
+                                <td class="py-2 px-4 border-b text-center rol">{{ $vendedor->rol }}</td>
+                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
+                                <td class="py-2 px-4 border-b text-center estado">
+                                    {{ $vendedor->activo == '1' ? 'Activo' : 'Inactivo' }}</td>
+                                <td class = "text-right pr-6">
+                                    <x-dropdown class="origin-top absolute ">
+                                        <x-slot name="trigger">
+                                            <button>
+                                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                                </svg>
+                                            </button>
+                                        </x-slot>
+                                        <x-slot name="content">
+                                            <?php
+                                            
+                                            ?>
+                                            <x-dropdown-link :href="route('vendedor.datos_vendedor', $vendedor->id)">
+                                                {{ __('Ver ventas') }}
+                                            </x-dropdown-link>
+                                            @role('Administrador|superAdmin')
+                                                <x-dropdown-link :href="route('vendedor.edit', $vendedor)">
+                                                    {{ __('Editar Vendedor') }}
+                                                </x-dropdown-link>
+                                            @endrole
+                                            @role('Administrador|superAdmin')
+                                                <x-dropdown-link :href="route('vendedor.cambiarActivo', $vendedor)">
+                                                    {{ __('Eliminar Vendedor') }}
+                                                </x-dropdown-link>
+                                            @endrole
+                                        </x-slot>
+                                    </x-dropdown>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </table>
                 <div class="pagination flex justify-center mt-2">
-                    
+
                     <div class="pagination "></div>
                 </div>
-              </div>
+            </div>
         </div>
-       
+
     </div>
     <style>
         .pagination li {
-      display: inline-block;
-      padding: 5px;
-    }
-    
-    .pagination a {
-      display: inline-block;
-      padding: 10px 15px; /* Ajusta el relleno según sea necesario */
-      background-color: #4a4a4a; /* Color de fondo del botón */
-      color: #fff; /* Color del texto del botón */
-      border-radius: 5px; /* Bordes redondeados */
-      text-decoration: none; /* Eliminar subrayado del enlace */
-      transition: background-color 0.3s ease; /* Efecto de transición al pasar el ratón */
-    }
-    
-    .pagination a:hover {
-      background-color: #555; /* Cambia el color de fondo al pasar el ratón */
-    }
-    
+            display: inline-block;
+            padding: 5px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 10px 15px;
+            /* Ajusta el relleno según sea necesario */
+            background-color: #4a4a4a;
+            /* Color de fondo del botón */
+            color: #fff;
+            /* Color del texto del botón */
+            border-radius: 5px;
+            /* Bordes redondeados */
+            text-decoration: none;
+            /* Eliminar subrayado del enlace */
+            transition: background-color 0.3s ease;
+            /* Efecto de transición al pasar el ratón */
+        }
+
+        .pagination a:hover {
+            background-color: #555;
+            /* Cambia el color de fondo al pasar el ratón */
+        }
     </style>
 
-    
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-        <script>
-            // buscador
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script>
+        // buscador
         var options = {
             valueNames: ['nombres', 'rol', 'estado'],
             page: 10, // Número de elementos por página
-        pagination: true // Habilitar paginación
+            pagination: true // Habilitar paginación
         };
 
         var userList = new List('users', options);

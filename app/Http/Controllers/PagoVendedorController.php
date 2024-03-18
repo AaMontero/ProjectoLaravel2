@@ -77,7 +77,12 @@ class PagoVendedorController extends Controller
         return redirect()->route('vendedores.pagosPendientes')
             ->with('status', __('Pago realizado'));
     }
+    public function pagarVendedor($idVendedor)
+    {
 
+        PagoVendedor::where('vendedor_id', $idVendedor)->update(['estado' => 'pago']);
+        return back()->with('status', __('Pagos registrados'));
+    }
 
     /**
      * Remove the specified resource from storage.

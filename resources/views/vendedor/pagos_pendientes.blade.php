@@ -157,6 +157,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class = "ml-20 mr-20">
+                        <p class="ml-5 flex justify-center items-center list-none space-x-2">
+                            {{ $pagosEfectivos->appends([]) }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

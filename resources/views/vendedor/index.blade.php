@@ -66,6 +66,23 @@
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
+
+                        <label class="mt-3 ml-4 font-bold">Usuario Asociado:</label>
+                        <select name="usuario_asociado"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            placeholder="{{ __('Seleccione el % del Vendedor') }}">
+                            <option value="" disabled selected>
+                                {{ __('Seleccione el usuario') }}</option>
+                            @foreach ($usuarios as $usuario_asociado)
+                                <option value="{{ $usuario_asociado->id }}" {{ old('usuario_asociado') == $rol ? 'selected' : '' }}>
+                                    {{ $usuario_asociado->id }} - {{ $usuario_asociado->name}}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('usuario_asociado')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <x-primary-button
                             class='mt-4 bg-gray-800 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out'>Agregar
                             nuevo vendedor</x-primary-button>

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Vendedor;
 use App\Models\PagoVendedor;
 use App\Models\UserAction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class VendedorController extends Controller
@@ -17,7 +19,13 @@ class VendedorController extends Controller
 
     public function index()
     {
+        $vendedoresIDS = DB::table('model_has_roles')
+            ->where('role_id', 3) // 3 es el numero que corresponde a vendedor 
+            ->pluck('model_id')
+            ->toArray();
+
         return view('vendedor.index', [
+            "usuarios" => User::whereIn('id', $vendedoresIDS)->get(),
             "vendedores" => Vendedor::all()->where("activo", true),
             "roles" => $this->roles,
             "porcentajes" => $this->porcentajes,
@@ -141,16 +149,13 @@ class VendedorController extends Controller
 
     public function pagosPendientes()
     {
-        $pagosPendientes = PagoVendedor::where('estado', 'pendiente')->get();
-        $pagosPendientesPorVendedor = $pagosPendientes->groupBy('vendedor_id');
-        $vendedores = Vendedor::all();
         return view('vendedor.pagos_pendientes', [
-            'vendedores' => $vendedores,
-            'pagosPendientesPorVendedor' => $pagosPendientesPorVendedor,
-            'pagosPendientes' => PagoVendedor::where('estado', "Pendiente")
-                ->orderBy('fecha_pago', 'desc')
-                ->get(),
             'pagosEfectivos' => PagoVendedor::where('estado', "Pago")
+                ->orderBy('updated_at', 'desc')
+                ->paginate(15),
+            'vendedores' => Vendedor::all(),
+            'pagosPendientesPorVendedor' => PagoVendedor::where('estado', 'pendiente')->get()->groupBy('vendedor_id'),
+            'pagosPendientes' => PagoVendedor::where('estado', "Pendiente")
                 ->orderBy('fecha_pago', 'desc')
                 ->get()
         ]);

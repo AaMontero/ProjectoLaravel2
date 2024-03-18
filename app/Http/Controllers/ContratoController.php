@@ -180,7 +180,6 @@ class ContratoController extends Controller
             $StringOtrosFormaPago = "";
             foreach ($listaOtros as $item) {
                 if ($item && strpos($item[1], "con") === 0) {
-
                     $StringOtrosFormaPago .= "[" . $item[0] . " , " . str_replace("con", "", $item[1]) . "]";
                 }
             }
@@ -232,8 +231,8 @@ class ContratoController extends Controller
             if ($abonoCredDir == "") {
                 $abonoCredDir = 0;
             }
-            if ($formasPagoString == "") {
-                echo ("Inserte una forma de pago");
+            if (empty($formasPagoString)) {
+                return redirect()->back()->withErrors(['formas_pago' => 'Inserte una forma de pago'])->withInput();
             } else {
                 foreach ($formasPagoString as $forma) {
                     $formasPago = $formasPago . $forma . "\n \n";

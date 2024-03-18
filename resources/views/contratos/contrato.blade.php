@@ -210,7 +210,10 @@
                             </div>
                         </div>
                         <ul id="listaFormasPagoUl"></ul>
-
+                        @error('formas_pago')
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
                         <!-- Bono hospedaje Qory Loyalty -->
                         <div class="mb-2">
                             <label class="inline-flex items-center mt-1 p-0  font-bold">Bono hospedaje Qory

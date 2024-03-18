@@ -305,8 +305,11 @@
                                     {{ $contrato->fecha_fin_pagare ? $contrato->fecha_fin_pagare : 'NO' }}</td>
                                 <!-- Otros metodos de Pago-->
                                 <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                    {{ $contrato->otro_comentario ? str_replace('"', '', $contrato->otro_comentario) : 'NO' }}
+                                    {!! $contrato->otro_comentario
+                                        ? str_replace(']', ']</br>', str_replace('"', '', $contrato->otro_comentario))
+                                        : 'NO' !!}
                                 </td>
+
                                 {{-- modal dinamico --}}
                                 <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                     <button type="button" data-bs-toggle="modal"
@@ -596,9 +599,10 @@
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
+                console.log(listaFormasPago);
                 document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
+                console.log(document.getElementById("formas_pago").value);
                 alert("Se agregó: " + cadena);
-                console.log('asdas');
             }
         }
 

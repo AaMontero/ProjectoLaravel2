@@ -43,9 +43,7 @@ class ContratoController extends Controller
         $clientes = Cliente::all();
 
         return view('contratos.contrato', [
-            "contratos" => Contrato::with('Cliente')->get(),
-            // "contratos" => Contrato::orderBy('created_at', 'desc')->latest()->paginate(30),
-            "contratos" => Contrato::all(),
+            "contratos" => Contrato::with('Cliente')->orderBy('created_at', 'desc')->get(),
             "clientes" => $clientes,
             "vendedores" => Vendedor::all(),
         ]);
@@ -55,11 +53,11 @@ class ContratoController extends Controller
     public function obtenerDetallesCliente($id)
     {
         $cliente = Cliente::find($id);
-
         return response()->json($cliente);
     }
     public function eliminarContrato($contrato)
     {
+        //FALTA POR IMPLEMENTAR 
     }
 
 
@@ -107,18 +105,16 @@ class ContratoController extends Controller
         $utils = new Utils();
         $utils->agregarPago($vendedor, $contrato, $controlerPV);
         $utils->agregarPago($closer1, $contrato, $controlerPV);
-        $utils->agregarPago($closer2, $contrato, $controlerPV);
+        if (isset($closer2)) {
+            $utils->agregarPago($closer2, $contrato, $controlerPV);
+        }
+
         $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
 
         return to_route('contrato.index')
             ->with('status', __('Contrato creado exitosamente'));
     }
-    public function create(Request $request)
-    {
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $utils = new Utils();
@@ -126,7 +122,7 @@ class ContratoController extends Controller
         date_default_timezone_set('America/Guayaquil');
         $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
         //Inicializacion de variables
-        $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $cedula = $contratoId = $formasPago = $pagareText = $montoCuotaPagare = "";
+        $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $contratoId = $pagareText = $montoCuotaPagare = "";
         $aniosContrato = $montoContrato = 0;
         $bonoQory = $bonoQoryInt = $contienePagare = $contieneCreditoDirecto = false;
         $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date("Y-m-d");
@@ -167,6 +163,7 @@ class ContratoController extends Controller
             $okBono = isset($request->bono_hospedaje);
             $okBonoInt = isset($request->bono_hospedaje_internacional);
             $listaOtros = [];
+
             $fomasPagoSinComillas = str_replace("[", "", $formasPago);
             $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas);
             $formasPagoLista = explode(",", $fomasPagoSinComillas2);
@@ -174,9 +171,7 @@ class ContratoController extends Controller
 
             foreach ($formasPagoLista as $elem) {
                 $elemDividido = explode(" ", $elem);
-
-                // Verifica si $elemDividido tiene al menos dos elementos antes de acceder a ellos
-                if (count($elemDividido) >= 2) {
+                if (count($elemDividido) >= 2 && strpos($elem, "Pagaré") === false) {
                     $valNum = $elemDividido[0];
                     $valText = implode(" ", array_slice($elemDividido, 1));
                     $listaOtros[] = [$valNum, $valText];
@@ -185,6 +180,7 @@ class ContratoController extends Controller
             $StringOtrosFormaPago = "";
             foreach ($listaOtros as $item) {
                 if ($item && strpos($item[1], "con") === 0) {
+
                     $StringOtrosFormaPago .= "[" . $item[0] . " , " . str_replace("con", "", $item[1]) . "]";
                 }
             }
@@ -215,17 +211,12 @@ class ContratoController extends Controller
                     $contratoId = "QT" . $codigo_ciudad;
                 }
             }
-
             $nombre_cliente = $nombres . " " . $apellidos;
-
-
             if ($okBono == 1) {
                 $bonoQory = true;
             } else {
                 $bonoQory = false;
             }
-
-
             if ($okBonoInt == 1) {
                 $bonoQoryInt = true;
             } else {
@@ -272,15 +263,12 @@ class ContratoController extends Controller
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                     $funciones->generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valorPagare, $fechaActual, 1, $montoCuotaPagare, $pagareText, $rutaCarpetaSave);
                 }
-
                 echo ("Los documentos se generaron correctamente. \n");
             }
-
             //Creación del cliente
             if (empty($tieneUsuario)) {
                 // Si $tieneUsuario está vacío, busca un cliente por cédula
                 $clienteExiste = Cliente::where('cedula', $numCedula)->first();
-
                 if (!$clienteExiste) {
                     // Si no existe el cliente, crea uno nuevo asociándolo al usuario actual
                     $controler = new ClienteController();
@@ -295,12 +283,9 @@ class ContratoController extends Controller
                     $cliente->email = $email;
                     $cliente->activo = true;
                     $cliente->cliente_user = $controler->obtenerNick($nombres, $apellidos);
-
                     // Asociar el cliente al usuario actual
                     $cliente->user()->associate(auth()->user());
-
                     $cliente->save();
-
                     $persona = $cliente;
                 } else {
                     // Si ya existe el cliente, asigna el cliente existente a $persona

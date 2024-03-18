@@ -54,4 +54,9 @@ class PagoVendedorController extends Controller
         //Aqui va la lógica para obtener el pago
         return 150.50;
     }
+    public function pagarVendedor($idVendedor)
+    {
+        PagoVendedor::where('vendedor_id', $idVendedor)->update(['estado' => 'pago']);
+        return back()->with('status', __('Pagos registrados'));
+    }
 }

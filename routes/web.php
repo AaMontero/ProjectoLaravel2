@@ -98,7 +98,7 @@ Route::middleware('auth')->group(function () {
         ->name('vendedor.datos_vendedor') // Ver los datos de un vendedor
         ->middleware('checkRole:Administrador,Asesor,superAdmin');
     Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
-        ->name('vendedores.pagosPendientes')
+        ->name('vendedores.pagosPendientes') 
         ->middleware('checkRole:Administrador,superAdmin'); //Pagos pendientes - Solo Admin
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update'); // Actualizar los datos de un vendedor
@@ -116,7 +116,7 @@ Route::middleware('auth')->group(function () {
     Route::get('pagoVendedores/revertirPago/{pago}', [PagoVendedorController::class, 'quitarPagado'])
         ->name('pagoVendedor.revertirPago'); //Cambia el estado de un pago a pendiente
     Route::get('pagoVendedores/{idVendedor}', [PagoVendedorController::class, 'pagarVendedor'])
-        ->name('pagoVendedores.pagoVendedor');
+        ->name('pagoVendedores.pagoVendedor'); //Pagar a un vendedor
 
 
     //RUTAS PARA CONTRATOS

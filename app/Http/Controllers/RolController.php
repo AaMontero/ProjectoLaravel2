@@ -14,7 +14,6 @@ class RolController extends Controller
     public function index()
 
     {
-        // Obtener detalles del usuario desde la base de datos 
         $user = User::all();
         $roles = Role::all();
         return view('roles.rol', ['user' => $user, 'roles' => $roles]);

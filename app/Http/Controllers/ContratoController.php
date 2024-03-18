@@ -58,7 +58,9 @@ class ContratoController extends Controller
 
         return response()->json($cliente);
     }
-
+    public function eliminarContrato($contrato)
+    {
+    }
 
 
     public function add_contrato(Cliente $cliente)
@@ -131,7 +133,6 @@ class ContratoController extends Controller
         try {
             $tieneUsuario = $request->usuario_previo;
             if (empty($tieneUsuario)) {
-                file_put_contents("entraIF", "entra al if");
                 $request->validate([
                     'cedula' => ['required', 'min:10', 'max:10'],
                     'nombres' => ['required', 'min:5', 'max:255'],
@@ -144,8 +145,6 @@ class ContratoController extends Controller
                     'monto_contrato' => ['required', 'numeric', 'min: 0.01'],
                 ]);
             } else {
-
-                file_put_contents("entraElse", "entra al else");
                 $request->validate([
                     'ubicacion_sala' => ['required', 'min:5', 'max:255'],
                     'anios_contrato' => ['required', 'integer', 'min:0'],

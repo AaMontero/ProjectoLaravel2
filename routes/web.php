@@ -11,10 +11,8 @@ use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\User_actions;
 use App\Http\Controllers\UserActionsController;
 use App\Http\Middleware\VerifyCsrfToken;
-use App\Models\UserAction;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -61,6 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('paquetes/{paquete}', [PaqueteController::class, 'destroy'])
         ->name('paquetes.destroy') //Eliminar Paquetes
         ->middleware('checkRole:Administrador,superAdmin');
+
 
     //RUTAS PARA CLIENTES
     Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])
@@ -157,7 +155,6 @@ Route::middleware('auth')->group(function () {
 
 
     //RUTAS DE LOGS
-    Route::post('save_task', [PusherPruebaControlller::class, 'save_task']); //Registrar un LOG
     Route::get('/log', [UserActionsController::class, 'index'])
         ->name('log')
         ->middleware('checkRole:superAdmin');

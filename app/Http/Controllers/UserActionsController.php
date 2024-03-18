@@ -9,8 +9,6 @@ use App\Models\Paquete;
 use App\Models\User;
 use App\Models\UserAction;
 use App\Models\Vendedor;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class UserActionsController extends Controller
 {

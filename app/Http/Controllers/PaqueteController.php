@@ -10,9 +10,6 @@ use Illuminate\Validation\ValidationException;
 
 class PaqueteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $num_dias = $request->num_dias;
@@ -62,18 +59,6 @@ class PaqueteController extends Controller
             ]);
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -121,14 +106,8 @@ class PaqueteController extends Controller
         }
     }
 
-    public function show(Paquete $paquete)
-    {
-        //
-    }
-
     public function edit(Paquete $paquete)
     {
-        // Convertir la propiedad lista_caracteristicas a una cadena JSON
         $listaJson = json_encode($paquete->incluye);
         return view('paquetes.edit', ['paquete' => $paquete, 'listaJson' => $listaJson]);
     }
@@ -190,15 +169,11 @@ class PaqueteController extends Controller
         return to_route('paquetes.paquetes')
             ->with('status', __('Package updated successfully'));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Paquete $paquete)
     {
         // Guardar los datos del paquete antes de eliminarlo
         $paqueteEliminado = $paquete->toArray();
-        
+
         // Crear un registro en la tabla UserAction antes de eliminar el paquete
         UserAction::create([
             'user_id' => auth()->id(),
@@ -208,12 +183,10 @@ class PaqueteController extends Controller
             'modified_data' => json_encode($paqueteEliminado),
             // Otros campos relevantes que desees registrar en el log
         ]);
-    
+
         $paquete->delete();
-        
+
         return redirect()->route('paquetes.paquetes')
             ->with('status', __('Package deleted successfully'));
     }
-    
-
 }

@@ -11,21 +11,16 @@ use Illuminate\Validation\ValidationException;
 
 class VendedorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $roles = ['Vendedor', 'Closer', 'Jefe de Sala '];
+    private $porcentajes = ['4% Fijo', 'Variable1', 'Variable2'];
+    private $estados = ['Activo', 'Inactivo'];
+
     public function index()
     {
         return view('vendedor.index', [
-            // "vendedores" => Vendedor::with('pagosVendedor')
-            //     ->orderBy('activo', 'desc') // Ordenar por estado (activo primero)
-            //     ->latest()
-            //     ->paginate(10),
             "vendedores" => Vendedor::all()->where("activo", true),
-            "roles" => [
-                'Vendedor', 'Closer', 'Jefe de Sala'
-            ],
-            "porcentajes" => ['4% Fijo', 'Variable1', 'Variable2'],
+            "roles" => $this->roles,
+            "porcentajes" => $this->porcentajes,
         ]);
     }
 
@@ -59,11 +54,6 @@ class VendedorController extends Controller
         );
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         try {
@@ -91,20 +81,13 @@ class VendedorController extends Controller
         }
     }
 
-    public function show(Vendedor $vendedor)
-    {
-    }
-
-
     public function edit(Vendedor $vendedor)
     {
         return view('vendedor.editar', [
             'vendedor' => $vendedor,
-            "roles" => [
-                'Vendedor', 'Closer', 'Jefe de Sala'
-            ],
-            "porcentajes" => ['4% Fijo', 'Variable1', 'Variable2'],
-            "estados" => ['Activo', 'Inactivo']
+            "roles" => $this->roles,
+            "porcentajes" => $this->porcentajes,
+            "estados" => $this->estados,
         ]);
     }
 
@@ -156,13 +139,6 @@ class VendedorController extends Controller
     }
 
 
-
-
-    public function destroy(Vendedor $vendedor)
-    {
-        //
-    }
-
     public function pagosPendientes()
     {
         $pagosPendientes = PagoVendedor::where('estado', 'pendiente')->get();
@@ -180,16 +156,12 @@ class VendedorController extends Controller
         ]);
     }
 
-
     public function cambiarActivo(Vendedor $vendedor)
     {
-
         if ($vendedor->activo == "1") {
-            file_put_contents("vendedorIF.txt", "entra al if");
             $vendedor->activo = 0;
             $vendedor->update();
         } elseif ($vendedor->activo == "0") {
-            file_put_contents("vendedorELSE.txt", "entra al else");
             $vendedor->activo = 1;
             $vendedor->update();
         }

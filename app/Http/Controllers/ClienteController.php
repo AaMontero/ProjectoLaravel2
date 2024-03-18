@@ -9,11 +9,11 @@ use Illuminate\Validation\ValidationException;
 
 class ClienteController extends Controller
 {
-
-    /**
-     * Display a listing of the resource.
-     */
-
+    private $provinciasEcuador = [
+        'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi', 'El Oro', 'Esmeraldas', 'Galápagos',
+        'Guayas', 'Imbabura', 'Loja', 'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana', 'Pastaza', 'Pichincha',
+        'Santa Elena', 'Santo Domingo de los Tsáchilas', 'Sucumbíos', 'Tungurahua', 'Zamora-Chinchipe'
+    ];
 
     public function obtenerDetallesCliente($clienteId)
     {
@@ -25,15 +25,9 @@ class ClienteController extends Controller
 
     public function index(Request $request)
     {
-        $provinciasEcuador = [
-            'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi', 'El Oro', 'Esmeraldas', 'Galápagos',
-            'Guayas', 'Imbabura', 'Loja', 'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana', 'Pastaza', 'Pichincha',
-            'Santa Elena', 'Santo Domingo de los Tsáchilas', 'Sucumbíos', 'Tungurahua', 'Zamora-Chinchipe'
-        ];
-
         return view('clientes.index', [
             "clientes" => Cliente::all(),
-            "provincias" => $provinciasEcuador,
+            "provincias" => $this->provinciasEcuador,
         ]);
     }
 
@@ -44,11 +38,6 @@ class ClienteController extends Controller
     {
         //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
     public function store(Request $request)
     {
         try {
@@ -104,14 +93,9 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
-        $provinciasEcuador = [
-            'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi', 'El Oro', 'Esmeraldas', 'Galápagos',
-            'Guayas', 'Imbabura', 'Loja', 'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana', 'Pastaza', 'Pichincha',
-            'Santa Elena', 'Santo Domingo de los Tsáchilas', 'Sucumbíos', 'Tungurahua', 'Zamora-Chinchipe'
-        ];
         return view('clientes.edit', [
             'cliente' => $cliente,
-            'provincias' => $provinciasEcuador
+            'provincias' => $this->provinciasEcuador
         ]);
     }
 
@@ -132,16 +116,13 @@ class ClienteController extends Controller
             'fecha_nacimiento' => ['required', 'date'],
         ]);
 
-        //Validar que no haya un cliente con el mismo numero de cédula o correo. 
-        $existingCliente = Cliente::where('email', $validated['email'])
-            ->where('id', '!=', $cliente->id)
-            ->first();
+        $existingCliente = $this->validarExisteCedula($cliente, $request->email);
         if ($existingCliente) {
             return redirect()->back()->withErrors(['email' => 'Este correo electrónico ya está registrado.'])->withInput();
         }
 
 
-        // Guardar los datos originales del cliente antes de la actualización
+
         $originalData = $cliente->getAttributes();
         // Actualizar el cliente
         $cliente->update($validated);
@@ -180,5 +161,11 @@ class ClienteController extends Controller
         $primeraLetraNombre = substr($nombres, 0, 1);
         $usuario = strtolower($primeraLetraNombre . $primerApellido . $segundoApellido);
         return $usuario;
+    }
+    public function validarExisteCedula($cliente, $email)
+    {
+        Cliente::where('email', $email)
+            ->where('id', '!=', $cliente->id)
+            ->first();
     }
 }

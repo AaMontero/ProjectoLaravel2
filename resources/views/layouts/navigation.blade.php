@@ -46,6 +46,7 @@
                         <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                             {{ __('Administracion') }}
                         </x-nav-link>
+                   
                     @endrole
 
 

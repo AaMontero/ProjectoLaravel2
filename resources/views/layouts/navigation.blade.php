@@ -24,7 +24,6 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 
 
-
                     @role('Administrador|superAdmin')
                     <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
                         {{ __('Dashboard') }}

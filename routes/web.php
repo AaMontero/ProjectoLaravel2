@@ -33,7 +33,7 @@ use App\Http\Middleware\VerifyCsrfToken;
 
 //Middleware - Bloque de código que se ejecuta en el medio del enrutamiento
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -42,27 +42,64 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::middleware('checkRole:Administrador,superAdmin')->group(function () {
+        Route::get('/paquetes/{paquete}/edit', [PaqueteController::class, 'edit'])
+            ->name('paquetes.edit');
+        Route::delete('paquetes/{paquete}', [PaqueteController::class, 'destroy'])
+            ->name('paquetes.destroy');
+        Route::get('calendar/index', [CalendarController::class, 'index'])
+            ->name('calendar.index');
+        Route::post('/calendar', [CalendarController::class, 'store'])
+            ->name('calendar.store');
+        Route::get('vendedor/index', [VendedorController::class, 'index'])
+            ->name('vendedor.index');
+        Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
+            ->name('vendedores.pagosPendientes');
+        Route::get('/rol', [RolController::class, 'index'])
+            ->name('roles.rol');
+        Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])
+            ->name('clientes.edit'); //Formulario para editar un cliente
+        Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
+            ->name('vendedor.edit'); // Formulario para editar un vendedor
+        Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
+            ->name('pagoVendedor.edit'); // Formulario para editar un pago 
+        Route::get('pagoVendedores/{idVendedor}', [PagoVendedorController::class, 'pagarVendedor'])
+            ->name('pagoVendedores.pagoVendedor'); //Pagar a un vendedor
+    });
+
+    Route::middleware('checkRole:Administrador,Asesor,superAdmin')->group(function () {
+        Route::get('/paquetes', [PaqueteController::class,  'index'])
+            ->name('paquetes.paquetes');
+        Route::post('/paquetes', [PaqueteController::class, 'store'])
+            ->name('paquetes.store');
+        Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
+            ->name('vendedor.datos_vendedor');
+    });
+
+    Route::middleware('checkRole:Administrador,superAdmin,Host')->group(function () {
+        Route::put('paquetes/{paquete}',  [PaqueteController::class, 'update'])
+            ->name("paquetes.update");
+        Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
+            ->name('contrato.agregar');  //Agregar Contrato desde un cliente 
+        Route::post('/contrato', [ContratoController::class, 'store'])
+            ->name('contrato.store'); //Registrar un nuevo contrato
+        Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])
+            ->name('contrato.vendedores'); //Agregar los vendedores al contrato (JS,C1,C2,V) 
+    });
+    Route::middleware('checkRole:superAdmin')->group(function () {
+        Route::put('/roles/{user}', [RolController::class, 'asignarRol'])
+            ->name('roles.asignar-rol');
+        Route::get('/log', [UserActionsController::class, 'index'])
+            ->name('log');
+    });
+
+
 
     //RUTAS PARA PAQUETES
-    Route::get('/paquetes/{paquete}/edit', [PaqueteController::class, 'edit'])
-        ->name('paquetes.edit') // Formulario para edigar los paquetes
-        ->middleware('checkRole:Administrador,superAdmin');
-    Route::get('/paquetes', [PaqueteController::class,  'index'])
-        ->name('paquetes.paquetes') //Mostrar Paquetes (Principal)
-        ->middleware('checkRole:Administrador,Asesor,superAdmin');
-    Route::post('/paquetes', [PaqueteController::class, 'store'])
-        ->name('paquetes.store') //Agregar Paquetes
-        ->middleware('checkRole:Administrador,superAdmin,Host');
-    Route::put('paquetes/{paquete}',  [PaqueteController::class, 'update'])
-        ->name("paquetes.update"); //Registra una actualización 
-    Route::delete('paquetes/{paquete}', [PaqueteController::class, 'destroy'])
-        ->name('paquetes.destroy') //Eliminar Paquetes
-        ->middleware('checkRole:Administrador,superAdmin');
 
 
     //RUTAS PARA CLIENTES
-    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])
-        ->name('clientes.edit'); //Formulario para editar un cliente
+
     Route::get('/clientes',        [ClienteController::class, 'index'])
         ->name('clientes.index'); //Mostrar Clientes (Principal)
     Route::post('clientes',        [ClienteController::class, 'store'])
@@ -72,12 +109,6 @@ Route::middleware('auth')->group(function () {
 
 
     //RUTAS PARA EL CALENDARIO
-    Route::get('calendar/index', [CalendarController::class, 'index'])
-        ->name('calendar.index')
-        ->middleware('checkRole:Administrador,superAdmin');
-    Route::post('/calendar', [CalendarController::class, 'store'])
-        ->name('calendar.store')
-        ->middleware('checkRole:Administrador,superAdmin');
     Route::patch('calendar/update/{id}', [CalendarController::class, 'update'])
         ->name('calendar.update');
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])
@@ -85,21 +116,11 @@ Route::middleware('auth')->group(function () {
 
 
 
-
-    //RUTAS PARA LOS VENDEDORES
-    Route::get('vendedor/index', [VendedorController::class, 'index'])
-        ->name('vendedor.index')
-        ->middleware('checkRole:Administrador,superAdmin'); //Mostrar los vendedores (Principal) //Admin
     Route::post('/vendedor', [VendedorController::class, 'store'])
         ->name('vendedor.store'); //Agregar un nuevo vendedor
-    Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
-        ->name('vendedor.edit'); // Formulario para editar un vendedor
-    Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
-        ->name('vendedor.datos_vendedor') // Ver los datos de un vendedor
-        ->middleware('checkRole:Administrador,Asesor,superAdmin');
-    Route::get('/vendedor/pagos_pendiente', [VendedorController::class, 'pagosPendientes'])
-        ->name('vendedores.pagosPendientes') 
-        ->middleware('checkRole:Administrador,superAdmin'); //Pagos pendientes - Solo Admin
+
+
+
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update'); // Actualizar los datos de un vendedor
     Route::get('/vendedor/{vendedor}/inactivo', [VendedorController::class, 'cambiarActivo'])
@@ -107,34 +128,26 @@ Route::middleware('auth')->group(function () {
 
 
     // RUTAS PARA EL PAGO VENDEDORES
-    Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
-        ->name('pagoVendedor.edit'); // Formulario para editar un pago 
+
     Route::put('pagoVendedor/{pago}', [PagoVendedorController::class, 'update'])
         ->name('pagoVendedor.update'); //Actualizar un pago 
     Route::get('pagoVendedores/pagoRealizado/{pago}', [PagoVendedorController::class, 'pagado'])
         ->name('pagoVendedor.pagar'); //Cambia el estado de un pago a pago
     Route::get('pagoVendedores/revertirPago/{pago}', [PagoVendedorController::class, 'quitarPagado'])
         ->name('pagoVendedor.revertirPago'); //Cambia el estado de un pago a pendiente
-    Route::get('pagoVendedores/{idVendedor}', [PagoVendedorController::class, 'pagarVendedor'])
-        ->name('pagoVendedores.pagoVendedor'); //Pagar a un vendedor
+
 
 
     //RUTAS PARA CONTRATOS
     Route::get('/contrato/index', [ContratoController::class, 'index'])
         ->name('contrato.index'); // Mostrar los contratos (Principal)
-    Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
-        ->name('contrato.agregar');  //Agregar Contrato desde un cliente 
-    Route::post('/contrato', [ContratoController::class, 'store'])
-        ->name('contrato.store'); //Registrar un nuevo contrato
-    Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])
-        ->name('contrato.vendedores'); //Agregar los vendedores al contrato (JS,C1,C2,V) 
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
         ->name('contrato.add_vendedores'); //Registrar los vendedores en el contrato 
 
 
 
     //RUTAS PARA EL CHAT - NOTIFICACIONES 
-    Route::get('chat', [WhatsAppController::class, 'index'])
+    Route::get('/chat', [WhatsAppController::class, 'index'])
         ->name('chat.chat'); //Mostrar el chat (Principal)
     Route::get('/enviaWpp', [WhatsAppController::class, 'enviarPHP'])
         ->name('chat.envia'); //Envía los mensajes
@@ -145,19 +158,13 @@ Route::middleware('auth')->group(function () {
 
 
     // RUTAS DE ROLES 
-    Route::get('/rol', [RolController::class, 'index'])
-        ->name('roles.rol')
-        ->middleware('checkRole:Administrador,superAdmin'); // Mostrar los roles 
-    Route::put('/roles/{user}', [RolController::class, 'asignarRol'])
-        ->name('roles.asignar-rol')
-        ->middleware('checkRole:superAdmin'); //Cambiar el rol de un usuario 
+
+
+
 
 
 
     //RUTAS DE LOGS
-    Route::get('/log', [UserActionsController::class, 'index'])
-        ->name('log')
-        ->middleware('checkRole:superAdmin');
 
 
 

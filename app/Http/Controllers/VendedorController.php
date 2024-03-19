@@ -33,7 +33,6 @@ class VendedorController extends Controller
     }
 
 
-
     public function datosVendedor($vendedorId)
     {
         $vendedor = Vendedor::find($vendedorId);
@@ -65,10 +64,12 @@ class VendedorController extends Controller
     public function store(Request $request)
     {
         try {
+
             $validated = $request->validate([
                 'nombres' => ['required', 'min:5', 'max:255'],
                 'rol' => ['required', 'min:5', 'max:255'],
-                'porcentaje_ventas' => ['required', 'min:5', 'max:255']
+                'porcentaje_ventas' => ['required', 'min:5', 'max:255'],
+                'user_vend_id' => ['required'],
             ]);
 
             // Crear el vendedor
@@ -112,19 +113,14 @@ class VendedorController extends Controller
                 "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
                 "activo" => ['required']
             ]);
-
             // Obtener el vendedor antes de la actualización
             $vendedorAnterior = $vendedor->getAttributes();
-
             // Actualizar el vendedor con los datos validados
             $vendedor->update($validated);
-
             // Obtener el vendedor después de la actualización
             $vendedorActualizado = $vendedor->refresh();
-
             // Comparar los datos antes y después de la actualización para detectar cambios
             $modifiedData = array_diff_assoc($vendedorActualizado->getAttributes(), $vendedorAnterior);
-
             // Crear un registro en UserAction si hay datos modificados
             if (!empty($modifiedData)) {
                 UserAction::create([

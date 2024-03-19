@@ -68,18 +68,19 @@
                         @enderror
 
                         <label class="mt-3 ml-4 font-bold">Usuario Asociado:</label>
-                        <select name="usuario_asociado"
+                        <select name="user_vend_id"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                             placeholder="{{ __('Seleccione el % del Vendedor') }}">
                             <option value="" disabled selected>
                                 {{ __('Seleccione el usuario') }}</option>
                             @foreach ($usuarios as $usuario_asociado)
-                                <option value="{{ $usuario_asociado->id }}" {{ old('usuario_asociado') == $rol ? 'selected' : '' }}>
-                                    {{ $usuario_asociado->id }} - {{ $usuario_asociado->name}}
+                                <option value="{{ $usuario_asociado->id }}"
+                                    {{ old('usuario_asociado') == $rol ? 'selected' : '' }}>
+                                    {{ $usuario_asociado->id }} - {{ $usuario_asociado->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('usuario_asociado')
+                        @error('user_vend_id')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror

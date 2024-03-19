@@ -11,7 +11,7 @@
                         document.write(new Date().getFullYear())
                     </script>,
                     made with <i class="fa fa-heart"></i> by
-                    <a href="#" class="font-weight-bold" target="_blank">QORI TRAVEL</a>
+                    <a href="#" class="font-weight-bold" target="_blank">The Snausers</a>
                     for a better web.
 
                 </div>

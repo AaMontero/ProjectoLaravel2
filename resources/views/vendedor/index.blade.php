@@ -98,7 +98,7 @@
         <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
             <div id="users">
                 <input class="search mb-4" placeholder="Buscar" />
-                <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300" style="overflow-x: auto;">
+                <table class="w-100 bg-[#f8fafc] dark:bg-gray-800 border border-gray-300" style="overflow-x: auto;">
                     <thead>
                         <tr>
                             <th class="py-2 px-4 border-b text-center ">ID</th>

@@ -5,6 +5,36 @@
         </h2>
     </x-slot>
     <script>
+        let listaCaracteristicas = [];
+
+        function agregarCaracteristica() {
+            const caracteristicaCiudad = document.getElementById("lugar_caracteristica");
+            console.log(caracteristicaCiudad);
+            const caracteristicaInput = document.getElementById("caracteristica");
+            console.log(caracteristicaInput);
+            const caracteristicaTexto = caracteristicaInput.value.trim();
+            const caracteristicaCiudadTexto = caracteristicaCiudad.value.trim();
+            if (caracteristicaTexto !== "") {
+                // Validación para asegurar que caracteristicaCiudadTexto no esté vacía
+                const caracteristicaCiudadValidada = caracteristicaCiudadTexto !== "" ? caracteristicaCiudadTexto :
+                    "";
+
+                const caracteristica = [
+                    caracteristicaTexto, caracteristicaCiudadValidada
+                ];
+
+                listaCaracteristicas.push(caracteristica);
+                caracteristicaInput.value = "";
+                caracteristicaCiudad.value = "";
+                // Cambiado a innerHTML para mostrar la lista en un elemento div
+                document.getElementById("lista_caracteristicas").value = JSON.stringify(listaCaracteristicas);
+                alert("Se ha agregado la característica: " + caracteristicaTexto);
+            } else {
+                alert("Por favor, ingresa una característica válida.");
+            }
+
+            console.log(listaCaracteristicas);
+        }
         //Toca cambiar para que si no se da click en uno de los botones regrese la lista sin modificar
         function cambiarCaracteristica(caracteristicaId) {
             event.preventDefault();
@@ -29,6 +59,9 @@
             //console.log(document.getElementById("lista_caracteristicas_mod").value);  
 
         }
+
+
+
     </script>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4">
@@ -95,18 +128,21 @@
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <div>
-                            <label class="mt-3 font-bold ml-4">Imagen actual:</label>
+                        {{-- //cargar imagenes del paquete --}}
+                        <div class="flex flex-wrap" id="image-preview-container">
                             @if ($paquete->imagen_paquete)
-                                <img src="{{ asset('uploads/paquetes/' . $paquete->imagen_paquete) }}"
-                                    alt="Imagen actual del paquete" class="mb-2 max-w-64 max-h-64">
+                                @foreach (explode(',', $paquete->imagen_paquete) as $imageName)
+                                    <div class="w-1/4 p-2">
+                                        <img src="{{ asset('uploads/paquetes/' . $imageName) }}"
+                                            alt="Imagen actual del paquete" class="w-full h-auto rounded-lg">
+                                    </div>
+                                @endforeach
                             @endif
                         </div>
-
+                        
                         <label class="mt-3 font-bold ml-4" for="imagen_paquete">Cambiar Imagen:</label>
-                        <input type="file" name="imagen_paquete" class="form-control mb-2">
+                        <input type="file" name="imagen_paquete[]" id="imagen_paquete" class="form-control mb-2" multiple>
                         <input type="hidden" id="lista_caracteristicas_mod" name="lista_caracteristicas_mod">
-
                         <div>
                             <label class="mt-3 font-bold ml-4 font-bold">Características Actuales</label>
 
@@ -138,7 +174,7 @@
                         <label class="mt-3 font-bold ml-4">Agregar Nueva caracteristica</label>
                         <div class="flex mt-0">
 
-                            <input type="text" name="ciudad_caracteristica" id="ciudad_caracteristica"
+                            <input type="text" name="lugar_caracteristica" id="lugar_caracteristica"
                                 class="block w-2/6 mr-4 rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
                                 placeholder="{{ __('Lugar') }}" value="{{ old('ciudad_caracteristica') }}">
 
@@ -160,5 +196,37 @@
             </div>
         </div>
     </div>
-    <script></script>
+    <style>
+        .img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-right: 5px;
+        }
+    </style>
+    <script>
+        document.getElementById('imagen_paquete').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('image-preview-container');
+            previewContainer.innerHTML = ''; // Limpiar la vista previa
+    
+            for (const file of files) {
+                const reader = new FileReader();
+    
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.alt = 'Imagen previa del paquete';
+                    img.className = 'w-full h-auto rounded-lg';
+    
+                    const div = document.createElement('div');
+                    div.className = 'w-1/4 p-2';
+                    div.appendChild(img);
+    
+                    previewContainer.appendChild(div);
+                };
+    
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </x-app-layout>

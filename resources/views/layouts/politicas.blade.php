@@ -1,5 +1,3 @@
-<x-app-layout>
-
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <div class=" flex items-center justify-center">
         <div class=" py-6 px-4 bg-white shadow-lg rounded-lg">
@@ -128,5 +126,5 @@
 
     </p>
     </div>
-</x-app-layout>
+
 @include('layouts.footer')

@@ -9,7 +9,7 @@
     <style>
         .imagen{
         background-image: url("{{ asset('images/travel.jpg') }}");
-        height: 575px;
+        height: 650px;
         width: 1400px;
         margin-left: auto;
         margin-right: auto;

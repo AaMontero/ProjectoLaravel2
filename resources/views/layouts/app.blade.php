@@ -9,7 +9,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Qori Travel') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,11 +28,11 @@
         @php
             use App\Models\Notificacion;
             $notificaciones = Notificacion::where('visto', false)
-                ->orderBy('created_at', 'desc') 
+                ->orderBy('created_at', 'desc')
                 ->get()
-                ->groupBy('descripcion') 
+                ->groupBy('descripcion')
                 ->map(function ($group) {
-                    return $group->first(); 
+                    return $group->first();
                 });
         @endphp
 

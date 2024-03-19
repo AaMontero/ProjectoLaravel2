@@ -12,17 +12,18 @@
                 {{ __('Logs') }}
             </x-nav-link>
             @endrole
-            <x-nav-link href="{{ route('vendedores.pagosPendientes') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
+            <x-nav-link href="{{ route('vendedores.pagosPendientes') }}"
+                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                 {{ __('Pagos pendientes') }}
             </x-nav-link>
         </div>
     </x-slot>
     @role('superAdmin')
-    <div class="py-2">
-        <div class="max-w mx-auto px-2 lg:px-20 mb-4">
-            <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
+        <div class="py-2">
+            <div class="max-w mx-auto px-2 lg:px-20 mb-4">
+                <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
 
-                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
+                    <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
 
                     <div class="w-100 bg-[#f8fafc] dark:bg-gray-800 border border-gray-300 overflow-auto">
                         <table class="w-full">
@@ -61,12 +62,12 @@
                         </table>
 
 
-                    </div>
+                        </div>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endrole
 </x-app-layout>
 

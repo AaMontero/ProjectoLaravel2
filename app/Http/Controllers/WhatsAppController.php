@@ -22,11 +22,9 @@ class WhatsAppController extends Controller
     {
         $mensaje = $request->mensajeEnvio;
         $numeroEnviar = $request->numeroEnvio;
-
         if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
-
         $telefonoEnviaID = "258780720641927";
         $apiUrl = 'https://graph.facebook.com/v18.0/';
         $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';

@@ -252,7 +252,12 @@
         function crearCuadroFecha(fecha) {
             var divFecha = document.createElement("div");
             var small = document.createElement("small");
-            small..textContent = fecha;
+            small.textContent = fecha;
+            divFecha.style = 'text-align: center; margin-bottom: 8px;';
+            small.style =
+                ' font-weight: bold; padding: 5px; background-color: white; border-radius: 5px; margin-bottom: 4px; color: gray';
+            divFecha.appendChild(small);
+            return divFecha;
         }
 
         function crearMensajeEnviado(elemento) {
@@ -348,25 +353,32 @@
 
             // Mostrar el teléfono del chat actual
             document.getElementById("telefono-chat").textContent = telefono;
-            var horaMensajeAnterior = null; 
-            if (mensajes && mensajes.length > 0) {
-                mensajes.forEach(function(elemento) {
-                    var elementoCreado;
-                    if(horaMensajeAnterior !== null &&horaMensajeAnterior != horaMensajeNuevo){
+            var horaMensajeAnterior = null;
 
+            if (mensajes && mensajes.length > 0) {
+                var fecha = mensajes[0]['fecha_hora'].substring(0, 10);
+                elementoCreado = crearCuadroFecha(transformarFecha(fecha));
+                lista.appendChild(elementoCreado);
+                mensajes.forEach(function(elemento) {
+                    var fecha = elemento['fecha_hora'].substring(0, 10);
+                    var elementoCreado;
+                    console.log("Los datos de las fechas son: " + horaMensajeAnterior + "    " + fecha);
+                    if (horaMensajeAnterior !== null && horaMensajeAnterior != fecha) {
+                        elementoCreado = crearCuadroFecha(transformarFecha(fecha));
+                        lista.appendChild(elementoCreado);
                     }
                     if (elemento['telefono_wa'] == telefonoEmisor) {
                         elementoCreado = crearMensajeEnviado(elemento);
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
-                            
+
                             elementoCreado = crearMensajeImgRecibido(elemento);
                         } else {
                             elementoCreado = crearMensajeRecibido(elemento);
                         }
 
                     }
-
+                    horaMensajeAnterior = fecha;
                     lista.appendChild(elementoCreado);
                 });
             }
@@ -401,6 +413,21 @@
             lista.appendChild(crearMensajeRecibido(objeto));
 
         });
+
+        function transformarFecha(fechaString) {
+            var partesFecha = fechaString.split('-');
+            var año = partesFecha[0];
+            var mes = partesFecha[1];
+            var dia = partesFecha[2];
+            var fecha = new Date(año, mes - 1,
+                dia);
+            var nombresMeses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre",
+                "octubre", "noviembre", "diciembre"
+            ];
+            var fechaFormateada = dia + " de " + nombresMeses[mes - 1] + " de " + año;
+
+            return fechaFormateada;
+        }
     </script>
 
 </x-app-layout>

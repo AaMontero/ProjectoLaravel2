@@ -1,19 +1,20 @@
 <x-app-layout>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Packages') }}
             </h2>
             @role('Administrador|superAdmin')
-            <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
-                <span class="mr-2">Agregar un nuevo paquete</span>
-                <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </div>
+                <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
+                    <span class="mr-2">Agregar un nuevo paquete</span>
+                    <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
             @endrole
         </div>
     </x-slot>
@@ -75,9 +76,12 @@
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="imagen_paquete">Imagen del paquete:</label>
-                        <input type="file" name="imagen_paquete" id="imagen_paquete" class="form-control mb-2"
-                            value="{{ old('imagen_paquete') }}">
+                        <label class="mt-3 font-bold p-0 ml-4" for="imagen_paquete">Imágenes del paquete:</label>
+                        <input type="file" name="imagen_paquete[]" id="imagen_paquete" class="form-control mb-2"
+                            multiple>
+                        <div id="preview-container" class="flex flex-wrap">
+                            <!-- Aquí se mostrarán las imágenes -->
+                        </div>
                         @error('imagen_paquete')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
@@ -105,6 +109,27 @@
                         </div>
 
                         <script>
+                            //previsializar las imagenes antes de subirlas
+                            document.getElementById('imagen_paquete').addEventListener('change', function(e) {
+                                var files = e.target.files;
+                                var previewContainer = document.getElementById('preview-container');
+                                previewContainer.innerHTML = '';
+
+                                for (var i = 0; i < files.length; i++) {
+                                    var file = files[i];
+                                    var reader = new FileReader();
+
+                                    reader.onload = function(e) {
+                                        var img = document.createElement('img');
+                                        img.src = e.target.result;
+                                        img.classList.add('preview-image');
+                                        previewContainer.appendChild(img);
+                                    }
+
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+
                             function abrirVentanaAgregarPaquete() {
 
                                 var ventanaAgregarPaquete = document.getElementById("idAgregarPaquete");
@@ -147,13 +172,19 @@
                                 console.log(listaCaracteristicas);
                             }
                         </script>
-                        
+
                         <x-primary-button class='mt-4'>Agregar nuevo paquete</x-primary-button>
                     </form>
                 </div>
             </div>
         </div>
         <style>
+            .preview-image {
+                max-width: 200px;
+                max-height: 200px;
+                margin-right: 5px;
+            }
+
             .spaninfo {
                 color: black;
             }
@@ -171,7 +202,16 @@
                 font-size: 2rem;
                 text-align: center;
             }
+
+            .imagen-insertada {
+                width: 300px;
+                /* Ancho fijo */
+                height: 200px;
+                /* Alto fijo */
+            }
         </style>
+
+
         <div class="flex items-center w-full ml-10 pt-4">
             <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex space-x-4 w-full">
                 <div class = "w-1/4 flex">
@@ -225,12 +265,35 @@
 
         <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
             @foreach ($paquetes as $paquete)
-                <div class = "text-center">
+                <div class = "text-center ">
                     <span class = "spanTituloPaquete ml-5 ">{{ $paquete->nombre_paquete }}</span></p>
                 </div>
 
                 <div
                     class="p-6 bg-transparent flex justify-between items-center border-b border-gray-300 dark:border-gray-700">
+                    <div style="width: 300px; height: 200px; overflow: hidden;" id="carouselExampleFade"
+                        class="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- Slides -->
+                            @foreach (explode(',', $paquete->imagen_paquete) as $index => $imageName)
+                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                    <img src="{{ asset('uploads/paquetes/' . $imageName) }}"
+                                        class="d-block w-64 h-48 object-cover mx-auto" alt="Imagen del paquete"
+                                        loading="lazy">
+                                </div>
+                            @endforeach
+                        </div>
+                        <!-- Botones de navegación -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                          </button>
+                          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                          </button>
+                    </div>
+
 
                     <div class="w-3/5 h-3/5 text-gray-800 dark:text-gray-200">
 
@@ -277,10 +340,6 @@
 
                         </div>
 
-                    </div>
-                    <div class="w-2/5 h-3/5">
-                        <img class="w-full h-full rounded-lg" src='uploads/paquetes/{{ $paquete->imagen_paquete }}'
-                            alt="Imagen del paquete">
                     </div>
 
 
@@ -335,6 +394,8 @@
 
     </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
     @include('layouts.footer')
 </x-app-layout>

@@ -1,4 +1,5 @@
 <x-guest-layout>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <form method="POST" action="{{ route('register') }}">
         @csrf
         <!-- Name -->
@@ -57,3 +58,4 @@
         
     </form>
 </x-guest-layout>
+@include('layouts.footer')

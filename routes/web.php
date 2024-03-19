@@ -125,6 +125,10 @@ Route::middleware('auth')->group(function () {
         ->name('contrato.vendedores');
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
         ->name('contrato.add_vendedores');
+        Route::delete('/eliminar-contrato/{contrato}', [ContratoController::class, 'destroy'])
+        ->name('eliminar.contrato');
+    
+
 
     Route::get('buscar_contrato', [ContratoController::class, 'buscarContrato'])
         ->name('buscar_contrato');
@@ -160,8 +164,8 @@ Route::middleware('auth')->group(function () {
         return view('layouts.terminos');
     })->name('terminos');
      //Log
-     Route::get('/log', [UserActionsController::class, 'index'])
-     ->name('log')
+     Route::get('/logs', [UserActionsController::class, 'index'])
+     ->name('logs.log')
      ->middleware('checkRole:superAdmin');
 
     //Notificaciones 

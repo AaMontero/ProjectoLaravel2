@@ -7,6 +7,7 @@ use App\Models\CaracteristicaPaquete;
 use App\Models\UserAction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\File;
 
 class PaqueteController extends Controller
 {
@@ -84,17 +85,22 @@ class PaqueteController extends Controller
                 'num_noches' => ['required', 'integer', 'min:1'],
                 'precio_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
                 'precio_no_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
-                'imagen_paquete' => ['required', 'min:3', 'max:255'],
+                'imagen_paquete' => ['required', 'max:255'],
             ]);
 
+            $imageNames = [];
+
             if ($request->hasFile('imagen_paquete')) {
-                $file = $request->file('imagen_paquete');
-                $extension = $file->getClientOriginalExtension();
-                $filename = time() . "." . $extension;
-                $file->move('uploads/paquetes/', $filename);
-                $validated['imagen_paquete'] = $filename;
+                foreach ($request->file('imagen_paquete') as $file) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time() . '_' . uniqid() . '.' . $extension;
+                    $folderName = $request->input('nombre_paquete'); // Obtener el nombre del paquete desde el formulario
+                    $file->move('uploads/paquetes/' . $folderName, $filename); // Mover la imagen a la carpeta del paquete
+                    $imageNames[] = $folderName . '/' . $filename; // Guardar la ruta completa de la imagen
+                }
             }
 
+            $validated['imagen_paquete'] = implode(',', $imageNames);
             $paquete = $request->user()->paquetes()->create($validated);
             $listaCaracteristicas = json_decode($request->get('lista_caracteristicas'));
             foreach ($listaCaracteristicas as $caracteristica) {
@@ -145,15 +151,41 @@ class PaqueteController extends Controller
             'precio_no_afiliado' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
         ]);
 
+
         if ($request->hasFile('imagen_paquete')) {
-            $file = $request->file('imagen_paquete');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . "." . $extension;
-            $file->move('uploads/paquetes/', $filename);
-            $validated['imagen_paquete'] = $filename;
+            $folderName = $request->input('nombre_paquete');
+            $folderPath = 'uploads/paquetes/' . $folderName;
+
+            // Eliminar todos los archivos existentes en la carpeta
+            File::cleanDirectory($folderPath);
+
+            $imageNames = []; // Para almacenar los nombres de los archivos subidos
+
+            // Iterar sobre cada archivo cargado
+            foreach ($request->file('imagen_paquete') as $file) {
+                if ($file->isValid()) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time() . '_' . uniqid() . '.' . $extension;
+
+                    // Mover el archivo a la carpeta específica
+                    $file->move($folderPath, $filename);
+
+                    // Guardar el nombre del archivo en la lista de nombres de archivos
+                    $imageNames[] = $folderName . '/' . $filename;
+                }
+            }
+
+            // Verificar si se han cargado archivos antes de asignarlos al arreglo de datos validados
+            if (!empty($imageNames)) {
+                // Asignar la lista de nombres de archivos al arreglo de datos validados
+                $validated['imagen_paquete'] = implode(',', $imageNames);
+            } else {
+                // Manejo de errores cuando no se cargan imágenes válidas
+            }
         } else {
-            //Manejo de errores cuando no haya una imagen
+            // Manejo de errores cuando no haya imágenes
         }
+
 
         if ($listaModificada != "") {
             $listaCaracteristicas = json_decode($request->get('lista_caracteristicas_mod'));
@@ -198,7 +230,13 @@ class PaqueteController extends Controller
     {
         // Guardar los datos del paquete antes de eliminarlo
         $paqueteEliminado = $paquete->toArray();
-        
+
+        // Eliminar la carpeta que contiene las imágenes del paquete
+        $folderName = 'uploads/paquetes/' . $paquete->nombre_paquete;
+        if (File::exists($folderName)) {
+            File::deleteDirectory($folderName);
+        }
+
         // Crear un registro en la tabla UserAction antes de eliminar el paquete
         UserAction::create([
             'user_id' => auth()->id(),
@@ -208,12 +246,11 @@ class PaqueteController extends Controller
             'modified_data' => json_encode($paqueteEliminado),
             // Otros campos relevantes que desees registrar en el log
         ]);
-    
+
+        // Eliminar el paquete
         $paquete->delete();
-        
+
         return redirect()->route('paquetes.paquetes')
             ->with('status', __('Package deleted successfully'));
     }
-    
-
 }

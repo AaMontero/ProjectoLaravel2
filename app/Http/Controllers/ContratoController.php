@@ -17,6 +17,7 @@ use App\Http\Controllers\PagoVendedorController;
 use App\Models\UserAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\File;
 
 $meses = array(
     1 => 'Enero',
@@ -418,8 +419,26 @@ class ContratoController extends Controller
      */
     public function destroy(Contrato $contrato)
     {
-        //
+        // Guardar los datos del paquete antes de eliminarlo
+        $contratoEliminado = $contrato->toArray();
+        // Crear un registro en la tabla UserAction antes de eliminar el paquete
+        UserAction::create([
+            'user_id' => auth()->id(),
+            'action' => 'eliminar',
+            'entity_type' => 'contrato',
+            'entity_id' => $contrato->id,
+            'modified_data' => json_encode($contratoEliminado),
+        ]);
+
+
+        // Eliminar el paquete
+        $contrato->delete();
+
+      
+        return redirect()->route('contrato.index')
+            ->with('status', __('Contrato eliminando exitosamente'));
     }
+
 
     private function validarCampos(
         $nombres,

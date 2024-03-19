@@ -337,7 +337,6 @@ class ContratoController extends Controller
                 'action' => 'crear', // Acción de crear contrato
                 'entity_type' => 'contrato', // Tipo de entidad
                 'entity_id' => $contratoIngresado->id, // ID del contrato creado
-                'modified_data' => json_encode(['contrato' => $contratoIngresado->toArray()]), // Datos modificados
                 // Otros campos relevantes que desees registrar en el log
             ]);
             return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
@@ -387,6 +386,28 @@ class ContratoController extends Controller
     {
         // Guardar los datos del paquete antes de eliminarlo
         $contratoEliminado = $contrato->toArray();
+
+        // Construir la ruta de la carpeta del contrato
+        $nombreCliente = $contrato->cliente->nombres . ' ' . $contrato->cliente->apellidos;
+        $fechaCreacion = $contrato->created_at->format('Y-m-d');
+        $nombreUsuario = getenv("USERNAME");
+        $nombreCarpeta = $nombreCliente . " " . $fechaCreacion;
+        $rutaCarpeta = "C:\\Users\\$nombreUsuario\\Documents\\Contratos\\$nombreCarpeta";
+
+        // Verificar si la carpeta existe antes de intentar eliminarla
+        if (is_dir($rutaCarpeta)) {
+            // Eliminar todos los archivos dentro del directorio
+            foreach (glob($rutaCarpeta . '/*') as $archivo) {
+                if (is_file($archivo))
+                    unlink($archivo); // Eliminar el archivo
+            }
+
+            // Eliminar el directorio vacío
+            if (!rmdir($rutaCarpeta)) {
+                throw new Exception("Error al eliminar la carpeta: $rutaCarpeta");
+            }
+        }
+
         // Crear un registro en la tabla UserAction antes de eliminar el paquete
         UserAction::create([
             'user_id' => auth()->id(),
@@ -400,7 +421,7 @@ class ContratoController extends Controller
         // Eliminar el paquete
         $contrato->delete();
 
-      
+
         return redirect()->route('contrato.index')
             ->with('status', __('Contrato eliminando exitosamente'));
     }

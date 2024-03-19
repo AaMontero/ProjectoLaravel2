@@ -20,8 +20,6 @@ return new class extends Migration
         $role2 = Role::create(['name' => 'Host']);
         $role3 = Role::create(['name' => 'Asesor']);
         $role3 = Role::create(['name' => 'superAdmin']);
-        // $user = User::find(1);
-        // $user->assignRole($role1);
     }
 
     /**
@@ -29,6 +27,5 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
     }
 };

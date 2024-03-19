@@ -24,6 +24,7 @@ class RolController extends Controller
     {
         try {
             $rolId = $request->input('rol_id');
+            file_put_contents("llegaRol.txt", $rolId); 
 
             // Asignar el rol al usuario
             $user->syncRoles([$rolId]);

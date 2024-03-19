@@ -14,13 +14,13 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    
-     public function handle(Request $request, Closure $next, ...$roles)
-     {
-         if (Auth::check() && Auth::user()->hasAnyRole($roles)) {
-             return $next($request);
-         }
- 
-         return redirect('/')->with('error', 'Acceso no autorizado');
-     }
+
+    public function handle(Request $request, Closure $next, ...$roles)
+    {
+        if (Auth::check() && Auth::user()->hasAnyRole($roles)) {
+            return $next($request);
+        }
+
+        return redirect('/')->with('error', 'Acceso no autorizado');
+    }
 }

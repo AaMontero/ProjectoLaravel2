@@ -26,7 +26,7 @@
 
                     @role('Administrador|superAdmin')
                     <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
-                        {{ __('Dashboard') }}
+                        {{ __('Chats') }}
                     </x-nav-link>
                     <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                         {{ __('Paquetes') }}
@@ -228,7 +228,7 @@
         <div class="pt-2 pb-3 space-y-1">
             @role('Administrador|superAdmin')
                 <x-responsive-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
-                    {{ __('Dashboard') }}
+                    {{ __('Chats') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                     {{ __('Paquetes') }}

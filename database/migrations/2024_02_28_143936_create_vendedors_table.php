@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('vendedors', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->String("nombres"); 
-            $table->String("rol"); 
-            $table->String("porcentaje_ventas"); 
+            $table->String("nombres");
+            $table->String("rol");
+            $table->String("porcentaje_ventas");
             $table->boolean("activo")->default(true);
-            $table->decimal('saldo_pendiente', 10, 2)->nullable(); 
+            $table->decimal('saldo_pendiente', 10, 2)->nullable();
+            $table->foreignId('user_vend_id')->constrained('users');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
         });
     }

@@ -44,9 +44,7 @@ class ContratoController extends Controller
         $clientes = Cliente::all();
 
         return view('contratos.contrato', [
-            "contratos" => Contrato::with('Cliente')->get(),
-            // "contratos" => Contrato::orderBy('created_at', 'desc')->latest()->paginate(30),
-            "contratos" => Contrato::all(),
+            "contratos" => Contrato::with('Cliente')->orderBy('created_at', 'desc')->get(),
             "clientes" => $clientes,
             "vendedores" => Vendedor::all(),
         ]);
@@ -56,27 +54,12 @@ class ContratoController extends Controller
     public function obtenerDetallesCliente($id)
     {
         $cliente = Cliente::find($id);
-
         return response()->json($cliente);
     }
-    //Busqueda en el contrato
-    public function buscarContrato(Request $request)
+    public function eliminarContrato($contrato)
     {
-        $contratoId = $request->input('id');
-
-        // Buscar el contrato por su ID en la base de datos
-        $contrato = Contrato::where('contrato_id', $contratoId)->first();
-
-        // Si se encuentra el contrato, devolver los datos en formato JSON
-        if ($contrato) {
-            return response()->json($contrato);
-        }
-
-        // Si no se encuentra el contrato, devolver una respuesta JSON vacía
-        return response()->json(null);
+        //FALTA POR IMPLEMENTAR 
     }
-
-
 
 
     public function add_contrato(Cliente $cliente)
@@ -123,18 +106,16 @@ class ContratoController extends Controller
         $utils = new Utils();
         $utils->agregarPago($vendedor, $contrato, $controlerPV);
         $utils->agregarPago($closer1, $contrato, $controlerPV);
-        $utils->agregarPago($closer2, $contrato, $controlerPV);
+        if (isset($closer2)) {
+            $utils->agregarPago($closer2, $contrato, $controlerPV);
+        }
+
         $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
 
         return to_route('contrato.index')
             ->with('status', __('Contrato creado exitosamente'));
     }
-    public function create(Request $request)
-    {
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $utils = new Utils();
@@ -142,14 +123,13 @@ class ContratoController extends Controller
         date_default_timezone_set('America/Guayaquil');
         $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
         //Inicializacion de variables
-        $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $cedula = $contratoId = $formasPago = $pagareText = $montoCuotaPagare = "";
+        $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $contratoId = $pagareText = $montoCuotaPagare = "";
         $aniosContrato = $montoContrato = 0;
         $bonoQory = $bonoQoryInt = $contienePagare = $contieneCreditoDirecto = false;
         $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date("Y-m-d");
         try {
             $tieneUsuario = $request->usuario_previo;
             if (empty($tieneUsuario)) {
-                file_put_contents("entraIF", "entra al if");
                 $request->validate([
                     'cedula' => ['required', 'min:10', 'max:10'],
                     'nombres' => ['required', 'min:5', 'max:255'],
@@ -162,8 +142,6 @@ class ContratoController extends Controller
                     'monto_contrato' => ['required', 'numeric', 'min: 0.01'],
                 ]);
             } else {
-
-                file_put_contents("entraElse", "entra al else");
                 $request->validate([
                     'ubicacion_sala' => ['required', 'min:5', 'max:255'],
                     'anios_contrato' => ['required', 'integer', 'min:0'],
@@ -186,6 +164,7 @@ class ContratoController extends Controller
             $okBono = isset($request->bono_hospedaje);
             $okBonoInt = isset($request->bono_hospedaje_internacional);
             $listaOtros = [];
+
             $fomasPagoSinComillas = str_replace("[", "", $formasPago);
             $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas);
             $formasPagoLista = explode(",", $fomasPagoSinComillas2);
@@ -193,9 +172,7 @@ class ContratoController extends Controller
 
             foreach ($formasPagoLista as $elem) {
                 $elemDividido = explode(" ", $elem);
-
-                // Verifica si $elemDividido tiene al menos dos elementos antes de acceder a ellos
-                if (count($elemDividido) >= 2) {
+                if (count($elemDividido) >= 2 && strpos($elem, "Pagaré") === false) {
                     $valNum = $elemDividido[0];
                     $valText = implode(" ", array_slice($elemDividido, 1));
                     $listaOtros[] = [$valNum, $valText];
@@ -234,17 +211,12 @@ class ContratoController extends Controller
                     $contratoId = "QT" . $codigo_ciudad;
                 }
             }
-
             $nombre_cliente = $nombres . " " . $apellidos;
-
-
             if ($okBono == 1) {
                 $bonoQory = true;
             } else {
                 $bonoQory = false;
             }
-
-
             if ($okBonoInt == 1) {
                 $bonoQoryInt = true;
             } else {
@@ -260,8 +232,8 @@ class ContratoController extends Controller
             if ($abonoCredDir == "") {
                 $abonoCredDir = 0;
             }
-            if ($formasPagoString == "") {
-                echo ("Inserte una forma de pago");
+            if (empty($formasPagoString)) {
+                return redirect()->back()->withErrors(['formas_pago' => 'Inserte una forma de pago'])->withInput();
             } else {
                 foreach ($formasPagoString as $forma) {
                     $formasPago = $formasPago . $forma . "\n \n";
@@ -291,15 +263,12 @@ class ContratoController extends Controller
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                     $funciones->generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valorPagare, $fechaActual, 1, $montoCuotaPagare, $pagareText, $rutaCarpetaSave);
                 }
-
                 echo ("Los documentos se generaron correctamente. \n");
             }
-
             //Creación del cliente
             if (empty($tieneUsuario)) {
                 // Si $tieneUsuario está vacío, busca un cliente por cédula
                 $clienteExiste = Cliente::where('cedula', $numCedula)->first();
-
                 if (!$clienteExiste) {
                     // Si no existe el cliente, crea uno nuevo asociándolo al usuario actual
                     $controler = new ClienteController();
@@ -314,12 +283,9 @@ class ContratoController extends Controller
                     $cliente->email = $email;
                     $cliente->activo = true;
                     $cliente->cliente_user = $controler->obtenerNick($nombres, $apellidos);
-
                     // Asociar el cliente al usuario actual
                     $cliente->user()->associate(auth()->user());
-
                     $cliente->save();
-
                     $persona = $cliente;
                 } else {
                     // Si ya existe el cliente, asigna el cliente existente a $persona
@@ -367,13 +333,13 @@ class ContratoController extends Controller
 
             // Crear un registro en la tabla de registros
             UserAction::create([
-            'user_id' => $request->user()->id,
-            'action' => 'crear', // Acción de crear contrato
-            'entity_type' => 'contrato', // Tipo de entidad
-            'entity_id' => $contratoIngresado->id, // ID del contrato creado
-            'modified_data' => json_encode(['contrato' => $contratoIngresado->toArray()]), // Datos modificados
-            // Otros campos relevantes que desees registrar en el log
-             ]);
+                'user_id' => $request->user()->id,
+                'action' => 'crear', // Acción de crear contrato
+                'entity_type' => 'contrato', // Tipo de entidad
+                'entity_id' => $contratoIngresado->id, // ID del contrato creado
+                'modified_data' => json_encode(['contrato' => $contratoIngresado->toArray()]), // Datos modificados
+                // Otros campos relevantes que desees registrar en el log
+            ]);
             return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
 
             //return route('contrato.vendedores', ['contrato' => $contrato]);

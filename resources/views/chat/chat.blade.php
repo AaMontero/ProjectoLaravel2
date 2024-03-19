@@ -20,8 +20,8 @@
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
                 @php
-                    $ultimoMensaje = $mensajesTelefono->last(); // Obtener el último mensaje
-                    $leido = $ultimoMensaje['leido']; // Verificar si el último mensaje está marcado como leído
+                    $ultimoMensaje = $mensajesTelefono->last();
+                    $leido = $ultimoMensaje->visto == 1;
                 @endphp
                 <div class="space-y-4">
                     <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
@@ -34,8 +34,8 @@
                             {{ $telefono }}
                         </div>
                         @if (!$leido)
-                            <span
-                                class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo</span>
+                            <span class="bg-red-500 text-white text-xs font-semibold rounded-full px-2 ml-2">Nuevo
+                            </span>
                         @endif
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                 });
         }
 
-        function llamadaAjax() {
+        function llamadaAjax() { //
             return new Promise((resolve, reject) => {
                 const textoIngresado = document.getElementById("mensajeInput").value;
                 const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
@@ -121,7 +121,6 @@
                         return response.text();
                     })
                     .then((responseData) => {
-                        //console.log(responseData);
                         resolve(responseData);
                     })
                     .catch((error) => {
@@ -298,6 +297,27 @@
             return divGrande;
         }
 
+        function marcarMensajesComoLeidos(idChat) {
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/visto/' + idChat, true); // Ruta del endpoint
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log('Mensajes marcados como leídos exitosamente');
+                } else {
+                    console.error('Error al marcar los mensajes como leídos: ' + xhr.status);
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Error de red al marcar los mensajes como leídos');
+            };
+
+            xhr.send(); // Envía la solicitud POST
+        }
+
         function abrirchat(telefono, mensajes) {
             var lista = document.getElementById("miLista"); // Asegúrate de tener la referencia correcta a tu lista
             var VentanaChat = document.getElementById("abrirchat");
@@ -341,10 +361,12 @@
                 });
             }
             setTimeout(function() {
+                VentanaChat.style.display = 'block';
                 elementos.scrollTop = elementos.scrollHeight;
-            }, 100);
+            }, 1000);
+            console.log("El telefono del mensajes : " + telefono);
 
-            VentanaChat.style.display = 'block';
+            marcarMensajesComoLeidos(telefono);
         }
 
 
@@ -367,7 +389,6 @@
             }
             var lista = document.getElementById("miLista");
             lista.appendChild(crearMensajeRecibido(objeto));
-
 
         });
     </script>

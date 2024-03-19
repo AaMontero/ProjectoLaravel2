@@ -18,63 +18,98 @@
         </div>
     </x-slot>
 
+    <script>
+        function pagarUsuarios(usuarioId) {
+            console.log("El id del usuario que llega es: " + usuarioId);
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/pagoVendedores/' + usuarioId, true); // Ruta del endpoint
+            xhr.setRequestHeader('Content-Type', 'application/json');
 
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log('Se marcaron como pagos los registros');
+                    alert("Se ha registrado el pago");
+                    window.location.reload();
+                } else {
+                    console.error('Error al marcar los pagos como hechos: ' + xhr.status);
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Error de red al marcar como pagos');
+            };
+
+            xhr.send();
+        }
+    </script>
     <div class="py-2 ">
         <div class="max-w mx-auto px-2 lg:px-20 mb-4">
             <h2 class = "ml-8">Pagos Pendientes</h2>
-            <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
-                <div class="p-6 text-gray-900 dark:text-gray-100 ">
-                    <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300">
-                        <thead>
-                            <tr> <!--Etiquetas de la tabla de clientes-->
-                                <th class="py-2 px-4 border-b text-center ">Valor de Pago</th>
-                                <th class="py-2 px-4 border-b text-center ">Fecha</th>
-                                <th class="py-2 px-4 border-b text-center ">Concepto</th>
-                                <th class="py-2 px-4 border-b text-center ">ID del vendedor</th>
-                                <th class="py-2 px-4 border-b text-center ">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pagosPendientes as $pago)
-                                <tr> <!--Tabla que muestra los clientes-->
-                                    <td class="py-2 px-4 border-b text-center">{{ $pago->valor_pago }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $pago->fecha_pago }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $pago->concepto }}</td>
-                                    <td class="py-2 px-4 border-b text-center">{{ $pago->vendedor_id }}</td>
-                                    <td class = "text-right pr-6">
-                                        <x-dropdown class="origin-top absolute ">
-                                            <x-slot name="trigger">
-                                                <button>
-                                                    <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                                    </svg>
-                                                </button>
-                                            </x-slot>
-                                            <x-slot name="content">
-                                                <?php
-                                                
-                                                ?>
-                                                <x-dropdown-link :href="route('pagoVendedor.edit', $pago)">
-                                                    {{ __('Editar Pago') }}
-                                                </x-dropdown-link>
-                                                <x-dropdown-link :href="route('pagoVendedor.pagar', $pago)">
-                                                    {{ __('Pago Realizado') }}
-                                                </x-dropdown-link>
+            @foreach ($pagosPendientesPorVendedor as $vendedorId => $pagosPendientes)
+                <div class="bg-white dark:bg-gray-900 bg-opacity-50 shadow-lg rounded-lg ">
+                    <div class="p-6 text-gray-900 dark:text-gray-100 ">
+                        <div class = "flex justify-between">
+                            <h3 class="font-bold">Vendedor:
+                                {{ $vendedores->first(function ($vendedor) use ($vendedorId) {
+                                    return $vendedor->id == $vendedorId;
+                                })->nombres }}
+                            </h3>
+                            <x-primary-button onclick="pagarUsuarios('{{ $vendedorId }}')"
+                                class="mt-4">Pagar</x-primary-button>
 
+                        </div>
 
-
-                                            </x-slot>
-                                        </x-dropdown>
-                                    </td>
+                        <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300">
+                            <thead>
+                                <tr> <!--Etiquetas de la tabla de clientes-->
+                                    <th class="py-2 px-4 border-b text-center ">Valor de Pago</th>
+                                    <th class="py-2 px-4 border-b text-center ">Fecha</th>
+                                    <th class="py-2 px-4 border-b text-center ">Concepto</th>
+                                    <th class="py-2 px-4 border-b text-center ">ID del vendedor</th>
+                                    <th class="py-2 px-4 border-b text-center ">Opciones</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($pagosPendientes as $pago)
+                                    <tr> <!--Tabla que muestra los clientes-->
+                                        <td class="py-2 px-4 border-b text-center">{{ $pago->valor_pago }}</td>
+                                        <td class="py-2 px-4 border-b text-center">{{ $pago->fecha_pago }}</td>
+                                        <td class="py-2 px-4 border-b text-center">{{ $pago->concepto }}</td>
+                                        <td class="py-2 px-4 border-b text-center">{{ $pago->vendedor_id }}</td>
+                                        <td class = "text-right pr-6">
+                                            <x-dropdown class="origin-top absolute ">
+                                                <x-slot name="trigger">
+                                                    <button>
+                                                        <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5"
+                                                            stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                                        </svg>
+                                                    </button>
+                                                </x-slot>
+                                                <x-slot name="content">
+                                                    <?php
+                                                    
+                                                    ?>
+                                                    <x-dropdown-link :href="route('pagoVendedor.edit', $pago)">
+                                                        {{ __('Editar Pago') }}
+                                                    </x-dropdown-link>
+                                                    <x-dropdown-link :href="route('pagoVendedor.pagar', $pago)">
+                                                        {{ __('Pago Realizado') }}
+                                                    </x-dropdown-link>
+
+                                                </x-slot>
+                                            </x-dropdown>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 
@@ -127,6 +162,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class = "ml-20 mr-20">
+                        <p class="ml-5 flex justify-center items-center list-none space-x-2">
+                            {{ $pagosEfectivos->appends([]) }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

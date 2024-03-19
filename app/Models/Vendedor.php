@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Vendedor extends Model
 {
     protected $fillable = [
-        'nombres', 'rol','porcentaje_ventas', 'activo', 'user_id'
-    ]; 
+        'nombres', 'rol', 'porcentaje_ventas', 'activo', 'user_id', 'user_vend_id'
+    ];
 
-    public function pagosVendedor(){
+    public function pagosVendedor()
+    {
         return $this->hasMany(PagoVendedor::class);
     }
-
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_vend_id');
+    }
     use HasFactory;
-
-    
 }

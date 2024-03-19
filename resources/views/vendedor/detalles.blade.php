@@ -43,7 +43,7 @@
             <div class="py-2">
                 @foreach ($pagosXmeses as $mes => $pagosPorMes)
                     <h2 class="text-lg text-center font-semibold mt-8">
-                        {{$mesesanio[intval(explode("-",$mes)[1])]}} - {{ explode("-",$mes)[0]}} </h2>
+                        {{ $mesesanio[intval(explode('-', $mes)[1])] }} - {{ explode('-', $mes)[0] }} </h2>
 
                     @foreach ($pagosPorMes as $pago)
                         <div class="px-4">

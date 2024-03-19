@@ -65,6 +65,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('pagoVendedor.edit'); // Formulario para editar un pago 
         Route::get('pagoVendedores/{idVendedor}', [PagoVendedorController::class, 'pagarVendedor'])
             ->name('pagoVendedores.pagoVendedor'); //Pagar a un vendedor
+        Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
+            ->name('vendedor.datos_vendedor');
     });
 
     Route::middleware('checkRole:Administrador,Asesor,superAdmin')->group(function () {
@@ -72,8 +74,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('paquetes.paquetes');
         Route::post('/paquetes', [PaqueteController::class, 'store'])
             ->name('paquetes.store');
-        Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
-            ->name('vendedor.datos_vendedor');
+        Route::get('/vendedor/{vendedorId}/datosVendedorV', [VendedorController::class, 'datosVendedorV'])
+            ->name('vendedor.datos_vendedorV');
     });
 
     Route::middleware('checkRole:Administrador,superAdmin,Host')->group(function () {
@@ -143,9 +145,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('contrato.index'); // Mostrar los contratos (Principal)
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
         ->name('contrato.add_vendedores');
-        Route::delete('/eliminar-contrato/{contrato}', [ContratoController::class, 'destroy'])
+    Route::delete('/eliminar-contrato/{contrato}', [ContratoController::class, 'destroy'])
         ->name('eliminar.contrato');
-    
+
 
 
 
@@ -179,10 +181,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/terminos-condiciones', function () {
         return view('layouts.terminos');
     })->name('terminos');
-     //Log
-     Route::get('/logs', [UserActionsController::class, 'index'])
-     ->name('logs.log')
-     ->middleware('checkRole:superAdmin');
+    //Log
+    Route::get('/logs', [UserActionsController::class, 'index'])
+        ->name('logs.log')
+        ->middleware('checkRole:superAdmin');
 
     //Notificaciones 
     Route::get('/cambiarEstadoNot/{notificacion}', [NotificacionController::class, 'leido'])

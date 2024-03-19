@@ -19,13 +19,16 @@ class VendedorController extends Controller
 
     public function index()
     {
-        $vendedoresIDS = DB::table('model_has_roles')
+        $vendedoresIDS = DB::table('model_has_roles')  // ID usuarios vendedores
             ->where('role_id', 3) // 3 es el numero que corresponde a vendedor 
             ->pluck('model_id')
             ->toArray();
-
+        $userVendIds = Vendedor::whereIn('user_vend_id', $vendedoresIDS) //ID usuario sin vendedor asociado
+            ->pluck('user_vend_id')
+            ->toArray();
+        $indicesDiferentes = array_diff($vendedoresIDS, $userVendIds);
         return view('vendedor.index', [
-            "usuarios" => User::whereIn('id', $vendedoresIDS)->get(),
+            "usuarios" => User::whereIn('id', $indicesDiferentes)->get(),
             "vendedores" => Vendedor::all()->where("activo", true),
             "roles" => $this->roles,
             "porcentajes" => $this->porcentajes,
@@ -36,6 +39,34 @@ class VendedorController extends Controller
     public function datosVendedor($vendedorId)
     {
         $vendedor = Vendedor::find($vendedorId);
+        $listaPagos = PagoVendedor::where('vendedor_id', $vendedor->id)
+            ->orderBy('fecha_pago', 'desc')
+            ->get();
+
+        $listaMeses = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        $pagosAgrupados = $listaPagos->groupBy(function ($date) {
+            return Carbon::parse($date->fecha_pago)->format('Y-m'); // Agrupa por año y mes
+        });
+
+        $sumaPendientes = $listaPagos->where('estado', 'Pendiente')->sum('valor_pago');
+        return view(
+            'vendedor.detalles',
+            [
+                'vendedor' => $vendedor,
+                'pagosVendedor' => $listaPagos,
+                'pagosPendientes' => $sumaPendientes,
+                'pagosXmeses' => $pagosAgrupados,
+                'mesesanio' => $listaMeses,
+            ]
+        );
+    }
+
+    public function datosVendedorV($vendedorId)
+    {
+        $vendedor = Vendedor::where('user_vend_id', $vendedorId)->first();
         $listaPagos = PagoVendedor::where('vendedor_id', $vendedor->id)
             ->orderBy('fecha_pago', 'desc')
             ->get();

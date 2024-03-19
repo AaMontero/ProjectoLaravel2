@@ -249,6 +249,12 @@
             return divGrande;
         }
 
+        function crearCuadroFecha(fecha) {
+            var divFecha = document.createElement("div");
+            var small = document.createElement("small");
+            small..textContent = fecha;
+        }
+
         function crearMensajeEnviado(elemento) {
             // Crear elementos DOM
             var divGrande = document.createElement("div");
@@ -342,21 +348,25 @@
 
             // Mostrar el teléfono del chat actual
             document.getElementById("telefono-chat").textContent = telefono;
-
+            var horaMensajeAnterior = null; 
             if (mensajes && mensajes.length > 0) {
                 mensajes.forEach(function(elemento) {
                     var elementoCreado;
+                    if(horaMensajeAnterior !== null &&horaMensajeAnterior != horaMensajeNuevo){
+
+                    }
                     if (elemento['telefono_wa'] == telefonoEmisor) {
                         elementoCreado = crearMensajeEnviado(elemento);
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
-                            console.log("Mensaje que abre el metodo:" + elemento['mensaje_enviado']);
+                            
                             elementoCreado = crearMensajeImgRecibido(elemento);
                         } else {
                             elementoCreado = crearMensajeRecibido(elemento);
                         }
 
                     }
+
                     lista.appendChild(elementoCreado);
                 });
             }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->String("porcentaje_ventas");
             $table->boolean("activo")->default(true);
             $table->decimal('saldo_pendiente', 10, 2)->nullable();
-            $table->foreignId('user_vend_id')->constrained('users');
+            $table->foreignId('user_vend_id')->constrained('users')->default(1);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
         });
     }

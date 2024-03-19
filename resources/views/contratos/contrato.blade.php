@@ -254,7 +254,7 @@
         <div class="p-6 text-gray-900 dark:text-gray-100 overflow-auto">
             <div id="users">
                 <input class="search " placeholder="Buscar" />
-                <table class="w-100 bg-white dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
+                <table class="w-100 bg-[#f8fafc] dark:bg-gray-800 border border-gray-300 " style="overflow-x: auto;">
                     <thead>
                         <tr>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Contrato ID</th>
@@ -272,6 +272,7 @@
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 1 </th>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 2</th>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Jefe Sala</th>
+                            <th class="py-2 px-4 border-b text-center whitespace-nowrap">Opciones</th>
 
                             <div class="py-2">
                                 <div class="max-w mx-auto px-2 lg:px-20 mb-4">
@@ -326,8 +327,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title"style="margin: 0 auto;"
-                                                        id="exampleModalLabel">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
                                                         Información del cliente
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -423,15 +423,15 @@
                                                 </div>
 
                                                 @foreach ($vendedores as $vendedor)
-                                                    @if ($vendedor->id == $contrato->closer_id)
-                                                        <p><strong>Nombre:
-                                                            </strong><span>{{ $vendedor->nombres }}</span></p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de ventas:</strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
-                                                    @endif
+                                                @if ($vendedor->id == $contrato->closer_id)
+                                                <p><strong>Nombre:
+                                                    </strong><span>{{ $vendedor->nombres }}</span></p>
+                                                <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                </p>
+                                                <p><strong>Porcentaje de ventas:</strong>
+                                                    <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                </p>
+                                                @endif
                                                 @endforeach
                                                 <div class="modal-body">
 
@@ -449,8 +449,8 @@
                                         data-bs-target="#exampleModalCloser2{{ $contrato->id }}">
                                         {{ $contrato->closer2_id }}
                                     </button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalCloser2{{ $contrato->id }}"
+                                     <!-- Modal -->
+                                     <div class="modal fade" id="exampleModalCloser2{{ $contrato->id }}"
                                         tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -462,17 +462,17 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 @foreach ($vendedores as $vendedor)
-                                                    @if ($vendedor->id == $contrato->closer2_id)
-                                                        <p><strong>Nombre:
-                                                            </strong><span>{{ $vendedor->nombres }}</span></p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de ventas: </strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
-                                                    @endif
+                                                @if ($vendedor->id == $contrato->closer2_id)
+                                                <p><strong>Nombre:
+                                                    </strong><span>{{ $vendedor->nombres }}</span></p>
+                                                <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                </p>
+                                                <p><strong>Porcentaje de ventas: </strong>
+                                                    <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                </p>
+                                                @endif
                                                 @endforeach
-
+    
                                                 <div class="modal-body">
 
                                                 </div>
@@ -489,8 +489,8 @@
                                         data-bs-target="#exampleModalJefeSala{{ $contrato->id }}">
                                         {{ $contrato->jefe_sala_id }}
                                     </button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalJefeSala{{ $contrato->id }}"
+                                      <!-- Modal -->
+                                      <div class="modal fade" id="exampleModalJefeSala{{ $contrato->id }}"
                                         tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -502,18 +502,18 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 @foreach ($vendedores as $vendedor)
-                                                    @if ($vendedor->id == $contrato->jefe_sala_id)
-                                                        <p><strong>Nombre :</strong>
-                                                            <span>{{ $vendedor->nombres }}</span>
-                                                        </p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de ventas :</strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
-                                                    @endif
+                                                @if ($vendedor->id == $contrato->jefe_sala_id)
+                                                <p><strong>Nombre :</strong>
+                                                    <span>{{ $vendedor->nombres }}</span>
+                                                </p>
+                                                <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                </p>
+                                                <p><strong>Porcentaje de ventas :</strong>
+                                                    <span>{{ $vendedor->porcentaje_ventas }}</span>
+                                                </p>
+                                                @endif
                                                 @endforeach
-
+    
                                                 <div class="modal-body">
 
                                                 </div>
@@ -525,7 +525,28 @@
                                         </div>
                                     </div>
                                 </td>
-
+                                <td class = "text-right pr-6">
+                                    <x-dropdown class="origin-top absolute ">
+                                        <x-slot name="trigger">
+                                            <button>
+                                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                                </svg>
+                                            </button>
+                                        </x-slot>
+                                        <x-slot name="content">
+                                            <form action="{{ route('eliminar.contrato', $contrato->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-500">{{ __('Eliminar Contrato') }}</button>
+                                            </form>
+                                        </x-slot>
+                                        
+                                    </x-dropdown>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

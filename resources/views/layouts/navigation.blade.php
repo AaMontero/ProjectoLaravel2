@@ -14,9 +14,9 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                   <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
+                    </a> 
                 </div>
 
                 <!-- Navigation Links -->
@@ -46,11 +46,7 @@
                     <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                         {{ __('Administracion') }}
                     </x-nav-link>
-                    @role('superAdmin')
-                    <x-nav-link :href="route('log')" :active="request()->routeIs('log.*')" class="no-underline">
-                        {{ __('Log') }}
-                    </x-nav-link>
-                    @endrole
+                   
                     @endrole
 
 
@@ -252,7 +248,7 @@
                 <x-responsive-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                     {{ __('Asignar rol') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log.*')" class="no-underline">
+                <x-responsive-nav-link :href="route('logs.log')" :active="request()->routeIs('logs.*')" class="no-underline">
                     {{ __('Log') }}
                 </x-responsive-nav-link>
             @endrole

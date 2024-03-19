@@ -129,7 +129,11 @@ Route::middleware('auth')->group(function () {
     Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])
         ->name('contrato.vendedores'); //Agregar los vendedores al contrato (JS,C1,C2,V) 
     Route::post('/contrato_vendedores', [ContratoController::class, 'add_vendedores_DB'])
-        ->name('contrato.add_vendedores'); //Registrar los vendedores en el contrato 
+        ->name('contrato.add_vendedores');
+        Route::delete('/eliminar-contrato/{contrato}', [ContratoController::class, 'destroy'])
+        ->name('eliminar.contrato');
+    
+
 
 
 
@@ -168,7 +172,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/terminos-condiciones', function () {
         return view('layouts.terminos');
     })->name('terminos');
-
+     //Log
+     Route::get('/logs', [UserActionsController::class, 'index'])
+     ->name('logs.log')
+     ->middleware('checkRole:superAdmin');
 
     //Notificaciones 
     Route::get('/cambiarEstadoNot/{notificacion}', [NotificacionController::class, 'leido'])

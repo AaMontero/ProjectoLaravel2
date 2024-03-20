@@ -222,7 +222,6 @@ body {
             var modalEditarBtn = document.getElementById("ModalEditar");
             var editarModal = document.getElementById("editarModal");
             // Asignar un evento clic al botón para abrir la ventana modal
-            var span = document.getElementsByClassName("close")[0];
 
             modalEditarBtn.onclick = function(event) {
                 // Mostrar la ventana modal

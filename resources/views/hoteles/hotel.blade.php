@@ -2,32 +2,33 @@
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <x-slot name="header">
-            <div class="flex justify-between items-center">
-                <div x-data="{ showModal: false }" x-cloak class="flex items-center gap-5">
-                    @role('superAdmin')
-                    <x-nav-link  :href="route('paquetes.paquetes')" 
-                    class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <div x-data="{ showModal: false }" x-cloak class="flex items-center gap-5">
+                @role('superAdmin')
+                    <x-nav-link :href="route('paquetes.paquetes')"
+                        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                         {{ __('Paquetes') }}
                     </x-nav-link>
                     {{-- hoteles --}}
-                    <x-nav-link href="{{ route('hotel') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
+                    <x-nav-link href="{{ route('hotel') }}"
+                        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                         {{ __('Hoteles') }}
                     </x-nav-link>
-                    @endrole
-                </div>
-                
-                @role('Administrador|superAdmin')
-                    <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
-                        <span class="mr-2">Agregar un nuevo paquete</span>
-                        <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
-                            stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                    </div>
                 @endrole
             </div>
-        </x-slot>
+
+            @role('Administrador|superAdmin')
+                <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
+                    <span class="mr-2">Agregar un nuevo hotel</span>
+                    <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
+            @endrole
+        </div>
+    </x-slot>
 
     <div class="py-2">
         <div id="idAgregarPaquete" class="max-w-7xl mx-auto sm:px lg:px-8 pb-2"
@@ -36,87 +37,85 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form method="POST" action = "{{ route('paquetes.store') }} " enctype="multipart/form-data">
                         @csrf
-                        <label class="mt-0.5 font-bold p-0 ml-4" for="nombre_paquete">Nombre del paquete:</label>
-                        <input type="text" name="nombre_paquete" id="nombre_paquete"
-                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Ingresa el nombre del paquete') }}" value="{{ old('nombre_paquete') }}">
+                        <div class="flex w-full">
+                            <div class="mr-2 flex-1">
+                                <label class="mt-0.5 font-bold p-0" for="nombre_paquete">País:</label>
+                                <input type="text" name="pais" id="pais"
+                                    class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    placeholder="{{ __('Ingresa el país') }}" value="{{ old('pais') }}">
+                            </div>
+                            <div class="mr-2 flex-1">
+                                <label class="mt-0.5 font-bold p-0" for="nombre_paquete">Provincia:</label>
+                                <input type="text" name="provincia" id="provincia"
+                                    class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    placeholder="{{ __('Ingresa la provincia') }}" value="{{ old('provincia') }}">
+                            </div>
+                            <div class="flex-1">
+                                <label class="mt-0.5 font-bold p-0" for="nombre_paquete">Ciudad:</label>
+                                <input type="text" name="ciudad" id="ciudad"
+                                    class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    placeholder="{{ __('Ingresa la ciudad') }}" value="{{ old('ciudad') }}">
+                            </div>
+                        </div>
+
                         @error('nombre_paquete')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="message">Descripción del paquete:</label>
-                        <input type="text" name="message" id="message"
+                        <label class="mt-3 font-bold p-0 ml-4" for="message">Número de habitaciones:</label>
+                        <input type="number" name="num_h" id="num_h"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Ingresa la descripcion del paquete') }}" value="{{ old('message') }}">
+                            placeholder="{{ __('Ingresa el número de habitaciones') }}" value="{{ old('num_h') }}">
                         @error('message')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="num_dias">Número de días:</label>
-                        <input type="number" name="num_dias" id="num_dias"
+                        <label class="mt-3 font-bold p-0 ml-4" for="num_dias">Número de camas:</label>
+                        <input type="number" name="num_camas" id="num_camas"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Ingresa el número de días') }}" value="{{ old('num_dias') }}">
+                            placeholder="{{ __('Ingresa el número de camas') }}" value="{{ old('num_camas') }}">
                         @error('num_dias')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="num_noches">Número de noches:</label>
-                        <input type="number" name="num_noches" id="num_noches"
+                        <label class="mt-3 font-bold p-0 ml-4" for="precio_afiliado">Precio:</label>
+                        <input type="number" name="precio" id="precio" step="0.01"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Ingresa el número de noches') }}" value="{{ old('num_noches') }}">
-                        @error('num_noches')
-                            <small class = "text-red-500 ml-2">{{ $message }}</small>
-                            <br>
-                        @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="precio_afiliado">Precio Afiliados:</label>
-                        <input type="number" name="precio_afiliado" id="precio_afiliado" step="0.01"
-                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Ingresa el precio de afiliado') }}"
-                            value="{{ old('precio_afiliado') }}">
+                            placeholder="{{ __('Ingresa el precio') }}" value="{{ old('precio') }}">
                         @error('precio_afiliado')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="precio_no_afiliado">Precio no afiliados:</label>
-                        <input type="number" name="precio_no_afiliado" id="precio_no_afiliado" step="0.01"
+                        <label class="mt-3 font-bold p-0 ml-4" for="precio_no_afiliado">Servicios:</label>
+                        <input type="text" name="servicios" id="servicios" step="0.01"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder="{{ __('Ingresa el precio de no afiliados') }}"
-                            value="{{ old('precio_no_afiliado') }}">
+                            value="{{ old('servicios') }}">
                         @error('precio_no_afiliado')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 font-bold p-0 ml-4" for="imagen_paquete">Imágenes del paquete:</label>
-                        <input type="file" name="imagen_paquete[]" id="imagen_paquete" class="form-control mb-2"
-                            multiple>
-                        <div id="preview-container" class="flex flex-wrap">
-                            <!-- Aquí se mostrarán las imágenes -->
-                        </div>
+                        <label class="mt-3 font-bold p-0 ml-4" for="servicios">Tipo de alojamiento:</label>
+                        <select name="servicios" id="servicios" class="form-control mb-2">
+                            <option value="Servicio1">Servicio 1</option>
+                            <option value="Servicio2">Servicio 2</option>
+                            <option value="Servicio3">Servicio 3</option>
+                        </select>
+
                         @error('imagen_paquete')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <input type="hidden" id="lista_caracteristicas" name="lista_caracteristicas">
-
-                        <div>
-                            <label class="mt-1 p-0 ml-4 font-bold" for="lugar_caracteristica">Agregar
-                                Característica</label>
-                            <div class="flex">
-                                <input type="text" name="lugar_caracteristica" id="lugar_caracteristica"
-                                    class="mr-2 mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    placeholder="{{ __('Lugar') }}" value="{{ old('ciudad_caracteristica') }}">
-
-                                <input type="text" name="caracteristica" id="caracteristica"
-                                    class=" mr-2 mb-2 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    placeholder="{{ __('Ingrese su característica aquí') }}"
-                                    value="{{ old('caracteristica') }}">
-
-                                <button type="button" onclick="agregarCaracteristica()"
-                                    class="ml-2 h-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
+                        <label class="mt-3 font-bold p-0 ml-4" for="precio_no_afiliado">Opiniones:</label>
+                        <input type="text" name="servicios" id="servicios" step="0.01"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="{{ __('Ingresa el precio de no afiliados') }}"
+                            value="{{ old('servicios') }}">
+                        @error('precio_no_afiliado')
+                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                       
 
                         <script>
                             //previsializar las imagenes antes de subirlas
@@ -153,37 +152,9 @@
                                 console.log("esta dando click en el boton para ocultar");
 
                             }
-                            let listaCaracteristicas = [];
-
-                            function agregarCaracteristica() {
-                                const caracteristicaCiudad = document.getElementById("lugar_caracteristica");
-                                const caracteristicaInput = document.getElementById("caracteristica");
-                                const caracteristicaTexto = caracteristicaInput.value.trim();
-                                const caracteristicaCiudadTexto = caracteristicaCiudad.value.trim();
-                                if (caracteristicaTexto !== "") {
-                                    // Validación para asegurar que caracteristicaCiudadTexto no esté vacía
-                                    const caracteristicaCiudadValidada = caracteristicaCiudadTexto !== "" ? caracteristicaCiudadTexto :
-                                        "";
-
-                                    const caracteristica = [
-                                        caracteristicaTexto, caracteristicaCiudadValidada
-                                    ];
-
-                                    listaCaracteristicas.push(caracteristica);
-                                    caracteristicaInput.value = "";
-                                    caracteristicaCiudad.value = "";
-                                    // Cambiado a innerHTML para mostrar la lista en un elemento div
-                                    document.getElementById("lista_caracteristicas").value = JSON.stringify(listaCaracteristicas);
-                                    alert("Se ha agregado la característica: " + caracteristicaTexto);
-                                } else {
-                                    alert("Por favor, ingresa una característica válida.");
-                                }
-
-                                console.log(listaCaracteristicas);
-                            }
                         </script>
 
-                        <x-primary-button class='mt-4'>Agregar nuevo paquete</x-primary-button>
+                        <x-primary-button class='mt-4'>Agregar nuevo hotel</x-primary-button>
                     </form>
                 </div>
             </div>
@@ -222,7 +193,7 @@
         </style>
 
 
-        <div class="flex items-center w-full ml-10 pt-4">
+        {{-- <div class="flex items-center w-full ml-10 pt-4">
             <form action="{{ route('paquetes.paquetes') }}" method="GET" class="flex space-x-4 w-full">
                 <div class = "w-1/4 flex">
                     <div class ="w-1/2 mr-4">
@@ -271,9 +242,9 @@
 
 
             </form>
-        </div>
+        </div> --}}
 
-        <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
+        {{-- <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
             @foreach ($paquetes as $paquete)
                 <div class = "text-center ">
                     <span class = "spanTituloPaquete ml-5 ">{{ $paquete->nombre_paquete }}</span></p>
@@ -406,7 +377,7 @@
                     'precio_max' => $precio_max,
                 ]) }}
             </p>
-        </div>
+        </div> --}}
 
 
 

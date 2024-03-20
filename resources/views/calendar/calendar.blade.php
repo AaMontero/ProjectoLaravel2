@@ -120,13 +120,15 @@ body {
                         </select>
                         <label for="">Titular</label>
                         <input type="text" class="form-control" id="author">
-                        <label for="">Hoteles</label>
-                        <select class="form-select" id="note">
+
+                        <label for="hotel">Hoteles</label>
+                        <select class="form-select" id="hotel" name="hotel">
                             <option value="" disabled selected>Selecciona un hotel</option>
-                            <option value="">Diamond beach</option>
-                            <option value="">Marriot</option>
-                            <option value="">hilton colon</option>
+                            @foreach($hoteles as $id => $hotel_nombre)
+                                <option value="{{ $id }}">{{ $hotel_nombre }}</option>
+                            @endforeach
                         </select>
+
                         <label for="">Fecha Inicio</label>
                         <input type="date" class="form-control" id="start_date">
                         <label for="">Fecha salida</label>
@@ -159,10 +161,17 @@ body {
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
                         </select>
-                        <label for="text">Autor</label>
+                        <label for="">Autor</label>
                         <input type="text" class="form-control" id="author_edit">
-                        <label for="">Descripcion</label>
-                        <input type="text" class="form-control" id="note_edit">
+
+                        <label for="hotel">Hoteles</label>
+                        <select class="form-select" id="hotel" name="hotel">
+                            <option value="" disabled selected>Selecciona un hotel</option>
+                            @foreach($hoteles as $id => $hotel_nombre)
+                                <option value="{{ $id }}">{{ $hotel_nombre }}</option>
+                            @endforeach
+                        </select>
+
                         <label for="">Fecha Inicio</label>
                         <input type="date" class="form-control" id="start_date_edit">
                         <label for="">Fecha salida</label>
@@ -181,7 +190,7 @@ body {
 
         <div class="flex justify-between">
 
-            <!-- DEtalles -->
+            <!-- Detalles -->
             <div class="w-1/4 p-4">
                 <div id="event-details">
                     <h3 class="text-lg font-bold mb-2">Detalles del Evento</h3>
@@ -199,7 +208,7 @@ body {
                         <strong>Fecha de Fin:</strong> <span id="fechaFinSpan"></span>
                     </div>
                     <div class="mb-1">
-                        <strong>Hoteles:</strong> <span id="notaSpan"></span>
+                        <strong>Hoteles:</strong> <span id="hotel_nombreSpan"></span>
                     </div>
                     <div class="modal-footer">
                        <button type="button" class="btn btn-success ModalEditar" id="ModalEditar">ModalEditar</button>
@@ -269,7 +278,7 @@ body {
                             var end_date = $('#end_date').val();
                             console.log("El valor de end_date es: " + end_date);
                             var author = $('#author').val();
-                            var note = $('#note').val();
+                            var hotel_nombre = $('#hotel').val();
 
 
                            // Obtener los valores de los campos
@@ -277,10 +286,10 @@ body {
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
                             var author = $('#author').val();
-                            var note = $('#note').val();
+                            var hotel_nombre = $('#hotel').val();
 
                             // Verificar si algún campo está vacío
-                            if (!title || !start_date || !end_date || !author || !note) {
+                            if (!title || !start_date || !end_date || !author || !hotel_nombre) {
                                 // Mostrar mensaje de error
                                 swal("Error", "Todos los campos son obligatorios", "error");
                             } else {
@@ -294,7 +303,7 @@ body {
                                         start_date: start_date,
                                         end_date: end_date,
                                         author: author,
-                                        note: note,
+                                        hotel_nombre: hotel_nombre,
                                         user_id: {{ auth()->id() }}
                                     },
                                     success: function(response) {
@@ -302,7 +311,7 @@ body {
                                         $('#calendar').fullCalendar('renderEvent', {
                                             'title': response.title,
                                             'author': response.author,
-                                            'note': response.note,
+                                            'hotel_nombre': response.hotel_nombre,
                                             'start': response.start_date,
                                             'end': response.end_date,
                                         });
@@ -331,7 +340,7 @@ body {
                             var autorSeleccionado = event.author;
                             var fechaInicioSeleccionado = event.start;
                             var fechaFinSeleccionado = event.end;
-                            var notaSeleccionado = event.note;
+                            var hotel_nombreSeleccionado = event.hotel_nombre;
 
                             var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
                             var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
@@ -340,7 +349,7 @@ body {
                             document.getElementById("autorSpan").innerText = autorSeleccionado;
                             document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
                             document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
-                            document.getElementById("notaSpan").innerText = notaSeleccionado;
+                            document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
 
                             // Establecer los valores en el formulario de edición
                             console.log("Valor del título seleccionado:", tituloSeleccionado);
@@ -348,7 +357,7 @@ body {
                             document.getElementById("author_edit").value = autorSeleccionado;
                             document.getElementById("start_date_edit").value = formatoFechaInicio;
                             document.getElementById("end_date_edit").value = formatoFechaFin;
-                            document.getElementById("note_edit").value = notaSeleccionado;
+                            document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
 
                             $('#updateBtn').unbind().click(function() {
                             console.log('Editado Correctamente');
@@ -357,7 +366,7 @@ body {
                             var end_date = $('#end_date_edit').val();
                             var title = $('#title_edit').val();
                             var author = $('#author_edit').val();
-                            var note = $('#note_edit').val();
+                            var note = $('#hotel_nombre_edit').val();
 
                             $.ajax({
                                 url: "{{ route('calendar.update', '') }}" + '/' + id,
@@ -368,7 +377,7 @@ body {
                                     end_date: end_date,
                                     title: title,
                                     author: author,
-                                    note: note
+                                    hotel_nombre: hotel_nombre
                                 },
                                 success: function(response) {
                                     swal("¡Exito!", "¡Evento Actualizado!", "success").then(() => {

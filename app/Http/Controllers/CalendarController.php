@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Hotel;
 use App\Models\Eventos;
 use App\Models\UserAction;
 use Carbon\Carbon;
@@ -16,6 +16,8 @@ class CalendarController extends Controller
     {
         $events = array();
         $eventos = Eventos::all();
+        $hoteles = Hotel::pluck('id','hotel_nombre');
+
         foreach ($eventos as $evento) {
             $events[] = [
                 'id' => $evento->id,
@@ -23,11 +25,11 @@ class CalendarController extends Controller
                 'start' => $evento->start_date,
                 'end' => $evento->end_date,
                 'author' => $evento->author,
-                'note' => $evento->note,
+                'hotel_nombre' => $evento->hotel_nombre,
             ];
         }
 
-        return view('calendar.calendar', ['event' => $events]);
+        return view('calendar.calendar', ['event' => $events, 'hoteles' => $hoteles]);
     }
 
     public function store(Request $request)
@@ -38,7 +40,7 @@ class CalendarController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'author' => 'required|string',
-            'note' => 'required|string',
+            'hotel_nombre' => 'required|string',
 
         ]);
 
@@ -47,10 +49,14 @@ class CalendarController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'author' => $request->author,
-            'note' => $request->note,
+            'hotel_nombre' => $request->hotel_nombre,
             'user_id' => auth()->id()
 
         ]);
+        $hotel = new Hotel();
+        $hotel->nombre = $request->hotel_nombre;
+        // Otras asignaciones necesarias para tu modelo Hotel
+        $hotel->save();
 
         // Crea un registro en la tabla UserAction
         UserAction::create([
@@ -77,7 +83,7 @@ class CalendarController extends Controller
         $eventos->update([
             'title' => $request->title,
             'author' => $request->author,
-            'note' => $request->note,
+            'hotel_nombre' => $request->hotel_nombre,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
         ]);

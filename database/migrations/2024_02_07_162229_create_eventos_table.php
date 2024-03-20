@@ -17,7 +17,6 @@ return new class extends Migration
             $table->dateTime('start_date'); // Fecha y hora de inicio
             $table->dateTime('end_date'); // Fecha y hora de fin
             $table->string('author');
-
             $table->string('hotel_nombre')->nullable(); // Comentario
             $table->unsignedBigInteger('user_id'); // ID del usuario que registra la reserva
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

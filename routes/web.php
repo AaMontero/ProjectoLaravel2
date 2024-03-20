@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaqueteController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\HotelController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Controllers\WhatsAppController;
@@ -202,3 +203,5 @@ require __DIR__ . '/auth.php';
 Route::get('/hoteles', function () {
     return view('hoteles.hotel');
 })->name('hotel');
+Route::post('/hoteles', [HotelController::class, 'store'])
+->name('hoteles.store');

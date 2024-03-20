@@ -10,12 +10,12 @@ class Eventos extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'start_date', 'end_date', 'author', 'note', 'hotel_id', 'hotel_nombre', 'user_id'
+        'title', 'start_date', 'end_date', 'author','hotel_nombre', 'user_id'
     ];
 
     public function hotel()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Hotel::class, 'hotel_id');
     }
 
     public function user()

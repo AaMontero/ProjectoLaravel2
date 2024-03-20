@@ -69,10 +69,10 @@ class CalendarController extends Controller
         if (!$eventos) {
             return response()->json(['error' => 'No se pudo encontrar el evento'], 404);
         }
-    
+
         // Obtener los datos originales del evento antes de la actualización
         $originalData = $eventos->getAttributes();
-    
+
         // Actualizar el evento en la base de datos
         $eventos->update([
             'title' => $request->title,
@@ -81,7 +81,7 @@ class CalendarController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
         ]);
-    
+
         // Obtener los datos modificados del evento
         $modifiedData = [];
         foreach ($originalData as $key => $value) {
@@ -96,10 +96,10 @@ class CalendarController extends Controller
                 $modifiedData[$key] = $eventos->{$key};
             }
         }
-    
+
         // Convierte los datos modificados a JSON
         $modifiedDataJson = json_encode($modifiedData);
-    
+
         // Crear un registro en la tabla UserAction
         UserAction::create([
             'user_id' => auth()->id(),
@@ -109,17 +109,17 @@ class CalendarController extends Controller
             'modified_data' => $modifiedDataJson, // Datos modificados
             // Otros campos relevantes que desees registrar en el log
         ]);
-    
+
         return response()->json(['message' => 'Evento actualizado correctamente', 'event' => $eventos]);
     }
-    
+
     public function destroy($id)
     {
         $eventos = Eventos::find($id);
         if (!$eventos) {
             return response()->json(['error' => 'No se pudo encontrar el evento'], 404);
         }
-    
+
         // Crear un registro en la tabla UserAction antes de eliminar el evento
         UserAction::create([
             'user_id' => auth()->id(),
@@ -128,7 +128,7 @@ class CalendarController extends Controller
             'entity_id' => $id, // ID del evento eliminado
             'modified_data' => json_encode($eventos), // Datos del evento eliminado
         ]);
-    
+
         $eventos->delete();
         return response()->json(['message' => 'Evento eliminado correctamente', 'id' => $id]);
     }

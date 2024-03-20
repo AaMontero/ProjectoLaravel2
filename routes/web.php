@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/vendedor/{vendedor}/edit', [VendedorController::class, 'edit'])
             ->name('vendedor.edit'); // Formulario para editar un vendedor
         Route::get('pagoVendedor/{pagoVendedor}/editar', [PagoVendedorController::class, 'edit'])
-            ->name('pagoVendedor.edit'); // Formulario para editar un pago 
+            ->name('pagoVendedor.edit'); // Formulario para editar un pago
         Route::get('pagoVendedores/{idVendedor}', [PagoVendedorController::class, 'pagarVendedor'])
             ->name('pagoVendedores.pagoVendedor'); //Pagar a un vendedor
         Route::get('/vendedor/{vendedorId}/datosVendedor', [VendedorController::class, 'datosVendedor'])
@@ -82,11 +82,11 @@ Route::middleware(['auth'])->group(function () {
         Route::put('paquetes/{paquete}',  [PaqueteController::class, 'update'])
             ->name("paquetes.update");
         Route::get('contrato/agregar/{cliente}', [ContratoController::class, 'add_contrato'])
-            ->name('contrato.agregar');  //Agregar Contrato desde un cliente 
+            ->name('contrato.agregar');  //Agregar Contrato desde un cliente
         Route::post('/contrato', [ContratoController::class, 'store'])
             ->name('contrato.store'); //Registrar un nuevo contrato
         Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])
-            ->name('contrato.vendedores'); //Agregar los vendedores al contrato (JS,C1,C2,V) 
+            ->name('contrato.vendedores'); //Agregar los vendedores al contrato (JS,C1,C2,V)
     });
     Route::middleware('checkRole:superAdmin')->group(function () {
         Route::put('/roles/{user}', [RolController::class, 'asignarRol'])
@@ -95,13 +95,7 @@ Route::middleware(['auth'])->group(function () {
             ->name('log');
     });
 
-
-
-    //RUTAS PARA PAQUETES
-
-
     //RUTAS PARA CLIENTES
-
     Route::get('/clientes',        [ClienteController::class, 'index'])
         ->name('clientes.index'); //Mostrar Clientes (Principal)
     Route::post('clientes',        [ClienteController::class, 'store'])
@@ -116,13 +110,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])
         ->name('calendar.destroy');
 
-
-
+    //RUTAS PARA VENDEDOR
     Route::post('/vendedor', [VendedorController::class, 'store'])
         ->name('vendedor.store'); //Agregar un nuevo vendedor
-
-
-
     Route::put('/vendedor/{vendedor}/update', [VendedorController::class, 'update'])
         ->name('vendedor.update'); // Actualizar los datos de un vendedor
     Route::get('/vendedor/{vendedor}/inactivo', [VendedorController::class, 'cambiarActivo'])
@@ -130,9 +120,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     // RUTAS PARA EL PAGO VENDEDORES
-
     Route::put('pagoVendedor/{pago}', [PagoVendedorController::class, 'update'])
-        ->name('pagoVendedor.update'); //Actualizar un pago 
+        ->name('pagoVendedor.update'); //Actualizar un pago
     Route::get('pagoVendedores/pagoRealizado/{pago}', [PagoVendedorController::class, 'pagado'])
         ->name('pagoVendedor.pagar'); //Cambia el estado de un pago a pago
     Route::get('pagoVendedores/revertirPago/{pago}', [PagoVendedorController::class, 'quitarPagado'])
@@ -149,10 +138,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('eliminar.contrato');
 
 
-
-
-
-    //RUTAS PARA EL CHAT - NOTIFICACIONES 
+    //RUTAS PARA EL CHAT - NOTIFICACIONES
     Route::get('/chat', [WhatsAppController::class, 'index'])
         ->name('chat.chat'); //Mostrar el chat (Principal)
     Route::get('/enviaWpp', [WhatsAppController::class, 'enviarPHP'])
@@ -163,7 +149,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('chat.leer_mensajes'); //Marcar los mensajes de un usuario como leidos
 
 
-    // RUTAS DE ROLES 
+    // RUTAS DE ROLES
 
 
 
@@ -174,7 +160,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // RUTAS DE TERMINOS Y CONDICIONES 
+    // RUTAS DE TERMINOS Y CONDICIONES
     Route::get('/politicas-privacidad', function () {
         return view('layouts.politicas');
     })->name('politicas');
@@ -186,14 +172,14 @@ Route::middleware(['auth'])->group(function () {
         ->name('logs.log')
         ->middleware('checkRole:superAdmin');
 
-    //Notificaciones 
+    //Notificaciones
     Route::get('/cambiarEstadoNot/{notificacion}', [NotificacionController::class, 'leido'])
-        ->name('notificacion.marcar_leido'); // Marcar como leida una notificaciòn. 
+        ->name('notificacion.marcar_leido'); // Marcar como leida una notificaciòn.
 });
 
 
 
-// RUTAS DE WEBHOOKS 
+// RUTAS DE WEBHOOKS
 // Autentifiación para conectarse con APIS (No necesita estar logeado)
 Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
     ->withoutMiddleware([VerifyCsrfToken::class]);
@@ -202,7 +188,7 @@ Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
 
 
 
-//RUTAS PARA TERMINOS Y CONDICIONES 
+//RUTAS PARA TERMINOS Y CONDICIONES
 Route::get('/politicas-privacidad', function () {
     return view('layouts.politicas');
 })->name('politicas');

@@ -101,8 +101,6 @@ body {
 
     </style>
     <body>
-        <!-- Button trigger modal -->
-
 
         <!-- Modal -->
         <div class="modal fade" id="eventoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -115,14 +113,20 @@ body {
                     <div class="modal-body">
                         <label for="estado">Estado</label>
                         <select class="form-select" id="title">
+                            <option value="" disabled selected>Selecciona un estado</option>
                             <option value="Prereservado">Pre-reservado</option>
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
                         </select>
                         <label for="">Titular</label>
                         <input type="text" class="form-control" id="author">
-                        <label for="">Descripcion</label>
-                        <input type="text" class="form-control" id="note">
+                        <label for="">Hoteles</label>
+                        <select class="form-select" id="note">
+                            <option value="" disabled selected>Selecciona un hotel</option>
+                            <option value="">Diamond beach</option>
+                            <option value="">Marriot</option>
+                            <option value="">hilton colon</option>
+                        </select>
                         <label for="">Fecha Inicio</label>
                         <input type="date" class="form-control" id="start_date">
                         <label for="">Fecha salida</label>
@@ -195,10 +199,10 @@ body {
                         <strong>Fecha de Fin:</strong> <span id="fechaFinSpan"></span>
                     </div>
                     <div class="mb-1">
-                        <strong>Nota:</strong> <span id="notaSpan"></span>
+                        <strong>Hoteles:</strong> <span id="notaSpan"></span>
                     </div>
                     <div class="modal-footer">
-                       <button type="button" class="btn btn-success" id="ModalEditar">ModalEditar</button>
+                       <button type="button" class="btn btn-success ModalEditar" id="ModalEditar">ModalEditar</button>
 
                     </div>
                 </div>
@@ -219,93 +223,7 @@ body {
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
         </script>
         <script>
-            var modalEditarBtn = document.getElementById("ModalEditar");
-            var editarModal = document.getElementById("editarModal");
-            // Asignar un evento clic al botón para abrir la ventana modal
-
-            modalEditarBtn.onclick = function(event) {
-                // Mostrar la ventana modal
-                editarModal.classList.add("show");
-                editarModal.style.display = "block";
-
-                $('#editarModal').modal('show');
-                var id = event.id;
-
-                // Configurar la función de clic para el botón de actualización
-                $('#updateBtn').unbind().click(function() {
-                    console.log('Editado Correctamente');
-                    var id = event.id;
-                    var start_date = $('#start_date_edit').val();
-                    var end_date = $('#end_date_edit').val();
-                    var title = $('#title_edit').val();
-                    var author = $('#author_edit').val();
-                    var note = $('#note_edit').val();
-
-                    $.ajax({
-                        url: "{{ route('calendar.update', '') }}" + '/' + id,
-                        type: "PATCH",
-                        dataType: 'json',
-                        data: {
-                            start_date: start_date,
-                            end_date: end_date,
-                            title: title,
-                            author: author,
-                            note: note
-                        },
-                        success: function(response) {
-                            swal("¡Exito!", "¡Evento Actualizado!", "success").then(() => {
-                                $('#editarModal').modal('hide'); // Ocultar el modal después del mensaje de éxito
-                                location.reload(); // Recargar la página para reflejar los cambios
-                            });// Mostrando una alerta de éxito
-                        },
-                        error: function(error) {
-                            console.log(error);
-                            swal("¡Error!", "Hubo un error al actualizar el evento.", "error"); // Mostrando una alerta de error
-                        }
-                    });
-                });
-                $('#deleteBtn').unbind().click(function() {
-                    var id = event.id;
-                    swal({
-                        title: "¿Estás seguro?",
-                        text: "¡No podrás recuperar este evento una vez eliminado!",
-                        icon: "warning",
-                        buttons: ["Cancelar", "Sí, eliminarlo"],
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
-                            $.ajax({
-                                url: "{{ route('calendar.destroy', '') }}" + '/' + id,
-                                type: "DELETE",
-                                dataType: 'json',
-                                success: function(response) {
-                                    swal("¡Bien hecho!", "¡Evento Eliminado!", "success").then(() => {
-                                        $('#editarModal').modal('hide');
-                                        location.reload();
-                                    });
-                                },
-                                error: function(error) {
-                                    console.log(error);
-                                    swal("¡Error!", "Hubo un error al eliminar el evento.", "error");
-                                }
-                            });
-                        } else {
-                            swal("Operación cancelada", {
-                                icon: "info",
-                            });
-                        }
-                    });
-                });
-
-
-                $("#editarModal").on("hidden.bs.modal", function() {
-                    $("#updateBtn").unbind();
-                    $("#deleteBtn").unbind();
-                });
-            };
-
-            $(document).ready(function() {
+        $(document).ready(function() {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -431,6 +349,73 @@ body {
                             document.getElementById("start_date_edit").value = formatoFechaInicio;
                             document.getElementById("end_date_edit").value = formatoFechaFin;
                             document.getElementById("note_edit").value = notaSeleccionado;
+
+                            $('#updateBtn').unbind().click(function() {
+                            console.log('Editado Correctamente');
+                            var id = event.id;
+                            var start_date = $('#start_date_edit').val();
+                            var end_date = $('#end_date_edit').val();
+                            var title = $('#title_edit').val();
+                            var author = $('#author_edit').val();
+                            var note = $('#note_edit').val();
+
+                            $.ajax({
+                                url: "{{ route('calendar.update', '') }}" + '/' + id,
+                                type: "PATCH",
+                                dataType: 'json',
+                                data: {
+                                    start_date: start_date,
+                                    end_date: end_date,
+                                    title: title,
+                                    author: author,
+                                    note: note
+                                },
+                                success: function(response) {
+                                    swal("¡Exito!", "¡Evento Actualizado!", "success").then(() => {
+                                        $('#editarModal').modal('hide'); // Ocultar el modal después del mensaje de éxito
+                                        location.reload(); // Recargar la página para reflejar los cambios
+                                    });// Mostrando una alerta de éxito
+                                },
+                                error: function(error) {
+                                    console.log(error);
+                                    swal("¡Error!", "Hubo un error al actualizar el evento.", "error"); // Mostrando una alerta de error
+                                }
+                            });
+                        });
+
+                        $('#deleteBtn').unbind().click(function() {
+                            var id = event.id;
+                            swal({
+                                title: "¿Estás seguro?",
+                                text: "¡No podrás recuperar este evento una vez eliminado!",
+                                icon: "warning",
+                                buttons: ["Cancelar", "Sí, eliminarlo"],
+                                dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    $.ajax({
+                                        url: "{{ route('calendar.destroy', '') }}" + '/' + id,
+                                        type: "DELETE",
+                                        dataType: 'json',
+                                        success: function(response) {
+                                            swal("¡Bien hecho!", "¡Evento Eliminado!", "success").then(() => {
+                                                $('#editarModal').modal('hide');
+                                                location.reload();
+                                            });
+                                        },
+                                        error: function(error) {
+                                            console.log(error);
+                                            swal("¡Error!", "Hubo un error al eliminar el evento.", "error");
+                                        }
+                                    });
+                                } else {
+                                    swal("Operación cancelada", {
+                                        icon: "info",
+                                    });
+                                }
+                            });
+                        });
                     },
 
                     selectAllow: function(event) {
@@ -443,7 +428,29 @@ body {
                 });
 
 
-            });
+        });
+
+        $(document).ready(function() {
+            var modalEditarBtn = document.getElementById("ModalEditar");
+            var editarModal = document.getElementById("editarModal");
+            // Asignar un evento clic al botón para abrir la ventana modal
+
+            modalEditarBtn.onclick = function(event) {
+                // Mostrar la ventana modal
+                editarModal.classList.add("show");
+                editarModal.style.display = "block";
+
+                $('#editarModal').modal('show');
+                $("#editarModal").on("hidden.bs.modal", function() {
+                    $("#updateBtn").unbind();
+                    $("#deleteBtn").unbind();
+                });
+            }
+                // Configurar la función de clic para el botón de actualización
+        });
+
+
+
 
         </script>
     </body>

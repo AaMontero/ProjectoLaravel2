@@ -16,8 +16,9 @@ return new class extends Migration
             $table->enum('title', ['prereservado', 'reservado', 'disponible']);// Titular o persona que reserva
             $table->dateTime('start_date'); // Fecha y hora de inicio
             $table->dateTime('end_date'); // Fecha y hora de fin
-            $table->string('author'); // Estado del evento
-            $table->text('note')->nullable(); // Comentario
+            $table->string('author');
+
+            $table->string('hotel_nombre')->nullable(); // Comentario
             $table->unsignedBigInteger('user_id'); // ID del usuario que registra la reserva
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

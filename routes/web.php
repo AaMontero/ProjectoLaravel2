@@ -197,3 +197,8 @@ Route::get('/terminos-condiciones', function () {
 })->name('terminos');
 
 require __DIR__ . '/auth.php';
+
+//RUTAS HOTELES
+Route::get('/hoteles', function () {
+    return view('hoteles.hotel');
+})->name('hotel');

@@ -74,19 +74,33 @@
                     <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
                     <input type="text" id="mensajeInput" name = "mensajeEnvio"
                         class="w-4/5 border rounded-md py-2 px-5 focus:outline-none focus:border-blue-500"
-                        placeholder="Escribe un mensaje...">
-
+                        placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)">
                     <button type="button" onclick="enviarFormulario()"
                         class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
-
                 </form>
             </div>
-            <script></script>
         </div>
     </div>
 
 
     <script>
+        //Recibir los mensajes en tiempo real
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('217450e1ce096539fb1c', {
+            cluster: 'sa1'
+        });
+        var channel = pusher.subscribe('whatsapp-channel');
+        channel.bind('whatsapp-event', function(data) {
+            var objeto = {
+                mensaje_enviado: data['mensaje'],
+                fecha_hora: data['horaMensaje'],
+                numero: data['usuario']
+            }
+            var lista = document.getElementById("miLista");
+            lista.appendChild(crearMensajeRecibido(objeto));
+
+        });
+
         function enviarFormulario() {
             llamadaAjax()
                 .then((respuesta) => {
@@ -130,16 +144,13 @@
             });
         }
 
-
-        function formatearHora(fechaHoraString) {
-            var fechaHora = new Date(fechaHoraString);
-            var hora = fechaHora.getHours();
-            var minutos = fechaHora.getMinutes();
-            var horaFormato = (hora < 10 ? '0' : '') + hora; // Agregar un cero delante si la hora es menor que 10
-            var minutosFormato = (minutos < 10 ? '0' : '') +
-                minutos; // Agregar un cero delante si los minutos son menores que 10
-            return horaFormato + ':' + minutosFormato;
+        function enviarConEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                enviarFormulario();
+            }
         }
+
         // Obtener la lista
         var lista = document.getElementById("miLista");
         var telefonoEmisor = "593987411818";
@@ -397,22 +408,7 @@
             chat.style.display = 'none';
             document.getElementById("miLista").innerText = "";
         }
-        //Recibir los mensajes en tiempo real
-        Pusher.logToConsole = true;
-        var pusher = new Pusher('217450e1ce096539fb1c', {
-            cluster: 'sa1'
-        });
-        var channel = pusher.subscribe('whatsapp-channel');
-        channel.bind('whatsapp-event', function(data) {
-            var objeto = {
-                mensaje_enviado: data['mensaje'],
-                fecha_hora: data['horaMensaje'],
-                numero: data['usuario']
-            }
-            var lista = document.getElementById("miLista");
-            lista.appendChild(crearMensajeRecibido(objeto));
 
-        });
 
         function transformarFecha(fechaString) {
             var partesFecha = fechaString.split('-');
@@ -425,8 +421,17 @@
                 "octubre", "noviembre", "diciembre"
             ];
             var fechaFormateada = dia + " de " + nombresMeses[mes - 1] + " de " + año;
-
             return fechaFormateada;
+        }
+
+        function formatearHora(fechaHoraString) {
+            var fechaHora = new Date(fechaHoraString);
+            var hora = fechaHora.getHours();
+            var minutos = fechaHora.getMinutes();
+            var horaFormato = (hora < 10 ? '0' : '') + hora; // Agregar un cero delante si la hora es menor que 10
+            var minutosFormato = (minutos < 10 ? '0' : '') +
+                minutos; // Agregar un cero delante si los minutos son menores que 10
+            return horaFormato + ':' + minutosFormato;
         }
     </script>
 

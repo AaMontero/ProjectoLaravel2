@@ -14,14 +14,11 @@
             console.log(caracteristicaInput);
             const caracteristicaTexto = caracteristicaInput.value.trim();
             const caracteristicaCiudadTexto = caracteristicaCiudad.value.trim();
-            if (caracteristicaTexto !== "") {
-                // Validación para asegurar que caracteristicaCiudadTexto no esté vacía
-                const caracteristicaCiudadValidada = caracteristicaCiudadTexto !== "" ? caracteristicaCiudadTexto :
-                    "";
-
-                const caracteristica = [
-                    caracteristicaTexto, caracteristicaCiudadValidada
-                ];
+            if (caracteristicaTexto !== "" && caracteristicaCiudadTexto !== "") {
+                const caracteristica = {
+                    descripcion: caracteristicaTexto,
+                    lugar: caracteristicaCiudadTexto
+                };
 
                 listaCaracteristicas.push(caracteristica);
                 caracteristicaInput.value = "";
@@ -30,10 +27,11 @@
                 document.getElementById("lista_caracteristicas").value = JSON.stringify(listaCaracteristicas);
                 alert("Se ha agregado la característica: " + caracteristicaTexto);
             } else {
-                alert("Por favor, ingresa una característica válida.");
+                alert("Por favor, ingresa una característica y su lugar válidos.");
             }
-
             console.log(listaCaracteristicas);
+
+
         }
         //Toca cambiar para que si no se da click en uno de los botones regrese la lista sin modificar
         function cambiarCaracteristica(caracteristicaId) {

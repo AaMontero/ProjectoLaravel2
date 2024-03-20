@@ -145,15 +145,12 @@ class PaqueteController extends Controller
                 if ($file->isValid()) {
                     $extension = $file->getClientOriginalExtension();
                     $filename = time() . '_' . uniqid() . '.' . $extension;
-
                     // Mover el archivo a la carpeta específica
                     $file->move($folderPath, $filename);
-
                     // Guardar el nombre del archivo en la lista de nombres de archivos
                     $imageNames[] = $folderName . '/' . $filename;
                 }
             }
-
             // Verificar si se han cargado archivos antes de asignarlos al arreglo de datos validados
             if (!empty($imageNames)) {
                 // Asignar la lista de nombres de archivos al arreglo de datos validados
@@ -165,7 +162,6 @@ class PaqueteController extends Controller
             // Manejo de errores cuando no haya imágenes
         }
 
-
         if ($listaModificada != "") {
             $listaCaracteristicas = json_decode($request->get('lista_caracteristicas_mod'));
             foreach ($listaCaracteristicas as $caracteristica) {
@@ -175,6 +171,25 @@ class PaqueteController extends Controller
                 $tempCar->save();
             }
         } else {
+        }
+        
+        $listaCaracteristicas = json_decode($request->get('lista_caracteristicas'), true);
+        if (is_array($listaCaracteristicas) && !empty($listaCaracteristicas)) {
+            foreach ($listaCaracteristicas as $caracteristica) {
+                // Verificar si la característica ya existe en la base de datos
+                $existingCaracteristica = CaracteristicaPaquete::where('descripcion', $caracteristica['descripcion'])
+                                                                ->where('lugar', $caracteristica['lugar'])
+                                                                ->where('paquete_id', $paquete->id)
+                                                                ->first();
+                if (!$existingCaracteristica) {
+                    // Si no existe, crearla
+                    CaracteristicaPaquete::create([
+                        'paquete_id' => $paquete->id,
+                        'descripcion' => $caracteristica['descripcion'],
+                        'lugar' => $caracteristica['lugar'],
+                    ]);
+                }
+            }
         }
 
         // Crear un registro en la tabla UserAction solo si hay datos modificados
@@ -201,6 +216,9 @@ class PaqueteController extends Controller
         return to_route('paquetes.paquetes')
             ->with('status', __('Package updated successfully'));
     }
+
+   
+
     public function destroy(Paquete $paquete)
     {
         // Guardar los datos del paquete antes de eliminarlo

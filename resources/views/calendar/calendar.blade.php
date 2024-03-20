@@ -369,7 +369,7 @@ body {
                             var end_date = $('#end_date_edit').val();
                             var title = $('#title_edit').val();
                             var author = $('#author_edit').val();
-                            var note = $('#hotel_nombre_edit').val();
+                            var hotel_nombre = $('#hotel_nombre_edit').val();
 
                             $.ajax({
                                 url: "{{ route('calendar.update', '') }}" + '/' + id,

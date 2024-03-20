@@ -272,8 +272,9 @@
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 1 </th>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Closer 2</th>
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Jefe Sala</th>
+                            @role('Administrador|superAdmin')
                             <th class="py-2 px-4 border-b text-center whitespace-nowrap">Opciones</th>
-
+                            @endrole
                             <div class="py-2">
                                 <div class="max-w mx-auto px-2 lg:px-20 mb-4">
 
@@ -525,6 +526,7 @@
                                         </div>
                                     </div>
                                 </td>
+                                @role('Administrador|superAdmin')
                                 <td class = "text-right pr-6">
                                     <x-dropdown class="origin-top absolute ">
                                         <x-slot name="trigger">
@@ -546,9 +548,9 @@
                                                     class="text-red-500">{{ __('Eliminar Contrato') }}</x-dropdown-link>
                                             </form>
                                         </x-slot>
-
                                     </x-dropdown>
                                 </td>
+                                @endrole
                             </tr>
                         @endforeach
                     </tbody>
@@ -587,14 +589,6 @@
             /* Cambia el color de fondo al pasar el ratón */
         }
     </style>
-
-
-    {{-- paginacion --}}
-    {{-- <div class="ml-20 mr-20">
-        <p class="ml-5 flex justify-center items-center list-none space-x-2">
-            {{ $contratos->appends([]) }}
-        </p>
-    </div> --}}
 
     {{-- buscador --}}
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>

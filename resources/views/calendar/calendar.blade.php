@@ -33,12 +33,6 @@ body {
 }
 
 /* Estilos para la parte de Event Details */
-#event-details {
-    background-color: #cecece;
-    padding: 20px;
-    border-radius: 10px;
-    animation: fadeIn 0.5s ease-in-out;
-}
 
 /* Animación para Event Details */
 @keyframes fadeIn {
@@ -113,7 +107,7 @@ body {
                     <div class="modal-body">
                         <label for="estado">Estado</label>
                         <select class="form-select" id="title">
-                            <option value="" disabled selected>Selecciona un estado</option>
+                            <option value="" disabled selected>Selecciona un Estado</option>
                             <option value="Prereservado">Pre-reservado</option>
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
@@ -123,9 +117,9 @@ body {
 
                         <label for="hotel">Hoteles</label>
                         <select class="form-select" id="hotel" name="hotel">
-                            <option value="" disabled selected>Selecciona un hotel</option>
-                            @foreach($hoteles as $id => $hotel_nombre)
-                                <option value="{{ $id }}">{{ $hotel_nombre }}</option>
+                            <option value="" disabled selected>Selecciona un Hotel</option>
+                            @foreach($hoteles as $hotel_nombre)
+                                <option value="">{{ $hotel_nombre }}</option>
                             @endforeach
                         </select>
 
@@ -157,6 +151,7 @@ body {
                     <div class="modal-body">
                         <label for="estado">Estado</label>
                         <select class="form-select" id="title_edit">
+                            <option value="" disabled selected>Selecciona un Estado</option>
                             <option value="Prereservado">Pre-reservado</option>
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
@@ -166,7 +161,7 @@ body {
 
                         <label for="hotel">Hoteles</label>
                         <select class="form-select" id="hotel" name="hotel">
-                            <option value="" disabled selected>Selecciona un hotel</option>
+                            <option value="" disabled selected>Selecciona un Hotel</option>
                             @foreach($hoteles as $id => $hotel_nombre)
                                 <option value="{{ $id }}">{{ $hotel_nombre }}</option>
                             @endforeach
@@ -192,27 +187,32 @@ body {
 
             <!-- Detalles -->
             <div class="w-1/4 p-4">
-                <div id="event-details">
+                <div id="event-details" class="bg-white shadow-md rounded px-4 py-2">
                     <h3 class="text-lg font-bold mb-2">Detalles del Evento</h3>
                     <hr class="mb-2">
-                    <div class="mb-1">
-                        <strong>Título:</strong> <span id="tituloSpan"></span>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Autor:</strong> <span id="autorSpan"></span>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Fecha de Inicio:</strong> <span id="fechaInicioSpan"></span>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Fecha de Fin:</strong> <span id="fechaFinSpan"></span>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Hoteles:</strong> <span id="hotel_nombreSpan"></span>
-                    </div>
-                    <div class="modal-footer">
-                       <button type="button" class="btn btn-success ModalEditar" id="ModalEditar">ModalEditar</button>
 
+                    <div class="mb-2">
+                        <strong class="font-semibold">Título:</strong>
+                        <span id="tituloSpan" class="ml-2"></span>
+                    </div>
+                    <div class="mb-2">
+                        <strong class="font-semibold">Autor:</strong>
+                        <span id="autorSpan" class="ml-2"></span>
+                    </div>
+                    <div class="mb-2">
+                        <strong class="font-semibold">Fecha de Inicio:</strong>
+                        <span id="fechaInicioSpan" class="ml-2"></span>
+                    </div>
+                    <div class="mb-2">
+                        <strong class="font-semibold">Fecha de Fin:</strong>
+                        <span id="fechaFinSpan" class="ml-2"></span>
+                    </div>
+                    <div class="mb-2">
+                        <strong class="font-semibold">Hoteles:</strong>
+                        <span id="hotel_nombreSpan" class="ml-2"></span>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out" id="ModalEditar">Editar</button>
                     </div>
                 </div>
             </div>

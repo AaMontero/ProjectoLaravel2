@@ -16,7 +16,7 @@ class CalendarController extends Controller
     {
         $events = array();
         $eventos = Eventos::all();
-        $hoteles = Hotel::pluck('id','hotel_nombre');
+        $hoteles = Hotel::pluck('hotel_nombre');
 
         foreach ($eventos as $evento) {
             $events[] = [

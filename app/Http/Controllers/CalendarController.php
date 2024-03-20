@@ -53,10 +53,7 @@ class CalendarController extends Controller
             'user_id' => auth()->id()
 
         ]);
-        $hotel = new Hotel();
-        $hotel->nombre = $request->hotel_nombre;
-        // Otras asignaciones necesarias para tu modelo Hotel
-        $hotel->save();
+
 
         // Crea un registro en la tabla UserAction
         UserAction::create([

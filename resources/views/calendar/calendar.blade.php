@@ -116,10 +116,10 @@ body {
                         <input type="text" class="form-control" id="author">
 
                         <label for="hotel">Hoteles</label>
-                        <select class="form-select" id="hotel" name="hotel">
+                        <select class="form-select" id="hotel_nombre" name="hotel">
                             <option value="" disabled selected>Selecciona un Hotel</option>
                             @foreach($hoteles as $hotel_nombre)
-                                <option value="">{{ $hotel_nombre }}</option>
+                                <option value="{{ $hotel_nombre }}">{{ $hotel_nombre }}</option>
                             @endforeach
                         </select>
 
@@ -160,11 +160,11 @@ body {
                         <input type="text" class="form-control" id="author_edit">
 
                         <label for="hotel">Hoteles</label>
-                        <select class="form-select" id="hotel" name="hotel">
+                        <select class="form-select" id="hotel_nombre_edit" name="hotel_nombre_edit">
                             <option value="" disabled selected>Selecciona un Hotel</option>
-                            @foreach($hoteles as $id => $hotel_nombre)
-                                <option value="{{ $id }}">{{ $hotel_nombre }}</option>
-                            @endforeach
+                            @foreach($hoteles as $hotel_nombre)
+                            <option value="{{ $hotel_nombre }}">{{ $hotel_nombre }}</option>
+                        @endforeach
                         </select>
 
                         <label for="">Fecha Inicio</label>
@@ -278,21 +278,22 @@ body {
                             var end_date = $('#end_date').val();
                             console.log("El valor de end_date es: " + end_date);
                             var author = $('#author').val();
-                            var hotel_nombre = $('#hotel').val();
-
+                            var hotel_nombre = $('#hotel_nombre').val();
+                            console.log("El valor de hotel es: " + hotel_nombre);
 
                            // Obtener los valores de los campos
                             var title = $('#title').val();
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
                             var author = $('#author').val();
-                            var hotel_nombre = $('#hotel').val();
+                            var hotel_nombre = $('#hotel_nombre').val();
 
                             // Verificar si algún campo está vacío
                             if (!title || !start_date || !end_date || !author || !hotel_nombre) {
                                 // Mostrar mensaje de error
                                 swal("Error", "Todos los campos son obligatorios", "error");
-                            } else {
+                                return;
+                            }
                                 // Realizar la solicitud AJAX solo si todos los campos están llenos
                                 $.ajax({
                                     url: "{{ route('calendar.store') }}",
@@ -324,10 +325,12 @@ body {
                                     error: function(error) {
                                         if (error.responseJSON.errors) {
                                             $('#titleError').html(error.responseJSON.errors.title)
+                                        }else {
+                                            swal("Error", "Hubo un gran error al guardar el evento", "error");
                                         }
                                     },
                                 });
-                            }
+
 
 
                         });

@@ -22,7 +22,7 @@ class HotelController extends Controller
                 'pais' => ['required', 'min:3', 'max:255'],
                 'provincia' => ['min:3', 'max:255'],
                 'ciudad' => ['required', 'min:3', 'max:255'],
-                'nombre_hotel' => ['required', 'min:3', 'max:255'],
+                'hotel_nombre' => ['required', 'min:3', 'max:255'],
                 'imagen_hotel' => ['required'],
                 'num_h' => ['required', 'integer', 'min:1'],
                 'num_camas' => ['required', 'integer', 'min:1'],
@@ -38,7 +38,7 @@ class HotelController extends Controller
                 foreach ($request->file('imagen_hotel') as $file) {
                     $extension = $file->getClientOriginalExtension();
                     $filename = time() . '_' . uniqid() . '.' . $extension;
-                    $folderName = $request->input('nombre_hotel'); // Usar el nombre del hotel
+                    $folderName = $request->input('hotel_nombre'); // Usar el nombre del hotel
                     $file->move('uploads/hoteles/' . $folderName, $filename); // Mover la imagen a la carpeta del hotel
                     $imagePaths[] = 'uploads/hoteles/' . $folderName . '/' . $filename; // Guardar la ruta completa de la imagen
                 }

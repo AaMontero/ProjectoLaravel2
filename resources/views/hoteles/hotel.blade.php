@@ -37,11 +37,11 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form method="POST" action = "{{ route('hoteles.store') }} " enctype="multipart/form-data">
                         @csrf
-                        <label class="mt-0.5 font-bold p-0 ml-4" for="nombre_hotel">Nombre hotel:</label>
-                        <input type="text" name="nombre_hotel" id="nombre_hotel"
+                        <label class="mt-0.5 font-bold p-0 ml-4" for="hotel_nombre">Nombre hotel:</label>
+                        <input type="text" name="hotel_nombre" id="hotel_nombre"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Ingresa el nombre del hotel') }}" value="{{ old('nombre_hotel') }}">
-                        @error('nombre_hotel')
+                            placeholder="{{ __('Ingresa el nombre del hotel') }}" value="{{ old('hotel_nombre') }}">
+                        @error('hotel_nombre')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror

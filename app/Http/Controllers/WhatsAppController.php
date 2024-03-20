@@ -27,7 +27,7 @@ class WhatsAppController extends Controller
         }
         $telefonoEnviaID = "258780720641927";
         $apiUrl = 'https://graph.facebook.com/v18.0/';
-        $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
+        $apiKey = 'EAA0cGBz1VmwBOytaVkWgZCZCZCQ1AwhhwxzMMQYmn8CHhrBbzpPof0yOl52DMlGipCNkZAv3QsFyzRBAg9W1SjCVZBihKyF3k4Q27iI2yRwTx6ReGE9DlVIFKBGr2BjIwVNp7yYEprYujgaV6NsiMNL9KgGjiPjn6gK8UZB0xZCXOhzIkDwh8DYQcZB4tCD6ueZBt';
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -49,7 +49,7 @@ class WhatsAppController extends Controller
             ]),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Bearer EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x'
+                'Authorization: Bearer' . $apiKey
             ),
         ));
         $whatsApp = new WhatsApp();

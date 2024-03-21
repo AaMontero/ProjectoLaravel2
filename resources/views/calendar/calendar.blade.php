@@ -173,8 +173,10 @@ body {
             <div class="w-1/4 p-4">
                 <div  class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
                     <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
+
                     <hr class="mb-2">
                         <div id="event-details" class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden" style="display: none;">
+                            <button type="button" id="close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             <div class="mb-2 mt-4">
                                 <strong class="font-semibold">Estado:</strong>
                                 <span id="tituloSpan" class="ml-2"></span>

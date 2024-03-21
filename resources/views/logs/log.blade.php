@@ -157,7 +157,27 @@
                                                                         </p>
                                                                     @endif
                                                                 @endforeach
-                                                            @elseif ($dato->entity_type === 'evento')
+                                                            @elseif ($dato->entity_type === 'hotel')
+                                                                @foreach ($hotel as $hoteles)
+                                                                    @if ($hoteles->id == $dato->entity_id)
+                                                                        <p><strong>Nombre del hotel:
+                                                                            </strong><span>{{ $hoteles->hotel_nombre }}</span>
+                                                                        </p>
+                                                                        <p><strong>País :</strong>
+                                                                            <span>{{ $hoteles->pais }}</span>
+                                                                        </p>
+                                                                        <p><strong>Provincia:
+                                                                            </strong><span>{{ $hoteles->provincia }}</span>
+                                                                        </p>
+                                                                        <p><strong>Ciudad:
+                                                                            </strong><span>{{ $hoteles->ciudad }}</span>
+                                                                        </p>
+                                                                        <p><strong>Precio:
+                                                                            </strong><span>{{ $hoteles->precio }}</span>
+                                                                        </p>
+                                                                    @endif
+                                                                @endforeach
+                                                                @elseif ($dato->entity_type === 'evento')
                                                                 @foreach ($evento as $eventos)
                                                                     @if ($eventos->id == $dato->entity_id)
                                                                         <p><strong>Titulo:

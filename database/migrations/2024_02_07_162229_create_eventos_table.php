@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
-            $table->enum('title', ['prereservado', 'reservado', 'disponible']);// Titular o persona que reserva
+            $table->enum('title', ['Prereservado', 'Reservado', 'Disponible']);// Titular o persona que reserva
             $table->dateTime('start_date'); // Fecha y hora de inicio
             $table->dateTime('end_date'); // Fecha y hora de fin
             $table->string('author');

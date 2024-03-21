@@ -20,20 +20,21 @@ class HotelController extends Controller
         try {
             $validated = $request->validate([
                 'pais' => ['required', 'min:3', 'max:255'],
-                'provincia' => ['min:3', 'max:255'],
+                'provincia' => ['nullable', 'min:3', 'max:255'],
                 'ciudad' => ['required', 'min:3', 'max:255'],
                 'hotel_nombre' => ['required', 'min:3', 'max:255'],
                 'imagen_hotel' => ['required'],
                 'num_h' => ['required', 'integer', 'min:1'],
                 'num_camas' => ['required', 'integer', 'min:1'],
                 'precio' => ['required', 'numeric', 'min:0.01', 'max:9999.99'],
-                'servicios' => ['required'],
+                'servicios' => ['required', 'array'],
                 'tipo_alojamiento' => ['required'],
-                'opiniones' => ['required', 'min:0.01', 'max:9999.99'],
+                'opiniones' => ['required', 'array'], // Cambiado a array
+                'opiniones.*' => ['string', 'min:3', 'max:255'], // Reglas para cada opinión
             ]);
     
             $imagePaths = [];
-
+    
             if ($request->hasFile('imagen_hotel')) {
                 foreach ($request->file('imagen_hotel') as $file) {
                     $extension = $file->getClientOriginalExtension();
@@ -44,10 +45,19 @@ class HotelController extends Controller
                 }
             }
             
-    
+            
             $validated['imagen_hotel'] = implode(',', $imagePaths);
-            $hotel = Hotel::create($validated);
+    
+            // Concatenar las opiniones separadas por comas
+            $opiniones = implode(',', $validated['opiniones']);
+            $validated['opiniones'] = $opiniones;
 
+            // Concatenar los servicios separadas por comas
+            $servicios = implode(',', $validated['servicios']);
+            $validated['servicios'] = $servicios;
+    
+            $hotel = Hotel::create($validated);
+    
             // Crear un registro en la tabla UserAction
             UserAction::create([
                 'user_id' => $request->user()->id,
@@ -62,5 +72,6 @@ class HotelController extends Controller
             return redirect()->back()->withErrors($e->validator->errors())->withInput();
         }
     }
+    
     
 }

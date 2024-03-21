@@ -14,6 +14,7 @@ use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserActionsController;
 use App\Http\Middleware\VerifyCsrfToken;
+use App\Models\Hotel;
 
 /*
 |--------------------------------------------------------------------------
@@ -200,8 +201,13 @@ Route::get('/terminos-condiciones', function () {
 require __DIR__ . '/auth.php';
 
 //RUTAS HOTELES
-Route::get('/hoteles', function () {
-    return view('hoteles.hotel');
-})->name('hotel');
+Route::get('/hoteles', [HotelController::class, 'index'])
+->name('hotel');
 Route::post('/hoteles', [HotelController::class, 'store'])
 ->name('hoteles.store');
+Route::delete('hotel/{hotel}', [HotelController::class, 'destroy'])
+->name('hotel.destroy');
+Route::get('/hoteles/{hotel}/edit', [HotelController::class, 'edit'])
+            ->name('hotel.edit');
+Route::put('hoteles/{hotel}',  [HotelController::class, 'update'])
+->name('hotel.update');

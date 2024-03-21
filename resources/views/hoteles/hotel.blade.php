@@ -6,26 +6,26 @@
         <div class="flex justify-between items-center">
             <div x-data="{ showModal: false }" x-cloak class="flex items-center gap-5">
                 @role('superAdmin')
-                <x-nav-link :href="route('paquetes.paquetes')"
-                    class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
-                    {{ __('Paquetes') }}
-                </x-nav-link>
-                {{-- hoteles --}}
-                <x-nav-link href="{{ route('hotel') }}"
-                    class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
-                    {{ __('Hoteles') }}
-                </x-nav-link>
+                    <x-nav-link :href="route('paquetes.paquetes')"
+                        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
+                        {{ __('Paquetes') }}
+                    </x-nav-link>
+                    {{-- hoteles --}}
+                    <x-nav-link href="{{ route('hotel') }}"
+                        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
+                        {{ __('Hoteles') }}
+                    </x-nav-link>
                 @endrole
             </div>
 
             @role('Administrador|superAdmin')
-            <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
-                <span class="mr-2">Agregar un nuevo hotel</span>
-                <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </div>
+                <div onclick="abrirVentanaAgregarPaquete()" class="cursor-pointer flex items-center">
+                    <span class="mr-2">Agregar un nuevo hotel</span>
+                    <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
             @endrole
         </div>
     </x-slot>
@@ -42,8 +42,8 @@
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder="{{ __('Ingresa el nombre del hotel') }}" value="{{ old('hotel_nombre') }}">
                         @error('hotel_nombre')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <div class="flex w-full">
                             <div class="mr-2 flex-1">
@@ -72,24 +72,24 @@
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder="{{ __('Ingresa el número de habitaciones') }}" value="{{ old('num_h') }}">
                         @error('num_h')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <label class="mt-3 font-bold p-0 ml-4" for="num_camas">Número de camas:</label>
                         <input type="number" name="num_camas" id="num_camas"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder="{{ __('Ingresa el número de camas') }}" value="{{ old('num_camas') }}">
                         @error('num_camas')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <label class="mt-3 font-bold p-0 ml-4" for="precio">Precio:</label>
                         <input type="number" name="precio" id="precio" step="0.01"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder="{{ __('Ingresa el precio') }}" value="{{ old('precio') }}">
                         @error('precio')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <div>
                             <label class="mt-3 font-bold p-0 ml-4" for="servicios[]">Servicios:</label>
@@ -98,19 +98,20 @@
                                 placeholder="{{ __('Ingresa un servicio') }}">
                         </div>
 
-                            <div id="servicios-container" class="m-3">
-                                <!-- nuevo input de opinion -->
-                            </div>
-    
-                            <div>
-                                <button type="button" id="agregar-servicio-btn" class="mt-1 bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                                    Agregar otra servicio
-                                  </button>
-                                  
-                            </div>
+                        <div id="servicios-container" class="m-3">
+                            <!-- nuevo input de opinion -->
+                        </div>
+
+                        <div>
+                            <button type="button" id="agregar-servicio-btn"
+                                class="mt-1 bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                                Agregar otra servicio
+                            </button>
+
+                        </div>
                         @error('servicios')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <label class="mt-3 font-bold p-0 ml-4" for="tipo_alojamiento">Tipo de alojamiento:</label>
                         <select name="tipo_alojamiento" id="tipo_alojamiento" class="form-control mb-2">
@@ -120,8 +121,8 @@
                         </select>
 
                         @error('tipo_alojamiento')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <div>
                             <label class="mt-3 font-bold p-0 ml-4" for="opiniones[]">Opiniones:</label>
@@ -135,64 +136,70 @@
                         </div>
 
                         <div>
-                            <button type="button" id="agregar-opinion-btn" class="mt-1 bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                            <button type="button" id="agregar-opinion-btn"
+                                class="mt-1 bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
                                 Agregar otra opinión
-                              </button>
-                              
+                            </button>
+
                         </div>
 
                         @error('opiniones')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <label class="mt-3 font-bold p-0 ml-4" for="imagen_hotel">Imágenes del hotel:</label>
-                        <input type="file" name="imagen_hotel[]" id="imagen_hotel" class="form-control mb-2" multiple>
+                        <input type="file" name="imagen_hotel[]" id="imagen_hotel" class="form-control mb-2"
+                            multiple>
                         <div id="preview-container" class="flex flex-wrap">
                             <!-- Aquí se mostrarán las imágenes -->
                         </div>
                         @error('imagen_hotel')
-                        <small class="text-red-500 ml-2">{{ $message }}</small>
-                        <br>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
                         @enderror
                         <x-primary-button class='mt-4'>Agregar nuevo hotel</x-primary-button>
                     </form>
                 </div>
             </div>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+
         <script>
-        //agregar un input dinamico en las opiniones
-        document.addEventListener("DOMContentLoaded", function() {
-        var opinionesContainer = document.getElementById('opiniones-container');
-        var agregarOpinionBtn = document.getElementById('agregar-opinion-btn');
+            //agregar un input dinamico en las opiniones
+            document.addEventListener("DOMContentLoaded", function() {
+                var opinionesContainer = document.getElementById('opiniones-container');
+                var agregarOpinionBtn = document.getElementById('agregar-opinion-btn');
 
-        agregarOpinionBtn.addEventListener('click', function() {
-            var nuevaOpinionInput = document.createElement('input');
-            nuevaOpinionInput.type = 'text';
-            nuevaOpinionInput.name = 'opiniones[]';
-            nuevaOpinionInput.className = 'mt-3 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
-            nuevaOpinionInput.placeholder = 'Ingresa otra opinión';
+                agregarOpinionBtn.addEventListener('click', function() {
+                    var nuevaOpinionInput = document.createElement('input');
+                    nuevaOpinionInput.type = 'text';
+                    nuevaOpinionInput.name = 'opiniones[]';
+                    nuevaOpinionInput.className =
+                        'mt-3 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
+                    nuevaOpinionInput.placeholder = 'Ingresa otra opinión';
 
-            // Insertar el nuevo campo antes del botón "Agregar otra opinión"
-            agregarOpinionBtn.parentNode.insertBefore(nuevaOpinionInput, agregarOpinionBtn);
+                    // Insertar el nuevo campo antes del botón "Agregar otra opinión"
+                    agregarOpinionBtn.parentNode.insertBefore(nuevaOpinionInput, agregarOpinionBtn);
+                });
             });
-        });
 
-        //agregar un input dinamico en los servicios
-        document.addEventListener("DOMContentLoaded", function() {
-        var opinionesContainer = document.getElementById('servicios-container');
-        var agregarOpinionBtn = document.getElementById('agregar-servicio-btn');
+            //agregar un input dinamico en los servicios
+            document.addEventListener("DOMContentLoaded", function() {
+                var opinionesContainer = document.getElementById('servicios-container');
+                var agregarOpinionBtn = document.getElementById('agregar-servicio-btn');
 
-        agregarOpinionBtn.addEventListener('click', function() {
-            var nuevaOpinionInput = document.createElement('input');
-            nuevaOpinionInput.type = 'text';
-            nuevaOpinionInput.name = 'servicios[]';
-            nuevaOpinionInput.className = 'mt-3 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
-            nuevaOpinionInput.placeholder = 'Ingresa otro servicio';
+                agregarOpinionBtn.addEventListener('click', function() {
+                    var nuevaOpinionInput = document.createElement('input');
+                    nuevaOpinionInput.type = 'text';
+                    nuevaOpinionInput.name = 'servicios[]';
+                    nuevaOpinionInput.className =
+                        'mt-3 block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
+                    nuevaOpinionInput.placeholder = 'Ingresa otro servicio';
 
-            // Insertar el nuevo campo antes del botón "Agregar otra opinión"
-            agregarOpinionBtn.parentNode.insertBefore(nuevaOpinionInput, agregarOpinionBtn);
+                    // Insertar el nuevo campo antes del botón "Agregar otra opinión"
+                    agregarOpinionBtn.parentNode.insertBefore(nuevaOpinionInput, agregarOpinionBtn);
+                });
             });
-        });
             //previsializar las imagenes antes de subirlas
             document.getElementById('imagen_hotel').addEventListener('change', function(e) {
                 var files = e.target.files;
@@ -227,6 +234,7 @@
                 console.log("esta dando click en el boton para ocultar");
 
             }
+
         </script>
 
         <style>
@@ -262,11 +270,138 @@
             }
         </style>
 
+        <div 
+            class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
+
+            @foreach ($hotel as $hoteles)
+                <div class = "text-center">
+                    <span class = "spanTituloPaquete ml-5 nombres">{{ $hoteles->hotel_nombre }}</span></p>
+                </div>
+
+                <div
+                    class="p-6 bg-transparent flex justify-between items-center border-b border-gray-300 dark:border-gray-700">
+                    <div style="width: 300px; height: 200px; overflow: hidden;" id="carouselExampleFade"
+                        class="carousel slide carousel-fade " data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- Slides -->
+                            @foreach (explode(',', $hoteles->imagen_hotel) as $index => $imageName)
+                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                    <img src="{{ asset($imageName) }}" class="d-block w-64 h-48 object-cover mx-auto"
+                                        alt="Imagen del hotel" loading="lazy">
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Botones de navegación -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+
+                    <div class="w-3/5 h-3/5 text-gray-800 dark:text-gray-200">
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Primera columna -->
+                            <div class="col-span-1">
+                                <p><span class="spanTitulo">País:</span> <span
+                                        class="spaninfo">{{ $hoteles->pais }}</span></p>
+                                <p><span class="spanTitulo">Tipo de servicio:</span> <span
+                                        class="spaninfo">{{ $hoteles->tipo_alojamiento }}</span></p>
+                                <p><span class="spanTitulo">Provincia:</span> <span
+                                        class="spaninfo">{{ $hoteles->provincia }}</span></p>
+                                <p><span class="spanTitulo">Ciudad:</span> <span
+                                        class="spaninfo">{{ $hoteles->ciudad }}</span></p>
+                                <p><span class="spanTitulo">Numero de habitaciones:</span> <span
+                                        class="spaninfo">{{ $hoteles->num_h }}</span></p>
+                                <p><span class="spanTitulo">Numero de camas:</span> <span
+                                        class="spaninfo">{{ $hoteles->num_camas }}</span></p>
+                            </div>
+                            <!-- Segunda columna -->
+                            <div class="col-span-1">
+                                <!-- Mostrar los servicios -->
+                                <p class="spanTitulo">Servicios</p>
+                                <ul class="list-decimal pl-8">
+                                    @foreach (explode(',', $hoteles->servicios) as $servicio)
+                                        <li class="spaninfo flex items-center">
+                                            <img src="{{ asset('images/iconoEtiqueta.png') }}" class="w-4 h-4 mr-2"
+                                                alt="Check Circle Icon">
+                                            {{ $servicio }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <!-- Mostrar los comentarios -->
+                                <p class="spanTitulo">Comentarios</p>
+                                <ul class="list-decimal pl-8">
+                                    @foreach (explode(',', $hoteles->opiniones) as $opinion)
+                                        <li class="spaninfo flex items-center">
+                                            <img src="{{ asset('images/iconoEtiqueta.png') }}" class="w-4 h-4 mr-2"
+                                                alt="Check Circle Icon">
+                                            {{ $opinion }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
 
 
+                    <!-- Dropdown para acciones -->
+                    <x-dropdown>
+                        <x-slot name="trigger">
+                            <button>
+                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <!-- Enlace para editar el paquete -->
+                            <x-dropdown-link :href="route('hotel.edit', $hoteles)">
+                                {{ __('Editar hotel') }}
+                            </x-dropdown-link>
+
+                            <!-- Formulario para eliminar el paquete -->
+                            <form id="deleteForm" method="POST" action="{{ route('hotel.destroy', $hoteles) }}">
+                                @csrf
+                                @method('DELETE')
+                                <x-dropdown-link :href="route('hotel.destroy', $hoteles)" onclick="return confirmDelete(event)">
+                                    {{ __('Eliminar Hotel') }}
+                                </x-dropdown-link>
+                            </form>
+
+
+                            <script>
+                                function confirmDelete(event) {
+                                    if (confirm('¿Deseas eliminar este hotel?')) {
+                                        event.target.closest('form').submit();
+                                    }
+                                    return false;
+                                }
+                            </script>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+
+                <!-- Separador entre paquetes -->
+                <hr class="my-4 border-gray-300 dark:border-gray-700">
+            @endforeach
+        </div>
+        
     </div>
     </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>

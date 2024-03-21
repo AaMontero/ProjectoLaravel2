@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Contrato;
 use App\Models\Eventos;
+use App\Models\Hotel;
 use App\Models\Paquete;
 use App\Models\User;
 use App\Models\UserAction;
@@ -21,6 +22,7 @@ class UserActionsController extends Controller
         $contrato = Contrato::all();
         $paquete = Paquete::all();
         $evento = Eventos::all();
+        $hotel = Hotel::all();
        
 
         return view('logs.log', ['datos' => $datos, 
@@ -29,6 +31,7 @@ class UserActionsController extends Controller
                                 'user' =>$user,
                                 'contrato' =>$contrato,
                                 'paquete' => $paquete,
-                                'evento' => $evento]);
+                                'evento' => $evento,
+                                'hotel' => $hotel]);
     }
 }

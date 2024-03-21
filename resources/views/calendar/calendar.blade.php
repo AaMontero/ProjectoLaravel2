@@ -271,8 +271,8 @@ body {
 
                     select: function(start, end, allDays) {
                         $('#eventoModal').modal('show');
-                        $('#start_date').val(moment(start).format('YYYY-MM-DD HH:mm:ss'));
-                        $('#end_date').val(moment(end).format('YYYY-MM-DD HH:mm:ss'));
+                        $('#start_date').val(moment(start).format('YYYY-MM-DD'));
+                        $('#end_date').val(moment(end).format('YYYY-MM-DD'));
 
                         $('#saveBtn').unbind().click(function() {
                             var title = $('#title').val();
@@ -344,13 +344,13 @@ body {
                             var id = event.id;
                             var tituloSeleccionado = event.title;
                             var autorSeleccionado = event.author;
-                            var fechaInicioSeleccionado = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
-                            var fechaFinSeleccionado = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
+                            var fechaInicioSeleccionado = moment(event.start).format('YYYY-MM-DD');
+                            var fechaFinSeleccionado = moment(event.end).format('YYYY-MM-DD');
                             var hotel_nombreSeleccionado = event.hotel_nombre;
 
 
                             //Mostrar los detalles del evento en el modal
-                            document.getElementById("tituloSpan").innerText = tituloSeleccionado;s
+                            document.getElementById("tituloSpan").innerText = tituloSeleccionado;
                             document.getElementById("autorSpan").innerText = autorSeleccionado;
                             document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
                             document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
@@ -360,8 +360,8 @@ body {
                             console.log("Valor del título seleccionado:", tituloSeleccionado);
                             document.getElementById("title_edit").value = tituloSeleccionado;
                             document.getElementById("author_edit").value = autorSeleccionado;
-                            document.getElementById("start_date_edit").value = formatoFechaInicio;
-                            document.getElementById("end_date_edit").value = formatoFechaFin;
+                            document.getElementById("start_date_edit").value = fechaInicioSeleccionado;
+                            document.getElementById("end_date_edit").value = fechaFinSeleccionado;
                             document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
 
                             $('#updateBtn').unbind().click(function() {

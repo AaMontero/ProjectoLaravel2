@@ -6,14 +6,15 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <title>Full Calendar js</title>
+    <title>Calendar</title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -112,7 +113,7 @@ body {
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
                         </select>
-                        <label for="">Titular</label>
+                        <label for="">Cliente</label>
                         <input type="text" class="form-control" id="author">
 
                         <label for="hotel">Hoteles</label>
@@ -123,9 +124,9 @@ body {
                             @endforeach
                         </select>
 
-                        <label for="">Fecha Inicio</label>
+                        <label for="">Fecha de Entrada</label>
                         <input type="date" class="form-control" id="start_date">
-                        <label for="">Fecha salida</label>
+                        <label for="">Fecha de Salida</label>
                         <input type="date" class="form-control" id="end_date">
 
                         <span id="titleError" class="text-danger"></span>
@@ -156,7 +157,7 @@ body {
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
                         </select>
-                        <label for="">Autor</label>
+                        <label for="">Cliente</label>
                         <input type="text" class="form-control" id="author_edit">
 
                         <label for="hotel">Hoteles</label>
@@ -167,9 +168,9 @@ body {
                         @endforeach
                         </select>
 
-                        <label for="">Fecha Inicio</label>
+                        <label for="">Fecha de Entrada</label>
                         <input type="date" class="form-control" id="start_date_edit">
-                        <label for="">Fecha salida</label>
+                        <label for="">Fecha de Salida</label>
                         <input type="date" class="form-control" id="end_date_edit">
                         <span id="titleError" class="text-danger"></span>
                     </div>
@@ -192,19 +193,19 @@ body {
                     <hr class="mb-2">
 
                     <div class="mb-2">
-                        <strong class="font-semibold">Título:</strong>
+                        <strong class="font-semibold">Estado:</strong>
                         <span id="tituloSpan" class="ml-2"></span>
                     </div>
                     <div class="mb-2">
-                        <strong class="font-semibold">Autor:</strong>
+                        <strong class="font-semibold">Cliente:</strong>
                         <span id="autorSpan" class="ml-2"></span>
                     </div>
                     <div class="mb-2">
-                        <strong class="font-semibold">Fecha de Inicio:</strong>
+                        <strong class="font-semibold">Fecha de Entrada:</strong>
                         <span id="fechaInicioSpan" class="ml-2"></span>
                     </div>
                     <div class="mb-2">
-                        <strong class="font-semibold">Fecha de Fin:</strong>
+                        <strong class="font-semibold">Fecha de Salida:</strong>
                         <span id="fechaFinSpan" class="ml-2"></span>
                     </div>
                     <div class="mb-2">
@@ -232,6 +233,7 @@ body {
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
         </script>
         <script>
+
         $(document).ready(function() {
                 $.ajaxSetup({
                     headers: {
@@ -266,10 +268,11 @@ body {
                     selectable: true,
                     selecetHelper: true,
 
+
                     select: function(start, end, allDays) {
                         $('#eventoModal').modal('show');
-                        $('#start_date').val(moment(start).format('YYYY-MM-DD'));
-                        $('#end_date').val(moment(end).format('YYYY-MM-DD'));
+                        $('#start_date').val(moment(start).format('YYYY-MM-DD HH:mm:ss'));
+                        $('#end_date').val(moment(end).format('YYYY-MM-DD HH:mm:ss'));
 
                         $('#saveBtn').unbind().click(function() {
                             var title = $('#title').val();
@@ -341,14 +344,13 @@ body {
                             var id = event.id;
                             var tituloSeleccionado = event.title;
                             var autorSeleccionado = event.author;
-                            var fechaInicioSeleccionado = event.start;
-                            var fechaFinSeleccionado = event.end;
+                            var fechaInicioSeleccionado = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
+                            var fechaFinSeleccionado = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
                             var hotel_nombreSeleccionado = event.hotel_nombre;
 
-                            var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
-                            var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
+
                             //Mostrar los detalles del evento en el modal
-                            document.getElementById("tituloSpan").innerText = tituloSeleccionado;
+                            document.getElementById("tituloSpan").innerText = tituloSeleccionado;s
                             document.getElementById("autorSpan").innerText = autorSeleccionado;
                             document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
                             document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
@@ -429,11 +431,13 @@ body {
                             });
                         });
                     },
-
                     selectAllow: function(event) {
-                        return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1,'second').utcOffset(false), 'day');
-                    },
+                    return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1, 'second').utcOffset(false), 'day');
+                },
+
+
                 });
+
 
                 $("#eventoModal").on("hidden.bs.modal", function() {
                     $("#saveBtn").unbind();

@@ -353,31 +353,25 @@ body {
                             var id = event.id;
                             var tituloSeleccionado = event.title;
                             var autorSeleccionado = event.author;
-                            var fechaInicioSeleccionado = event.start;
-                            var fechaFinSeleccionado = event.end;
+                            var fechaInicioSeleccionado = moment(event.start).format('dddd, D [de] MMMM [de] YYYY');
+                            var fechaFinSeleccionado = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
                             var hotel_nombreSeleccionado = event.hotel_nombre;
-                            //fechas formateadas para modal y detalles
-                            var fechaInicioFormateada = moment(event.start).format('dddd, D [de] MMMM [de] YYYY');
-                            var fechaFinFormateada = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
 
-                            var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
-                            var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
-
-    console.log('Fecha de inicio:',fechaInicioFormateada );
-    console.log('Fecha de fin:', fechaFinFormateada);
-                            //Mostrar los detalles del evento en el modal en event-details
+                            var formatoFechaInicio = moment(event.start).format('YYYY-MM-DD');
+                            var formatoFechaFin = moment(event.end).format('YYYY-MM-DD');
+                            //Mostrar los detalles del evento en el modal
                             document.getElementById("tituloSpan").innerText = tituloSeleccionado;
                             document.getElementById("autorSpan").innerText = autorSeleccionado;
-                            document.getElementById("fechaInicioSpan").innerText = fechaInicioFormateada;
-                            document.getElementById("fechaFinSpan").innerText = fechaFinFormateada;
+                            document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
+                            document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
                             document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
 
-                            // Establecer los valores en el formulario del editarModal
+                            // Establecer los valores en el formulario de edición
                             console.log("Valor del título seleccionado:", tituloSeleccionado);
                             document.getElementById("title_edit").value = tituloSeleccionado;
                             document.getElementById("author_edit").value = autorSeleccionado;
-                            document.getElementById("start_date_edit").innerText = formatoFechaInicio;
-                            document.getElementById("end_date_edit").innerText = formatoFechaFin;
+                            document.getElementById("start_date_edit").value = formatoFechaInicio;
+                            document.getElementById("end_date_edit").value = formatoFechaFin;
                             document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
                             $('#event-details').show();
 

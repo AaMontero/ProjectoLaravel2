@@ -188,36 +188,34 @@
             <div class="w-1/4 p-4">
                 <div class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
                     <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
+
                     <hr class="mb-2">
-                    <div id="event-details"
-                        class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden"
-                        style="display: none;">
-                        <div class="mb-2 mt-4">
-                            <strong class="font-semibold">Estado:</strong>
-                            <span id="tituloSpan" class="ml-2"></span>
+                        <div id="event-details" class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden" style="display: none;">
+                            <button type="button" id="closedetails" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="mb-2 mt-4">
+                                <strong class="font-semibold">Estado:</strong>
+                                <span id="tituloSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Cliente:</strong>
+                                <span id="autorSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Fecha de Entrada:</strong>
+                                <span id="fechaInicioSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Fecha de Salida:</strong>
+                                <span id="fechaFinSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Hoteles:</strong>
+                                <span id="hotel_nombreSpan" class="ml-2"></span>
+                            </div>
+                            <div class="flex">
+                                <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2" id="ModalEditar">Editar</button>
+                            </div>
                         </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Cliente:</strong>
-                            <span id="autorSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Fecha de Entrada:</strong>
-                            <span id="fechaInicioSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Fecha de Salida:</strong>
-                            <span id="fechaFinSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Hoteles:</strong>
-                            <span id="hotel_nombreSpan" class="ml-2"></span>
-                        </div>
-                        <div class="flex">
-                            <button type="button"
-                                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2"
-                                id="ModalEditar">Editar</button>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -374,28 +372,7 @@
 
                     eventClick: function(event) {
 
-                        var id = event.id;
-                        var tituloSeleccionado = event.title;
-                        var autorSeleccionado = event.author;
-                        var fechaInicioSeleccionado = event.start;
-                        var fechaFinSeleccionado = event.end;
-                        var hotel_nombreSeleccionado = event.hotel_nombre;
-                        //fechas formateadas para modal y detalles
-                        var fechaInicioFormateada = moment(event.start).format(
-                            'dddd, D [de] MMMM [de] YYYY');
-                        var fechaFinFormateada = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
-
-                        var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
-                        var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
-
-                        console.log('Fecha de inicio:', fechaInicioFormateada);
-                        console.log('Fecha de fin:', fechaFinFormateada);
-                        //Mostrar los detalles del evento en el modal en event-details
-                        document.getElementById("tituloSpan").innerText = tituloSeleccionado;
-                        document.getElementById("autorSpan").innerText = autorSeleccionado;
-                        document.getElementById("fechaInicioSpan").innerText = fechaInicioFormateada;
-                        document.getElementById("fechaFinSpan").innerText = fechaFinFormateada;
-                        document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
+                       
                             var id = event.id;
                             var tituloSeleccionado = event.title;
                             var autorSeleccionado = event.author;

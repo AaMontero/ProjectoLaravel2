@@ -162,7 +162,7 @@
                 </div>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+
 
         <script>
             //agregar un input dinamico en las opiniones
@@ -234,7 +234,6 @@
                 console.log("esta dando click en el boton para ocultar");
 
             }
-
         </script>
 
         <style>
@@ -270,138 +269,160 @@
             }
         </style>
 
-        <div 
+        <div id="hotels"
             class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
+            <div class="mt-4 mb-4 mx-auto max-w-lg">
+                <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar hotel..." />
+            </div>
 
-            @foreach ($hotel as $hoteles)
-                <div class = "text-center">
-                    <span class = "spanTituloPaquete ml-5 nombres">{{ $hoteles->hotel_nombre }}</span></p>
-                </div>
-
-                <div
-                    class="p-6 bg-transparent flex justify-between items-center border-b border-gray-300 dark:border-gray-700">
-                    <div style="width: 300px; height: 200px; overflow: hidden;" id="carouselExampleFade"
-                        class="carousel slide carousel-fade " data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <!-- Slides -->
-                            @foreach (explode(',', $hoteles->imagen_hotel) as $index => $imageName)
-                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                    <img src="{{ asset($imageName) }}" class="d-block w-64 h-48 object-cover mx-auto"
-                                        alt="Imagen del hotel" loading="lazy">
+            <div class="w-100 bg-white dark:bg-gray-800 border border-[#0a0a0a] p-4 rounded-md overflow-x-auto">
+                <div class="list ">
+                    @foreach ($hotel as $hoteles)
+                        <div
+                            class="p-6 bg-transparent flex justify-between items-center border-b border-gray-300 dark:border-gray-700">
+                            <div style="width: 300px; height: 200px; overflow: hidden;" id="carouselExampleFade"
+                                class="carousel slide carousel-fade " data-bs-ride="carousel">
+                                <div class = "text-center">
+                                    <span class = "spanTituloPaquete ml-5 nombres">{{ $hoteles->hotel_nombre }}</span></p>
                                 </div>
-                            @endforeach
+                                <div class="carousel-inner ">
+                                    <!-- Slides -->
+                                    @foreach (explode(',', $hoteles->imagen_hotel) as $index => $imageName)
+                                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                            <img src="{{ asset($imageName) }}"
+                                                class="d-block w-64 h-48 object-cover mx-auto" alt="Imagen del hotel"
+                                                loading="lazy">
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Botones de navegación -->
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+
+                            <div class="w-3/5 h-3/5 text-gray-800 dark:text-gray-200">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Primera columna -->
+                                    <div class="col-span-1">
+                                        <p><span class="spanTitulo">País:</span> <span
+                                                class="spaninfo">{{ $hoteles->pais }}</span></p>
+                                        <p><span class="spanTitulo">Tipo de servicio:</span> <span
+                                                class="spaninfo">{{ $hoteles->tipo_alojamiento }}</span></p>
+                                        <p><span class="spanTitulo">Provincia:</span> <span
+                                                class="spaninfo">{{ $hoteles->provincia }}</span></p>
+                                        <p><span class="spanTitulo">Ciudad:</span> <span
+                                                class="spaninfo">{{ $hoteles->ciudad }}</span></p>
+                                        <p><span class="spanTitulo">Numero de habitaciones:</span> <span
+                                                class="spaninfo">{{ $hoteles->num_h }}</span></p>
+                                        <p><span class="spanTitulo">Numero de camas:</span> <span
+                                                class="spaninfo">{{ $hoteles->num_camas }}</span></p>
+                                    </div>
+                                    <!-- Segunda columna -->
+                                    <div class="col-span-1">
+                                        <!-- Mostrar los servicios -->
+                                        <p class="spanTitulo">Servicios</p>
+                                        <ul class="list-decimal pl-8">
+                                            @foreach (explode(',', $hoteles->servicios) as $servicio)
+                                                <li class="spaninfo flex items-center">
+                                                    <img src="{{ asset('images/iconoEtiqueta.png') }}"
+                                                        class="w-4 h-4 mr-2" alt="Check Circle Icon">
+                                                    {{ $servicio }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        <!-- Mostrar los comentarios -->
+                                        <p class="spanTitulo">Comentarios</p>
+                                        <ul class="list-decimal pl-8">
+                                            @foreach (explode(',', $hoteles->opiniones) as $opinion)
+                                                <li class="spaninfo flex items-center">
+                                                    <img src="{{ asset('images/iconoEtiqueta.png') }}"
+                                                        class="w-4 h-4 mr-2" alt="Check Circle Icon">
+                                                    {{ $opinion }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Dropdown para acciones -->
+                            <x-dropdown>
+                                <x-slot name="trigger">
+                                    <button>
+                                        <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                        </svg>
+                                    </button>
+                                </x-slot>
+
+                                <x-slot name="content">
+                                    <!-- Enlace para editar el paquete -->
+                                    <x-dropdown-link :href="route('hotel.edit', $hoteles)">
+                                        {{ __('Editar hotel') }}
+                                    </x-dropdown-link>
+
+                                    <!-- Formulario para eliminar el paquete -->
+                                    <form id="deleteForm" method="POST"
+                                        action="{{ route('hotel.destroy', $hoteles) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-dropdown-link :href="route('hotel.destroy', $hoteles)" onclick="return confirmDelete(event)">
+                                            {{ __('Eliminar Hotel') }}
+                                        </x-dropdown-link>
+                                    </form>
+
+
+                                    <script>
+                                        function confirmDelete(event) {
+                                            if (confirm('¿Deseas eliminar este hotel?')) {
+                                                event.target.closest('form').submit();
+                                            }
+                                            return false;
+                                        }
+                                    </script>
+                                </x-slot>
+                            </x-dropdown>
                         </div>
 
-                        <!-- Botones de navegación -->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-
-
-                    <div class="w-3/5 h-3/5 text-gray-800 dark:text-gray-200">
-                        <div class="grid grid-cols-2 gap-4">
-                            <!-- Primera columna -->
-                            <div class="col-span-1">
-                                <p><span class="spanTitulo">País:</span> <span
-                                        class="spaninfo">{{ $hoteles->pais }}</span></p>
-                                <p><span class="spanTitulo">Tipo de servicio:</span> <span
-                                        class="spaninfo">{{ $hoteles->tipo_alojamiento }}</span></p>
-                                <p><span class="spanTitulo">Provincia:</span> <span
-                                        class="spaninfo">{{ $hoteles->provincia }}</span></p>
-                                <p><span class="spanTitulo">Ciudad:</span> <span
-                                        class="spaninfo">{{ $hoteles->ciudad }}</span></p>
-                                <p><span class="spanTitulo">Numero de habitaciones:</span> <span
-                                        class="spaninfo">{{ $hoteles->num_h }}</span></p>
-                                <p><span class="spanTitulo">Numero de camas:</span> <span
-                                        class="spaninfo">{{ $hoteles->num_camas }}</span></p>
-                            </div>
-                            <!-- Segunda columna -->
-                            <div class="col-span-1">
-                                <!-- Mostrar los servicios -->
-                                <p class="spanTitulo">Servicios</p>
-                                <ul class="list-decimal pl-8">
-                                    @foreach (explode(',', $hoteles->servicios) as $servicio)
-                                        <li class="spaninfo flex items-center">
-                                            <img src="{{ asset('images/iconoEtiqueta.png') }}" class="w-4 h-4 mr-2"
-                                                alt="Check Circle Icon">
-                                            {{ $servicio }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                                <!-- Mostrar los comentarios -->
-                                <p class="spanTitulo">Comentarios</p>
-                                <ul class="list-decimal pl-8">
-                                    @foreach (explode(',', $hoteles->opiniones) as $opinion)
-                                        <li class="spaninfo flex items-center">
-                                            <img src="{{ asset('images/iconoEtiqueta.png') }}" class="w-4 h-4 mr-2"
-                                                alt="Check Circle Icon">
-                                            {{ $opinion }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Dropdown para acciones -->
-                    <x-dropdown>
-                        <x-slot name="trigger">
-                            <button>
-                                <svg class="ml-5 w-5 h-5 text-gray-400 dark:text-gray-200"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                </svg>
-                            </button>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <!-- Enlace para editar el paquete -->
-                            <x-dropdown-link :href="route('hotel.edit', $hoteles)">
-                                {{ __('Editar hotel') }}
-                            </x-dropdown-link>
-
-                            <!-- Formulario para eliminar el paquete -->
-                            <form id="deleteForm" method="POST" action="{{ route('hotel.destroy', $hoteles) }}">
-                                @csrf
-                                @method('DELETE')
-                                <x-dropdown-link :href="route('hotel.destroy', $hoteles)" onclick="return confirmDelete(event)">
-                                    {{ __('Eliminar Hotel') }}
-                                </x-dropdown-link>
-                            </form>
-
-
-                            <script>
-                                function confirmDelete(event) {
-                                    if (confirm('¿Deseas eliminar este hotel?')) {
-                                        event.target.closest('form').submit();
-                                    }
-                                    return false;
-                                }
-                            </script>
-                        </x-slot>
-                    </x-dropdown>
+                        <!-- Separador entre paquetes -->
+                        <hr class="my-4 border-gray-300 dark:border-gray-700">
+                    @endforeach
                 </div>
-
-                <!-- Separador entre paquetes -->
-                <hr class="my-4 border-gray-300 dark:border-gray-700">
-            @endforeach
+            </div>
         </div>
-        
+
+
+    </div>
+
     </div>
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    |
+    <script>
+        // buscador
+        var options = {
+            valueNames: ['nombres'],
+
+        };
+
+        var userList = new List('hotels', options);
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>

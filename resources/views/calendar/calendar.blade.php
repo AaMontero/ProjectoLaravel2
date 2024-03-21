@@ -26,58 +26,72 @@
     </x-slot>
 
     <style>
-/* Estilos generales */
-body {
-    background-color: #ffffff;
-    color: #000000;
-    font-family: Arial, sans-serif;
-}
+        /* Estilos generales */
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Arial, sans-serif;
+        }
 
-/* Estilos para la parte de Event Details */
+        /* Estilos para la parte de Event Details */
 
-/* Animación para Event Details */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        /* Animación para Event Details */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-/* Estilos para el calendario */
-#calendar {
-    background-color:#a8a6a6e5;
-    padding: 20px;
-    border-radius: 10px;
+            to {
+                opacity: 1;
+            }
+        }
 
-}
+        /* Estilos para el calendario */
+        #calendar {
+            background-color: #a8a6a6e5;
+            padding: 20px;
+            border-radius: 10px;
 
-/* Animación para el calendario */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-.fc-event{
-   border-radius: 5px; /* Añadir bordes redondeados */
-    padding: 5px; /* Añadir espacio interno */
-    font-size: 14px; /* Tamaño de fuente */
-    cursor: pointer; /* Cambiar el cursor al pasar sobre el evento */
-}
-/* Estilos para los botones del calendario */
-.fc-button {
+        }
 
-    color: #000000;
-    border-color: #000000; /* Red */
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        /* Animación para el calendario */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .fc-event {
+            border-radius: 5px;
+            /* Añadir bordes redondeados */
+            padding: 5px;
+            /* Añadir espacio interno */
+            font-size: 14px;
+            /* Tamaño de fuente */
+            cursor: pointer;
+            /* Cambiar el cursor al pasar sobre el evento */
+        }
+
+        /* Estilos para los botones del calendario */
+        .fc-button {
+
+            color: #000000;
+            border-color: #000000;
+            /* Red */
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
     </style>
+
     <body>
 
         <!-- Modal -->
@@ -102,7 +116,7 @@ body {
                         <label for="hotel">Hoteles</label>
                         <select class="form-select" id="hotel_nombre" name="hotel">
                             <option value="" disabled selected>Selecciona un Hotel</option>
-                            @foreach($hoteles as $hotel_nombre)
+                            @foreach ($hoteles as $hotel_nombre)
                                 <option value="{{ $hotel_nombre }}">{{ $hotel_nombre }}</option>
                             @endforeach
                         </select>
@@ -129,7 +143,8 @@ body {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Editar Evento</h5>
-                        <button type="button" id="close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" id="close" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
@@ -146,9 +161,9 @@ body {
                         <label for="hotel">Hoteles</label>
                         <select class="form-select" id="hotel_nombre_edit" name="hotel_nombre_edit">
                             <option value="" disabled selected>Selecciona un Hotel</option>
-                            @foreach($hoteles as $hotel_nombre)
-                            <option value="{{ $hotel_nombre }}">{{ $hotel_nombre }}</option>
-                        @endforeach
+                            @foreach ($hoteles as $hotel_nombre)
+                                <option value="{{ $hotel_nombre }}">{{ $hotel_nombre }}</option>
+                            @endforeach
                         </select>
 
                         <label for="">Fecha de Entrada</label>
@@ -171,34 +186,38 @@ body {
 
             <!-- Detalles -->
             <div class="w-1/4 p-4">
-                <div  class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
+                <div class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
                     <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
                     <hr class="mb-2">
-                        <div id="event-details" class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden" style="display: none;">
-                            <div class="mb-2 mt-4">
-                                <strong class="font-semibold">Estado:</strong>
-                                <span id="tituloSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Cliente:</strong>
-                                <span id="autorSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Fecha de Entrada:</strong>
-                                <span id="fechaInicioSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Fecha de Salida:</strong>
-                                <span id="fechaFinSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Hoteles:</strong>
-                                <span id="hotel_nombreSpan" class="ml-2"></span>
-                            </div>
-                            <div class="flex">
-                                <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2" id="ModalEditar">Editar</button>
-                            </div>
+                    <div id="event-details"
+                        class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden"
+                        style="display: none;">
+                        <div class="mb-2 mt-4">
+                            <strong class="font-semibold">Estado:</strong>
+                            <span id="tituloSpan" class="ml-2"></span>
                         </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Cliente:</strong>
+                            <span id="autorSpan" class="ml-2"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Fecha de Entrada:</strong>
+                            <span id="fechaInicioSpan" class="ml-2"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Fecha de Salida:</strong>
+                            <span id="fechaFinSpan" class="ml-2"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Hoteles:</strong>
+                            <span id="hotel_nombreSpan" class="ml-2"></span>
+                        </div>
+                        <div class="flex">
+                            <button type="button"
+                                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2"
+                                id="ModalEditar">Editar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -217,8 +236,7 @@ body {
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
         </script>
         <script>
-
-        $(document).ready(function() {
+            $(document).ready(function() {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -253,7 +271,7 @@ body {
                     selecetHelper: true,
                     eventTextColor: '#ffffff',
 
-                    eventRender: function(event, element){
+                    eventRender: function(event, element) {
                         var colorMapping = {
                             'Prereservado': '#00227f',
                             'Reservado': '#FF0000',
@@ -265,12 +283,13 @@ body {
                         }
                         var content = '';
                         if (event.title === 'Prereservado' || event.title === 'Reservado') {
-                            content = '<div class="event-title">' + event.title +', '+ event.hotel_nombre + ', '+ event.author + '</div>';
+                            content = '<div class="event-title">' + event.title + ', ' + event
+                                .hotel_nombre + ', ' + event.author + '</div>';
                         } else {
                             content = '<div class="event-title">' + event.title + '</div>';
                         }
-                                // Agregar el contenido al elemento del evento
-                            element.find('.fc-content').html(content);
+                        // Agregar el contenido al elemento del evento
+                        element.find('.fc-content').html(content);
 
                     },
 
@@ -281,7 +300,7 @@ body {
 
                         $('#saveBtn').unbind().click(function() {
                             var title = $('#title').val();
-                            console.log("El valor de end es: "+ end);
+                            console.log("El valor de end es: " + end);
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
                             console.log("El valor de end_date es: " + end_date);
@@ -289,7 +308,7 @@ body {
                             var hotel_nombre = $('#hotel_nombre').val();
                             console.log("El valor de hotel es: " + hotel_nombre);
 
-                           // Obtener los valores de los campos
+                            // Obtener los valores de los campos
                             var title = $('#title').val();
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
@@ -302,44 +321,49 @@ body {
                                 swal("Error", "Todos los campos son obligatorios", "error");
                                 return;
                             }
-                                // Realizar la solicitud AJAX solo si todos los campos están llenos
-                                $.ajax({
-                                    url: "{{ route('calendar.store') }}",
-                                    type: "POST",
-                                    dataType: 'json',
-                                    data: {
-                                        title: title,
-                                        start_date: start_date,
-                                        end_date: end_date,
-                                        author: author,
-                                        hotel_nombre: hotel_nombre,
-                                        user_id: {{ auth()->id() }}
-                                    },
-                                    success: function(response) {
-                                        $('#eventoModal').modal('hide')
+                            // Realizar la solicitud AJAX solo si todos los campos están llenos
+                            $.ajax({
+                                url: "{{ route('calendar.store') }}",
+                                type: "POST",
+                                dataType: 'json',
+                                data: {
+                                    title: title,
+                                    start_date: start_date,
+                                    end_date: end_date,
+                                    author: author,
+                                    hotel_nombre: hotel_nombre,
+                                    user_id: {{ auth()->id() }}
+                                },
+                                success: function(response) {
+                                    $('#eventoModal').modal('hide')
 
-                                        $('#calendar').fullCalendar('renderEvent', {
-                                            'title': response.title,
-                                            'author': response.author,
-                                            'hotel_nombre': response.hotel_nombre,
-                                            'start': response.start_date,
-                                            'end': response.end_date,
+                                    $('#calendar').fullCalendar('renderEvent', {
+                                        'title': response.title,
+                                        'author': response.author,
+                                        'hotel_nombre': response.hotel_nombre,
+                                        'start': response.start_date,
+                                        'end': response.end_date,
 
+                                    });
+
+                                    swal("¡Éxito!", "¡Evento Guardado Correctamente!",
+                                            "success")
+                                        .then(function() {
+                                            location
+                                        .reload(); // Recargar la página después del mensaje de éxito
                                         });
-
-                                        swal("¡Éxito!", "¡Evento Guardado Correctamente!", "success")
-                                            .then(function() {
-                                                location.reload();// Recargar la página después del mensaje de éxito
-                                            });
-                                    },
-                                    error: function(error) {
-                                        if (error.responseJSON.errors) {
-                                            $('#titleError').html(error.responseJSON.errors.title)
-                                        }else {
-                                            swal("Error", "Hubo un gran error al guardar el evento", "error");
-                                        }
-                                    },
-                                });
+                                },
+                                error: function(error) {
+                                    if (error.responseJSON.errors) {
+                                        $('#titleError').html(error.responseJSON.errors
+                                            .title)
+                                    } else {
+                                        swal("Error",
+                                            "Hubo un gran error al guardar el evento",
+                                            "error");
+                                    }
+                                },
+                            });
 
 
 
@@ -350,39 +374,40 @@ body {
 
                     eventClick: function(event) {
 
-                            var id = event.id;
-                            var tituloSeleccionado = event.title;
-                            var autorSeleccionado = event.author;
-                            var fechaInicioSeleccionado = event.start;
-                            var fechaFinSeleccionado = event.end;
-                            var hotel_nombreSeleccionado = event.hotel_nombre;
-                            //fechas formateadas para modal y detalles
-                            var fechaInicioFormateada = moment(event.start).format('dddd, D [de] MMMM [de] YYYY');
-                            var fechaFinFormateada = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
+                        var id = event.id;
+                        var tituloSeleccionado = event.title;
+                        var autorSeleccionado = event.author;
+                        var fechaInicioSeleccionado = event.start;
+                        var fechaFinSeleccionado = event.end;
+                        var hotel_nombreSeleccionado = event.hotel_nombre;
+                        //fechas formateadas para modal y detalles
+                        var fechaInicioFormateada = moment(event.start).format(
+                            'dddd, D [de] MMMM [de] YYYY');
+                        var fechaFinFormateada = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
 
-                            var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
-                            var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
+                        var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
+                        var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
 
-    console.log('Fecha de inicio:',fechaInicioFormateada );
-    console.log('Fecha de fin:', fechaFinFormateada);
-                            //Mostrar los detalles del evento en el modal en event-details
-                            document.getElementById("tituloSpan").innerText = tituloSeleccionado;
-                            document.getElementById("autorSpan").innerText = autorSeleccionado;
-                            document.getElementById("fechaInicioSpan").innerText = fechaInicioFormateada;
-                            document.getElementById("fechaFinSpan").innerText = fechaFinFormateada;
-                            document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
+                        console.log('Fecha de inicio:', fechaInicioFormateada);
+                        console.log('Fecha de fin:', fechaFinFormateada);
+                        //Mostrar los detalles del evento en el modal en event-details
+                        document.getElementById("tituloSpan").innerText = tituloSeleccionado;
+                        document.getElementById("autorSpan").innerText = autorSeleccionado;
+                        document.getElementById("fechaInicioSpan").innerText = fechaInicioFormateada;
+                        document.getElementById("fechaFinSpan").innerText = fechaFinFormateada;
+                        document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
 
-                            // Establecer los valores en el formulario del editarModal
-                            console.log("Valor del título seleccionado:", tituloSeleccionado);
-                            document.getElementById("title_edit").value = tituloSeleccionado;
-                            document.getElementById("author_edit").value = autorSeleccionado;
-                            document.getElementById("start_date_edit").innerText = formatoFechaInicio;
-                            document.getElementById("end_date_edit").innerText = formatoFechaFin;
-                            document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
-                            $('#event-details').show();
+                        // Establecer los valores en el formulario del editarModal
+                        console.log("Valor del título seleccionado:", tituloSeleccionado);
+                        document.getElementById("title_edit").value = tituloSeleccionado;
+                        document.getElementById("author_edit").value = autorSeleccionado;
+                        document.getElementById("start_date_edit").innerText = formatoFechaInicio;
+                        document.getElementById("end_date_edit").innerText = formatoFechaFin;
+                        document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
+                        $('#event-details').show();
 
 
-                            $('#updateBtn').unbind().click(function() {
+                        $('#updateBtn').unbind().click(function() {
                             console.log('Editado Correctamente');
                             var id = event.id;
                             var start_date = $('#start_date_edit').val();
@@ -403,14 +428,19 @@ body {
                                     hotel_nombre: hotel_nombre
                                 },
                                 success: function(response) {
-                                    swal("¡Exito!", "¡Evento Actualizado!", "success").then(() => {
-                                        $('#editarModal').modal('hide'); // Ocultar el modal después del mensaje de éxito
-                                        location.reload(); // Recargar la página para reflejar los cambios
-                                    });// Mostrando una alerta de éxito
+                                    swal("¡Exito!", "¡Evento Actualizado!", "success")
+                                        .then(() => {
+                                            $('#editarModal').modal(
+                                            'hide'); // Ocultar el modal después del mensaje de éxito
+                                            location
+                                        .reload(); // Recargar la página para reflejar los cambios
+                                        }); // Mostrando una alerta de éxito
                                 },
                                 error: function(error) {
                                     console.log(error);
-                                    swal("¡Error!", "Hubo un error al actualizar el evento.", "error"); // Mostrando una alerta de error
+                                    swal("¡Error!",
+                                        "Hubo un error al actualizar el evento.",
+                                        "error"); // Mostrando una alerta de error
                                 }
                             });
                         });
@@ -418,40 +448,47 @@ body {
                         $('#deleteBtn').unbind().click(function() {
                             var id = event.id;
                             swal({
-                                title: "¿Estás seguro?",
-                                text: "¡No podrás recuperar este evento una vez eliminado!",
-                                icon: "warning",
-                                buttons: ["Cancelar", "Sí, eliminarlo"],
-                                dangerMode: true,
-                            })
-                            .then((willDelete) => {
-                                if (willDelete) {
-                                    $.ajax({
-                                        url: "{{ route('calendar.destroy', '') }}" + '/' + id,
-                                        type: "DELETE",
-                                        dataType: 'json',
-                                        success: function(response) {
-                                            swal("¡Bien hecho!", "¡Evento Eliminado!", "success").then(() => {
-                                                $('#editarModal').modal('hide');
-                                                location.reload();
-                                            });
-                                        },
-                                        error: function(error) {
-                                            console.log(error);
-                                            swal("¡Error!", "Hubo un error al eliminar el evento.", "error");
-                                        }
-                                    });
-                                } else {
-                                    swal("Operación cancelada", {
-                                        icon: "info",
-                                    });
-                                }
-                            });
+                                    title: "¿Estás seguro?",
+                                    text: "¡No podrás recuperar este evento una vez eliminado!",
+                                    icon: "warning",
+                                    buttons: ["Cancelar", "Sí, eliminarlo"],
+                                    dangerMode: true,
+                                })
+                                .then((willDelete) => {
+                                    if (willDelete) {
+                                        $.ajax({
+                                            url: "{{ route('calendar.destroy', '') }}" +
+                                                '/' + id,
+                                            type: "DELETE",
+                                            dataType: 'json',
+                                            success: function(response) {
+                                                swal("¡Bien hecho!",
+                                                    "¡Evento Eliminado!",
+                                                    "success").then(() => {
+                                                    $('#editarModal').modal(
+                                                        'hide');
+                                                    location.reload();
+                                                });
+                                            },
+                                            error: function(error) {
+                                                console.log(error);
+                                                swal("¡Error!",
+                                                    "Hubo un error al eliminar el evento.",
+                                                    "error");
+                                            }
+                                        });
+                                    } else {
+                                        swal("Operación cancelada", {
+                                            icon: "info",
+                                        });
+                                    }
+                                });
                         });
                     },
                     selectAllow: function(event) {
-                    return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1, 'second').utcOffset(false), 'day');
-                },
+                        return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1,
+                            'second').utcOffset(false), 'day');
+                    },
 
 
                 });
@@ -462,31 +499,26 @@ body {
                 });
 
 
-        });
+            });
 
-        $(document).ready(function() {
-            var modalEditarBtn = document.getElementById("ModalEditar");
-            var editarModal = document.getElementById("editarModal");
-            // Asignar un evento clic al botón para abrir la ventana modal
+            $(document).ready(function() {
+                var modalEditarBtn = document.getElementById("ModalEditar");
+                var editarModal = document.getElementById("editarModal");
+                // Asignar un evento clic al botón para abrir la ventana modal
 
-            modalEditarBtn.onclick = function(event) {
-                // Mostrar la ventana modal
-                editarModal.classList.add("show");
-                editarModal.style.display = "block";
+                modalEditarBtn.onclick = function(event) {
+                    // Mostrar la ventana modal
+                    editarModal.classList.add("show");
+                    editarModal.style.display = "block";
 
-                $('#editarModal').modal('show');
-                $("#editarModal").on("hidden.bs.modal", function() {
-                    $("#updateBtn").unbind();
-                    $("#deleteBtn").unbind();
-                });
-            }
+                    $('#editarModal').modal('show');
+                    $("#editarModal").on("hidden.bs.modal", function() {
+                        $("#updateBtn").unbind();
+                        $("#deleteBtn").unbind();
+                    });
+                }
 
-        });
-
-
-
-
-
+            });
         </script>
     </body>
 </x-app-layout>

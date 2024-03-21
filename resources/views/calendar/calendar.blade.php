@@ -176,7 +176,7 @@ body {
 
                     <hr class="mb-2">
                         <div id="event-details" class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden" style="display: none;">
-                            <button type="button" id="close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" id="closedetails" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             <div class="mb-2 mt-4">
                                 <strong class="font-semibold">Estado:</strong>
                                 <span id="tituloSpan" class="ml-2"></span>

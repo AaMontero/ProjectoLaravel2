@@ -43,7 +43,7 @@ body {
 
 /* Estilos para el calendario */
 #calendar {
-    background-color:#bcbcbc;
+    background-color:#a8a6a6e5;
     padding: 20px;
     border-radius: 10px;
 
@@ -60,7 +60,12 @@ body {
         opacity: 1;
     }
 }
-
+.fc-event{
+   border-radius: 5px; /* Añadir bordes redondeados */
+    padding: 5px; /* Añadir espacio interno */
+    font-size: 14px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el evento */
+}
 /* Estilos para los botones del calendario */
 .fc-button {
 
@@ -72,28 +77,6 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
-
-/* Estilos para los eventos agregados */
-.fc-event {
-    background-color: #4dff40; /* Orange */
-    border-color: #40ff69; /* Orange */
-    border-radius: 5px;
-    padding: 5px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-/* Estilos para eventos del mismo día */
-.fc-day-grid-event {
-    background-color: #00227f; /* Blue */
-    border-color: #081844; /* Blue */
-    border-radius: 5px;
-    padding: 5px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
     </style>
     <body>
 
@@ -188,33 +171,34 @@ body {
 
             <!-- Detalles -->
             <div class="w-1/4 p-4">
-                <div id="event-details" class="bg-white shadow-md rounded px-4 py-2">
-                    <h3 class="text-lg font-bold mb-2">Detalles del Evento</h3>
+                <div  class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
+                    <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
                     <hr class="mb-2">
-
-                    <div class="mb-2">
-                        <strong class="font-semibold">Estado:</strong>
-                        <span id="tituloSpan" class="ml-2"></span>
-                    </div>
-                    <div class="mb-2">
-                        <strong class="font-semibold">Cliente:</strong>
-                        <span id="autorSpan" class="ml-2"></span>
-                    </div>
-                    <div class="mb-2">
-                        <strong class="font-semibold">Fecha de Entrada:</strong>
-                        <span id="fechaInicioSpan" class="ml-2"></span>
-                    </div>
-                    <div class="mb-2">
-                        <strong class="font-semibold">Fecha de Salida:</strong>
-                        <span id="fechaFinSpan" class="ml-2"></span>
-                    </div>
-                    <div class="mb-2">
-                        <strong class="font-semibold">Hoteles:</strong>
-                        <span id="hotel_nombreSpan" class="ml-2"></span>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out" id="ModalEditar">Editar</button>
-                    </div>
+                        <div id="event-details" class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white hidden" style="display: none;">
+                            <div class="mb-2 mt-4">
+                                <strong class="font-semibold">Estado:</strong>
+                                <span id="tituloSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Cliente:</strong>
+                                <span id="autorSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Fecha de Entrada:</strong>
+                                <span id="fechaInicioSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Fecha de Salida:</strong>
+                                <span id="fechaFinSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Hoteles:</strong>
+                                <span id="hotel_nombreSpan" class="ml-2"></span>
+                            </div>
+                            <div class="flex">
+                                <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2" id="ModalEditar">Editar</button>
+                            </div>
+                        </div>
                 </div>
             </div>
 
@@ -267,7 +251,28 @@ body {
                     events: evento,
                     selectable: true,
                     selecetHelper: true,
+                    eventTextColor: '#ffffff',
 
+                    eventRender: function(event, element){
+                        var colorMapping = {
+                            'Prereservado': '#00227f',
+                            'Reservado': '#FF0000',
+                            'Disponible': '#0C7E21'
+                        };
+                        if (colorMapping[event.title]) {
+                            // Aplica el color correspondiente al evento
+                            element.css('background-color', colorMapping[event.title]);
+                        }
+                        var content = '';
+                        if (event.title === 'Prereservado' || event.title === 'Reservado') {
+                            content = '<div class="event-title">' + event.title +', '+ event.hotel_nombre + ', '+ event.author + '</div>';
+                        } else {
+                            content = '<div class="event-title">' + event.title + '</div>';
+                        }
+                                // Agregar el contenido al elemento del evento
+                            element.find('.fc-content').html(content);
+
+                    },
 
                     select: function(start, end, allDays) {
                         $('#eventoModal').modal('show');
@@ -312,17 +317,19 @@ body {
                                     },
                                     success: function(response) {
                                         $('#eventoModal').modal('hide')
+
                                         $('#calendar').fullCalendar('renderEvent', {
                                             'title': response.title,
                                             'author': response.author,
                                             'hotel_nombre': response.hotel_nombre,
                                             'start': response.start_date,
                                             'end': response.end_date,
+
                                         });
 
                                         swal("¡Éxito!", "¡Evento Guardado Correctamente!", "success")
                                             .then(function() {
-                                                location.reload(); // Recargar la página después del mensaje de éxito
+                                                location.reload();// Recargar la página después del mensaje de éxito
                                             });
                                     },
                                     error: function(error) {
@@ -338,31 +345,42 @@ body {
 
                         });
                     },
-                    eventTextColor: '#ffffff',
+
+
 
                     eventClick: function(event) {
+
                             var id = event.id;
                             var tituloSeleccionado = event.title;
                             var autorSeleccionado = event.author;
-                            var fechaInicioSeleccionado = moment(event.start).format('YYYY-MM-DD');
-                            var fechaFinSeleccionado = moment(event.end).format('YYYY-MM-DD');
+                            var fechaInicioSeleccionado = event.start;
+                            var fechaFinSeleccionado = event.end;
                             var hotel_nombreSeleccionado = event.hotel_nombre;
+                            //fechas formateadas para modal y detalles
+                            var fechaInicioFormateada = moment(event.start).format('dddd, D [de] MMMM [de] YYYY');
+                            var fechaFinFormateada = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
 
+                            var formatoFechaInicio = moment(fechaInicioSeleccionado).format('YYYY-MM-DD');
+                            var formatoFechaFin = moment(fechaFinSeleccionado).format('YYYY-MM-DD');
 
-                            //Mostrar los detalles del evento en el modal
+    console.log('Fecha de inicio:',fechaInicioFormateada );
+    console.log('Fecha de fin:', fechaFinFormateada);
+                            //Mostrar los detalles del evento en el modal en event-details
                             document.getElementById("tituloSpan").innerText = tituloSeleccionado;
                             document.getElementById("autorSpan").innerText = autorSeleccionado;
-                            document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
-                            document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
+                            document.getElementById("fechaInicioSpan").innerText = fechaInicioFormateada;
+                            document.getElementById("fechaFinSpan").innerText = fechaFinFormateada;
                             document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
 
-                            // Establecer los valores en el formulario de edición
+                            // Establecer los valores en el formulario del editarModal
                             console.log("Valor del título seleccionado:", tituloSeleccionado);
                             document.getElementById("title_edit").value = tituloSeleccionado;
                             document.getElementById("author_edit").value = autorSeleccionado;
-                            document.getElementById("start_date_edit").value = fechaInicioSeleccionado;
-                            document.getElementById("end_date_edit").value = fechaFinSeleccionado;
+                            document.getElementById("start_date_edit").innerText = formatoFechaInicio;
+                            document.getElementById("end_date_edit").innerText = formatoFechaFin;
                             document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
+                            $('#event-details').show();
+
 
                             $('#updateBtn').unbind().click(function() {
                             console.log('Editado Correctamente');
@@ -462,8 +480,9 @@ body {
                     $("#deleteBtn").unbind();
                 });
             }
-                // Configurar la función de clic para el botón de actualización
+
         });
+
 
 
 

@@ -314,8 +314,8 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <!-- Primera columna -->
                                     <div class="col-span-1">
-                                        <p><span class="spanTitulo">País:</span> <span
-                                                class="spaninfo">{{ $hoteles->pais }}</span></p>
+                                        <p><span class="spanTitulo ">País:</span> <span
+                                                class="spaninfo pais">{{ $hoteles->pais }}</span></p>
                                         <p><span class="spanTitulo">Tipo de servicio:</span> <span
                                                 class="spaninfo">{{ $hoteles->tipo_alojamiento }}</span></p>
                                         <p><span class="spanTitulo">Provincia:</span> <span
@@ -416,7 +416,7 @@
     <script>
         // buscador
         var options = {
-            valueNames: ['nombres'],
+            valueNames: ['nombres','pais'],
 
         };
 

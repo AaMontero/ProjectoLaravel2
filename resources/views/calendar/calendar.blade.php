@@ -373,6 +373,7 @@
                     eventClick: function(event) {
 
                        
+                        
                             var id = event.id;
                             var tituloSeleccionado = event.title;
                             var autorSeleccionado = event.author;

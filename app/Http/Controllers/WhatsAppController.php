@@ -72,23 +72,24 @@ class WhatsAppController extends Controller
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
         //file_put_contents("elem.txt", $mensajeLlega);
-        $telefonoEnviaID = "258780720641927";
-        $apiUrl = 'https://graph.facebook.com/v18.0/';
-        $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
+
         $mensaje  = $this->conversacion($mensajeLlega);
 
             if(gettype($mensaje) != 'array'){
-                $this->enviarMensaje($apiUrl, $telefonoEnviaID, $numeroEnviar, $mensaje, $apiKey);
+                $this->enviarMensaje( $numeroEnviar, $mensaje);
             }else {
                 file_put_contents("segundo elemento.txt", $mensaje[1]);
                 foreach ($mensaje as $elem) {
-                    $this->enviarMensaje($apiUrl, $telefonoEnviaID, $numeroEnviar, $elem, $apiKey);
-                    sleep(300);
+                    $this->enviarMensaje($numeroEnviar, $elem);
+                    sleep(15);
                 }
             }
     }
 
-    function enviarMensaje($apiUrl, $telefonoEnviaID, $numeroEnviar, $mensaje, $apiKey){
+    function enviarMensaje($numeroEnviar, $mensaje){
+        $telefonoEnviaID = "258780720641927";
+        $apiUrl = 'https://graph.facebook.com/v18.0/';
+        $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_VERBOSE, true);
         curl_setopt_array($curl, array(

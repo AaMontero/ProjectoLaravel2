@@ -277,7 +277,37 @@ class WhatsAppController extends Controller
     }
     function conversacion($mensajeRecibido)
     {
-        if ($mensajeRecibido === "¡Hola! Me gustaría obtener más información sobre sus servicios de viaje. ¿Podrían proporcionarme detalles sobre los destinos, paquetes disponibles y precios?") {
+        $util = new Utils();
+
+        $mensajenoTilde = $util->convertirMinNoTilde($mensajeRecibido);
+        switch ($mensajenoTilde) {
+            case $util->convertirMinNoTilde("¡Hola! Me gustaría obtener más información sobre sus servicios de viaje. ¿Podrían proporcionarme detalles sobre los destinos, paquetes disponibles y precios?"):
+                return  "¡Hola! Claro, aquí tienes tres opciones de paquetes de viaje:\n\n
+                Destino: Cancún, México
+                Paquete Todo Incluido: 7 días y 6 noches en una habitación doble.
+                Precio: $1500 por persona.
+                Servicios: Playa privada, acceso ilimitado al spa y actividades acuáticas.\n\n
+
+                Destino: París, Francia
+                Paquete Romántico: 5 días y 4 noches en una suite.
+                Precio: $2500 por persona.
+                Servicios: Tour privado por la ciudad, cena romántica en la Torre Eiffel y paseo en barco por el Sena.\n\n
+                Destino: Tokio, Japón
+                Paquete Aventura: 10 días y 9 noches en una habitación individual.
+                Precio: $3000 por persona.
+                Servicios: Tour por los templos, experiencia en el distrito de Akihabara y clases de sushi.\n\n
+                Por favor, selecciona el número del paquete que te interese o si necesitas más detalles sobre alguno de ellos.";
+                break;
+            case $util->convertirMinNoTilde("Me interesa el paquete número 2, a París."):
+                return "Perfecto, ¿cuántas personas viajarán contigo?";
+                break;
+            case 3:
+                echo "La opción es 3";
+                break;
+            default:
+                return "No hay respuesta";
+        }
+        if ($mensajenoTilde === "¡Hola! Me gustaría obtener más información sobre sus servicios de viaje. ¿Podrían proporcionarme detalles sobre los destinos, paquetes disponibles y precios?") {
             return "¡Hola! Claro, aquí tienes tres opciones de paquetes de viaje:\n\n
                 Destino: Cancún, México
                 Paquete Todo Incluido: 7 días y 6 noches en una habitación doble.
@@ -303,10 +333,18 @@ class WhatsAppController extends Controller
             return " ¡Gracias! Tu reserva está confirmada. Para finalizar el proceso, por favor haz clic en el siguiente enlace para proceder con el pago: https://www.payphone.app/,\n\nUna vez completado, recibirás un correo electrónico con todos los detalles de tu viaje. ¿Hay algo más en lo que pueda ayudarte?";
         } else if ($mensajeRecibido === "Eso seria todo !Gracias!") {
             return "Gracias a ti, Buen viaje!";
+        } else {
+            return "No se encontro el mensaje";
         }
-
     }
 }
+
 class Utils
 {
+    function convertirMinNoTilde($mensaje)
+    {
+        $mensaje = mb_strtolower($mensaje, 'UTF-8');
+        $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
+        return $mensaje;
+    }
 }

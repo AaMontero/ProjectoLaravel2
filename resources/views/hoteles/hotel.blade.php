@@ -280,12 +280,12 @@
                     @foreach ($hotel as $hoteles)
                         <div
                             class="p-6 bg-transparent flex justify-between items-center border-b border-gray-300 dark:border-gray-700">
-                            <div style="width: 300px; height: 200px; overflow: hidden;" id="carouselExampleFade"
+                            <div style="width: 300px; height: 200px; overflow: hidden;"  id="carousel{{ $hoteles->id }}"
                                 class="carousel slide carousel-fade " data-bs-ride="carousel">
                                 <div class = "text-center">
-                                    <span class = "spanTituloPaquete ml-5 nombres">{{ $hoteles->hotel_nombre }}</span></p>
+                                    <span class = "spanTituloPaquete ml-5 text-center nombres">{{ $hoteles->hotel_nombre }}</span></p>
                                 </div>
-                                <div class="carousel-inner ">
+                                <div class="carousel-inner">
                                     <!-- Slides -->
                                     @foreach (explode(',', $hoteles->imagen_hotel) as $index => $imageName)
                                         <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
@@ -298,12 +298,12 @@
 
                                 <!-- Botones de navegación -->
                                 <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                                    data-bs-target="#carousel{{ $hoteles->id  }}" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
                                 </button>
                                 <button class="carousel-control-next" type="button"
-                                    data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                                    data-bs-target="#carousel{{ $hoteles->id  }}" data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>

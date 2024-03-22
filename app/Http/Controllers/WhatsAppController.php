@@ -287,7 +287,6 @@ class WhatsAppController extends Controller
                 Paquete Todo Incluido: 7 días y 6 noches en una habitación doble.
                 Precio: $1500 por persona.
                 Servicios: Playa privada, acceso ilimitado al spa y actividades acuáticas.\n\n
-
                 Destino: París, Francia
                 Paquete Romántico: 5 días y 4 noches en una suite.
                 Precio: $2500 por persona.

@@ -17,7 +17,6 @@ use App\Http\Controllers\PagoVendedorController;
 use App\Models\UserAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\File;
 
 $meses = array(
     1 => 'Enero',
@@ -242,12 +241,12 @@ class ContratoController extends Controller
                 $rutaCarpetaSave = $funciones->crearCarpetaCliente($nombre_cliente, $fechaActual);
                 $funciones->generarVerificacion($nombre_cliente, $numero_sucesivo, $numCedula, $rutaCarpetaSave);
                 $funciones->generarDiferimiento($contratoId, $numero_sucesivo, $ciudad, $numCedula, $fechaActual, $nombre_cliente, $rutaCarpetaSave);
-                if ($contieneCreditoDirecto != true && $contienePagare != true) {
+                if ($contieneCreditoDirecto != true && $contienePagare != true) { // No contiene credito directo ni pagare
                     $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
                     $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $rutaCarpetaSave, false);
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                 }
-                if ($contieneCreditoDirecto == true) {
+                if ($contieneCreditoDirecto == true) { // SI contiene credito directo 
                     $valorPendiente = ($montoCredDir - $abonoCredDir);
                     $resultado =  $valorPendiente / $numCuotasCredDir;
                     $valorCuota = ceil($resultado * 100) / 100;
@@ -257,7 +256,7 @@ class ContratoController extends Controller
                     $funciones->generarContratoCreditoDirecto($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave, $abonoCredDir, $numCuotasCredDir, $valorCuota);
                     $funciones->generarPagaresCredito($fechaInicioCredDir, $montoCredDir, $abonoCredDir, $numCuotasCredDir, $rutaCarpetaSave, $numero_sucesivo, $nombre_cliente, $ciudad, $numCedula, $fechaActual, $email);
                 }
-                if ($contienePagare == true) {
+                if ($contienePagare == true) { // Si contiene pagare
                     $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
                     $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $rutaCarpetaSave, false);
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
@@ -424,60 +423,6 @@ class ContratoController extends Controller
 
         return redirect()->route('contrato.index')
             ->with('status', __('Contrato eliminando exitosamente'));
-    }
-
-
-    private function validarCampos(
-        $nombres,
-        $apellidos,
-        $ciudad,
-        $email,
-        $cedula,
-        $ubicacionSala,
-        $aniosContrato,
-        $montoContrato,
-        $provincia
-    ) {
-        $errores = [];
-        if (strlen($nombres) <= 3) {
-            $errorNombres = "El nombre debe tener al menos 3 caracteres";
-            $errores[] = $errorNombres;
-        }
-        if (strlen($apellidos) <= 3) {
-            $errorApellidos = "El apellido debe tener al menos 3 caracteres";
-            $errores[] = $errorApellidos;
-        }
-        if (strlen($ciudad) <= 3) {
-            $errorCiudad = "La ciudad debe contener al menos 3 caracteres";
-            $errores[] = $errorCiudad;
-        }
-        if (strpos($email, "@") === false) {
-            $errorCorreo = "El formato del correo ingresado no es valido";
-            $errores[] = $errorCorreo;
-        }
-
-
-        if (strlen($cedula) !== 10) {
-            $errorCedula = "El formato del correo ingresado no es válido";
-            $errores[] = $errorCedula;
-        }
-        if (strlen($ubicacionSala) <= 3) {
-            $errorUbicacionSala = "La ubicación debe contener al menos 3 caracteres";
-            $errores[] = $errorUbicacionSala;
-        }
-        if ($aniosContrato == 0) {
-            $erroraniosContrato = "Ingrese la cantidad de años del contrato";
-            $errores[] = $erroraniosContrato;
-        }
-        if ($montoContrato == 0) {
-            $errorMontoContrato = "Ingrese el monto del contrato";
-            $errores[] = $errorMontoContrato;
-        }
-        if (strlen($provincia) <= 3) {
-            $errorProvincia = "La provincia debe contener al menos 3 caracteres";
-            $errores[] = $errorProvincia;
-        }
-        return $errores;
     }
 }
 
@@ -707,7 +652,6 @@ class DocumentGenerator
         $montoContratoText = strtoupper($montoContratoText);
         $abonoContratoText = strtoupper($abonoContratoText);
         $cuotaValorContratoText = strtoupper($cuotaValorContratoText);
-
         $templateWord = new TemplateProcessor(resource_path("docs/Contrato de agencia de viajes_QORIT CD.docx"));
         $templateWord->setValue('edit_nombres_apellidos', $nombre_cliente);
         $templateWord->setValue('edit_contrato_id', $contrato);

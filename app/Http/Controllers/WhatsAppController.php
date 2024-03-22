@@ -66,6 +66,54 @@ class WhatsAppController extends Controller
         return json_encode($whatsApp);
     }
 
+    public function enviarMensajeChatBot($numeroEnviar, $mensajeLlega)
+    {
+        $mensaje  = $this->conversacion($mensajeLlega);
+        if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
+            $numeroEnviar = '593' . substr($numeroEnviar, 1);
+        }
+
+        $telefonoEnviaID = "258780720641927";
+        $apiUrl = 'https://graph.facebook.com/v18.0/';
+        $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_VERBOSE, true);
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $apiUrl . $telefonoEnviaID . '/messages',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode([
+                "messaging_product" => "whatsapp",
+                "to" => $numeroEnviar, // Número de teléfono del destinatario
+                "type" => "text", // Tipo de mensaje
+                "text" => [
+                    "body" => $mensaje, // Cuerpo del mensaje de texto
+                ],
+            ]),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $apiKey,
+            ),
+        ));
+        $response = curl_exec($curl);
+        $whatsApp = new WhatsApp();
+        $whatsApp->mensaje_enviado = $mensaje;
+        $whatsApp->id_wa = "asdasdasd";
+        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->id_numCliente = $numeroEnviar;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->visto = true;
+        $whatsApp->save();
+        curl_close($curl);
+        return json_encode($whatsApp);
+    }
+
+
     public function webhook(Request $request)
     {
 
@@ -156,6 +204,7 @@ class WhatsAppController extends Controller
             $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
             $this->crearNotificacion($cadenaNotificacion, $mensaje);
             event($event);
+            $this->enviarMensajeChatBot($telefonoUser, $mensaje);
         } else {
             file_put_contents("mensajeExistente.txt", $id);
         }
@@ -220,13 +269,39 @@ class WhatsAppController extends Controller
         $notificacion->tipo = "chat";
         $notificacion->save();
     }
-}
-class Utils
-{
     function convertirMinNoTilde($mensaje)
     {
         $mensaje = mb_strtolower($mensaje, 'UTF-8');
         $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
         return $mensaje;
     }
+    function conversacion($mensajeRecibido)
+    {
+
+        if ($mensajeRecibido = "¡Hola! Me gustaría obtener más información sobre sus servicios de viaje. ¿Podrían proporcionarme detalles sobre los destinos, paquetes disponibles y precios?") {
+            return "¡Hola! Claro, aquí tienes tres opciones de paquetes de viaje:
+
+            Destino: Cancún, México
+            
+            Paquete Todo Incluido: 7 días y 6 noches en una habitación doble.
+            Precio: $1500 por persona.
+            Servicios: Playa privada, acceso ilimitado al spa y actividades acuáticas.
+            Destino: París, Francia
+            
+            Paquete Romántico: 5 días y 4 noches en una suite.
+            Precio: $2500 por persona.
+            Servicios: Tour privado por la ciudad, cena romántica en la Torre Eiffel y paseo en barco por el Sena.
+            Destino: Tokio, Japón
+            
+            Paquete Aventura: 10 días y 9 noches en una habitación individual.
+            Precio: $3000 por persona.
+            Servicios: Tour por los templos, experiencia en el distrito de Akihabara y clases de sushi.
+            Por favor, selecciona el número del paquete que te interese o si necesitas más detalles sobre alguno de ellos.";
+        } else {
+            return "No hay respueta";
+        }
+    }
+}
+class Utils
+{
 }

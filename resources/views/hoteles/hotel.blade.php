@@ -269,21 +269,22 @@
             }
         </style>
 
-        <div id="hotels"
-            class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
-            <div class="mt-4 mb-4 mx-auto max-w-lg">
-                <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar hotel..." />
+        <div id="hotels">
+            <div class="mt-4 mx-auto max-w-lg">
+                <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar paquete..." />
             </div>
 
-            <div class="w-100 bg-white dark:bg-gray-800 border border-[#0a0a0a] p-4 rounded-md overflow-x-auto">
-                <div class="list ">
+            <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
+                <div class="list">
                     @foreach ($hotel as $hoteles)
-                        <div
-                            class="p-6 bg-transparent flex justify-between items-center border-b border-gray-300 dark:border-gray-700">
-                            <div style="width: 300px; height: 200px; overflow: hidden;"  id="carousel{{ $hoteles->id }}"
-                                class="carousel slide carousel-fade " data-bs-ride="carousel">
+                        <div class="p-6 bg-transparent flex justify-between items-center">
+                            <div style="width: 300px; height: 200px; overflow: hidden;"
+                                id="carousel{{ $hoteles->id }}" class="carousel slide carousel-fade "
+                                data-bs-ride="carousel">
                                 <div class = "text-center">
-                                    <span class = "spanTituloPaquete ml-5 text-center nombres">{{ $hoteles->hotel_nombre }}</span></p>
+                                    <span
+                                        class = "spanTituloPaquete ml-5 text-center nombres">{{ $hoteles->hotel_nombre }}</span>
+                                    </p>
                                 </div>
                                 <div class="carousel-inner">
                                     <!-- Slides -->
@@ -298,12 +299,12 @@
 
                                 <!-- Botones de navegación -->
                                 <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#carousel{{ $hoteles->id  }}" data-bs-slide="prev">
+                                    data-bs-target="#carousel{{ $hoteles->id }}" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
                                 </button>
                                 <button class="carousel-control-next" type="button"
-                                    data-bs-target="#carousel{{ $hoteles->id  }}" data-bs-slide="next">
+                                    data-bs-target="#carousel{{ $hoteles->id }}" data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
@@ -416,8 +417,7 @@
     <script>
         // buscador
         var options = {
-            valueNames: ['nombres','pais'],
-
+            valueNames: ['nombres', 'pais'],
         };
 
         var userList = new List('hotels', options);

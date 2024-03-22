@@ -70,7 +70,7 @@
 
             <!-- Vista donde se muestra el div de notificaciones -->
             <div id = "navNotificaciones">
-                <ul class="navbar-nav mr-1 ">
+                <ul class="navbar-nav mr-1 absolute">
                     <li class="nav-item dropdown mt-3">
                         <a class="nav-link cursor-pointer">
                             <i class="fas fa-bell text-black"></i>

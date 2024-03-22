@@ -169,7 +169,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/terminos-condiciones', function () {
         return view('layouts.terminos');
     })->name('terminos');
-    //Log
+    //RUTA LOG
     Route::get('/logs', [UserActionsController::class, 'index'])
         ->name('logs.log')
         ->middleware('checkRole:superAdmin');

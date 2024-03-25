@@ -188,7 +188,7 @@ class VendedorController extends Controller
         ]);
     }
 
-    public function cambiarActivo(Vendedor $vendedor)
+    public function cambiarActivo(Request $request ,Vendedor $vendedor)
     {
         if ($vendedor->activo == "1") {
             $vendedor->activo = 0;
@@ -197,6 +197,16 @@ class VendedorController extends Controller
             $vendedor->activo = 1;
             $vendedor->update();
         }
+
+ 
+          UserAction::create([
+            'user_id' => $request->user()->id,
+            'action' => 'cambiar estado a inactivo', // Acción de inserción
+            'entity_type' => 'vendedor', // Tipo de entidad
+            'entity_id' => $vendedor->id, // ID del vendedor creado
+
+
+        ]);
         return to_route('vendedor.index')
             ->with('status', __('Se ha cambiado el estado del vendedor'));;
     }

@@ -214,11 +214,6 @@
             }
         }
     </script>
-    {{-- <div class = "ml-20 mr-20">
-        <p class="ml-5 flex justify-center items-center list-none space-x-2">
-            {{ $vendedores->appends([]) }}
-        </p>
-    </div> --}}
 
 </x-app-layout>
 @include('layouts.footer')

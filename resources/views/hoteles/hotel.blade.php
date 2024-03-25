@@ -271,7 +271,7 @@
 
         <div id="hotels">
             <div class="mt-4 mx-auto max-w-lg">
-                <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar paquete..." />
+                <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar hotel..." />
             </div>
 
             <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
@@ -389,11 +389,20 @@
 
 
                                     <script>
-                                        function confirmDelete(event) {
-                                            if (confirm('¿Deseas eliminar este hotel?')) {
-                                                event.target.closest('form').submit();
-                                            }
-                                            return false;
+                                         function confirmDelete(event) {
+                                            Swal.fire({
+                                                title: "¿Deseas eliminar este hotel?",
+                                                showDenyButton: true,
+                                                confirmButtonText: "Sí",
+                                                denyButtonText: `No`,
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    event.target.closest('form').submit();
+                                                } else if (result.isDenied) {
+                                                  
+                                                }
+                                            });
+                                            return false; 
                                         }
                                     </script>
                                 </x-slot>
@@ -426,5 +435,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('layouts.footer')
 </x-app-layout>

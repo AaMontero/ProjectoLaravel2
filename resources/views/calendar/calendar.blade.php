@@ -189,32 +189,37 @@
                 <div class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
                     <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
                     <hr class="mb-2">
-                        <div id="event-details" class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white relative hidden" style="display: none;">
-                            <button type="button" id="closedetails" class="btn-close absolute top-0 right-0 mt-1 mr-1"  aria-label="Close"></button>
-                            <div class="mb-2 mt-4">
-                                <strong class="font-semibold">Estado:</strong>
-                                <span id="tituloSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Cliente:</strong>
-                                <span id="autorSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Fecha de Entrada:</strong>
-                                <span id="fechaInicioSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Fecha de Salida:</strong>
-                                <span id="fechaFinSpan" class="ml-2"></span>
-                            </div>
-                            <div class="mb-2">
-                                <strong class="font-semibold">Hoteles:</strong>
-                                <span id="hotel_nombreSpan" class="ml-2"></span>
-                            </div>
-                            <div class="flex">
-                                <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2" id="ModalEditar">Editar</button>
-                            </div>
+                    <div id="event-details"
+                        class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white relative hidden"
+                        style="display: none;">
+                        <button type="button" id="closedetails" class="btn-close absolute top-0 right-0 mt-1 mr-1"
+                            aria-label="Close"></button>
+                        <div class="mb-2 mt-4">
+                            <strong class="font-semibold">Estado:</strong>
+                            <span id="tituloSpan" class="ml-2"></span>
                         </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Cliente:</strong>
+                            <span id="autorSpan" class="ml-2"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Fecha de Entrada:</strong>
+                            <span id="fechaInicioSpan" class="ml-2"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Fecha de Salida:</strong>
+                            <span id="fechaFinSpan" class="ml-2"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong class="font-semibold">Hoteles:</strong>
+                            <span id="hotel_nombreSpan" class="ml-2"></span>
+                        </div>
+                        <div class="flex">
+                            <button type="button"
+                                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2"
+                                id="ModalEditar">Editar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -347,7 +352,7 @@
                                             "success")
                                         .then(function() {
                                             location
-                                        .reload(); // Recargar la página después del mensaje de éxito
+                                                .reload(); // Recargar la página después del mensaje de éxito
                                         });
                                 },
                                 error: function(error) {
@@ -373,35 +378,36 @@
 
 
 
-                            var id = event.id;
-                            var tituloSeleccionado = event.title;
-                            var autorSeleccionado = event.author;
-                            var fechaInicioSeleccionado = moment(event.start).format('dddd, D [de] MMMM [de] YYYY');
-                            var fechaFinSeleccionado = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
-                            var hotel_nombreSeleccionado = event.hotel_nombre;
+                        var id = event.id;
+                        var tituloSeleccionado = event.title;
+                        var autorSeleccionado = event.author;
+                        var fechaInicioSeleccionado = moment(event.start).format(
+                            'dddd, D [de] MMMM [de] YYYY');
+                        var fechaFinSeleccionado = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
+                        var hotel_nombreSeleccionado = event.hotel_nombre;
 
-                            var formatoFechaInicio = moment(event.start).format('YYYY-MM-DD');
-                            var formatoFechaFin = moment(event.end).format('YYYY-MM-DD');
-                            //Mostrar los detalles del evento en el modal
-                            document.getElementById("tituloSpan").innerText = tituloSeleccionado;
-                            document.getElementById("autorSpan").innerText = autorSeleccionado;
-                            document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
-                            document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
-                            document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
+                        var formatoFechaInicio = moment(event.start).format('YYYY-MM-DD');
+                        var formatoFechaFin = moment(event.end).format('YYYY-MM-DD');
+                        //Mostrar los detalles del evento en el modal
+                        document.getElementById("tituloSpan").innerText = tituloSeleccionado;
+                        document.getElementById("autorSpan").innerText = autorSeleccionado;
+                        document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
+                        document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
+                        document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
 
-                            // Establecer los valores en el formulario de edición
-                            console.log("Valor del título seleccionado:", tituloSeleccionado);
-                            document.getElementById("title_edit").value = tituloSeleccionado;
-                            document.getElementById("author_edit").value = autorSeleccionado;
-                            document.getElementById("start_date_edit").value = formatoFechaInicio;
-                            document.getElementById("end_date_edit").value = formatoFechaFin;
-                            document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
-                            //Metodo para que se muetre el evento en la parte de detalle
-                            $('#event-details').show();
-                            //Metodo para cerrar el evento
-                            $('#closedetails').click(function() {
-                                $('#event-details').hide();
-                            });
+                        // Establecer los valores en el formulario de edición
+                        console.log("Valor del título seleccionado:", tituloSeleccionado);
+                        document.getElementById("title_edit").value = tituloSeleccionado;
+                        document.getElementById("author_edit").value = autorSeleccionado;
+                        document.getElementById("start_date_edit").value = formatoFechaInicio;
+                        document.getElementById("end_date_edit").value = formatoFechaFin;
+                        document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
+                        //Metodo para que se muetre el evento en la parte de detalle
+                        $('#event-details').show();
+                        //Metodo para cerrar el evento
+                        $('#closedetails').click(function() {
+                            $('#event-details').hide();
+                        });
 
 
                         $('#updateBtn').unbind().click(function() {
@@ -428,9 +434,10 @@
                                     swal("¡Exito!", "¡Evento Actualizado!", "success")
                                         .then(() => {
                                             $('#editarModal').modal(
-                                            'hide'); // Ocultar el modal después del mensaje de éxito
+                                                'hide'
+                                                ); // Ocultar el modal después del mensaje de éxito
                                             location
-                                        .reload(); // Recargar la página para reflejar los cambios
+                                                .reload(); // Recargar la página para reflejar los cambios
                                         }); // Mostrando una alerta de éxito
                                 },
                                 error: function(error) {

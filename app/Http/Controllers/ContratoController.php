@@ -17,7 +17,6 @@ use App\Http\Controllers\PagoVendedorController;
 use App\Models\UserAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\File;
 
 $meses = array(
     1 => 'Enero',
@@ -242,24 +241,24 @@ class ContratoController extends Controller
                 $rutaCarpetaSave = $funciones->crearCarpetaCliente($nombre_cliente, $fechaActual);
                 $funciones->generarVerificacion($nombre_cliente, $numero_sucesivo, $numCedula, $rutaCarpetaSave);
                 $funciones->generarDiferimiento($contratoId, $numero_sucesivo, $ciudad, $numCedula, $fechaActual, $nombre_cliente, $rutaCarpetaSave);
-                if ($contieneCreditoDirecto != true && $contienePagare != true) {
+                if ($contieneCreditoDirecto != true && $contienePagare != true) { // No contiene credito directo ni pagare
                     $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
-                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $rutaCarpetaSave, false);
+                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, true, true, $rutaCarpetaSave, false, "");
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                 }
-                if ($contieneCreditoDirecto == true) {
+                if ($contieneCreditoDirecto == true) { // SI contiene credito directo 
                     $valorPendiente = ($montoCredDir - $abonoCredDir);
                     $resultado =  $valorPendiente / $numCuotasCredDir;
                     $valorCuota = ceil($resultado * 100) / 100;
                     $valorCuota = number_format($valorCuota, 2);
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Débito Automatico");
-                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $rutaCarpetaSave, true);
+                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, true, true, $rutaCarpetaSave, true, "");
                     $funciones->generarContratoCreditoDirecto($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave, $abonoCredDir, $numCuotasCredDir, $valorCuota);
                     $funciones->generarPagaresCredito($fechaInicioCredDir, $montoCredDir, $abonoCredDir, $numCuotasCredDir, $rutaCarpetaSave, $numero_sucesivo, $nombre_cliente, $ciudad, $numCedula, $fechaActual, $email);
                 }
-                if ($contienePagare == true) {
+                if ($contienePagare == true) { // Si contiene pagare
                     $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
-                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $rutaCarpetaSave, false);
+                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, true, true, $rutaCarpetaSave, false, "");
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                     $funciones->generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valorPagare, $fechaActual, 1, $montoCuotaPagare, $pagareText, $rutaCarpetaSave);
                 }
@@ -425,60 +424,6 @@ class ContratoController extends Controller
         return redirect()->route('contrato.index')
             ->with('status', __('Contrato eliminando exitosamente'));
     }
-
-
-    private function validarCampos(
-        $nombres,
-        $apellidos,
-        $ciudad,
-        $email,
-        $cedula,
-        $ubicacionSala,
-        $aniosContrato,
-        $montoContrato,
-        $provincia
-    ) {
-        $errores = [];
-        if (strlen($nombres) <= 3) {
-            $errorNombres = "El nombre debe tener al menos 3 caracteres";
-            $errores[] = $errorNombres;
-        }
-        if (strlen($apellidos) <= 3) {
-            $errorApellidos = "El apellido debe tener al menos 3 caracteres";
-            $errores[] = $errorApellidos;
-        }
-        if (strlen($ciudad) <= 3) {
-            $errorCiudad = "La ciudad debe contener al menos 3 caracteres";
-            $errores[] = $errorCiudad;
-        }
-        if (strpos($email, "@") === false) {
-            $errorCorreo = "El formato del correo ingresado no es valido";
-            $errores[] = $errorCorreo;
-        }
-
-
-        if (strlen($cedula) !== 10) {
-            $errorCedula = "El formato del correo ingresado no es válido";
-            $errores[] = $errorCedula;
-        }
-        if (strlen($ubicacionSala) <= 3) {
-            $errorUbicacionSala = "La ubicación debe contener al menos 3 caracteres";
-            $errores[] = $errorUbicacionSala;
-        }
-        if ($aniosContrato == 0) {
-            $erroraniosContrato = "Ingrese la cantidad de años del contrato";
-            $errores[] = $erroraniosContrato;
-        }
-        if ($montoContrato == 0) {
-            $errorMontoContrato = "Ingrese el monto del contrato";
-            $errores[] = $errorMontoContrato;
-        }
-        if (strlen($provincia) <= 3) {
-            $errorProvincia = "La provincia debe contener al menos 3 caracteres";
-            $errores[] = $errorProvincia;
-        }
-        return $errores;
-    }
 }
 
 class DocumentGenerator
@@ -611,39 +556,60 @@ class DocumentGenerator
         $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
-    public function generarBeneficiosAlcance($contrato, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $rutaSaveContrato, $clausulaCDBoolean)
+    public function generarBeneficiosAlcance($contrato, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $certificadoVacacionalInternacional, $bonoSemanaInternacional, $rutaSaveContrato, $clausulaCDBoolean, $destinoInternacional)
     {
         $nombre_cliente = strtoupper($nombre_cliente);
-        $titulo_bono = "16. BONO DE HOSPEDAJE QORY LOYALTY: ";
-        $texto_bono = "Acepto y recibo UN Bono de Hospedaje 3 Días 2 Noches para 06 personas. Previo pago de Impuestos. Uso exclusivo en departamentos de la compañía. No incluye ningún tipo de alimentación";
-        $titulo_bonoInt = "17. BONO DE HOSPEDAJE INTERNACIONAL QORY LOYALTY: ";
+        $titulo_nacional1 = "16. BONO DE HOSPEDAJE NACIONAL 1 QORY LOYALTY: ";
+        $texto_nacional1 = "Acepto y recibo UN Bono de Hospedaje 1 Noches 2 Días para 06 personas. Previo pago de Impuestos. Uso exclusivo en departamentos de la compañía. No incluye ningún tipo de alimentación.";
+        $titulo_nacional2 = "17.	BONO DE HOSPEDAJE NACIONAL 2 QORY LOYALTY: ";
+        $texto_nacional2 = "Acepto y recibo UN Bono de Hospedaje 2 Noches 3 Días para 06 personas. Previo pago de Impuestos. Uso exclusivo en departamentos de la compañía. No incluye ningún tipo de alimentación.";
         $clausulaCD = "";
+
+        $titulo_certificado_vacacional_internacional = "18. CERTIFICADO VACACIONAL INTERNACIONAL QORY LOYALTY";
+        $texto_certificado_vacacional_internacional = "Acepto y recibo un Bono de Hospedaje 5 Días 4 Noches para 02 Adultos. Previo pago de Impuestos. NO Incluye la alimentación. PREVIA RESERVA. Destino: " . $destinoInternacional;
+        $titulo_semana_internacional = "19. SEMANA INTERNACIONAL QORY LOYALTY";
+        $texto_semana_internacional = "Acepto y recibo un Bono de Hospedaje 8 días y 7 noches para (editable de 2 a 6 personas). Previo pago de Impuestos. NO Incluye la alimentación. PREVIA RESERVA. Destino: " . $destinoInternacional;
+
         if ($clausulaCDBoolean) {
             $clausulaCD = "Los beneficios se habilitarán conforme al contrato de programa turístico suscrito y al reglamento interno de QORIT TRAVEL AGENCY S.A.";
         }
-        $texto_bonoInt = "Acepto y recibo Un Bono de Hospedaje 4 Noches 5 Días para 05 personas. Previo pago de Impuestos, si incluye alimentación. PREVIA RESERVA. Destino: Cancún - México";
+
         $templateWord = new TemplateProcessor(resource_path("docs/ANEXO 3 BENEFICIOS ALCANCE DE LA OFERTA.docx"));
         $templateWord->setValue('edit_nombres_apellidos', $nombre_cliente);
         $templateWord->setValue('edit_contrato_id', $contrato);
         $templateWord->setValue('edit_numero_cedula', $numCedula);
         $templateWord->setValue('edit_num_cliente', $numero_sucesivo);
         $templateWord->setValue('edit_beneficios_alcance', $clausulaCD);
-        if ($bonoQory && !$bonoQoryInt) {
-            $templateWord->setValue('edit_bono_hospedaje', $titulo_bono);
-            $templateWord->setValue('edit_texto_bono_hospedaje', $texto_bono);
-            $templateWord->setValue('edit_bono_hospedaje_intern', "");
-            $templateWord->setValue('edit_texto_bono_hospedaje_intern', "");
-        } else if (($bonoQoryInt && $bonoQory) || ($bonoQoryInt && !$bonoQory)) {
-            $templateWord->setValue('edit_bono_hospedaje_intern', $titulo_bonoInt);
-            $templateWord->setValue('edit_texto_bono_hospedaje_intern', $texto_bonoInt);
-            $templateWord->setValue('edit_bono_hospedaje', $titulo_bono);
-            $templateWord->setValue('edit_texto_bono_hospedaje', $texto_bono);
+
+        if ($bonoQory) {
+            $templateWord->setValue('edit_titulo_nacional1', $titulo_nacional1);
+            $templateWord->setValue('edit_texto_bono_hospedaje', $texto_nacional1);
         } else {
-            $templateWord->setValue('edit_bono_hospedaje_intern', "");
-            $templateWord->setValue('edit_texto_bono_hospedaje_intern', "");
-            $templateWord->setValue('edit_bono_hospedaje', "");
+            $templateWord->setValue('edit_titulo_nacional1', "");
             $templateWord->setValue('edit_texto_bono_hospedaje', "");
         }
+        if ($bonoQoryInt) {
+            $templateWord->setValue('edit_titulo_nacional2', $titulo_nacional2);
+            $templateWord->setValue('edit_texto_bono_hospedaje', $texto_nacional2);
+        } else {
+            $templateWord->setValue('edit_titulo_nacional2', "");
+            $templateWord->setValue('edit_texto_bono_hospedaje', "");
+        }
+        if ($certificadoVacacionalInternacional) {
+            $templateWord->setValue('edit_titulo_vacacional_internacional', $titulo_certificado_vacacional_internacional);
+            $templateWord->setValue('edit_texto_vacacional_internacional', $texto_certificado_vacacional_internacional);
+        } else {
+            $templateWord->setValue('edit_titulo_vacacional_internacional', "");
+            $templateWord->setValue('edit_texto_vacacional_internacional', "");
+        }
+        if ($bonoSemanaInternacional) {
+            $templateWord->setValue('edit_titulo_semana_internacional', $titulo_semana_internacional);
+            $templateWord->setValue('edit_texto_semana_internacional', $texto_semana_internacional);
+        } else {
+            $templateWord->setValue('edit_titulo_semana_internacional', "");
+            $templateWord->setValue('edit_texto_semana_internacional', "");
+        }
+
         $nombreArchivo = 'QTBeneficiosDeAlcance' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
@@ -707,7 +673,6 @@ class DocumentGenerator
         $montoContratoText = strtoupper($montoContratoText);
         $abonoContratoText = strtoupper($abonoContratoText);
         $cuotaValorContratoText = strtoupper($cuotaValorContratoText);
-
         $templateWord = new TemplateProcessor(resource_path("docs/Contrato de agencia de viajes_QORIT CD.docx"));
         $templateWord->setValue('edit_nombres_apellidos', $nombre_cliente);
         $templateWord->setValue('edit_contrato_id', $contrato);

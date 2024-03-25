@@ -158,7 +158,7 @@
                     function confirmDelete(event) {
                         event.preventDefault();
                         Swal.fire({
-                            title: "¿Deseas eliminar este hotel?",
+                            title: "¿Deseas eliminar este vendedor?",
                             showDenyButton: true,
                             confirmButtonText: "Sí",
                             denyButtonText: `No`,

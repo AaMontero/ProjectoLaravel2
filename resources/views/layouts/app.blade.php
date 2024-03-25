@@ -12,6 +12,7 @@
     <title>{{ config('app.name', 'Qori Travel') }}</title>
 
     <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -22,8 +23,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased dark:bg-black">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+<body>
+    <div class="min-h-screen bg-gray-100">
 
         @php
             use App\Models\Notificacion;
@@ -55,6 +56,6 @@
 
 </body>
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>

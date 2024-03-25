@@ -142,7 +142,7 @@
                         <div>
                             <button type="button" id="agregar-servicio-btn"
                                 class="mt-1 bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                                Agregar otra servicio
+                                Agregar otro servicio
                             </button>
 
                         </div>

@@ -69,25 +69,32 @@ class WhatsAppController extends Controller
 
     public function enviarMensajeChatBot($numeroEnviar, $mensajeLlega)
     {
+
+
+
         if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
         //file_put_contents("elem.txt", $mensajeLlega);
-        $urlImagenRecibida = "public/uploads/recibo.jpeg";
-        $mensaje  = $this->conversacion($mensajeLlega, $urlImagenRecibida);
 
-            if(gettype($mensaje) != 'array'){
-                $this->enviarMensaje( $numeroEnviar, $mensaje);
-            }else {
-                file_put_contents("segundo elemento.txt", $mensaje[1]);
-                foreach ($mensaje as $elem) {
-                    $this->enviarMensaje($numeroEnviar, $elem);
-                    sleep(15);
-                }
+        if ($mensajeLlega == "imagen") {
+            $mensaje =  $this->conversacion("Listo");
+        } else {
+            $mensaje  = $this->conversacion($mensajeLlega);
+        }
+        if (gettype($mensaje) != 'array') {
+            $this->enviarMensaje($numeroEnviar, $mensaje);
+        } else {
+            file_put_contents("segundo elemento.txt", $mensaje[1]);
+            foreach ($mensaje as $elem) {
+                $this->enviarMensaje($numeroEnviar, $elem);
+                sleep(15);
             }
+        }
     }
 
-    function enviarMensaje($numeroEnviar, $mensaje){
+    function enviarMensaje($numeroEnviar, $mensaje)
+    {
         $telefonoEnviaID = "258780720641927";
         $apiUrl = 'https://graph.facebook.com/v18.0/';
         $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
@@ -198,9 +205,11 @@ class WhatsAppController extends Controller
                     file_put_contents($rutaImagen, file_get_contents($urlDescarga));
                     $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
                 }
+                $this->enviarMensajeChatBot($telefonoUser, "imagen");
             } else {
                 $mensaje = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']) ?
                     $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] : "";
+                $this->enviarMensajeChatBot($telefonoUser, $mensaje);
             }
 
             // Guardar el mensaje recibido en la base de datos
@@ -219,7 +228,6 @@ class WhatsAppController extends Controller
             $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
             $this->crearNotificacion($cadenaNotificacion, $mensaje);
             event($event);
-            $this->enviarMensajeChatBot($telefonoUser, $mensaje,);
         } else {
             file_put_contents("mensajeExistente.txt", $id);
         }
@@ -290,7 +298,7 @@ class WhatsAppController extends Controller
         $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
         return $mensaje;
     }
-    function conversacion($mensajeRecibido, $urlImagenRecibida)
+    function conversacion($mensajeRecibido)
     {
 
         $util = new Utils();
@@ -324,21 +332,19 @@ class WhatsAppController extends Controller
             case $util->convertirMinNoTilde("En este momento ya realicé el pago"):
                 return "Por favor, envía una captura de pantalla del comprobante de pago.";
                 break;
-                case $util->convertirMinNoTilde("Listo") + $urlImagenRecibida:
-                    $mensaje1 = "En este momento estamos verificando el pago...";
-                    $mensaje2 = "Tu pago se ha creditado correctamente. Recibirás un correo electrónico con más detalles de tu viaje.";
-                    $retorno = [$mensaje1, $mensaje2];
-                    return $retorno;
-                    break;
+            case $util->convertirMinNoTilde("Listo"):
+                $mensaje1 = "En este momento estamos verificando el pago...";
+                $mensaje2 = "Tu pago se ha creditado correctamente. Recibirás un correo electrónico con más detalles de tu viaje.";
+                $retorno = [$mensaje1, $mensaje2];
+                return $retorno;
+                break;
             case $util->convertirMinNoTilde("Eso sería todo por el momento, gracias"):
                 return "Gracias a ti. ¡Buen viaje!";
                 break;
             default:
                 return "No hay respuesta";
-
-       }
+        }
     }
-
 }
 
 class Utils

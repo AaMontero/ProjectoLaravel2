@@ -66,14 +66,15 @@ class WhatsAppController extends Controller
         return json_encode($whatsApp);
     }
 
+
     public function enviarMensajeChatBot($numeroEnviar, $mensajeLlega)
     {
         if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
         //file_put_contents("elem.txt", $mensajeLlega);
-
-        $mensaje  = $this->conversacion($mensajeLlega);
+        $urlImagenRecibida = "public/uploads/recibo.jpeg";
+        $mensaje  = $this->conversacion($mensajeLlega, $urlImagenRecibida);
 
             if(gettype($mensaje) != 'array'){
                 $this->enviarMensaje( $numeroEnviar, $mensaje);
@@ -218,7 +219,7 @@ class WhatsAppController extends Controller
             $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
             $this->crearNotificacion($cadenaNotificacion, $mensaje);
             event($event);
-            $this->enviarMensajeChatBot($telefonoUser, $mensaje);
+            $this->enviarMensajeChatBot($telefonoUser, $mensaje,);
         } else {
             file_put_contents("mensajeExistente.txt", $id);
         }
@@ -289,48 +290,52 @@ class WhatsAppController extends Controller
         $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
         return $mensaje;
     }
-    function conversacion($mensajeRecibido)
+    function conversacion($mensajeRecibido, $urlImagenRecibida)
     {
 
         $util = new Utils();
 
         $mensajenoTilde = $util->convertirMinNoTilde($mensajeRecibido);
         switch ($mensajenoTilde) {
-            case $util->convertirMinNoTilde("¡Hola! Me gustaría obtener más información sobre sus servicios de viaje. ¿Podrían proporcionarme detalles sobre los destinos, paquetes disponibles y precios?"):
-                return "¡Encantado! Con quien tengo el gusto?";
+            case $util->convertirMinNoTilde("Hola, ayúdame con información"):
+                return "¡Encantado! ¿Con quién tengo el gusto?";
                 break;
             case $util->convertirMinNoTilde("Me llamo Paul"):
-                return"Mucho gusto Paul, ¿En que puedo ayudarte?";
+                return "Mucho gusto, Paul. ¿En qué puedo ayudarte?";
                 break;
-            case $util->convertirMinNoTilde("Quiero viajar a Mexico, qué me recomendarías?"):
-                return  "Claro, contamos con este paquetes de viaje Mexico-Cancun:\nPaquete: Grand Casis Cancun ,\n4 días y 3 noches.\nPrecio: $450\nServicios:Traslado aeropuerto CUN – Hotel – aeropuerto CUN.\n-Participación en actividades y entretenimiento del hotel.\n-Sistema de alimentación todo incluido.\n-Habitación Gran Estándar.\n\n¿Te gustaría reservar este paquete o necesitas más información?";
+            case $util->convertirMinNoTilde("Quiero viajar a México, ¿qué me recomendarías?"):
+                return "Claro, contamos con el siguiente paquete de viaje a México-Cancún:\nPaquete: Grand Oasis Cancún\nDuración: 4 días y 3 noches\nPrecio: $450\nServicios: Traslado aeropuerto CUN – Hotel – aeropuerto CUN.\n- Participación en actividades y entretenimiento del hotel.\n- Sistema de alimentación todo incluido.\n- Habitación Gran Estándar.\n\n¿Te gustaría reservar este paquete o necesitas más información?";
                 break;
-            case $util->convertirMinNoTilde("Cuáles son las fechas disponibles para este paquete?"):
-                return "Las fechas disponibles para el paquete Grand Casis Cancun, Mexico son: del 10 al 20 de agosto, del 20 al 31 de septiembre y del 5 al 15 de octubre. ¿Te gustaría reservar?";
+            case $util->convertirMinNoTilde("¿Cuáles son las fechas disponibles para este paquete?"):
+                return "Las fechas disponibles para el paquete Grand Oasis Cancún, México son: del 10 al 20 de agosto, del 20 al 31 de septiembre y del 5 al 15 de octubre. ¿Te gustaría reservar?";
                 break;
             case $util->convertirMinNoTilde("Me gustaría reservar para el 10 al 15 de agosto"):
                 return "Perfecto, ¿cuántas personas serán?";
                 break;
             case $util->convertirMinNoTilde("Dos personas"):
-                return "Entendido, tu reserva para el paquete Grand Casis Cancun, Mexico, del 10 al 15 de agosto para dos personas ha sido confirmada.\nPor favor, proporcioname tu nombre completo, un correo electronico y tu numero de telefono.";
+                return "El valor para la reserva del paquete Grand Oasis Cancún es de $450. Confirma tu reserva, por favor proporcionándome los nombres de los pasajeros, un número de cédula y un correo electrónico.";
                 break;
-            case $util->convertirMinNoTilde("Paul Alexander Romero Chiliguisa, paulromero90@gmail.com, 0998557785"):
-                return "¡Gracias!, tenemos estas opciones de pago:\n1-Transferencia\n2-Pago con tarjeta de credito (PayPhone)\nO puedes solicitar contactarte con uno de nuestros Asesores especializados.";
+            case $util->convertirMinNoTilde("Paul Romero y Carla Garzon, CI: 1234567890, paulromero90@gmail.com"):
+                return "Gracias, el valor de tu reserva sería $450. Tenemos diferentes formas de pago:\n1- Transferencia\n2- Pago con tarjeta de crédito (PayPhone)\nO puedes solicitar contactarte con uno de nuestros asesores especializados.";
                 break;
-            case  $util->convertirMinNoTilde("Voy a realizar mi pago con una tarjeta de credito"):
-                return"Para finalizar el proceso, por favor haz clic en el siguiente enlace para proceder con el pago: https://www.payphone.app/.\n\nUna vez completado, recibirás un correo electrónico con todos los detalles de tu pago.";
+            case $util->convertirMinNoTilde("Voy a realizar mi pago con una tarjeta de crédito"):
+                return "Para finalizar el proceso, por favor haz clic en el siguiente enlace para proceder con el pago: https://www.payphone.app/.\n\nUna vez completado el pago, recibirás un correo electrónico con todos los detalles de tu pago.";
                 break;
-            case $util->convertirMinNoTilde("En este momento ya realice el pago"):
-                $mensaje1 = "En este momento estamos verificando el pago...";
-                $mensaje2 = "Tu pago se ha creditado correctamente!\nRecibirás un correo electrónico con mas detalles de tu viaje.";
-                $retorno = [$mensaje1, $mensaje2];
-                return $retorno;
+            case $util->convertirMinNoTilde("En este momento ya realicé el pago"):
+                return "Por favor, envía una captura de pantalla del comprobante de pago.";
                 break;
-            case $util->convertirMinNoTilde("Eso seria todo por el momento, Gracias"):
-                return "Gracias a ti, Buen viaje";
+                case $util->convertirMinNoTilde("Listo") + $urlImagenRecibida:
+                    $mensaje1 = "En este momento estamos verificando el pago...";
+                    $mensaje2 = "Tu pago se ha creditado correctamente. Recibirás un correo electrónico con más detalles de tu viaje.";
+                    $retorno = [$mensaje1, $mensaje2];
+                    return $retorno;
+                    break;
+            case $util->convertirMinNoTilde("Eso sería todo por el momento, gracias"):
+                return "Gracias a ti. ¡Buen viaje!";
                 break;
             default:
                 return "No hay respuesta";
+
        }
     }
 

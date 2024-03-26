@@ -23,7 +23,7 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-    
+
     ?>
 
 
@@ -605,6 +605,7 @@
             </div>
         </div>
     </div>
+
     <style>
         .pagination li {
             display: inline-block;

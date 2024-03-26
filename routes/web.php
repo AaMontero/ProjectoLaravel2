@@ -14,7 +14,6 @@ use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserActionsController;
 use App\Http\Middleware\VerifyCsrfToken;
-use App\Models\Hotel;
 
 /*
 |--------------------------------------------------------------------------

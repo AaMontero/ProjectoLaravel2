@@ -143,7 +143,7 @@
                                                 </x-dropdown-link>
                                             @endrole
                                             @role('Administrador|superAdmin')
-                                                <x-dropdown-link :href="route('vendedor.cambiarActivo', $vendedor)">
+                                                <x-dropdown-link :href="route('vendedor.cambiarActivo', $vendedor)" onclick="return confirmDelete(event)">
                                                     {{ __('Eliminar Vendedor') }}
                                                 </x-dropdown-link>
                                             @endrole
@@ -154,6 +154,25 @@
                         @endforeach
                     </tbody>
                 </table>
+                <script>
+                    function confirmDelete(event) {
+                        event.preventDefault();
+                        Swal.fire({
+                            title: "¿Deseas eliminar este vendedor?",
+                            showDenyButton: true,
+                            confirmButtonText: "Sí",
+                            denyButtonText: `No`,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Continuar con la eliminación
+                                window.location.href = event.target.getAttribute('href');
+                            } else if (result.isDenied) {
+                                // No hacer nada
+                            }
+                        });
+                        return false;
+                    }
+                </script>
                 <div class="pagination flex justify-center mt-2">
 
                     <div class="pagination "></div>
@@ -214,11 +233,6 @@
             }
         }
     </script>
-    {{-- <div class = "ml-20 mr-20">
-        <p class="ml-5 flex justify-center items-center list-none space-x-2">
-            {{ $vendedores->appends([]) }}
-        </p>
-    </div> --}}
 
 </x-app-layout>
 @include('layouts.footer')

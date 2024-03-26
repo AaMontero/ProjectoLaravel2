@@ -208,7 +208,6 @@ class PaqueteController extends Controller
                 'entity_type' => 'paquete',
                 'entity_id' => $paquete->id,
                 'modified_data' => json_encode($modifiedData),
-                // Otros campos relevantes que desees registrar en el log
             ]);
         }
 
@@ -237,7 +236,6 @@ class PaqueteController extends Controller
             'entity_type' => 'paquete',
             'entity_id' => $paquete->id,
             'modified_data' => json_encode($paqueteEliminado),
-            // Otros campos relevantes que desees registrar en el log
         ]);
 
         // Eliminar el paquete

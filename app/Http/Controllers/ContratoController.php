@@ -123,8 +123,9 @@ class ContratoController extends Controller
         $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
         //Inicializacion de variables
         $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $contratoId = $pagareText = $montoCuotaPagare = "";
-        $aniosContrato = $montoContrato = 0;
-        $bonoQory = $bonoQoryInt = $contienePagare = $contieneCreditoDirecto = false;
+        $lugarInternacional = "";
+        $aniosContrato = $montoContrato = $personasInternacional = 0;
+        $bonoQory = $bonoQoryInt = $contienePagare = $contieneCreditoDirecto = $vacacionalIntBool = $semanaIntBoolean = false;
         $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date("Y-m-d");
         try {
             $tieneUsuario = $request->usuario_previo;
@@ -162,13 +163,28 @@ class ContratoController extends Controller
             $contieneCreditoDirecto = $request->contiene_credito_directo;
             $okBono = isset($request->bono_hospedaje);
             $okBonoInt = isset($request->bono_hospedaje_internacional);
+            $bonoVacacionalInt = isset($request->bono_certificado_vacacional_internacional);
+            $bonoSemanaInt = isset($request->bono_semana_internacional);
             $listaOtros = [];
+            $okBono == 1 ? $bonoQory = true : $bonoQory = false;
+            $okBonoInt == 1 ? $bonoQoryInt = true : $bonoQoryInt = false;
+            $bonoVacacionalInt == 1 ? $vacacionalIntBool = true : $vacacionalIntBool = false;
+            $bonoSemanaInt == 1 ? $semanaIntBoolean = true : $semanaIntBoolean = false;
+            if ($vacacionalIntBool || $semanaIntBoolean) {
+
+                $request->validate([
+                    'personas_bono_semana_internacional' => ['required'],
+                    'lugar_bono_semana_internacional' => ['required'],
+                ]);
+                $lugarInternacional = $request->lugar_bono_semana_internacional;
+                $personasInternacional = $request->personas_bono_semana_internacional;
+            } else {
+                file_put_contents("No entra boolean.txt", "no esta entrando a validar");
+            }
 
             $fomasPagoSinComillas = str_replace("[", "", $formasPago);
             $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas);
             $formasPagoLista = explode(",", $fomasPagoSinComillas2);
-
-
             foreach ($formasPagoLista as $elem) {
                 $elemDividido = explode(" ", $elem);
                 if (count($elemDividido) >= 2 && strpos($elem, "Pagaré") === false) {
@@ -211,16 +227,7 @@ class ContratoController extends Controller
                 }
             }
             $nombre_cliente = $nombres . " " . $apellidos;
-            if ($okBono == 1) {
-                $bonoQory = true;
-            } else {
-                $bonoQory = false;
-            }
-            if ($okBonoInt == 1) {
-                $bonoQoryInt = true;
-            } else {
-                $bonoQoryInt = false;
-            }
+
             $valorPagare = json_decode($request->pagare_monto_info);
             $fechaVencimiento = json_decode($request->pagare_fecha_info);
             $formasPagoString = json_decode($request->formas_pago);
@@ -317,9 +324,12 @@ class ContratoController extends Controller
             $contrato->monto_contrato = $montoContrato;
             $contrato->bono_hospedaje_qori_loyalty = $bonoQory;
             $contrato->bono_hospedaje_internacional = $bonoQoryInt;
+            $contrato->bono_certificado_vacacional_internacional  = $vacacionalIntBool;
+            $contrato->bono_semana_internacional = $semanaIntBoolean;
+            $contrato->lugar_internacional = $lugarInternacional;
+            $contrato->personas_internacional = $personasInternacional;
             $contrato->contrato_id = $contratoId . $numero_sucesivo;
             $personaArray = json_decode($persona, true);
-
             if (!empty($personaArray) && isset($personaArray['id'])) {
                 $contrato->cliente_id = $personaArray['id'];
             } elseif (!empty($personaArray) && isset($personaArray[0]['id'])) {

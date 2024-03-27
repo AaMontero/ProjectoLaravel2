@@ -82,14 +82,16 @@ class WhatsAppController extends Controller
         } else {
             $mensaje  = $this->conversacion($mensajeLlega);
         }
+
         if (gettype($mensaje) != 'array') {
             $this->enviarMensaje($numeroEnviar, $mensaje);
         } else {
-            file_put_contents("segundo elemento.txt", $mensaje[1]);
+            //file_put_contents("segundo elemento.txt", $mensaje[1]);
             foreach ($mensaje as $elem) {
-                $this->enviarMensaje($numeroEnviar, $elem);
-                sleep(15);
+              $this->enviarMensaje($numeroEnviar, $elem);
+                sleep(30);
             }
+
         }
     }
 
@@ -298,6 +300,7 @@ class WhatsAppController extends Controller
         $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
         return $mensaje;
     }
+
     function conversacion($mensajeRecibido)
     {
 
@@ -338,7 +341,7 @@ class WhatsAppController extends Controller
                 $retorno = [$mensaje1, $mensaje2];
                 return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Eso sería todo por el momento, gracias"):
+            case $util->convertirMinNoTilde("Gracias"):
                 return "Gracias a ti. ¡Buen viaje!";
                 break;
             default:

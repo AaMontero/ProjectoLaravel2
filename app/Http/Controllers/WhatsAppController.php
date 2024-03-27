@@ -119,7 +119,7 @@ class WhatsAppController extends Controller
             ]),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Bearer ' . $apiKey,
+                'Authorizataion: Bearer ' . $apiKey,
             ),
         ));
         curl_exec($curl);

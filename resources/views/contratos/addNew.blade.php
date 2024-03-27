@@ -195,25 +195,72 @@
                         <div class="mb-2">
                             <label class="inline-flex items-center mt-1 p-0  font-bold">Bono hospedaje Qory
                                 Loyalty</label>
-                            <input type="checkbox" name="bono_hospedaje" id="bono_hospedaje_checkbox"
-                                value="{{ old('bono_hospedaje_checkbox') }}" class="ml-2">
+                            <input type="checkbox" name="bono_hospedaje" id="bono_hospedaje_checkbox">
                         </div>
                         @error('bono_hospedaje')
-                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-
                         <!-- Bono de hospedaje internacional Qory Loyalty -->
                         <div class="mb-2">
-                            <label class="inline-flex items-center mt-1 p-0  font-bold">Bono de hospedaje internacional
-                                Qory
-                                Loyalty</label>
+                            <label class="inline-flex items-center mt-1 p-0 font-bold">Certificado
+                                Vacacional</label>
                             <input type="checkbox" name="bono_hospedaje_internacional"
-                                id="bono_hospedaje_internacional_checkbox"
-                                value="{{ old('bono_hospedaje_internacional') }}" class="ml-2">
+                                id="bono_hospedaje_internacional_checkbox" class="ml-2">
                         </div>
                         @error('bono_hospedaje_internacional')
-                            <small class = "text-red-500 ml-2">{{ $message }}</small>
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!-- Bono de hospedaje internacional Qory Loyalty -->
+                        <div class="mb-2">
+                            <label class="inline-flex items-center mt-1 p-0 font-bold">
+                                Bono Vacacional Internacional
+                            </label>
+                            <input type="checkbox" name="bono_certificado_vacacional_internacional"
+                                id="bono_certificado_vacacional_internacional_checkbox" class="ml-2"
+                                onchange="toggleVisibility()">
+                        </div>
+                        @error('bono_certificado_vacacional_internacional')
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
+                            <br>
+                        @enderror
+                        <!-- Bono de hospedaje internacional Qory Loyalty -->
+                        <div class="mb-2 flex ">
+                            <div class = "flex">
+                                <label class="inline-flex items-center mt-1 p-0 font-bold">Bono de Semana
+                                    Internacional</label>
+                                <input type="checkbox" name="bono_semana_internacional"
+                                    id="bono_semana_internacional_checkbox" class="ml-3 mt-2"
+                                    onchange="toggleVisibility()">
+
+                            </div>
+                            <div id = "destino_personas_internacional" style = "display:none">
+                                <!-- Agregado margen a la derecha -->
+                                <div class="flex ml-10"> <!-- Agregado margen a la izquierda -->
+                                    <label class="inline-flex items-center mt-1 p-0 font-bold">Destino: </label>
+                                    <input type="text" name="lugar_bono_semana_internacional"
+                                        id="lugar_bono_semana_internacional" class="ml-2">
+                                </div>
+                                @error('lugar_bono_semana_internacional')
+                                    <small class="text-red-500 ml-2">{{ $message }}</small>
+                                    <br>
+                                @enderror
+                                <div class="flex ml-10">
+                                    <label class="inline-flex items-center mt-1 p-0 font-bold"># Personas: </label>
+                                    <input type="text" name="personas_bono_semana_internacional"
+                                        id="personas_bono_semana_internacional"
+                                        value="{{ old('personas_bono_semana_internacional') }}" class="ml-2">
+                                </div>
+                                @error('personas_bono_semana_internacional')
+                                    <small class="text-red-500 ml-2">{{ $message }}</small>
+                                    <br>
+                                @enderror
+                            </div>
+
+                        </div>
+                        @error('bono_semana_internacional')
+                            <small class="text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
                         <!-- Aquí está el botón para ejecutar el código -->
@@ -228,6 +275,30 @@
     </div>
     @include('layouts.footer')
     <script>
+        if (document.getElementById("bono_semana_internacional_checkbox").checked) {
+            document.getElementById("bono_semana_internacional").value = true;
+        }
+        if (document.getElementById("bono_certificado_vacacional_internacional_checkbox").checked) {
+            document.getElementById("bono_certificado_vacacional_internacional").value = true;
+        }
+        if (document.getElementById("bono_hospedaje_internacional_checkbox").checked) {
+            document.getElementById("bono_hospedaje_internacional").value = true;
+        }
+        if (document.getElementById("bono_hospedaje_checkbox").checkek) {
+            document.getElementById("bono_hospedaje").value = true;
+        }
+
+        function toggleVisibility() {
+            var bono_hospedaje_checkbox = document.getElementById("bono_certificado_vacacional_internacional_checkbox");
+            var bono_semana_internacional_checkbox = document.getElementById("bono_semana_internacional_checkbox");
+            var bono_semana_internacional_div = document.getElementById("destino_personas_internacional");
+
+            if (bono_hospedaje_checkbox.checked || bono_semana_internacional_checkbox.checked) {
+                bono_semana_internacional_div.style.display = "flex";
+            } else {
+                bono_semana_internacional_div.style.display = "none";
+            }
+        }
         var listaFormasPago = [];
         var pagareBoolean = false;
         var creditoDirectoBoolean = false;

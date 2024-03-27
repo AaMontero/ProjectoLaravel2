@@ -302,13 +302,10 @@
 
                         $('#saveBtn').unbind().click(function() {
                             var title = $('#title').val();
-                            console.log("El valor de end es: " + end);
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
-                            console.log("El valor de end_date es: " + end_date);
                             var author = $('#author').val();
                             var hotel_nombre = $('#hotel_nombre').val();
-                            console.log("El valor de hotel es: " + hotel_nombre);
 
                             // Obtener los valores de los campos
                             var title = $('#title').val();
@@ -411,7 +408,6 @@
 
 
                         $('#updateBtn').unbind().click(function() {
-                            console.log('Editado Correctamente');
                             var id = event.id;
                             var start_date = $('#start_date_edit').val();
                             var end_date = $('#end_date_edit').val();
@@ -441,7 +437,6 @@
                                         }); // Mostrando una alerta de éxito
                                 },
                                 error: function(error) {
-                                    console.log(error);
                                     swal("¡Error!",
                                         "Hubo un error al actualizar el evento.",
                                         "error"); // Mostrando una alerta de error

@@ -231,8 +231,6 @@
                     ventanaAgregarPaquete.style.display = 'none';
                 }
 
-                console.log("esta dando click en el boton para ocultar");
-
             }
         </script>
 

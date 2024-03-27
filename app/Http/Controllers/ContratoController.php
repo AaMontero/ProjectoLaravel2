@@ -119,9 +119,10 @@ class ContratoController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        file_put_contents("usersalaactivo.txt",$user->sala);
+
 
         $utils = new Utils();
+
         date_default_timezone_set('America/Guayaquil');
         $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
         //Inicializacion de variables
@@ -184,7 +185,7 @@ class ContratoController extends Controller
                 $lugarInternacional = $request->lugar_bono_semana_internacional;
                 $personasInternacional = $request->personas_bono_semana_internacional;
             } else {
-                file_put_contents("No entra boolean.txt", "no esta entrando a validar");
+
             }
             $fomasPagoSinComillas = str_replace("[", "", $formasPago);
             $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas);
@@ -218,13 +219,14 @@ class ContratoController extends Controller
             if($user->sala == 'Sala 1'){
                 $letrasContrato = "QTA_";
                 $numInicial = 40000;
+                $numero_sucesivo =  $utils->obtenerNumeroMayorTipo("Sala 1");
 
             }
             if($user->sala == "Sala 2"){
                 $letrasContrato = "QT_";
                 $numInicial = 30000;
+                $numero_sucesivo =  $utils->obtenerNumeroMayorTipo("Sala 2");
             }
-            $numero_sucesivo = $utils->obtenerNumeroMayor() + $numInicial;
             if (array_key_exists($ciudad, $ciudad_diccionario)) { // Si la ciudad esta en el diccionario
                 $codigo_ciudad = $ciudad_diccionario[$ciudad];
                 if ($contieneCreditoDirecto == 1) {
@@ -796,14 +798,45 @@ class Utils
     }
     public function obtenerNumeroMayor()
     {
-        $resultado = Contrato::select(DB::raw('MAX(id) AS max_numero'))->first();
-        $maxNumero = $resultado->max_numero;
+        $resultado = Contrato::select(DB::raw('MAX(contrato_id) AS max_contrato_id'))->first();
+
         if ($resultado) {
+            $maxNumero = intval($resultado->max_contrato_id);
             $numero_sucesivo = $maxNumero + 1;
         } else {
             $numero_sucesivo = 1; // Si no hay contratos en la base de datos
-            echo ("no esta entrando dentro del if");
+            echo ("no está entrando dentro del if");
         }
+
         return $numero_sucesivo;
+    }
+
+    public function obtenerNumeroMayorTipo($tipoContrato){
+            $resultadoA = Contrato::pluck('contrato_id')->toArray();
+            $ultimos_cinco_caracteres = array_map(function($contrato_id) {
+                return substr($contrato_id, -5); // Obtener los últimos 5 caracteres de cada contrato_id
+            }, $resultadoA);
+            $lista_30000_39999 = [];
+            $lista_40000_49999 = [];
+
+            foreach ($ultimos_cinco_caracteres as $valor) {
+                $numero = intval($valor);
+                if ($numero >= 30000 && $numero <= 39999) {
+                    $lista_30000_39999[] = $valor;
+                } elseif ($numero >= 40000 && $numero <= 49999) {
+                    $lista_40000_49999[] = $valor;
+                }
+             }
+
+            if($tipoContrato = "Sala 1"){
+                $maximoSala1 =  max($lista_40000_49999)+ 1 ;
+                return $maximoSala1;
+
+            }
+            if($tipoContrato = "Sala 2"){
+                $maximoSala2 = max($lista_30000_39999)+ 1 ;
+                return $maximoSala2;
+            }
+            return 0;
     }
 }

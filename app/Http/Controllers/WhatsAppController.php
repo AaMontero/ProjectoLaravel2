@@ -231,7 +231,7 @@ class WhatsAppController extends Controller
             $this->crearNotificacion($cadenaNotificacion, $mensaje);
             event($event);
         } else {
-            file_put_contents("mensajeExistente.txt", $id);
+
         }
     }
 

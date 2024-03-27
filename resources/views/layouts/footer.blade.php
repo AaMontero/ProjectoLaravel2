@@ -1,6 +1,4 @@
 <!-- SweetAlert -->
-
-
 <footer class="footer py-4">
   <div class="container-fluid">
     <div class="row align-items-center justify-content-lg-between">
@@ -19,7 +17,7 @@
             </div>
         </div>
         <div class="col-lg-6 text-end">
-            <a class="font-weight-bold cursor-default p-3" style="color: transparent; text-decoration: none;"  id="openModal" target="_blank" ></a>
+            <a class="font-weight-bold cursor-default p-1" style="color: transparent; text-decoration: none;"  id="openModal" target="_blank" ></a>
         </div>
     </div>
 </div>

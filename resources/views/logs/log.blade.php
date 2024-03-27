@@ -192,9 +192,7 @@
                                                                         <p><strong>Autor:
                                                                             </strong><span>{{ $eventos->author }}</span>
                                                                         </p>
-                                                                        <p><strong>Nota:
-                                                                            </strong><span>{{ $eventos->note }}</span>
-                                                                        </p>
+                                                                       
                                                                     @endif
                                                                 @endforeach
                                                             @endif

@@ -72,8 +72,7 @@
                                                     </select>
                                                 </td>
                                                 <td class="py-2 px-4 border-b text-center whitespace-nowrap">
-                                                    <x-primary-button class="mt-4" type="submit">Agregar
-                                                        rol</x-primary-button>
+                                                    <x-primary-button class="mt-4" type="submit">Modificar</x-primary-button>
 
                                                 </td>
                                             </form>

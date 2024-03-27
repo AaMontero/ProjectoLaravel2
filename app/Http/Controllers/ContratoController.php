@@ -17,6 +17,7 @@ use App\Http\Controllers\PagoVendedorController;
 use App\Models\UserAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 $meses = array(
     1 => 'Enero',
@@ -57,7 +58,7 @@ class ContratoController extends Controller
     }
     public function eliminarContrato($contrato)
     {
-        //FALTA POR IMPLEMENTAR 
+        //FALTA POR IMPLEMENTAR
     }
 
 
@@ -117,8 +118,10 @@ class ContratoController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        file_put_contents("usersalaactivo.txt",$user->sala);
+
         $utils = new Utils();
-        $numero_sucesivo = $utils->obtenerNumeroMayor();
         date_default_timezone_set('America/Guayaquil');
         $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
         //Inicializacion de variables
@@ -212,19 +215,29 @@ class ContratoController extends Controller
                 "Santo Domingo" => "STO"
             ];
 
+            if($user->sala == 'Sala 1'){
+                $letrasContrato = "QTA_";
+                $numInicial = 40000;
+
+            }
+            if($user->sala == "Sala 2"){
+                $letrasContrato = "QT_";
+                $numInicial = 30000;
+            }
+            $numero_sucesivo = $utils->obtenerNumeroMayor() + $numInicial;
             if (array_key_exists($ciudad, $ciudad_diccionario)) { // Si la ciudad esta en el diccionario
                 $codigo_ciudad = $ciudad_diccionario[$ciudad];
                 if ($contieneCreditoDirecto == 1) {
-                    $contratoId = "CD_QT" . $codigo_ciudad;
+                    $contratoId = "CD_".$letrasContrato . $codigo_ciudad;
                 } else {
-                    $contratoId = "QT" . $codigo_ciudad;
+                    $contratoId = $letrasContrato . $codigo_ciudad ;
                 }
             } else {
                 $codigo_ciudad = $ciudad;
                 if ($contieneCreditoDirecto == 1) {
-                    $contratoId = "CD_QT" . $codigo_ciudad;
+                    $contratoId = "CD_".$letrasContrato . $codigo_ciudad;
                 } else {
-                    $contratoId = "QT" . $codigo_ciudad;
+                    $contratoId = $letrasContrato . $codigo_ciudad;
                 }
             }
             $nombre_cliente = $nombres . " " . $apellidos;
@@ -254,7 +267,7 @@ class ContratoController extends Controller
                     $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, false, $lugarInternacional, $personasInternacional);
                     $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                 }
-                if ($contieneCreditoDirecto == true) { // SI contiene credito directo 
+                if ($contieneCreditoDirecto == true) { // SI contiene credito directo
                     $valorPendiente = ($montoCredDir - $abonoCredDir);
                     $resultado =  $valorPendiente / $numCuotasCredDir;
                     $valorCuota = ceil($resultado * 100) / 100;

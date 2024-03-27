@@ -372,11 +372,7 @@
                         });
                     },
 
-
-
                     eventClick: function(event) {
-
-
 
                         var id = event.id;
                         var tituloSeleccionado = event.title;

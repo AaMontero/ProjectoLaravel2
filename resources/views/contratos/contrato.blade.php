@@ -23,7 +23,7 @@
     $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
-
+    
     ?>
 
 
@@ -271,7 +271,8 @@
                                 @enderror
                                 <div class="flex ml-10">
                                     <label class="inline-flex items-center mt-1 p-0 font-bold"># Personas: </label>
-                                    <input type="text" name="personas_bono_semana_internacional" id="personas_bono_semana_internacional"
+                                    <input type="text" name="personas_bono_semana_internacional"
+                                        id="personas_bono_semana_internacional"
                                         value="{{ old('personas_bono_semana_internacional') }}" class="ml-2">
                                 </div>
                                 @error('personas_bono_semana_internacional')

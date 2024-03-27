@@ -16,7 +16,12 @@ class RolController extends Controller
     {
         $user = User::all();
         $roles = Role::all();
-        return view('roles.rol', ['user' => $user, 'roles' => $roles]);
+        $salas = ['No asignado', 'Sala 1', 'Sala 2'];
+        return view('roles.rol', [
+            'users' => $user,
+            'roles' => $roles,
+            'salas' => $salas
+        ]);
     }
 
 
@@ -24,8 +29,10 @@ class RolController extends Controller
     {
         try {
             $rolId = $request->input('rol_id');
-            file_put_contents("llegaRol.txt", $rolId); 
-
+            $salavalor = $request->input('sala_valor');
+            $user->sala = $salavalor;
+            file_put_contents("llegaSala.txt", $user);
+            $user->save();
             // Asignar el rol al usuario
             $user->syncRoles([$rolId]);
 

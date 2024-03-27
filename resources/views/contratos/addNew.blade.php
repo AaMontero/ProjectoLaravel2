@@ -312,7 +312,7 @@
             if (valorValue === "" || formaValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "(Tarjeta de débito) " + "$" + valorValue + " con " + formaValue;
+                var cadena = "(Tarjeta de débito) " + "$" + valorValue + " con " + formaValue + ".";
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
@@ -335,9 +335,9 @@
             if (valorValue === "" || formaValue === "" || bancoValue === "" || mesesValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "(Tarjeta de crédito)" + 
+                var cadena = "(Tarjeta de crédito) " + 
                     "$" + valorValue + " con " + formaValue + " del banco " + bancoValue +
-                    " a " + mesesValue + " meses de credito.";
+                    " a " + mesesValue + " meses de crédito.";
 
                 listaFormasPago.push(cadena);
                 valor.value = "";

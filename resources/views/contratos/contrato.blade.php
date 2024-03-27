@@ -778,7 +778,6 @@
                 console.log(listaFormasPago);
                 document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
                 console.log(document.getElementById("formas_pago").value);
-                alert("Se agregó: " + cadena);
             }
         }
 
@@ -804,7 +803,6 @@
                     document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
                     document.getElementById("contiene_pagare").value = "true";
                     pagareBoolean = true;
-                    alert("Se agregó: " + cadena);
                 }
             }
         }

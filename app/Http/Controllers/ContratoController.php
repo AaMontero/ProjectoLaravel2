@@ -18,6 +18,7 @@ use App\Models\UserAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+use ZipArchive;
 
 $meses = array(
     1 => 'Enero',
@@ -249,6 +250,7 @@ class ContratoController extends Controller
             $numCuotasCredDir = json_decode($request->cred_dir_num_cuotas);
             $montoCredDir = json_decode($request->cred_dir_valor);
             $abonoCredDir = json_decode($request->cred_dir_abono);
+            $listaDocumentos = [];
             if ($abonoCredDir == "") {
                 $abonoCredDir = 0;
             }
@@ -260,29 +262,30 @@ class ContratoController extends Controller
                 }
                 $funciones = new DocumentGenerator();
                 $rutaCarpetaSave = $funciones->crearCarpetaCliente($nombre_cliente, $fechaActual);
-                $funciones->generarVerificacion($nombre_cliente, $numero_sucesivo, $numCedula, $rutaCarpetaSave);
-                $funciones->generarDiferimiento($contratoId, $numero_sucesivo, $ciudad, $numCedula, $fechaActual, $nombre_cliente, $rutaCarpetaSave);
+                $listaDocumentos[] = $funciones->generarVerificacion($nombre_cliente, $numero_sucesivo, $numCedula, $rutaCarpetaSave);
+                $listaDocumentos[] = $funciones->generarDiferimiento($contratoId, $numero_sucesivo, $ciudad, $numCedula, $fechaActual, $nombre_cliente, $rutaCarpetaSave);
                 if ($contieneCreditoDirecto != true && $contienePagare != true) { // No contiene credito directo ni pagare
-                    $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
-                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, false, $lugarInternacional, $personasInternacional);
-                    $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
+                    $listaDocumentos[] = $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
+                    $listaDocumentos[] = $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, false, $lugarInternacional, $personasInternacional);
+                    $listaDocumentos[] = $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
                 }
                 if ($contieneCreditoDirecto == true) { // SI contiene credito directo
                     $valorPendiente = ($montoCredDir - $abonoCredDir);
                     $resultado =  $valorPendiente / $numCuotasCredDir;
                     $valorCuota = ceil($resultado * 100) / 100;
                     $valorCuota = number_format($valorCuota, 2);
-                    $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Débito Automatico");
-                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, true, $lugarInternacional, $personasInternacional);
-                    $funciones->generarContratoCreditoDirecto($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave, $abonoCredDir, $numCuotasCredDir, $valorCuota);
-                    $funciones->generarPagaresCredito($fechaInicioCredDir, $montoCredDir, $abonoCredDir, $numCuotasCredDir, $rutaCarpetaSave, $numero_sucesivo, $nombre_cliente, $ciudad, $numCedula, $fechaActual, $email);
+                    $listaDocumentos[] = $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Débito Automatico");
+                    $listaDocumentos[] = $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, true, $lugarInternacional, $personasInternacional);
+                    $listaDocumentos[] = $funciones->generarContratoCreditoDirecto($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave, $abonoCredDir, $numCuotasCredDir, $valorCuota);
+                    $listaDocumentos[] = $funciones->generarPagaresCredito($fechaInicioCredDir, $montoCredDir, $abonoCredDir, $numCuotasCredDir, $rutaCarpetaSave, $numero_sucesivo, $nombre_cliente, $ciudad, $numCedula, $fechaActual, $email);
                 }
                 if ($contienePagare == true) { // Si contiene pagare
-                    $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
-                    $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, false, $lugarInternacional, $personasInternacional);
-                    $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
-                    $funciones->generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valorPagare, $fechaActual, 1, $montoCuotaPagare, $pagareText, $rutaCarpetaSave);
+                    $listaDocumentos[] = $funciones->generarContrato($contratoId, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPagoString, $email, $fechaActual, $ciudad, $rutaCarpetaSave);
+                    $listaDocumentos[] = $funciones->generarBeneficiosAlcance($contratoId, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $vacacionalIntBool, $semanaIntBoolean, $rutaCarpetaSave, false, $lugarInternacional, $personasInternacional);
+                    $listaDocumentos[] = $funciones->generarCheckList($contratoId, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaCarpetaSave, "Descuento para pagos con tarjeta");
+                    $listaDocumentos[] = $funciones->generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valorPagare, $fechaActual, 1, $montoCuotaPagare, $pagareText, $rutaCarpetaSave);
                 }
+                $utils->comprimirArchivos($rutaCarpetaSave, $listaDocumentos);
                 echo ("Los documentos se generaron correctamente. \n");
             }
             //Creación del cliente
@@ -415,6 +418,7 @@ class ContratoController extends Controller
         $fechaCreacion = $contrato->created_at->format('Y-m-d');
         $nombreCarpeta = $nombreCliente . " " . $fechaCreacion;
         $rutaBase = $_SERVER['DOCUMENT_ROOT'] . '/contratos';
+        //$rutaBase = '../public/contratos';
         $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
         //Creacion de carpeta local
         // $nombreUsuario = getenv("USERNAME");
@@ -477,6 +481,7 @@ class DocumentGenerator
         // $nombreCarpeta = $nombre_cliente . " " . $fechaActual;
         // $rutaCarpeta = "C:\\Users\\$nombreUsuario\\Documents\\Contratos\\$nombreCarpeta";
         $rutaBase = $_SERVER['DOCUMENT_ROOT'] . '/contratos'; // Ruta Servidor Contratos 
+        // $rutaBase = "../public/contratos";
         $nombreCarpeta = $nombre_cliente . " " . $fechaActual;
         $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
         if (!is_dir($rutaCarpeta)) {
@@ -505,6 +510,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTDiferimiento' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarVerificacion($nombre_cliente, $numero_sucesivo, $numCedula, $rutaSaveContrato)
     {
@@ -517,6 +523,7 @@ class DocumentGenerator
 
 
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarFechasPagare($fecha_inicial, $valor, $abono, $numCuotas)
     {
@@ -584,6 +591,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTPagareCreditos' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarBeneficiosAlcance($contrato, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $certificadoVacacionalInternacional, $bonoSemanaInternacional, $rutaSaveContrato, $clausulaCDBoolean, $destinoInternacional, $numPersonasInternacional)
     {
@@ -647,6 +655,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTBeneficiosDeAlcance' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarContrato($contrato, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPago, $email, $fechaActual, $ciudad, $rutaSaveContrato)
     {
@@ -687,6 +696,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTContrato' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarContratoCreditoDirecto($contrato, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPago, $email, $fechaActual, $ciudad, $rutaSaveContrato, $abonoCD, $numCuotasCD, $valorCuotaCD)
     {
@@ -727,6 +737,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTContratoCD' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valor_pagare, $fechaActual, $numCuotas, $montoCuotaPagare, $pagareText, $rutaSaveContrato)
     {
@@ -754,6 +765,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTPagare' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
     public function generarCheckList($contrato, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaSaveContrato, $credDirBoolean)
     {
@@ -786,6 +798,7 @@ class DocumentGenerator
         $nombreArchivo = 'QTCheckList' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
         $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
+        return $nombreArchivo;
     }
 }
 
@@ -843,5 +856,21 @@ class Utils
             return $maximoSala2;
         }
         return 0;
+    }
+    public function comprimirArchivos($ruta, $listaArchivos)
+    {
+        $zip = new ZipArchive();
+        $nombreArchivoZip = $ruta . '.zip';
+        if ($zip->open($nombreArchivoZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            foreach ($listaArchivos as $elemento) {
+                $archivo = $ruta . '/' . $elemento;
+                if (is_file($archivo)) {
+                    $zip->addFile($archivo, $elemento);
+                } else {
+                    echo "El elemento $elemento no es un archivo válido. Se omitirá.\n";
+                }
+            }
+        }
+        $zip->close();
     }
 }

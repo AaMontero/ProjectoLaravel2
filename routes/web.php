@@ -87,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/contrato', [ContratoController::class, 'store'])
             ->name('contrato.store'); //Registrar un nuevo contrato
         Route::get('contratos/{contratoId}/addVendedor', [ContratoController::class, 'add_vendedor'])
-            ->name('contrato.vendedores'); //Agregar los vendedores al contrato (JS,C1,C2,V)
+            ->name('contrato.vendedores'); // Agregar los vendedores a los contratos
     });
     Route::middleware('checkRole:superAdmin')->group(function () {
         Route::put('/roles/{user}', [RolController::class, 'asignarRol'])
@@ -201,12 +201,12 @@ require __DIR__ . '/auth.php';
 
 //RUTAS HOTELES
 Route::get('/hoteles', [HotelController::class, 'index'])
-->name('hotel');
+    ->name('hotel');
 Route::post('/hoteles', [HotelController::class, 'store'])
-->name('hoteles.store');
+    ->name('hoteles.store');
 Route::delete('hotel/{hotel}', [HotelController::class, 'destroy'])
-->name('hotel.destroy');
+    ->name('hotel.destroy');
 Route::get('/hoteles/{hotel}/edit', [HotelController::class, 'edit'])
-            ->name('hotel.edit');
+    ->name('hotel.edit');
 Route::put('hoteles/{hotel}',  [HotelController::class, 'update'])
-->name('hotel.update');
+    ->name('hotel.update');

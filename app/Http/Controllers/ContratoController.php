@@ -71,7 +71,15 @@ class ContratoController extends Controller
     }
     public function add_vendedor($contratoId)
     {
+        $contrato = Contrato::find($contratoId);
+        $idCliente = $contrato->cliente_id;
+        $clienteActivo = Cliente::find($idCliente);
+        $rutaBase = $_SERVER['DOCUMENT_ROOT'] . '/contratos'; // Ruta Servidor Contratos 
+        // $rutaBase = "../public/contratos";
+        $nombreCarpeta = $clienteActivo->nombres . " " . $clienteActivo->apellidos . " " . date("Y-m-d") . ".zip";
+        $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
         return view('contratos.contrato_vendedores', [
+            "ruta" => $rutaCarpeta,
             "contratoId" => $contratoId,
             "vendedores" => Vendedor::where('rol', "Vendedor")->where('activo', 1)->get(),
             "closers" => Vendedor::where('rol', "Closer")->where('activo', 1)->get(),
@@ -120,10 +128,7 @@ class ContratoController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-
-
         $utils = new Utils();
-
         date_default_timezone_set('America/Guayaquil');
         $formasPago = $request->input('formas_pago'); //Lista Formas de Pago
         //Inicializacion de variables
@@ -286,7 +291,6 @@ class ContratoController extends Controller
                     $listaDocumentos[] = $funciones->generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valorPagare, $fechaActual, 1, $montoCuotaPagare, $pagareText, $rutaCarpetaSave);
                 }
                 $utils->comprimirArchivos($rutaCarpetaSave, $listaDocumentos);
-                echo ("Los documentos se generaron correctamente. \n");
             }
             //Creación del cliente
             if (empty($tieneUsuario)) {
@@ -365,7 +369,12 @@ class ContratoController extends Controller
                 'entity_id' => $contratoIngresado->id, // ID del contrato creado
                 // Otros campos relevantes que desees registrar en el log
             ]);
-            return to_route('contrato.vendedores', ['contratoId' => $contratoIngresado->id]);
+            return to_route(
+                'contrato.vendedores',
+                [
+                    'contratoId' => $contratoIngresado->id,
+                ]
+            );
 
             //return route('contrato.vendedores', ['contrato' => $contrato]);
 
@@ -870,6 +879,7 @@ class Utils
                     echo "El elemento $elemento no es un archivo válido. Se omitirá.\n";
                 }
             }
+        } else {
         }
         $zip->close();
     }

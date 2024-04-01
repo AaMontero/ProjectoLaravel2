@@ -185,7 +185,6 @@ class ContratoController extends Controller
                 $lugarInternacional = $request->lugar_bono_semana_internacional;
                 $personasInternacional = $request->personas_bono_semana_internacional;
             } else {
-
             }
             $fomasPagoSinComillas = str_replace("[", "", $formasPago);
             $fomasPagoSinComillas2 = str_replace("]", "", $fomasPagoSinComillas);
@@ -216,13 +215,12 @@ class ContratoController extends Controller
                 "Santo Domingo" => "STO"
             ];
 
-            if($user->sala == 'Sala 1'){
+            if ($user->sala == 'Sala 1') {
                 $letrasContrato = "QTA_";
                 $numInicial = 40000;
                 $numero_sucesivo =  $utils->obtenerNumeroMayorTipo("Sala 1");
-
             }
-            if($user->sala == "Sala 2"){
+            if ($user->sala == "Sala 2") {
                 $letrasContrato = "QT_";
                 $numInicial = 30000;
                 $numero_sucesivo =  $utils->obtenerNumeroMayorTipo("Sala 2");
@@ -230,14 +228,14 @@ class ContratoController extends Controller
             if (array_key_exists($ciudad, $ciudad_diccionario)) { // Si la ciudad esta en el diccionario
                 $codigo_ciudad = $ciudad_diccionario[$ciudad];
                 if ($contieneCreditoDirecto == 1) {
-                    $contratoId = "CD_".$letrasContrato . $codigo_ciudad;
+                    $contratoId = "CD_" . $letrasContrato . $codigo_ciudad;
                 } else {
-                    $contratoId = $letrasContrato . $codigo_ciudad ;
+                    $contratoId = $letrasContrato . $codigo_ciudad;
                 }
             } else {
                 $codigo_ciudad = $ciudad;
                 if ($contieneCreditoDirecto == 1) {
-                    $contratoId = "CD_".$letrasContrato . $codigo_ciudad;
+                    $contratoId = "CD_" . $letrasContrato . $codigo_ciudad;
                 } else {
                     $contratoId = $letrasContrato . $codigo_ciudad;
                 }
@@ -472,14 +470,19 @@ class DocumentGenerator
             11 => 'Noviembre',
             12 => 'Diciembre'
         );
-        $nombreUsuario = getenv("USERNAME"); //Obtiene el nombre del usuario desde la EV
+        // Ruta para acceso Local
+        // $nombreUsuario = getenv("USERNAME"); //Obtiene el nombre del usuario desde la EV
+        // $nombreCarpeta = $nombre_cliente . " " . $fechaActual;
+        // $rutaCarpeta = "C:\\Users\\$nombreUsuario\\Documents\\Contratos\\$nombreCarpeta";
+        $rutaBase = $_SERVER['DOCUMENT_ROOT'] . '/contratos'; // Ruta Servidor Contratos 
         $nombreCarpeta = $nombre_cliente . " " . $fechaActual;
-        $rutaCarpeta = "C:\\Users\\$nombreUsuario\\Documents\\Contratos\\$nombreCarpeta";
+        $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
         if (!is_dir($rutaCarpeta)) {
             if (!mkdir($rutaCarpeta, 0777, true)) {
                 throw new Exception("Error al crear la carpeta"); // Lanza una excepción en caso de error
             }
         }
+
         return $rutaCarpeta;
     }
 
@@ -811,32 +814,32 @@ class Utils
         return $numero_sucesivo;
     }
 
-    public function obtenerNumeroMayorTipo($tipoContrato){
-            $resultadoA = Contrato::pluck('contrato_id')->toArray();
-            $ultimos_cinco_caracteres = array_map(function($contrato_id) {
-                return substr($contrato_id, -5); // Obtener los últimos 5 caracteres de cada contrato_id
-            }, $resultadoA);
-            $lista_30000_39999 = [30000];
-            $lista_40000_49999 = [40000];
+    public function obtenerNumeroMayorTipo($tipoContrato)
+    {
+        $resultadoA = Contrato::pluck('contrato_id')->toArray();
+        $ultimos_cinco_caracteres = array_map(function ($contrato_id) {
+            return substr($contrato_id, -5); // Obtener los últimos 5 caracteres de cada contrato_id
+        }, $resultadoA);
+        $lista_30000_39999 = [30000];
+        $lista_40000_49999 = [40000];
 
-            foreach ($ultimos_cinco_caracteres as $valor) {
-                $numero = intval($valor);
-                if ($numero >= 30000 && $numero <= 39999) {
-                    $lista_30000_39999[] = $valor;
-                } elseif ($numero >= 40000 && $numero <= 49999) {
-                    $lista_40000_49999[] = $valor;
-                }
-             }
-
-            if($tipoContrato = "Sala 1"){
-                $maximoSala1 =  max($lista_40000_49999)+ 1 ;
-                return $maximoSala1;
-
+        foreach ($ultimos_cinco_caracteres as $valor) {
+            $numero = intval($valor);
+            if ($numero >= 30000 && $numero <= 39999) {
+                $lista_30000_39999[] = $valor;
+            } elseif ($numero >= 40000 && $numero <= 49999) {
+                $lista_40000_49999[] = $valor;
             }
-            if($tipoContrato = "Sala 2"){
-                $maximoSala2 = max($lista_30000_39999)+ 1 ;
-                return $maximoSala2;
-            }
-            return 0;
+        }
+
+        if ($tipoContrato = "Sala 1") {
+            $maximoSala1 =  max($lista_40000_49999) + 1;
+            return $maximoSala1;
+        }
+        if ($tipoContrato = "Sala 2") {
+            $maximoSala2 = max($lista_30000_39999) + 1;
+            return $maximoSala2;
+        }
+        return 0;
     }
 }

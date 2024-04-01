@@ -32,16 +32,16 @@
                         {{ __('Paquetes') }}
                     </x-nav-link>
                     <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
-                        {{ __('Calendar') }}
+                        {{ __('Calendario') }}
                     </x-nav-link>
                     <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
-                        {{ __('Clients') }}
+                        {{ __('Clientes') }}
                     </x-nav-link>
                     <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
-                        {{ __('Contracts') }}
+                        {{ __('Contratos') }}
                     </x-nav-link>
                     <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
-                        {{ __('Vendedor') }}
+                        {{ __('Vendedores') }}
                     </x-nav-link>
                     <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
                         {{ __('Administracion') }}
@@ -189,7 +189,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')" class="no-underline">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -200,7 +200,7 @@
                                 onclick="event.preventDefault();
                                                 this.closest('form').submit();"
                                 class="no-underline">
-                                {{ __('Log Out') }}
+                                {{ __('Salir') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -234,13 +234,13 @@
                     {{ __('Paquetes') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('Calendar.*')" class="no-underline">
-                    {{ __('Calendar') }}
+                    {{ __('Calendario') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('Clientes.*')" class="no-underline">
-                    {{ __('Clients') }}
+                    {{ __('Clientes') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('contrato.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
-                    {{ __('Contracts') }}
+                    {{ __('Contratos') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
                     {{ __('Vendedores') }}
@@ -278,7 +278,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')" class="no-underline">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -288,7 +288,7 @@
                     <x-responsive-nav-link :href="route('logout')" class="no-underline"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Salir') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

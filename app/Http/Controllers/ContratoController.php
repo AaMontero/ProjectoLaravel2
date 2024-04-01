@@ -413,10 +413,12 @@ class ContratoController extends Controller
         // Construir la ruta de la carpeta del contrato
         $nombreCliente = $contrato->cliente->nombres . ' ' . $contrato->cliente->apellidos;
         $fechaCreacion = $contrato->created_at->format('Y-m-d');
-        $nombreUsuario = getenv("USERNAME");
         $nombreCarpeta = $nombreCliente . " " . $fechaCreacion;
-        $rutaCarpeta = "C:\\Users\\$nombreUsuario\\Documents\\Contratos\\$nombreCarpeta";
-
+        $rutaBase = $_SERVER['DOCUMENT_ROOT'] . '/contratos';
+        $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
+        //Creacion de carpeta local
+        // $nombreUsuario = getenv("USERNAME");
+        // $rutaCarpeta = "C:\\Users\\$nombreUsuario\\Documents\\Contratos\\$nombreCarpeta";
         // Verificar si la carpeta existe antes de intentar eliminarla
         if (is_dir($rutaCarpeta)) {
             // Eliminar todos los archivos dentro del directorio
@@ -501,7 +503,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_fecha_contrato', $fechaFormateada);
         $templateWord->setValue('edit_nombres_apellidos', $nombre_cliente);
         $nombreArchivo = 'QTDiferimiento' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
     public function generarVerificacion($nombre_cliente, $numero_sucesivo, $numCedula, $rutaSaveContrato)
@@ -511,7 +513,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_nombres_apellidos', $nombre_cliente);
         $templateWord->setValue('edit_numero_cedula', $numCedula);
         $nombreArchivo = 'QTVerificacion' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
 
 
         $templateWord->saveAs($pathToSave);
@@ -580,7 +582,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_email', $email);
         $templateWord->setValue('edit_monto_contrato', $monto);
         $nombreArchivo = 'QTPagareCreditos' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
     public function generarBeneficiosAlcance($contrato, $numero_sucesivo, $nombre_cliente, $numCedula, $bonoQory, $bonoQoryInt, $certificadoVacacionalInternacional, $bonoSemanaInternacional, $rutaSaveContrato, $clausulaCDBoolean, $destinoInternacional, $numPersonasInternacional)
@@ -643,7 +645,7 @@ class DocumentGenerator
         }
 
         $nombreArchivo = 'QTBeneficiosDeAlcance' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
     public function generarContrato($contrato, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPago, $email, $fechaActual, $ciudad, $rutaSaveContrato)
@@ -683,7 +685,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_monto_contrato_texto', $montoContratoText);
         $templateWord->setValue('edit_fecha_texto', $fechaFormateada);
         $nombreArchivo = 'QTContrato' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
     public function generarContratoCreditoDirecto($contrato, $nombre_cliente, $numero_sucesivo, $numCedula, $montoContrato, $aniosContrato, $formasPago, $email, $fechaActual, $ciudad, $rutaSaveContrato, $abonoCD, $numCuotasCD, $valorCuotaCD)
@@ -723,7 +725,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_monto_cuota_CD', $valorCuotaCD);
         $templateWord->setValue('edit_monto_cuota_letas_CD', $cuotaValorContratoText);
         $nombreArchivo = 'QTContratoCD' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
     public function generarPagare($nombre_cliente, $numCedula, $numero_sucesivo, $fechaVencimiento, $ciudad, $email, $valor_pagare, $fechaActual, $numCuotas, $montoCuotaPagare, $pagareText, $rutaSaveContrato)
@@ -750,7 +752,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_monto_cuota_pagare', $montoCuotaPagare);
         $templateWord->setValue('edit_monto_pagare', $valor_pagare);
         $nombreArchivo = 'QTPagare' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
     public function generarCheckList($contrato, $numero_sucesivo, $ciudad, $provincia,  $numCedula, $email, $fechaActual, $nombre_cliente, $ubicacionSala, $rutaSaveContrato, $credDirBoolean)
@@ -782,7 +784,7 @@ class DocumentGenerator
         $templateWord->setValue('edit_fecha_texto', $fechaFormateada);
         $templateWord->setValue('edit_anexo2_CD', $textoAnexo2);
         $nombreArchivo = 'QTCheckList' . $numero_sucesivo . " " . $nombre_cliente . '.docx';
-        $pathToSave = $rutaSaveContrato . '\\' . $nombreArchivo;
+        $pathToSave = $rutaSaveContrato . '/' . $nombreArchivo;
         $templateWord->saveAs($pathToSave);
     }
 }

@@ -74,7 +74,7 @@ class ContratoController extends Controller
         $contrato = Contrato::find($contratoId);
         $idCliente = $contrato->cliente_id;
         $clienteActivo = Cliente::find($idCliente);
-        $rutaBase = $_SERVER['DOCUMENT_ROOT'] . '/contratos'; // Ruta Servidor Contratos 
+        $rutaBase =  'contratos'; // Ruta Servidor Contratos 
         // $rutaBase = "../public/contratos";
         $nombreCarpeta = $clienteActivo->nombres . " " . $clienteActivo->apellidos . " " . date("Y-m-d") . ".zip";
         $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;

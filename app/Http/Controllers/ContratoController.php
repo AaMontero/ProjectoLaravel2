@@ -816,8 +816,8 @@ class Utils
             $ultimos_cinco_caracteres = array_map(function($contrato_id) {
                 return substr($contrato_id, -5); // Obtener los últimos 5 caracteres de cada contrato_id
             }, $resultadoA);
-            $lista_30000_39999 = [];
-            $lista_40000_49999 = [];
+            $lista_30000_39999 = [30000];
+            $lista_40000_49999 = [40000];
 
             foreach ($ultimos_cinco_caracteres as $valor) {
                 $numero = intval($valor);

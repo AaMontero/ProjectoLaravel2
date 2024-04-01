@@ -156,7 +156,6 @@
         var telefonoEmisor = "593987411818";
 
         function crearMensajeImgRecibido(elemento) {
-            console.log(elemento['mensaje_enviado']);
             datosImg = JSON.parse(elemento['mensaje_enviado']);
             urlImg = datosImg.ruta
             msnImg = datosImg.textoImagen;
@@ -373,7 +372,6 @@
                 mensajes.forEach(function(elemento) {
                     var fecha = elemento['fecha_hora'].substring(0, 10);
                     var elementoCreado;
-                    console.log("Los datos de las fechas son: " + horaMensajeAnterior + "    " + fecha);
                     if (horaMensajeAnterior !== null && horaMensajeAnterior != fecha) {
                         elementoCreado = crearCuadroFecha(transformarFecha(fecha));
                         lista.appendChild(elementoCreado);
@@ -397,7 +395,7 @@
                 VentanaChat.style.display = 'block';
                 elementos.scrollTop = elementos.scrollHeight;
             }, 1000);
-            console.log("El telefono del mensajes : " + telefono);
+
 
             marcarMensajesComoLeidos(telefono);
         }

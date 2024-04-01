@@ -20,14 +20,12 @@
 
     <script>
         function pagarUsuarios(usuarioId) {
-            console.log("El id del usuario que llega es: " + usuarioId);
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/pagoVendedores/' + usuarioId, true); // Ruta del endpoint
             xhr.setRequestHeader('Content-Type', 'application/json');
 
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    console.log('Se marcaron como pagos los registros');
                     alert("Se ha registrado el pago");
                     window.location.reload();
                 } else {

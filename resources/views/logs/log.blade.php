@@ -106,6 +106,9 @@
                                                                         <p><strong>Email:
                                                                             </strong><span>{{ $usuario->email }}</span>
                                                                         </p>
+                                                                        <p><strong>Sala:
+                                                                        </strong><span>{{ $usuario->sala }}</span>
+                                                                    </p>
                                                                         <p><strong>Rol:</strong>
                                                                             @foreach ($usuario->roles as $role)
                                                                                 {{ $role->name }}
@@ -192,9 +195,7 @@
                                                                         <p><strong>Autor:
                                                                             </strong><span>{{ $eventos->author }}</span>
                                                                         </p>
-                                                                        <p><strong>Nota:
-                                                                            </strong><span>{{ $eventos->note }}</span>
-                                                                        </p>
+                                                                       
                                                                     @endif
                                                                 @endforeach
                                                             @endif

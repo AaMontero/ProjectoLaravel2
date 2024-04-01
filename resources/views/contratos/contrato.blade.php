@@ -20,7 +20,7 @@
     <?php
     $nombres = $email = $apellidos = $ciudad = $provincia = $ubicacionSala = $cedula = $contrato = $formasPago = $pagareText = $montoCuotaPagare = '';
     $aniosContrato = $montoContrato = $numCuotas = $valor_pagare = 0;
-    $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $contienePagare = $contieneCreditoDirecto = false;
+    $bonoQory = $bonoQoryInt = $pagareBoolean = $otroFormaPagoBoolean = $tarjertaCredito = $contienePagare = $contieneCreditoDirecto = false;
     date_default_timezone_set('America/Guayaquil');
     $fechaActual = $fechaVencimiento = $fechaInicioCredDir = date('Y-m-d');
     
@@ -32,9 +32,9 @@
         <div id="idAgregarContrato" class="max-w mx-auto sm:px-6 lg:px-20 mb-4 "
             style="{{ $errors->any() ? 'display: block;' : 'display: none;' }}">
             <!-- -->
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('contrato.store') }}" method="POST" class="p-4">
+            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg ">
+                <div class="p-6 text-gray-900 dark:text-gray-100 ">
+                    <form action="{{ route('contrato.store') }}" method="POST" class="p-4 ">
 
                         @csrf
                         <!-- Hidden -->
@@ -196,7 +196,7 @@
 
                             <div class="mt-2 italic">
                                 <input type="checkbox" value="{{ $otroFormaPagoBoolean }}" id="otroCheckbox"
-                                    class="mr-2 "> Otro
+                                    class="mr-2 "> Tarjeta de débito
                             </div>
                             <div id="divOtrosCheckbox" class="hidden mt-1 mb-4">
                                 <label for="monto" class="mr-2 mt-1 p-0 ml-4 font-bold">Valor:</label>
@@ -208,6 +208,42 @@
                                 <button onclick="functionAgregar()"
                                     class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">+</button>
                             </div>
+
+                            <div class="mt-2 italic">
+                                <input type="checkbox" value="{{ $tarjertaCredito }}" id="tarjetaCreditoCheckbox"
+                                    class="mr-2 "> Tarjeta de crédito
+                            </div>
+                            <div class="flex">
+                                <div id="tarjetaCreditoCheck" class="hidden mt-1 mb-4 ">
+                                    <label for="monto" class="mr-2 mt-1 p-0 ml-4 font-bold">Valor:</label>
+                                    <input type="number" id="monto" name="monto"
+                                        placeholder="Ingrese el valor" class="border rounded-md px-3 py-2 mr-2 w-15">
+                                    {{-- tarjeta --}}
+                                    <label for="formaPago" class="mr-2 mt-1 p-0 ml-4 font-bold">Tarjeta:</label>
+                                    <select id="formaPago" name="formaPago"
+                                        class="border rounded-md px-3 py-2 mr-2 w-20">
+                                        <option value="Visa">Visa</option>
+                                        <option value="MasterCard">MasterCard</option>
+                                        <option value="DinnersClub">Dinners Club</option>
+                                    </select>
+                                    {{-- banco --}}
+                                    <label for="banco" class="mr-2 mt-1 p-0 ml-4 font-bold">Banco:</label>
+                                    <input type="text" id="banco" name="banco"
+                                        placeholder="Ingrese el banco" class="border rounded-md px-3 py-2 mr-2 w-15">
+                                    {{-- meses de diferimiento --}}
+                                    <label for="mesesCredDir" class="mr-2 mt-1 p-0 ml-4 font-bold py-2"># Meses:
+                                    </label>
+                                    <select id="meses_credito" name="mesesCredDir"
+                                        class="border rounded-md px-3 py-2 mr-2 w-20">
+                                        <option value="12">12</option>
+                                        <option value="24">24</option>
+                                        <option value="36">36</option>
+                                    </select>
+                                    <button onclick="functionAgregarTC()"
+                                        class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">+</button>
+                                </div>
+                            </div>
+
                         </div>
                         <ul id="listaFormasPagoUl"></ul>
                         @error('formas_pago')
@@ -668,9 +704,18 @@
         }
         //confimacion de eliminar contrato
         function confirmDelete(event) {
-            if (confirm('¿Deseas eliminar este contrato?')) {
-                event.target.closest('form').submit();
-            }
+            Swal.fire({
+                title: "¿Deseas eliminar este contrato?",
+                showDenyButton: true,
+                confirmButtonText: "Sí",
+                denyButtonText: `No`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.closest('form').submit();
+                } else if (result.isDenied) {
+
+                }
+            });
             return false;
         }
 
@@ -696,7 +741,7 @@
             if (valorValue === "" || formaValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "$" + valorValue + " con " + formaValue;
+                var cadena = "(Tarjeta de débito) " + "$" + valorValue + " con " + formaValue + ".";
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
@@ -706,6 +751,36 @@
                 alert("Se agregó: " + cadena);
             }
         }
+
+        function functionAgregarTC() {
+            event.preventDefault();
+            const valor = document.getElementById("monto");
+            const forma = document.getElementById("formaPago");
+            const banco = document.getElementById("banco");
+            const meses = document.getElementById("meses_credito");
+            const valorValue = valor.value;
+            const formaValue = forma.value;
+            const bancoValue = banco.value;
+            const mesesValue = meses.value;
+
+            if (valorValue === "" || formaValue === "" || bancoValue === "" || mesesValue === "") {
+                alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
+            } else {
+                var cadena = "(Tarjeta de crédito) " +
+                    "$" + valorValue + " con " + formaValue + " del banco " + bancoValue +
+                    " a " + mesesValue + " meses de crédito."
+
+                listaFormasPago.push(cadena);
+                valor.value = "";
+                forma.value = "";
+                banco.value = "";
+                meses.value = "";
+                console.log(listaFormasPago);
+                document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
+                console.log(document.getElementById("formas_pago").value);
+            }
+        }
+
 
         function functionAgregarPagare() {
             if (pagareBoolean == true || creditoDirectoBoolean == true) {
@@ -728,7 +803,6 @@
                     document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
                     document.getElementById("contiene_pagare").value = "true";
                     pagareBoolean = true;
-                    alert("Se agregó: " + cadena);
                 }
             }
         }
@@ -784,6 +858,8 @@
             const pagareFields = document.getElementById("divPagareCheckbox");
             const otroFields = document.getElementById("divOtrosCheckbox");
             const creditoDirectoFields = document.getElementById("divCreditoDirectoCheckBox");
+            const tarjetaCreditoCheckbox = document.getElementById("tarjetaCreditoCheckbox");
+            const divTarjetaCredito = document.getElementById("tarjetaCreditoCheck")
             pagareCheckbox.addEventListener("change", function() {
                 if (pagareCheckbox.checked) {
                     pagareFields.style.display = "flex";
@@ -806,6 +882,14 @@
                     creditoDirectoFields.style.alignItems = "center";
                 } else {
                     creditoDirectoFields.style.display = "none";
+                }
+            });
+            tarjetaCreditoCheckbox.addEventListener("change", function() {
+                if (tarjetaCreditoCheckbox.checked) {
+                    divTarjetaCredito.style.display = "flex";
+                    divTarjetaCredito.style.alignItems = "center";
+                } else {
+                    divTarjetaCredito.style.display = "none";
                 }
             });
         });

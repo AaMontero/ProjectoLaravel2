@@ -31,22 +31,21 @@ class RolController extends Controller
             $rolId = $request->input('rol_id');
             $salavalor = $request->input('sala_valor');
             $user->sala = $salavalor;
-            file_put_contents("llegaSala.txt", $user);
             $user->save();
             // Asignar el rol al usuario
             $user->syncRoles([$rolId]);
-
             // Crear un registro en la tabla de registros
             UserAction::create([
                 'user_id' => $request->user()->id,
-                'action' => 'asignar rol', // Acción de asignar rol
-                'entity_type' => 'user', // Tipo de entidad
-                'entity_id' => $user->id, // ID del usuario al que se le asigna el rol
-                'modified_data' => json_encode(['rol_id' => $rolId]), // Datos modificados
+                'action' => 'modificar usuario', 
+                'entity_type' => 'user',
+                'entity_id' => $user->id, 
+                'modified_data' => json_encode(['rol_id' => $rolId, 
+                                                'sala_valor' => $salavalor ]), // Datos modificados
 
             ]);
 
-            return redirect()->route('roles.rol')->with('status', 'Rol asignado exitosamente');
+            return redirect()->route('roles.rol')->with('status', 'Usuario modificado exitosamente');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al asignar el rol')->withInput();
         }

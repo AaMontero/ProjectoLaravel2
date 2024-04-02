@@ -72,6 +72,7 @@ class ContratoController extends Controller
     public function add_vendedor($contratoId)
     {
         $contrato = Contrato::find($contratoId);
+        $montoContrato = $contrato->monto_contrato;
         $idCliente = $contrato->cliente_id;
         $clienteActivo = Cliente::find($idCliente);
         $rutaBase =  'contratos'; // Ruta Servidor Contratos 
@@ -79,6 +80,7 @@ class ContratoController extends Controller
         $nombreCarpeta = $clienteActivo->nombres . " " . $clienteActivo->apellidos . " " . date("Y-m-d") . ".zip";
         $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
         return view('contratos.contrato_vendedores', [
+            "montoContrato" => $montoContrato,
             "ruta" => $rutaCarpeta,
             "contratoId" => $contratoId,
             "vendedores" => Vendedor::where('rol', "Vendedor")->where('activo', 1)->get(),
@@ -100,6 +102,7 @@ class ContratoController extends Controller
         if ($request->closer1 == $request->closer2) {
             return redirect()->back()->withErrors(['duplicado' => __('Los closers no pueden ser los mismos.')])->withInput();
         }
+        $valorPagado = $request->monto_pagado;
         $contratoId = $request->contratoId;
         $contrato = Contrato::find($contratoId);
         $contrato->vendedor_id = $request->vendedor;
@@ -113,13 +116,13 @@ class ContratoController extends Controller
         $jefeDeSala = Vendedor::find($request->jefe_de_sala);
         $controlerPV = new PagoVendedorController();
         $utils = new Utils();
-        $utils->agregarPago($vendedor, $contrato, $controlerPV);
-        $utils->agregarPago($closer1, $contrato, $controlerPV);
+        $utils->agregarPago($vendedor, $contrato, $valorPagado, $controlerPV);
+        $utils->agregarPago($closer1, $contrato, $valorPagado, $controlerPV);
         if (isset($closer2)) {
-            $utils->agregarPago($closer2, $contrato, $controlerPV);
+            $utils->agregarPago($closer2, $contrato, $valorPagado, $controlerPV);
         }
 
-        $utils->agregarPago($jefeDeSala, $contrato, $controlerPV);
+        $utils->agregarPago($jefeDeSala, $contrato, $valorPagado, $controlerPV);
 
         return to_route('contrato.index')
             ->with('status', __('Contrato creado exitosamente'));
@@ -813,11 +816,14 @@ class DocumentGenerator
 
 class Utils
 {
-    public function agregarPago($vendedor, $contrato, $controlerPV)
+    public function agregarPago($vendedor, $contrato, $montoPagado, $controlerPV)
     {
-
+        $tipoVendedor = $vendedor->rol;
+        if ($contrato->closer1 && $contrato->closer2 && $vendedor->rol == "Closer") {
+            $tipoVendedor = "Closer2";
+        }
         $pagoVendedor = new PagoVendedor();
-        $pagoVendedor->valor_pago = $controlerPV->obtenerValorPago($vendedor->porcentaje_ventas);
+        $pagoVendedor->valor_pago = $controlerPV->obtenerValorPago($tipoVendedor, $montoPagado);
         $pagoVendedor->fecha_pago = new DateTime('now');
         $pagoVendedor->concepto = "Participación Contrato" . $contrato->contrato_id;
         $pagoVendedor->estado = "Pendiente";

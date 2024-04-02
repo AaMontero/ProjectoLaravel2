@@ -22,6 +22,9 @@
                     <form method="POST" class ="p-4" enctype="multipart/form-data"
                         action = "{{ route('contrato.add_vendedores') }} ">
                         @csrf
+                        <label class="mt-3 p-0 ml-4 font-bold">Valor Pagado:</label>
+                        <input name = "monto_pagado" type="number" id = "montoTotal" value={{ $montoContrato }}
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50">
                         <input type="hidden" value ="{{ $contratoId }}" name = "contratoId">
                         <label class="mt-3 p-0 ml-4 font-bold">Vendedor:</label>
                         <select name="vendedor"
@@ -58,8 +61,10 @@
                             <br>
                         @enderror
                         <label class="mt-3 p-0 ml-4 font-bold">Closer 2:</label>
-                        class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                        <select name="closer2" id = "closer2" placeholder="{{ __('Seleccione el Closer 2') }}">
+
+                        <select name="closer2" id = "closer2"
+                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
+                            placeholder="{{ __('Seleccione el Closer 2') }}">
                             <option value="" selected>
                                 {{ __('No seleccionado') }}</option>
                             @foreach ($closers as $closer)

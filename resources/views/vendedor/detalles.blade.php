@@ -25,10 +25,7 @@
                         <span class="text-lg font-bold mb-2">Saldo Pendiente:</span>
                         ${{ $pagosPendientes }}
                     </p>
-                    <p class="text-gray-700">
-                        <span class="text-lg font-bold mb-2">Porcentaje de Ventas Actual:</span>
-                        {{ $vendedor->porcentaje_ventas }}
-                    </p>
+
                 </div>
             </div>
         </div>
@@ -56,7 +53,13 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <p class="text-lg text-right font-bold ">${{ $pago->valor_pago }}</p>
+                                    <p
+                                        class="text-lg text-right font-bold 
+                                    @if ($pago->estado == 'Pendiente') text-gray-500 @endif
+                                    @if ($pago->estado == 'Pago') text-green-500 @endif
+                                    @if ($pago->estado == 'Cancelado') text-red-500 @endif">
+                                        ${{ $pago->valor_pago }}
+                                    </p>
                                     <label class="text-sm text-gray-500">
                                         <span class="font-bold">Fecha:</span>
                                         {{ $pago->fecha_pago }}

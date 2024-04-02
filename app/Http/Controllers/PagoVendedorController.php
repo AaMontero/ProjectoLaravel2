@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\PagoVendedor;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class PagoVendedorController extends Controller
 {
@@ -14,7 +13,7 @@ class PagoVendedorController extends Controller
             'pagoVendedor.editar',
             [
                 "pago" => $pagoVendedor,
-                "estados" => ["Pendiente", "Pago"]
+                "estados" => ["Pendiente", "Pago", "Cancelado"]
             ]
         );
     }
@@ -26,8 +25,6 @@ class PagoVendedorController extends Controller
             'fecha_pago' => ['required', 'date'],
             'concepto' => ['required', 'min:5', 'max:255'],
             'estado' => ['required'],
-            'closer1' => ['required', Rule::unique('tu_tabla')->ignore($pago->id)],
-            'closer2' => ['required', Rule::unique('tu_tabla')->ignore($pago->id)],
         ]);
         $pago->update($validated);
         return redirect()->route('vendedores.pagosPendientes')
@@ -49,10 +46,32 @@ class PagoVendedorController extends Controller
             ->with('status', __('Pago realizado'));
     }
 
-    public function obtenerValorPago($tipoPago)
+    public function obtenerValorPago($tipoVendedor, $montoVenta)
     {
-        //Aqui va la lógica para obtener el pago
-        return 150.50;
+        $porcentaje = 0.19;
+        $gastoAdministrativo = 150;
+        $porcentajeCloser = 0.06;
+        $porcentajeLiner = 0.04;
+        $porcentajeJefe = 0.02;
+        if ($montoVenta >= 2900) {
+            $gastoAdministrativo = 250;
+            $porcentajeCloser = 0.065;
+            $porcentajeLiner = 0.045;
+        }
+        $valorTotal = $montoVenta - ($porcentaje * $montoVenta) - $gastoAdministrativo;
+
+        if ($tipoVendedor == "Closer") {
+            return $valorTotal * $porcentajeCloser;
+        }
+        if ($tipoVendedor == "Vendedor") {
+            return $valorTotal * $porcentajeLiner;
+        }
+        if ($tipoVendedor == "Jefe de Sala") {
+            return $valorTotal * $porcentajeJefe;
+        }
+        if ($tipoVendedor == "Closer2") {
+            return ($valorTotal * $porcentajeCloser) / 2;
+        }
     }
     public function pagarVendedor($idVendedor)
     {

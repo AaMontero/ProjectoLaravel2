@@ -7,15 +7,18 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     @php
-
+        $user = Auth::user();
+        $vendedorId = $user->id;
     @endphp
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}"> <!-- Reemplaza 'ruta.de.destino' con la ruta a la que deseas que se dirija el enlace -->
-                        <img src="{{ asset('images/logoFondoNegro.jpeg')  }}" alt="Nuevo Logo" class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200 rounded-full">
+                    <a href="{{ route('dashboard') }}">
+                        <!-- Reemplaza 'ruta.de.destino' con la ruta a la que deseas que se dirija el enlace -->
+                        <img src="{{ asset('images/logoFondoNegro.jpeg') }}" alt="Nuevo Logo"
+                            class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200 rounded-full">
                     </a>
                 </div>
 
@@ -25,42 +28,41 @@
 
 
                     @role('Administrador|superAdmin')
-                    <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
-                        {{ __('Chats') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
-                        {{ __('Paquetes') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
-                        {{ __('Calendario') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
-                        {{ __('Clientes') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
-                        {{ __('Contratos') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
-                        {{ __('Vendedores') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
-                        {{ __('Administracion') }}
-                    </x-nav-link>
-
+                        <x-nav-link :href="route('chat.chat')" :active="request()->routeIs('chat.*')" class="no-underline">
+                            {{ __('Chats') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
+                            {{ __('Paquetes') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="no-underline">
+                            {{ __('Calendario') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
+                            {{ __('Clientes') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
+                            {{ __('Contratos') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                            {{ __('Vendedores') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('roles.rol')" :active="request()->routeIs('roles.*')" class="no-underline">
+                            {{ __('Administracion') }}
+                        </x-nav-link>
                     @endrole
 
 
                     @role('Host')
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
-                        {{ __('Clients') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
+                            {{ __('Clients') }}
+                        </x-nav-link>
                     @endrole
 
                     @role('Asesor')
                         <x-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                             {{ __('Paquetes') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('vendedor.index')" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                        <x-nav-link :href="route('vendedor.datos_vendedorV', ['vendedorId' => $vendedorId])" :active="request()->routeIs('vendedor.*')" class="no-underline">
                             {{ __('Vendedor') }}
                         </x-nav-link>
                     @endrole
@@ -263,8 +265,8 @@
                 <x-responsive-nav-link :href="route('paquetes.paquetes')" :active="request()->routeIs('paquetes.*')" class="no-underline">
                     {{ __('Paquetes') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('vendedor.index')" :active="request()->routeIs('Contrato.*')" class="no-underline">
-                    {{ __('Ventas') }}
+                <x-responsive-nav-link :href="route('vendedor.datos_vendedorV', ['vendedorId' => $vendedorId])" :active="request()->routeIs('vendedor.*')" class="no-underline">
+                    {{ __('Vendedor') }}
                 </x-responsive-nav-link>
             @endrole
         </div>

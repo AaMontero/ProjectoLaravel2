@@ -14,7 +14,6 @@ use Illuminate\Validation\ValidationException;
 class VendedorController extends Controller
 {
     private $roles = ['Vendedor', 'Closer', 'Jefe de Sala '];
-    private $porcentajes = ['4% Fijo', 'Variable1', 'Variable2'];
     private $estados = ['Activo', 'Inactivo'];
 
     public function index()
@@ -29,9 +28,8 @@ class VendedorController extends Controller
         $indicesDiferentes = array_diff($vendedoresIDS, $userVendIds);
         return view('vendedor.index', [
             "usuarios" => User::whereIn('id', $indicesDiferentes)->get(),
-            "vendedores" => Vendedor::all()->where("activo", true),
+            "vendedores" => Vendedor::orderBy("activo", "desc")->get(),
             "roles" => $this->roles,
-            "porcentajes" => $this->porcentajes,
         ]);
     }
 
@@ -99,7 +97,6 @@ class VendedorController extends Controller
             $validated = $request->validate([
                 'nombres' => ['required', 'min:5', 'max:255'],
                 'rol' => ['required', 'min:5', 'max:255'],
-                'porcentaje_ventas' => ['required', 'min:5', 'max:255'],
                 'user_vend_id' => ['required'],
             ]);
 
@@ -126,7 +123,6 @@ class VendedorController extends Controller
         return view('vendedor.editar', [
             'vendedor' => $vendedor,
             "roles" => $this->roles,
-            "porcentajes" => $this->porcentajes,
             "estados" => $this->estados,
         ]);
     }
@@ -141,7 +137,6 @@ class VendedorController extends Controller
             $validated = $request->validate([
                 "nombres" => ['required', 'min:5', 'max:255'],
                 "rol" => ['required', 'min:5', 'max:255'],
-                "porcentaje_ventas" => ['required', 'min:5', 'max:255'],
                 "activo" => ['required']
             ]);
             // Obtener el vendedor antes de la actualización
@@ -188,7 +183,7 @@ class VendedorController extends Controller
         ]);
     }
 
-    public function cambiarActivo(Request $request ,Vendedor $vendedor)
+    public function cambiarActivo(Request $request, Vendedor $vendedor)
     {
         if ($vendedor->activo == "1") {
             $vendedor->activo = 0;
@@ -198,8 +193,8 @@ class VendedorController extends Controller
             $vendedor->update();
         }
 
- 
-          UserAction::create([
+
+        UserAction::create([
             'user_id' => $request->user()->id,
             'action' => 'cambiar estado a inactivo', // Acción de inserción
             'entity_type' => 'vendedor', // Tipo de entidad

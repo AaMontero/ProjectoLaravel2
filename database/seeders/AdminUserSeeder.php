@@ -12,10 +12,9 @@ class AdminUserSeeder extends Seeder
     {
         $adminUser = User::firstOrCreate([
             'name' => 'Administrador',
-            'email' => '9   travelqorig@gmail.com',
+            'email' => 'travelqorig@gmail.com',
             'password' => Hash::make('UbOK6aaLtCiHjsu'),
         ]);
-
         // Asignar el rol de administrador al usuario
         $adminUser->assignRole('superAdmin');
     }

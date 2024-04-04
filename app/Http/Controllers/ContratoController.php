@@ -221,7 +221,9 @@ class ContratoController extends Controller
                 "guayaquil" => "GYE",
                 "santo domingo" => "STO",
                 "Santo domingo" => "STO",
-                "Santo Domingo" => "STO"
+                "Santo Domingo" => "STO",
+                "Salcedo" => "SLCDO",
+                "salcedo" => "SLCDO",
             ];
 
             if ($user->sala == 'Sala 1') {
@@ -862,11 +864,11 @@ class Utils
             }
         }
 
-        if ($tipoContrato = "Sala 1") {
+        if ($tipoContrato == "Sala 1") {
             $maximoSala1 =  max($lista_40000_49999) + 1;
             return $maximoSala1;
         }
-        if ($tipoContrato = "Sala 2") {
+        if ($tipoContrato == "Sala 2") {
             $maximoSala2 = max($lista_30000_39999) + 1;
             return $maximoSala2;
         }

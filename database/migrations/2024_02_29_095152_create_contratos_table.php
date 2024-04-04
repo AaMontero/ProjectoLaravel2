@@ -29,7 +29,6 @@ return new class extends Migration
             $table->decimal('abono_credito_directo', 10, 2)->nullable();
             $table->decimal('valor_pagare', 10, 2)->nullable();
             $table->date('fecha_fin_pagare')->nullable();
-            $table->string('comentario')->nullable();
             $table->string('otro_comentario')->nullable();
             $table->decimal('otro_valor', 10, 2)->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

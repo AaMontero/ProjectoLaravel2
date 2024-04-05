@@ -328,11 +328,12 @@
                             var hotel_nombre = $('#hotel_nombre').val();
 
                             // Establece la hora fija para guardar en la base de datos
-                            var hora_fija = '12:00:00'; // Cambia esta hora según tus necesidades
+                            var hora_inicio = '12:00:00';
+                            var hora_fin = '13:00:00'; // Cambia esta hora según tus necesidades
 
                             // Concatena la hora fija con la fecha de inicio
-                            start_date = start_date + ' ' + hora_fija;
-                            end_date = end_date + ' ' + hora_fija;
+                            start_date = start_date + ' ' + hora_inicio;
+                            end_date = end_date + ' ' + hora_fin;
 
                             // Verificar si algún campo está vacío
                             if (!title || !start_date || !end_date || !cliente_id || !hotel_nombre) {

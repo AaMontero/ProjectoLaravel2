@@ -94,10 +94,9 @@ class HotelController extends Controller
                 'num_h' => ['nullable', 'integer', 'min:1'],
                 'num_camas' => ['nullable', 'integer', 'min:1'],
                 'precio' => ['nullable', 'numeric', 'min:0.01', 'max:9999.99'],
-                'servicios' => ['nullable', 'array'],
+                'servicios' => ['array'],
                 'tipo_alojamiento' => ['nullable',],
-                'opiniones' => ['nullable', 'array'], // Cambiado a array
-                'opiniones.*' => ['nullable', 'string', 'min:3', 'max:255'], // Reglas para cada opinión
+                'opiniones' => ['array'], // Cambiado a array
             ]);
 
 
@@ -118,12 +117,22 @@ class HotelController extends Controller
             }
 
             // Concatenar las opiniones separadas por comas
-            $opiniones = implode(',', $validated['opiniones']);
-            $validated['opiniones'] = $opiniones;
+            $opiniones = $hotel->opiniones ? explode(',', $hotel->opiniones) : [];
+            if (!empty($validated['opiniones'])) {
+                $opiniones = array_merge($opiniones, $validated['opiniones']);
+                $opiniones = array_unique(array_filter($opiniones)); // Filtrar para eliminar valores nulos
+            }
+            $validated['opiniones'] = implode(',', $opiniones);
 
-            // Concatenar los servicios separadas por comas
-            $servicios = implode(',', $validated['servicios']);
-            $validated['servicios'] = $servicios;
+            // Concatenar los servicios separados por comas
+            $servicios = $hotel->servicios ? explode(',', $hotel->servicios) : [];
+            if (!empty($validated['servicios'])) {
+                $servicios = array_merge($servicios, $validated['servicios']);
+                $servicios = array_unique(array_filter($servicios)); // Filtrar para eliminar valores nulos
+            }
+            $validated['servicios'] = implode(',', $servicios);
+
+
 
             // Crear un registro en la tabla UserAction solo si hay datos modificados
             $originalData = $hotel->getOriginal();

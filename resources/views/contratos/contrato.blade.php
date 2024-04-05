@@ -5,7 +5,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Contracts Register') }}
+                {{ __('Contratos Registrados') }}
             </h2>
             <div onclick="abrirVentanaAgregarContrato()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar un nuevo contrato</span>
@@ -406,42 +406,40 @@
                                         {{ $contrato->cliente_id }}
                                     </button>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalCliente{{ $contrato->id }}"
-                                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Información del cliente
+                                    <!-- Modal Cliente ID -->
+                                    <div class="modal fixed inset-0 z-50 overflow-auto flex justify-center items-center bg-black bg-opacity-50"
+                                        id="exampleModalCliente{{ $contrato->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog flex items-center justify-center h-screen bottom-20">
+                                            <div class="modal-content bg-white rounded-lg shadow-lg">
+                                                <div
+                                                    class="flex justify-between modal-header bg-sky-700 text-white px-4 py-2 rounded-t-lg">
+                                                    <h5 class="modal-title text-lg font-bold flex-grow text-center"
+                                                        id="exampleModalLabel">
+                                                        Información del Usuario
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                @foreach ($clientes as $cliente)
-                                                    @if ($cliente->id == $contrato->cliente_id)
-                                                        <p><strong>Nombres:
-                                                            </strong><span>{{ $cliente->nombres }}</span></p>
-                                                        <p><strong>Apellidos: </strong>
-                                                            <span>{{ $cliente->apellidos }}</span>
-                                                        </p>
-                                                        <p><strong>Numero de telefono: </strong>
-                                                            <span>{{ $cliente->numTelefonico }}</span>
-                                                        </p>
-                                                        <p><strong>Nacimiento: </strong>
-                                                            <span>{{ $cliente->fecha_nacimiento }}</span>
-                                                        </p>
-                                                        <p><strong>Email: </strong>
-                                                            <span>{{ $cliente->email }}</span>
-                                                        </p>
-                                                    @endif
-                                                @endforeach
-                                                <div class="modal-body">
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cerrar</button>
+                                                <div class="modal-body ml-4 py-4 text-left">
+                                                    @foreach ($clientes as $cliente)
+                                                        @if ($cliente->id == $contrato->cliente_id)
+                                                            <p><strong>Nombres:
+                                                                </strong><span>{{ $cliente->nombres }}</span></p>
+                                                            <p><strong>Apellidos: </strong>
+                                                                <span>{{ $cliente->apellidos }}</span>
+                                                            </p>
+                                                            <p><strong>Numero de telefono: </strong>
+                                                                <span>{{ $cliente->numTelefonico }}</span>
+                                                            </p>
+                                                            <p><strong>Nacimiento: </strong>
+                                                                <span>{{ $cliente->fecha_nacimiento }}</span>
+                                                            </p>
+                                                            <p><strong>Email: </strong>
+                                                                <span>{{ $cliente->email }}</span>
+                                                            </p>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
@@ -454,14 +452,17 @@
                                         {{ $contrato->vendedor_id }}
                                     </button>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalVendedor{{ $contrato->id }}"
-                                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Información del vendedor
+                                    <!-- Modal  Vendedor-->
+                                    <div class="modal fixed inset-0 z-50 overflow-auto flex items-center justify-center h-screen bg-black bg-opacity-50"
+                                        id="exampleModalVendedor{{ $contrato->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog flex items-center justify-center h-screen bottom-20">
+                                            <div class="modal-content bg-white rounded-lg shadow-lg">
+                                                <div
+                                                    class="flex justify-between modal-header bg-sky-700 text-white px-4 py-2 rounded-t-lg">
+                                                    <h5 class="modal-title text-lg font-bold flex-grow text-center"
+                                                        id="exampleModalLabel">
+                                                        Información del Vendedor
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
@@ -469,39 +470,39 @@
 
                                                 @foreach ($vendedores as $vendedor)
                                                     @if ($vendedor->id == $contrato->vendedor_id)
-                                                        <p><strong>Nombre
-                                                                :</strong><span>{{ $vendedor->nombres }}</span></p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de Ventas:</strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
+                                                        <div class="modal-body ml-4 py-4 text-left">
+                                                            <p><strong>Nombre:
+                                                                </strong><span>{{ $vendedor->nombres }}</span>
+                                                            </p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Estado:
+                                                                </strong><span>{{ $vendedor->activo == 1 ? 'Activo' : 'Inactivo' }}</span>
+                                                            </p>
+                                                        </div>
                                                     @endif
                                                 @endforeach
-                                                <div class="modal-body">
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cerrar</button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </td>
                                 <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                     <button type="button" data-bs-toggle="modal"
                                         data-bs-target="#exampleModalCloser1{{ $contrato->id }}">
                                         {{ $contrato->closer_id }}
                                     </button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalCloser1{{ $contrato->id }}"
-                                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Información del Closer 1
+                                    <!-- Modal Closer 1 -->
+                                    <div class="modal fixed inset-0 z-50 overflow-auto flex justify-center items-center bg-black bg-opacity-50 "
+                                        id="exampleModalCloser1{{ $contrato->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog flex items-center justify-center h-screen bottom-20">
+                                            <div class="modal-content bg-white rounded-lg shadow-lg">
+                                                <div
+                                                    class="flex justify-between modal-header bg-sky-700 text-white px-4 py-2 rounded-t-lg">
+                                                    <h5 class="modal-title text-lg font-bold flex-grow text-center"
+                                                        id="exampleModalLabel">
+                                                        Información de Closer 1
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
@@ -509,22 +510,18 @@
 
                                                 @foreach ($vendedores as $vendedor)
                                                     @if ($vendedor->id == $contrato->closer_id)
-                                                        <p><strong>Nombre:
-                                                            </strong><span>{{ $vendedor->nombres }}</span></p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de ventas:</strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
+                                                        <div class="modal-body ml-4 py-4 text-left">
+                                                            <p><strong>Nombre:
+                                                                </strong><span>{{ $vendedor->nombres }}</span>
+                                                            </p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Estado:
+                                                                </strong><span>{{ $vendedor->activo == 1 ? 'Activo' : 'Inactivo' }}</span>
+                                                            </p>
+                                                        </div>
                                                     @endif
                                                 @endforeach
-                                                <div class="modal-body">
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cerrar</button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -534,81 +531,81 @@
                                         data-bs-target="#exampleModalCloser2{{ $contrato->id }}">
                                         {{ $contrato->closer2_id }}
                                     </button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalCloser2{{ $contrato->id }}"
-                                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                    <!-- Modal Closer 2-->
+                                    <div class="modal fixed inset-0 z-50 overflow-auto flex justify-center items-center bg-black bg-opacity-50"
+                                        id="exampleModalCloser2{{ $contrato->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog flex items-center justify-center h-screen bottom-20">
+                                            <div class="modal-content bg-white rounded-lg shadow-lg">
+                                                <div
+                                                    class="flex justify-between modal-header bg-sky-700 text-white px-4 py-2 rounded-t-lg">
+                                                    <h5 class="modal-title text-lg font-bold flex-grow text-center"
+                                                        id="exampleModalLabel">
                                                         Información del Closer 2
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
+
                                                 @foreach ($vendedores as $vendedor)
                                                     @if ($vendedor->id == $contrato->closer2_id)
-                                                        <p><strong>Nombre:
-                                                            </strong><span>{{ $vendedor->nombres }}</span></p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de ventas: </strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
+                                                        <div class="modal-body ml-4 py-4 text-left">
+                                                            <p><strong>Nombre:
+                                                                </strong><span>{{ $vendedor->nombres }}</span>
+                                                            </p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Estado:
+                                                                </strong><span>{{ $vendedor->activo == 1 ? 'Activo' : 'Inactivo' }}</span>
+                                                            </p>
+                                                        </div>
                                                     @endif
                                                 @endforeach
 
-                                                <div class="modal-body">
 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cerrar</button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </td>
                                 <td class="py-2 px-4 border-b text-center whitespace-nowrap">
                                     <button type="button" data-bs-toggle="modal"
                                         data-bs-target="#exampleModalJefeSala{{ $contrato->id }}">
                                         {{ $contrato->jefe_sala_id }}
                                     </button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalJefeSala{{ $contrato->id }}"
-                                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Información deljefe de sala
+                                    <!-- Modal Jefe de Sala-->
+                                    <div class="modal fixed inset-0 z-50 overflow-auto flex justify-center items-center bg-black bg-opacity-50"
+                                        id="exampleModalJefeSala{{ $contrato->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog flex items-center justify-center h-screen bottom-20">
+                                            <div class="modal-content bg-white rounded-lg shadow-lg">
+                                                <div
+                                                    class="flex justify-between modal-header bg-sky-700 text-white px-4 py-2 rounded-t-lg">
+                                                    <h5 class="modal-title text-lg font-bold flex-grow text-center"
+                                                        id="exampleModalLabel">
+                                                        Información del Jefe de Sala
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 @foreach ($vendedores as $vendedor)
                                                     @if ($vendedor->id == $contrato->jefe_sala_id)
-                                                        <p><strong>Nombre :</strong>
-                                                            <span>{{ $vendedor->nombres }}</span>
-                                                        </p>
-                                                        <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
-                                                        </p>
-                                                        <p><strong>Porcentaje de ventas :</strong>
-                                                            <span>{{ $vendedor->porcentaje_ventas }}</span>
-                                                        </p>
+                                                        <div class="modal-body ml-4 py-4 text-left">
+                                                            <p><strong>Nombre:
+                                                                </strong><span>{{ $vendedor->nombres }}</span>
+                                                            </p>
+                                                            <p><strong>Rol: </strong><span>{{ $vendedor->rol }}</span>
+                                                            </p>
+                                                            <p><strong>Estado:
+                                                                </strong><span>{{ $vendedor->activo == 1 ? 'Activo' : 'Inactivo' }}</span>
+                                                            </p>
+                                                        </div>
                                                     @endif
                                                 @endforeach
-
-                                                <div class="modal-body">
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cerrar</button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </td>
                                 @role('Administrador|superAdmin')
                                     <td class = "text-right pr-6">
@@ -741,13 +738,11 @@
             if (valorValue === "" || formaValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "(Tarjeta de débito) " + "$" + valorValue + " con " + formaValue + ".";
+                var cadena = "$" + valorValue + " con " + formaValue + "." + " (Tarjeta de débito) ";
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
-                console.log(listaFormasPago);
                 document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
-                console.log(document.getElementById("formas_pago").value);
                 alert("Se agregó: " + cadena);
             }
         }
@@ -766,18 +761,17 @@
             if (valorValue === "" || formaValue === "" || bancoValue === "" || mesesValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "(Tarjeta de crédito) " +
+                var cadena =
                     "$" + valorValue + " con " + formaValue + " del banco " + bancoValue +
-                    " a " + mesesValue + " meses de crédito."
+                    " a " + mesesValue + " meses." + " (Tarjeta de crédito) ";
 
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
                 banco.value = "";
                 meses.value = "";
-                console.log(listaFormasPago);
                 document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
-                console.log(document.getElementById("formas_pago").value);
+                alert("Se agregó: " + cadena);
             }
         }
 

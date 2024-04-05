@@ -43,23 +43,6 @@
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class=" mt-3 p-0 ml-4 font-bold">Porcentajes:</label>
-                        <select name="porcentaje_ventas"
-                            class=" block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Seleccione el % del Vendedor') }}">
-                            <option value="" disabled selected>
-                                {{ __('Seleccione el porcentaje') }}</option>
-                            @foreach ($porcentajes as $porcentaje)
-                                <option value="{{ $porcentaje }}"
-                                    {{ old('porcentaje_ventas', $vendedor->porcentaje_ventas) == $porcentaje ? 'selected' : '' }}>
-                                    {{ $porcentaje }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('porcentaje_ventas')
-                            <small class = "text-red-500 ml-2">{{ $message }}</small>
-                            <br>
-                        @enderror
                         <label class="mt-3 p-0 ml-4 font-bold">Estado:</label>
                         <select name="activo"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"

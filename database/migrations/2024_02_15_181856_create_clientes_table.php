@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('cedula');
             $table->string('nombres');
             $table->string('apellidos');
-            $table->string('numTelefonico');
+            $table->string('numTelefonico')->nullable();
             $table->date('fecha_nacimiento')->nullable(); 
             $table->string('email');    
             $table->string('provincia');

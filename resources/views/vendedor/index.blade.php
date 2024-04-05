@@ -3,7 +3,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Sellers Register') }}
+                {{ __('Vendedores Registrados') }}
             </h2>
             @role('Administrador|superAdmin')
                 <div onclick="abrirAgregarVendedor()" class="cursor-pointer flex items-center">
@@ -50,22 +50,6 @@
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
                         @enderror
-                        <label class="mt-3 ml-4 font-bold">Porcentajes:</label>
-                        <select name="porcentaje_ventas"
-                            class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-indigo-300 dark:focus:ring dark:focus:ring-indigo-200 dark:focus:ring-opacity-50"
-                            placeholder="{{ __('Seleccione el % del Vendedor') }}">
-                            <option value="" disabled selected>
-                                {{ __('Seleccione el porcentaje') }}</option>
-                            @foreach ($porcentajes as $porcentaje)
-                                <option value="{{ $porcentaje }}" {{ old('porcentaje') == $rol ? 'selected' : '' }}>
-                                    {{ $porcentaje }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('porcentaje_ventas')
-                            <small class = "text-red-500 ml-2">{{ $message }}</small>
-                            <br>
-                        @enderror
 
                         <label class="mt-3 ml-4 font-bold">Usuario Asociado:</label>
                         <select name="user_vend_id"
@@ -104,7 +88,6 @@
                             <th class="py-2 px-4 border-b text-center ">ID</th>
                             <th class="py-2 px-4 border-b text-center ">Nombres</th>
                             <th class="py-2 px-4 border-b text-center ">Rol</th>
-                            <th class="py-2 px-4 border-b text-center ">Porcentaje Ventas</th>
                             <th class="py-2 px-4 border-b text-center ">Estado</th>
                             <th class="py-2 px-4 border-b text-center ">Opciones</th>
                         </tr>
@@ -115,7 +98,6 @@
                                 <td class="py-2 px-4 border-b text-center">{{ $vendedor->id }}</td>
                                 <td class="py-2 px-4 border-b text-center nombres">{{ $vendedor->nombres }}</td>
                                 <td class="py-2 px-4 border-b text-center rol">{{ $vendedor->rol }}</td>
-                                <td class="py-2 px-4 border-b text-center">{{ $vendedor->porcentaje_ventas }}</td>
                                 <td class="py-2 px-4 border-b text-center estado">
                                     {{ $vendedor->activo == '1' ? 'Activo' : 'Inactivo' }}</td>
                                 <td class = "text-right pr-6">

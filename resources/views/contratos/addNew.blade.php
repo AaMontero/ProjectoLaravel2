@@ -3,7 +3,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Contracts') }}
+                {{ __('Contractos') }}
             </h2>
             <div onclick="abrirVentanaAgregarContrato()" class="cursor-pointer flex items-center">
                 <span class="mr-2">Agregar un nuevo contrato</span>
@@ -312,7 +312,7 @@
             if (valorValue === "" || formaValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "(Tarjeta de débito) " + "$" + valorValue + " con " + formaValue + ".";
+                var cadena = "$" + valorValue + " con " + formaValue + "." + " (Tarjeta de débito) ";
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
@@ -335,18 +335,16 @@
             if (valorValue === "" || formaValue === "" || bancoValue === "" || mesesValue === "") {
                 alert("Por favor, complete todos los campos antes de agregar una forma de pago.");
             } else {
-                var cadena = "(Tarjeta de crédito) " + 
+                var cadena =
                     "$" + valorValue + " con " + formaValue + " del banco " + bancoValue +
-                    " a " + mesesValue + " meses de crédito.";
+                    " a " + mesesValue + " meses." + " (Tarjeta de crédito) ";
 
                 listaFormasPago.push(cadena);
                 valor.value = "";
                 forma.value = "";
                 banco.value = "";
                 meses.value = "";
-                console.log(listaFormasPago);
                 document.getElementById("formas_pago").value = JSON.stringify(listaFormasPago);
-                console.log(document.getElementById("formas_pago").value);
                 alert("Se agregó: " + cadena);
             }
         }

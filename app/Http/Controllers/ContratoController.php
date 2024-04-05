@@ -498,8 +498,10 @@ class DocumentGenerator
         // $rutaBase = "../public/contratos";
         $nombreCarpeta = $nombre_cliente . " " . $fechaActual;
         $rutaCarpeta = $rutaBase . '/' . $nombreCarpeta;
+        echo $rutaCarpeta;
         if (!is_dir($rutaCarpeta)) {
             if (!mkdir($rutaCarpeta, 0777, true)) {
+                dd($rutaCarpeta); 
                 throw new Exception("Error al crear la carpeta"); // Lanza una excepción en caso de error
             }
         }

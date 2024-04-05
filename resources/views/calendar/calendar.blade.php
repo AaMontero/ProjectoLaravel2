@@ -110,8 +110,15 @@
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
                         </select>
-                        <label for="">Cliente</label>
-                        <input type="text" class="form-control" id="author">
+
+                        <label for="cliente">Cliente</label>
+                        <select class="form-select" id="cliente_select">
+                            <option value="" disabled selected>Selecciona un Cliente</option>
+                            @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nombres }} {{ $cliente->apellidos }} </option>
+                            @endforeach
+                        </select>
+
 
                         <label for="hotel">Hoteles</label>
                         <select class="form-select" id="hotel_nombre" name="hotel">
@@ -155,8 +162,14 @@
                             <option value="Reservado">Reservado</option>
                             <option value="Disponible">Disponible</option>
                         </select>
-                        <label for="">Cliente</label>
-                        <input type="text" class="form-control" id="author_edit">
+
+                        <label for="cliente">Cliente</label>
+                        <select class="form-select" id="cliente_edit">
+                            <option value="" disabled selected>Selecciona un Cliente</option>
+                            @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nombres }} {{ $cliente->apellidos }} </option>
+                            @endforeach
+                        </select>
 
                         <label for="hotel">Hoteles</label>
                         <select class="form-select" id="hotel_nombre_edit" name="hotel_nombre_edit">
@@ -200,7 +213,7 @@
                         </div>
                         <div class="mb-2">
                             <strong class="font-semibold">Cliente:</strong>
-                            <span id="autorSpan" class="ml-2"></span>
+                            <span id="clienteSpan" class="ml-2"></span>
                         </div>
                         <div class="mb-2">
                             <strong class="font-semibold">Fecha de Entrada:</strong>
@@ -286,7 +299,7 @@
                         var content = '';
                         if (event.title === 'Prereservado' || event.title === 'Reservado') {
                             content = '<div class="event-title">' + event.title + ', ' + event
-                                .hotel_nombre + ', ' + event.author + '</div>';
+                                .hotel_nombre + ', ' + event.cliente_id + '</div>';
                         } else {
                             content = '<div class="event-title">' + event.title + '</div>';
                         }
@@ -304,18 +317,18 @@
                             var title = $('#title').val();
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
-                            var author = $('#author').val();
+                            var cliente_id = $('#cliente_select').val();
                             var hotel_nombre = $('#hotel_nombre').val();
 
                             // Obtener los valores de los campos
                             var title = $('#title').val();
                             var start_date = $('#start_date').val();
                             var end_date = $('#end_date').val();
-                            var author = $('#author').val();
+                            var cliente_id = $('#cliente_select').val();
                             var hotel_nombre = $('#hotel_nombre').val();
 
                             // Verificar si algún campo está vacío
-                            if (!title || !start_date || !end_date || !author || !hotel_nombre) {
+                            if (!title || !start_date || !end_date || !cliente_id || !hotel_nombre) {
                                 // Mostrar mensaje de error
                                 swal("Error", "Todos los campos son obligatorios", "error");
                                 return;
@@ -329,7 +342,7 @@
                                     title: title,
                                     start_date: start_date,
                                     end_date: end_date,
-                                    author: author,
+                                    cliente_id: cliente_id,
                                     hotel_nombre: hotel_nombre,
                                     user_id: {{ auth()->id() }}
                                 },
@@ -338,7 +351,7 @@
 
                                     $('#calendar').fullCalendar('renderEvent', {
                                         'title': response.title,
-                                        'author': response.author,
+                                        'cliente_select': response.cliente_nombres + ' ' + response.cliente_apellidos,
                                         'hotel_nombre': response.hotel_nombre,
                                         'start': response.start_date,
                                         'end': response.end_date,
@@ -373,25 +386,26 @@
 
                         var id = event.id;
                         var tituloSeleccionado = event.title;
-                        var autorSeleccionado = event.author;
-                        var fechaInicioSeleccionado = moment(event.start).format(
-                            'dddd, D [de] MMMM [de] YYYY');
+                        var clienteSeleccionado = event.cliente_nombres + ' ' + event.cliente_apellidos;
+                        var cliente_idSeleccionado = event.cliente_id;
+                        var fechaInicioSeleccionado = moment(event.start).format('dddd, D [de] MMMM [de] YYYY');
                         var fechaFinSeleccionado = moment(event.end).format('dddd, D [de] MMMM [de] YYYY');
                         var hotel_nombreSeleccionado = event.hotel_nombre;
 
                         var formatoFechaInicio = moment(event.start).format('YYYY-MM-DD');
                         var formatoFechaFin = moment(event.end).format('YYYY-MM-DD');
-                        //Mostrar los detalles del evento en el modal
+
+                        //Mostrar los detalles del evento
                         document.getElementById("tituloSpan").innerText = tituloSeleccionado;
-                        document.getElementById("autorSpan").innerText = autorSeleccionado;
+                        document.getElementById("clienteSpan").innerText = clienteSeleccionado;
                         document.getElementById("fechaInicioSpan").innerText = fechaInicioSeleccionado;
                         document.getElementById("fechaFinSpan").innerText = fechaFinSeleccionado;
                         document.getElementById("hotel_nombreSpan").innerText = hotel_nombreSeleccionado;
 
-                        // Establecer los valores en el formulario de edición
+                        // Mostrar los valores en el modal para editar
                         console.log("Valor del título seleccionado:", tituloSeleccionado);
                         document.getElementById("title_edit").value = tituloSeleccionado;
-                        document.getElementById("author_edit").value = autorSeleccionado;
+                        document.getElementById("cliente_edit").value = cliente_idSeleccionado;
                         document.getElementById("start_date_edit").value = formatoFechaInicio;
                         document.getElementById("end_date_edit").value = formatoFechaFin;
                         document.getElementById("hotel_nombre_edit").value = hotel_nombreSeleccionado;
@@ -408,7 +422,7 @@
                             var start_date = $('#start_date_edit').val();
                             var end_date = $('#end_date_edit').val();
                             var title = $('#title_edit').val();
-                            var author = $('#author_edit').val();
+                            var cliente_id = $('#cliente_edit').val();
                             var hotel_nombre = $('#hotel_nombre_edit').val();
 
                             $.ajax({
@@ -419,7 +433,7 @@
                                     start_date: start_date,
                                     end_date: end_date,
                                     title: title,
-                                    author: author,
+                                    cliente_id: cliente_id,
                                     hotel_nombre: hotel_nombre
                                 },
                                 success: function(response) {
@@ -427,7 +441,7 @@
                                         .then(() => {
                                             $('#editarModal').modal(
                                                 'hide'
-                                                ); // Ocultar el modal después del mensaje de éxito
+                                            ); // Ocultar el modal después del mensaje de éxito
                                             location
                                                 .reload(); // Recargar la página para reflejar los cambios
                                         }); // Mostrando una alerta de éxito

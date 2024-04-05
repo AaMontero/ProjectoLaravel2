@@ -49,6 +49,7 @@ class CalendarController extends Controller
 
         ]);
 
+
         $eventos = Eventos::create([
             'title' => $request->title,
             'start_date' => $request->start_date,

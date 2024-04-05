@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
-            $table->enum('title', ['Prereservado', 'Reservado', 'Disponible']);
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
-            $table->unsignedBigInteger('cliente_id')->nullable();
-            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
-            $table->string('hotel_nombre')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->enum('title', ['Prereservado', 'Reservado', 'Disponible']);// Titular o persona que reserva
+            $table->dateTime('start_date'); // Fecha y hora de inicio
+            $table->dateTime('end_date'); // Fecha y hora de fin
+            $table->string('author');
+            $table->string('hotel_nombre')->nullable(); // Comentario
+            $table->unsignedBigInteger('user_id'); // ID del usuario que registra la reserva
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

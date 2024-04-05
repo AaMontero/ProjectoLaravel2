@@ -35,11 +35,13 @@ class RegisteredUserController extends Controller
 
      public function store(Request $request): RedirectResponse
      {
+         // Convertir el correo electrónico a minúsculas antes de la validación
+         $request->merge(['email' => strtolower($request->email)]);
+     
          $request->validate([
              'name' => ['required', 'string', 'max:255'],
-             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
              'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            
          ]);
      
          $user = User::create([
@@ -47,18 +49,14 @@ class RegisteredUserController extends Controller
              'email' => $request->email,
              'password' => Hash::make($request->password),
          ]);
-         
-         // Asignar segun el rol seleccionado
-        // $user->assignRole($request->rol);
-
-        // Asignar el rol de vendedor al usuario por defecto
-        $vendedorRole = Role::where('name', 'asesor')->first();
-        if ($vendedorRole) {
-            $user->assignRole($vendedorRole);
-        }
-
-
-        event(new Registered($user));
+     
+         // Asignar el rol de vendedor al usuario por defecto
+         $vendedorRole = Role::where('name', 'asesor')->first();
+         if ($vendedorRole) {
+             $user->assignRole($vendedorRole);
+         }
+     
+         event(new Registered($user));
          Auth::login($user);
      
          return redirect(RouteServiceProvider::HOME);

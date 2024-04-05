@@ -5,7 +5,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div x-data="{ showModal: false }" x-cloak class="flex items-center gap-5">
-                @role('superAdmin')
+                @role('Administrador|superAdmin')
                     <x-nav-link :href="route('paquetes.paquetes')"
                         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                         {{ __('Paquetes') }}
@@ -272,19 +272,18 @@
                 <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar hotel..." />
             </div>
 
-            <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
+            <div
+                class="mt-4 md:mr-16 md:ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
                 <div class="list">
                     @foreach ($hotel as $hoteles)
-                        <div class="p-6 bg-transparent flex justify-between items-center">
-                            <div style="width: 300px; height: 200px; overflow: hidden;"
-                                id="carousel{{ $hoteles->id }}" class="carousel slide carousel-fade "
+                        <div class="p-6 bg-transparent sm:flex sm:justify-between sm:items-center">
+                            <div id="carousel{{ $hoteles->id }}" class="carousel slide carousel-fade mx-auto mb-4"
                                 data-bs-ride="carousel">
-                                <div class = "text-center">
-                                    <span
-                                        class = "spanTituloPaquete ml-5 text-center nombres">{{ $hoteles->hotel_nombre }}</span>
-                                    </p>
+                                <div class = "ml:text-center">
+                                    <span class = "spanTituloPaquete nombres">{{ $hoteles->hotel_nombre }}</span>
                                 </div>
-                                <div class="carousel-inner">
+                                <div style="width: 300px; height: 200px; overflow: hidden;"
+                                    class="carousel-inner mx-auto">
                                     <!-- Slides -->
                                     @foreach (explode(',', $hoteles->imagen_hotel) as $index => $imageName)
                                         <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
@@ -307,51 +306,66 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
+                            <div class="ml:w-3/5 ml:h-3/5 text-gray-800 dark:text-gray-200">
+                                <div class=" w-90 text-gray-800 dark:text-gray-200">
+                                    <p>Entre las caracteristicas mas importantes de nuestro hotel <span
+                                            class="font-bold">{{ $hoteles->hotel_nombre }}</span>, tenemos las siguientes: </p>
+                                    <table class="w-full">
+                                        <tr>
+                                            <td><span class="spanTitulo">País:</span></td>
+                                            <td><span class="spaninfo">{{ $hoteles->pais }}</span></td>
+                                            <td><span class="spanTitulo">Tipo de servicio:</span></td>
+                                            <td><span class="spaninfo">{{ $hoteles->tipo_alojamiento }}</span></td>
 
+                                        </tr>
+                                        <tr>
+                                            <td><span class="spanTitulo whitespace-no-wrap">Provincia:</span></td>
+                                            <td><span class="spaninfo">{{ $hoteles->provincia }}</span></td>
+                                            <td><span class="spanTitulo">Ciudad:</span></td>
+                                            <td><span class="spaninfo">{{ $hoteles->ciudad }}</span></td>
+                                        </tr>
+                                        <tr>
 
-                            <div class="w-3/5 h-3/5 text-gray-800 dark:text-gray-200">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <!-- Primera columna -->
-                                    <div class="col-span-1">
-                                        <p><span class="spanTitulo ">País:</span> <span
-                                                class="spaninfo pais">{{ $hoteles->pais }}</span></p>
-                                        <p><span class="spanTitulo">Tipo de servicio:</span> <span
-                                                class="spaninfo">{{ $hoteles->tipo_alojamiento }}</span></p>
-                                        <p><span class="spanTitulo">Provincia:</span> <span
-                                                class="spaninfo">{{ $hoteles->provincia }}</span></p>
-                                        <p><span class="spanTitulo">Ciudad:</span> <span
-                                                class="spaninfo">{{ $hoteles->ciudad }}</span></p>
-                                        <p><span class="spanTitulo">Numero de habitaciones:</span> <span
-                                                class="spaninfo">{{ $hoteles->num_h }}</span></p>
-                                        <p><span class="spanTitulo">Numero de camas:</span> <span
-                                                class="spaninfo">{{ $hoteles->num_camas }}</span></p>
-                                    </div>
-                                    <!-- Segunda columna -->
-                                    <div class="col-span-1">
-                                        <!-- Mostrar los servicios -->
-                                        <p class="spanTitulo">Servicios</p>
-                                        <ul class="list-decimal pl-8">
-                                            @foreach (explode(',', $hoteles->servicios) as $servicio)
-                                                <li class="spaninfo flex items-center">
-                                                    <img src="{{ asset('images/iconoEtiqueta.png') }}"
-                                                        class="w-4 h-4 mr-2" alt="Check Circle Icon">
-                                                    {{ $servicio }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        <!-- Mostrar los comentarios -->
-                                        <p class="spanTitulo">Comentarios</p>
-                                        <ul class="list-decimal pl-8">
-                                            @foreach (explode(',', $hoteles->opiniones) as $opinion)
-                                                <li class="spaninfo flex items-center">
-                                                    <img src="{{ asset('images/iconoEtiqueta.png') }}"
-                                                        class="w-4 h-4 mr-2" alt="Check Circle Icon">
-                                                    {{ $opinion }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                                            <td><span class="spanTitulo">Num de habitaciones:</span></td>
+                                            <td><span class="spaninfo">{{ $hoteles->num_h }}</span></td>
+                                            <td><span class="spanTitulo">Num de camas:</span></td>
+                                            <td><span class="spaninfo">{{ $hoteles->num_camas }}</span></td>
+                                        </tr>
+                                    </table>
+
+                                    <table width = "100%">
+                                        <tr>
+                                            <td style="width: 50%;">
+                                                <!-- Mostrar los servicios -->
+                                                <p class="spanTitulo">Servicios</p>
+                                                <ul class="list-decimal pl-8">
+                                                    @foreach (explode(',', $hoteles->servicios) as $servicio)
+                                                        <li class="spaninfo flex items-center">
+                                                            <img src="{{ asset('images/iconoEtiqueta.png') }}"
+                                                                class="w-4 h-4 mr-2" alt="Check Circle Icon">
+                                                            {{ $servicio }}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td style="width: 50%;">
+                                                <p class="spanTitulo">Comentarios</p>
+                                                <ul class="list-decimal pl-8">
+                                                    @foreach (explode(',', $hoteles->opiniones) as $opinion)
+                                                        <li class="spaninfo flex items-center">
+                                                            <img src="{{ asset('images/iconoEtiqueta.png') }}"
+                                                                class="w-4 h-4 mr-2 whitespace-no-wrap"
+                                                                alt="Check Circle Icon">
+                                                            {{ $opinion }}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+
+                                        </tr>
+                                    </table>
                                 </div>
+
                             </div>
 
 
@@ -387,7 +401,7 @@
 
 
                                     <script>
-                                         function confirmDelete(event) {
+                                        function confirmDelete(event) {
                                             Swal.fire({
                                                 title: "¿Deseas eliminar este hotel?",
                                                 showDenyButton: true,
@@ -397,10 +411,10 @@
                                                 if (result.isConfirmed) {
                                                     event.target.closest('form').submit();
                                                 } else if (result.isDenied) {
-                                                  
+
                                                 }
                                             });
-                                            return false; 
+                                            return false;
                                         }
                                     </script>
                                 </x-slot>

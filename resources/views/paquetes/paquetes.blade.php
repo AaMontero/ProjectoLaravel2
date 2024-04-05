@@ -5,7 +5,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div x-data="{ showModal: false }" x-cloak class="flex items-center gap-5">
-                @role('superAdmin')
+                @role('Administrador|superAdmin')
                     <x-nav-link :href="route('paquetes.paquetes')"
                         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight no-underline">
                         {{ __('Paquetes') }}
@@ -227,19 +227,18 @@
                 <input class="search w-full p-2 border rounded-md mt-3" placeholder="Buscar paquete..." />
             </div>
 
-            <div class="mt-4 mr-16 ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
+            <div
+                class="mt-4 md:mr-16 md:ml-16 bg-white dark:bg-gray-800 shadow-sm rounded-lg divide-y dark:divide-gray-900">
                 <div class="list">
                     @foreach ($paquetes as $paquete)
-                        <div class="p-6 bg-transparent flex justify-between items-center ">
-                            <div style="width: 300px; height: 200px; overflow: hidden;"
-                                id="carousel{{ $paquete->id }}" class="carousel slide carousel-fade"
+                        <div class="p-6 bg-transparent sm:flex sm:justify-between sm:items-center">
+                            <div id="carousel{{ $paquete->id }}" class="carousel slide carousel-fade mx-auto mb-4"
                                 data-bs-ride="carousel">
-                                <div class = "text-center ">
-                                    <span
-                                        class = "spanTituloPaquete ml-5 nombres">{{ $paquete->nombre_paquete }}</span>
-                                    </p>
+                                <div class = "ml:text-center ">
+                                    <span class = "spanTituloPaquete nombres">{{ $paquete->nombre_paquete }}</span>
+
                                 </div>
-                                <div class="carousel-inner">
+                                <div style="width: 300px; height: 200px; overflow: hidden;" class="carousel-inner mx-auto">
                                     <!-- Slides -->
                                     @foreach (explode(',', $paquete->imagen_paquete) as $index => $imageName)
                                         <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
@@ -263,11 +262,8 @@
                             </div>
 
 
-                            <div class="w-3/5 h-3/5 text-gray-800 dark:text-gray-200">
-
-
+                            <div class="ml:w-3/5 ml:h-3/5 text-gray-800 dark:text-gray-200">
                                 <div class=" w-90 text-gray-800 dark:text-gray-200">
-
                                     <!-- Mensaje del paquete -->
                                     <p><span class="spanTitulo">Descripcion:</span> <span
                                             class="spaninfo">{{ $paquete->message }}</span></p>
@@ -275,23 +271,25 @@
                                     <table width="100%">
                                         <tr>
                                             <td style="width: 25%;">
-                                                <p><span class="spanTitulo">Número de días:</span> </p>
-                                                <p><span class="spanTitulo">Número de Noches:</span> </p>
+                                                <span class="spanTitulo">Número de días:</span>
+                                                <span class="spaninfo">{{ $paquete->num_dias }}</span>
                                             </td>
                                             <td style="width: 25%;">
-                                                <p><span class="spaninfo">{{ $paquete->num_dias }}</span></p>
-                                                <p><span class="spaninfo">{{ $paquete->num_noches }}</span></p>
-                                            </td>
-                                            <td style="width: 25%;">
-                                                <p><span class="spanTitulo">Precio Afiliados:</span></p>
-                                                <p><span class="spanTitulo">Precio No Afiliados:</span> </p>
-                                            </td>
-                                            <td style="width: 25%;">
-                                                <p><span class="spaninfo">${{ $paquete->precio_afiliado }}</span></p>
-                                                <p><span class="spaninfo">${{ $paquete->precio_no_afiliado }}</span>
-                                                </p>
+                                                <span class="spanTitulo">Número de Noches:</span>
+                                                <span class="spaninfo">{{ $paquete->num_noches }}</span>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td style="width: 25%;">
+                                                <span class="spanTitulo">Precio Afiliados:</span>
+                                                <span class="spaninfo">${{ $paquete->precio_afiliado }}</span>
+                                            </td>
+                                            <td style="width: 25%;">
+                                                <span class="spanTitulo">Precio No Afiliados:</span>
+                                                <span class="spaninfo">${{ $paquete->precio_no_afiliado }}</span>
+                                            </td>
+                                        </tr>
+
                                     </table>
 
 
@@ -352,10 +350,10 @@
                                                 if (result.isConfirmed) {
                                                     event.target.closest('form').submit();
                                                 } else if (result.isDenied) {
-                                                   
+
                                                 }
                                             });
-                                            return false; 
+                                            return false;
                                         }
                                     </script>
                                 </x-slot>

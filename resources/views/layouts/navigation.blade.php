@@ -56,6 +56,9 @@
                         <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" class="no-underline">
                             {{ __('Clients') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('contrato.index')" :active="request()->routeIs('contrato.*')" class="no-underline">
+                            {{ __('Contratos') }}
+                        </x-nav-link>
                     @endrole
 
                     @role('Asesor')

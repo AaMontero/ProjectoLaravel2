@@ -299,7 +299,7 @@
                         var content = '';
                         if (event.title === 'Prereservado' || event.title === 'Reservado') {
                             content = '<div class="event-title">' + event.title + ', ' + event
-                                .hotel_nombre + ', ' + event.cliente_id + '</div>';
+                                .hotel_nombre + ', ' + event.cliente_cedula + '</div>';
                         } else {
                             content = '<div class="event-title">' + event.title + '</div>';
                         }

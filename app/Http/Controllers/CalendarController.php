@@ -18,7 +18,7 @@ class CalendarController extends Controller
         $events = array();
         $eventos = Eventos::all();
         $hoteles = Hotel::pluck('hotel_nombre');
-        $clientes = Cliente::select('id','nombres', 'apellidos')->get();
+        $clientes = Cliente::select('id','nombres', 'apellidos','cedula')->get();
 
         foreach ($eventos as $evento) {
             $events[] = [
@@ -28,6 +28,7 @@ class CalendarController extends Controller
                 'end' => $evento->end_date,
                 'cliente_nombres' => $evento->cliente->nombres,
                 'cliente_apellidos' => $evento->cliente->apellidos,
+                'cliente_cedula'=> $evento->cliente->cedula,
                 'cliente_id' => $evento->cliente_id,
                 'hotel_nombre' => $evento->hotel_nombre,
             ];

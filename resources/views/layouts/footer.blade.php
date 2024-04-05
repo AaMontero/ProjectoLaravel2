@@ -11,9 +11,9 @@
                 <script>
                     document.write(new Date().getFullYear())
                 </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://travelqori.com/" class="font-weight-bold no-underline" target="_blank" >QORI TRAVEL</a>
-                for a better web.
+              hecho con <i class="fa fa-heart"></i> por
+              <a href="https://travelqori.com/" class="font-weight-bold no-underline" target="_blank" >Sistemas Snr</a>
+              para una mejor red.
             </div>
         </div>
     </div>

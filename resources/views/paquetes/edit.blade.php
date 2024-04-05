@@ -67,7 +67,7 @@
                         <label class="mt-0.5 p-1 ml-4 font-bold" for="nombre_paquete">Nombre del paquete:</label>
                         <input type="text" name="nombre_paquete" id="nombre_paquete"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}"
+                            placeholder="{{ __('Coloca tu mensaje aquí') }}"
                             value="{{ old('nombre_paquete', $paquete->nombre_paquete) }}">
                         @error('nombre_paquete')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
@@ -76,7 +76,7 @@
                         <label class="mt-3 font-bold ml-4" for="message">Descripción del paquete:</label>
                         <textarea name="message" id="message"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Put what you want to add here') }}">{{ old('message', $paquete->message) }}</textarea>
+                            placeholder="{{ __('Pon aquí lo que quieras añadir') }}">{{ old('message', $paquete->message) }}</textarea>
                         @error('message')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
                             <br>
@@ -88,7 +88,7 @@
                         <label class="mt-3 font-bold ml-4" for="num_dias">Número de días: </label>
                         <input type="number" name="num_dias" id="num_dias"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}"
+                            placeholder="{{ __('Coloca tu mensaje aquí') }}"
                             value="{{ old('num_dias', $paquete->num_dias) }}">
                         @error('num_dias')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
@@ -97,7 +97,7 @@
                         <label class="mt-3 font-bold ml-4" for="num_noches">Número de noches:</label>
                         <input type="number" name="num_noches" id="num_noches"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}"
+                            placeholder="{{ __('Coloca tu mensaje aquí') }}"
                             value="{{ old('num_noches', $paquete->num_noches) }}">
                         @error('num_noches')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
@@ -106,7 +106,7 @@
                         <label class="mt-3 font-bold ml-4" for="precio_afiliado">Precio Afiliados:</label>
                         <input type="number" name="precio_afiliado" id="precio_afiliado" step="0.01"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}"
+                            placeholder="{{ __('Coloca tu mensaje aquí') }}"
                             value="{{ old('precio_afiliado', $paquete->precio_afiliado) }}">
                         @error('precio_afiliado')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
@@ -115,7 +115,7 @@
                         <label class="mt-3 font-bold ml-4" for="precio_no_afiliado">Precio no afiliados:</label>
                         <input type="number" name="precio_no_afiliado" id="precio_no_afiliado" step="0.01"
                             class="block w-full rounded-md border-gray-300 bg-white shadow-sm transition-colors duration-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="{{ __('Put your message here') }}"
+                            placeholder="{{ __('Coloca tu mensaje aquí') }}"
                             value="{{ old('precio_no_afiliado', $paquete->precio_no_afiliado) }}">
                         @error('precio_no_afiliado')
                             <small class = "text-red-500 ml-2">{{ $message }}</small>
@@ -132,7 +132,7 @@
                                 @endforeach
                             @endif
                         </div>
-                        
+
                         <label class="mt-3 font-bold ml-4" for="imagen_paquete">Cambiar Imagen:</label>
                         <input type="file" name="imagen_paquete[]" id="imagen_paquete" class="form-control mb-2" multiple>
                         <input type="hidden" id="lista_caracteristicas_mod" name="lista_caracteristicas_mod">
@@ -201,23 +201,23 @@
             const files = event.target.files;
             const previewContainer = document.getElementById('image-preview-container');
             previewContainer.innerHTML = ''; // Limpiar la vista previa
-    
+
             for (const file of files) {
                 const reader = new FileReader();
-    
+
                 reader.onload = function(event) {
                     const img = document.createElement('img');
                     img.src = event.target.result;
                     img.alt = 'Imagen previa del paquete';
                     img.className = 'w-full h-auto rounded-lg';
-    
+
                     const div = document.createElement('div');
                     div.className = 'w-1/4 p-2';
                     div.appendChild(img);
-    
+
                     previewContainer.appendChild(div);
                 };
-    
+
                 reader.readAsDataURL(file);
             }
         });

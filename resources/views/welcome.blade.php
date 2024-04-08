@@ -421,9 +421,9 @@
                 turísticos e inclusive brindará la facilidad de crear un itinerario completo.
             </p>
             <div class="footer__socials">
-                <a href="#"><i class="ri-facebook-fill"></i></a>
-                <a href="#"><i class="ri-instagram-line"></i></a>
-                <a href="#"><i class="ri-tiktok-fill"></i></a>
+                <a href="https://www.facebook.com/QoriTGroup"><i class="ri-facebook-fill"></i></a>
+                <a href="https://www.instagram.com/qorittravelgroup?igsh=Nm1pcnI3dGJ5OWc1"><i class="ri-instagram-line"></i></a>
+                <a href="https://www.tiktok.com/@qorittravel.group?_t=8lMPwjveS3h&_r=1"><i class="ri-tiktok-fill"></i></a>
             </div>
         </div>
         <div class="footer__col">

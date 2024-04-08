@@ -227,13 +227,13 @@ class WhatsAppController extends Controller
                 $response = curl_exec($curl);
                 curl_close($curl);
                 $responseData = json_decode($response, true);
-                file_put_contents("audioRes.txt", $response);
-                file_put_contents("audioResData.txt", $responseData);
+                //file_put_contents("audioRes.txt", $response);
+                //file_put_contents("audioResData.txt", $responseData);
                 //$urlDescarga = isset($response['url']) ? $response['url'] : "";
                 $urlDescarga = $responseData;
                 $curl2 = curl_init();
                 $urlCorregido = str_replace('audio/ogg', 'audio%2Fogg', $responseData);
-                file_put_contents("urlCorregido.txt", $urlCorregido);
+                //file_put_contents("urlCorregido.txt", $urlCorregido);
                 curl_setopt_array($curl2, array(
                     CURLOPT_URL => 'https://lookaside.fbsbx.com/whatsapp_business/attachments/?mid=1892935764484584&ext=1712597640&hash=ATtRbK3IjmIWFFZYSITQKqQtydvppKgkYKPAO3gxnYll7Aaudio%2Fogg3b5fd33bad02e418bd8117ce019d57f419a5e563a66563d1ff3cb4071bf4531f57031892935764484584whatsapp',
                     //CURLOPT_URL => $urlCorregido,
@@ -250,7 +250,7 @@ class WhatsAppController extends Controller
                 ));
                 $responseAudio = curl_exec($curl2);
 
-                file_put_contents("audioFinal.txt", $responseAudio);
+                //file_put_contents("audioFinal.txt", $responseAudio);
                 if ($responseAudio != "") {
                     $rutaImagen = 'uploads/audiosWpp/' . $telefonoUser . '/' . $timestamp . 'audio.ogg';
                     $rutaImagenmp3 = 'uploads/audiosWpp/' . $telefonoUser . '/' . $timestamp . 'audio.mp3';

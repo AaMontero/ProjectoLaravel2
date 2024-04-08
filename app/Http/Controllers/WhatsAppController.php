@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class WhatsAppController extends Controller
 {
+
     public function index()
     {
         $mensajes = WhatsApp::all();
@@ -26,9 +27,9 @@ class WhatsAppController extends Controller
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
 
-        $telefonoEnviaID = "258780720641927";
+        $telefonoEnviaID = getenv("WPP_ID");
         $apiUrl = 'https://graph.facebook.com/v18.0/';
-        $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
+        $apiKey = getenv("WPP_TOKEN");
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_VERBOSE, true);
         curl_setopt_array($curl, array(
@@ -56,8 +57,8 @@ class WhatsAppController extends Controller
         $response = curl_exec($curl);
         $whatsApp = new WhatsApp();
         $whatsApp->mensaje_enviado = $mensaje;
-        $whatsApp->id_wa = "asdasdasd";
-        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->id_wa = "asdasdasd"; //Toca cambiar 
+        $whatsApp->telefono_wa = getenv("WPP_NUM");
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
         $whatsApp->visto = true;
@@ -88,18 +89,17 @@ class WhatsAppController extends Controller
         } else {
             //file_put_contents("segundo elemento.txt", $mensaje[1]);
             foreach ($mensaje as $elem) {
-              $this->enviarMensaje($numeroEnviar, $elem);
+                $this->enviarMensaje($numeroEnviar, $elem);
                 sleep(30);
             }
-
         }
     }
 
     function enviarMensaje($numeroEnviar, $mensaje)
     {
-        $telefonoEnviaID = "258780720641927";
+        $telefonoEnviaID = getenv("WPP_ID");
         $apiUrl = 'https://graph.facebook.com/v18.0/';
-        $apiKey = 'EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x';
+        $apiKey = getenv("WPP_TOKEN");
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_VERBOSE, true);
         curl_setopt_array($curl, array(
@@ -127,8 +127,8 @@ class WhatsAppController extends Controller
         curl_exec($curl);
         $whatsApp = new WhatsApp();
         $whatsApp->mensaje_enviado = $mensaje;
-        $whatsApp->id_wa = "asdasdasd";
-        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->id_wa = "asdasdasd"; //Revisar 
+        $whatsApp->telefono_wa = getenv("WPP_NUM");
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
         $whatsApp->visto = true;
@@ -191,14 +191,14 @@ class WhatsAppController extends Controller
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'GET',
                     CURLOPT_HTTPHEADER => array(
-                        'Authorization: Bearer EAA0cGBz1VmwBOzqlCBUHzv9mf4BsmNAqw2rLoreXSXUnxVL50mouIhdcAZAWZBLsKnqZBuRWiPcQWSE325mRwtcWbQMKsABhZAopcKgBKq6m0zsS8G0nQ7FJkZBDexVQPdZCtG7BzWRZBCwWGDAQNv32Jm0dulyiGSKOBrZBLZA7gmnxzszGg8L95fWLMiGeV1g2x'
+                        'Authorization: Bearer ' . getenv("WPP_TOKEN")
                     ),
                 ));
                 $response = curl_exec($curl);
                 $responseData = json_decode($response, true);
                 $urlDescarga = isset($responseData['url']) ? $responseData['url'] : "";
 
-                if ($urlDescarga) {
+                if ($urlDescarga != "") {
                     $rutaImagen = 'uploads/imagenesWpp/' . $telefonoUser . '/' . $timestamp . 'imagen.jpeg';
                     $directorio = 'uploads/imagenesWpp/' . $telefonoUser;
                     if (!is_dir($directorio)) {
@@ -208,6 +208,64 @@ class WhatsAppController extends Controller
                     $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
                 }
                 $this->enviarMensajeChatBot($telefonoUser, "imagen");
+            } elseif ($tipo == "audio") {
+
+                $idAudio = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['audio']['id'];
+                $url = "https://graph.facebook.com/v19.0/" . $idAudio;
+
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'GET',
+                    CURLOPT_HTTPHEADER => array(
+                        'Authorization: Bearer ' . getenv("WPP_TOKEN")
+                    ),
+                ));
+                $response = curl_exec($curl);
+                curl_close($curl);
+                $responseData = json_decode($response, true);
+                file_put_contents("audioRes.txt", $response);
+                file_put_contents("audioResData.txt", $responseData);
+                //$urlDescarga = isset($response['url']) ? $response['url'] : "";
+                $urlDescarga = $responseData;
+                $curl2 = curl_init();
+                $urlCorregido = str_replace('audio/ogg', 'audio%2Fogg', $responseData);
+                file_put_contents("urlCorregido.txt", $urlCorregido);
+                curl_setopt_array($curl2, array(
+                    CURLOPT_URL => 'https://lookaside.fbsbx.com/whatsapp_business/attachments/?mid=1892935764484584&ext=1712597640&hash=ATtRbK3IjmIWFFZYSITQKqQtydvppKgkYKPAO3gxnYll7Aaudio%2Fogg3b5fd33bad02e418bd8117ce019d57f419a5e563a66563d1ff3cb4071bf4531f57031892935764484584whatsapp',
+                    //CURLOPT_URL => $urlCorregido,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'GET',
+                    CURLOPT_HTTPHEADER => array(
+                        'Authorization: Bearer' . getenv("WPP_TOKEN"),
+                    ),
+                ));
+                $responseAudio = curl_exec($curl2);
+
+                file_put_contents("audioFinal.txt", $responseAudio);
+                if ($responseAudio != "") {
+                    $rutaImagen = 'uploads/audiosWpp/' . $telefonoUser . '/' . $timestamp . 'audio.ogg';
+                    $rutaImagenmp3 = 'uploads/audiosWpp/' . $telefonoUser . '/' . $timestamp . 'audio.mp3';
+
+                    $directorio = 'uploads/audiosWpp/' . $telefonoUser;
+                    if (!is_dir($directorio)) {
+                        mkdir($directorio, 0777, true);
+                        file_put_contents("entreCarpeta.txt", "Esta entrando a no hay carpeta");
+                    }
+                    //file_put_contents($rutaImagen, "llegaambos");
+                    // file_put_contents($rutaImagenmp3, "llegaambos");
+                    file_put_contents($rutaImagen, file_get_contents($responseAudio));
+                    file_put_contents($rutaImagenmp3, file_get_contents($responseAudio));
+                    curl_close($curl2);
+                }
             } else {
                 $mensaje = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']) ?
                     $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] : "";
@@ -231,7 +289,6 @@ class WhatsAppController extends Controller
             $this->crearNotificacion($cadenaNotificacion, $mensaje);
             event($event);
         } else {
-
         }
     }
 

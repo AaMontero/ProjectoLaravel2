@@ -181,7 +181,7 @@
         font-size: 12px;
         color: #515151;
         margin-left: 10px;
-    `;
+        `;
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
@@ -195,7 +195,7 @@
         color: #00000;
         margin-right: 100px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    `;
+        `;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
@@ -224,6 +224,7 @@
             var elementoH1 = document.createElement("h4");
             var horaElemento = document.createElement("small");
             elementoH1.textContent = elemento['mensaje_enviado'];
+            elementoH1.style.fontSize = '1.1rem';
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
 
             horaElemento.style = `
@@ -231,7 +232,7 @@
         color: #515151;
         margin-left: 10px;
         `;
-//font-size: 13px;
+        //font-size: 13px;
             nuevoElemento.style = `
         border-radius: 10px;
         margin-bottom: 8px;
@@ -281,6 +282,7 @@
             divGrande.style = `width: 100%; background-color: black;`;
             // Configurar contenido y estilos
             elementoH1.textContent = elemento['mensaje_enviado'];
+            elementoH1.style.fontSize = '1.1rem';
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
 
             divGrande.style = `display: flex; justify-content: flex-end; `;
@@ -290,13 +292,12 @@
         margin-left: 30px;
 
         `;
-//font-size: 13px;
+
             nuevoElemento.style = `
         border-radius: 10px;
         margin-bottom: 8px;
         background-color: #dcf8c6;
         font-family: Monserrat;
-
         line-height: 1;
         color: #00000;
         padding-left: 10px;

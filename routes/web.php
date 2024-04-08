@@ -200,6 +200,6 @@ Route::get('/hoteles/{hotel}/edit', [HotelController::class, 'edit'])
 Route::put('hoteles/{hotel}',  [HotelController::class, 'update'])
     ->name('hotel.update');
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+Route::get('/', function () {
+    return view('welcome');
+});

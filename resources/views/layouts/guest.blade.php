@@ -7,8 +7,9 @@
         <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, post-check=0, pre-check=0">
         <meta http-equiv="Pragma" content="no-cache">
         <meta http-equiv="Expires" content="0">
+        <link rel="icon" type="image/png"  sizes="200x200"  href="{{ asset('images/logoFondoNegro.jpeg') }}">
+        <title>Trivai</title>
 
-        <title>{{ config('app.name', 'CRM') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

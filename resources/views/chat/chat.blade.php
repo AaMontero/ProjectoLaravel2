@@ -12,10 +12,10 @@
             background-color: rgba(0, 0, 0, 0.1);
         }
     </style>
-    <div class="flex space-x-8">
+    <div class="flex flex-col lg:flex-row lg:space-x-8">
         <!-- Notificaciones -->
         <div id="notificaciones"
-            class="w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
+            class="w-full lg:w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
             style="max-height: 700px; border-radius: 10px;">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
@@ -44,8 +44,8 @@
 
         <!-- Chat -->
         <div id="abrirchat"
-            class="relative w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
-            style="display:none;">
+            class="relative w-full lg:w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
+            style="dispaly:none;">
             <h3 class="text-xl font-semibold mb-4">Chat</h3>
             <button onclick="cerrarChat()" class="absolute top-6 right-4 text-gray-600 hover:text-gray-800">
                 <!-- Icono de cierre (X) -->
@@ -63,20 +63,21 @@
                     <img src="{{ asset('images\logoFondoNegro.jpeg') }}" alt="User" class="w-8 h-8 rounded-full">
                     <div id="telefono-chat" class="ml-4"></div>
                 </div>
-                <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4  overflow-auto"
-                    style="max-height: 480px;">
+                <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4 overflow-auto"
+                    style="max-height: 500px;">
                     <ul id="miLista">
                     </ul>
                 </div>
                 <!-- Campo de texto para escribir -->
-                <form id="mensajeForm" class="mt-4" method = "GET" action={{ route('chat.envia') }}>
+                <form id="mensajeForm" class="mt-4 flex items-center relative" method = "GET" action={{ route('chat.envia') }}>
                     @csrf
                     <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
-                    <input type="text" id="mensajeInput" name = "mensajeEnvio"
-                        class="w-4/5 border rounded-md py-2 px-5 focus:outline-none focus:border-blue-500"
-                        placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)">
+                    <textarea id="mensajeInput" name="mensajeEnvio" class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
+                    style="height: 40px;"
+                    placeholder="Escribe un mensaje..."  onkeypress="enviarConEnter(event)"></textarea>
+
                     <button type="button" onclick="enviarFormulario()"
-                        class="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
+                        class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
                 </form>
             </div>
         </div>
@@ -84,6 +85,7 @@
 
 
     <script>
+
         //Recibir los mensajes en tiempo real
         Pusher.logToConsole = true;
         var pusher = new Pusher('217450e1ce096539fb1c', {
@@ -168,10 +170,10 @@
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-            width: 350px; 
+            width: 350px;
             height: auto;
             margin-bottom: 5px;
-            margin-left:5px; 
+            margin-left:5px;
             `;
 
             // Estilos para la hora
@@ -179,7 +181,7 @@
         font-size: 12px;
         color: #515151;
         margin-left: 10px;
-    `;
+        `;
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
@@ -193,7 +195,7 @@
         color: #00000;
         margin-right: 100px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    `;
+        `;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
@@ -222,6 +224,7 @@
             var elementoH1 = document.createElement("h4");
             var horaElemento = document.createElement("small");
             elementoH1.textContent = elemento['mensaje_enviado'];
+            elementoH1.style.fontSize = '1.1rem';
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
 
             horaElemento.style = `
@@ -229,14 +232,13 @@
         color: #515151;
         margin-left: 10px;
         `;
-
+        //font-size: 13px;
             nuevoElemento.style = `
         border-radius: 10px;
         margin-bottom: 8px;
         background-color: #ffffff;
         font-family: Monserrat;
-        font-size: 15px;
-        padding-right:10px; 
+        padding-right:10px;
         line-height: 1;
         color: #00000;
         margin-right: 100px;
@@ -279,25 +281,25 @@
             divGrande.style = `width: 100%; background-color: black;`;
             // Configurar contenido y estilos
             elementoH1.textContent = elemento['mensaje_enviado'];
+            elementoH1.style.fontSize = '1.1rem';
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
 
             divGrande.style = `display: flex; justify-content: flex-end; `;
-            horaElemento.style = ` 
+            horaElemento.style = `
         font-size: 12px;
         color: #515151;
         margin-left: 30px;
 
         `;
 
-            nuevoElemento.style = `    
+            nuevoElemento.style = `
         border-radius: 10px;
         margin-bottom: 8px;
         background-color: #dcf8c6;
         font-family: Monserrat;
-        font-size: 15px;
         line-height: 1;
         color: #00000;
-        padding-left: 10px; 
+        padding-left: 10px;
         text-align: right;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
             if (elemento['mensaje_enviado'].length < 20) {

@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -150,17 +150,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('chat.leer_mensajes'); //Marcar los mensajes de un usuario como leidos
 
 
-    // RUTAS DE ROLES
-
-
-
-
-
-
-    //RUTAS DE LOGS
-
-
-
     // RUTAS DE TERMINOS Y CONDICIONES
     Route::get('/politicas-privacidad', function () {
         return view('layouts.politicas');
@@ -210,3 +199,7 @@ Route::get('/hoteles/{hotel}/edit', [HotelController::class, 'edit'])
     ->name('hotel.edit');
 Route::put('hoteles/{hotel}',  [HotelController::class, 'update'])
     ->name('hotel.update');
+
+    Route::get('/', function () {
+        return view('welcome');
+    });

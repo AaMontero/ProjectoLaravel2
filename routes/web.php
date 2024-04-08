@@ -150,17 +150,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('chat.leer_mensajes'); //Marcar los mensajes de un usuario como leidos
 
 
-    // RUTAS DE ROLES
-
-
-
-
-
-
-    //RUTAS DE LOGS
-
-
-
     // RUTAS DE TERMINOS Y CONDICIONES
     Route::get('/politicas-privacidad', function () {
         return view('layouts.politicas');

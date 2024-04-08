@@ -45,7 +45,7 @@
         <!-- Chat -->
         <div id="abrirchat"
             class="relative w-full lg:w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
-            style="dispaly:none;">
+            style="display:none;">
             <h3 class="text-xl font-semibold mb-4">Chat</h3>
             <button onclick="cerrarChat()" class="absolute top-6 right-4 text-gray-600 hover:text-gray-800">
                 <!-- Icono de cierre (X) -->

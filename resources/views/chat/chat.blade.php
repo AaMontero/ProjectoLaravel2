@@ -238,7 +238,6 @@
         margin-bottom: 8px;
         background-color: #ffffff;
         font-family: Monserrat;
-
         padding-right:10px;
         line-height: 1;
         color: #00000;

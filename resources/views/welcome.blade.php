@@ -5,8 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="icon" type="image/png"  sizes="200x200" href="{{ asset('images/logoFondoNegro.jpeg') }}">
 
-    <title>Home</title>
+
+    <title>Trivai</title>
 </head>
 
 <body>
@@ -295,9 +297,7 @@
 
         .btn a {
             text-decoration: none;
-            /* Elimina el subrayado predeterminado */
             color: inherit;
-            /* Utiliza el color de texto predeterminado */
         }
 
         @media (width < 900px) {
@@ -406,7 +406,7 @@
             <button class="btn">Contactanos</button>
         </div>
         <div class="header__image">
-            <img class="img-container" src="{{ asset('images/logo3.png') }}" alt="header" />
+            <img src="{{ asset('images/logo3.png') }}" alt="header" />
         </div>
     </header>
 
@@ -415,7 +415,7 @@
         <span class="bg__blur"></span>
         <span class="bg__blur footer__blur"></span>
         <div class="footer__col">
-            <div class="footer__logo"><img src="{{ asset('images/logo3.png') }}" alt="logo" /></div>
+            <div class="footer__logo"></div>
             <p>
                 TRIVAI facilitará la búsqueda y reserva de tickets aéreos, hospedajes, reservaciones, paquetes
                 turísticos e inclusive brindará la facilidad de crear un itinerario completo.

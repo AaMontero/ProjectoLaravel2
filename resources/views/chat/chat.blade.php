@@ -135,7 +135,7 @@
                     'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
                     numeroAbierto + '&mensajeEnvio=' +
                     textoIngresado;
-                fetch(url)
+                fetch(urlServer)
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);

@@ -161,7 +161,8 @@
 
         // Obtener la lista
         var lista = document.getElementById("miLista");
-        var telefonoEmisor = "593987411818";
+        var telefonoEmisor = "593999938356";
+        var telefonoPruebas = "";
 
         function crearMensajeImgRecibido(elemento) {
             datosImg = JSON.parse(elemento['mensaje_enviado']);

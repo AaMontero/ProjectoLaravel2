@@ -127,14 +127,15 @@
             return new Promise((resolve, reject) => {
                 const textoIngresado = document.getElementById("mensajeInput").value;
                 const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-                const urlServer = 'trivai.me/enviaWpp?_token=' + tokenFin + '&numeroEnvio=' + numeroAbierto +
+                const urlServer = 'https://trivai.me/enviaWpp?_token=' + tokenFin + '&numeroEnvio=' +
+                    numeroAbierto +
                     '&mensajeEnvio=' +
                     textoIngresado;
                 const url =
                     'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
                     numeroAbierto + '&mensajeEnvio=' +
                     textoIngresado;
-                fetch(urlServer)
+                fetch(url)
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);

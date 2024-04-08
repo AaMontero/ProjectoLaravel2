@@ -64,7 +64,7 @@
                     <div id="telefono-chat" class="ml-4"></div>
                 </div>
                 <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4 overflow-auto"
-                    style="max-height: 300px;">
+                    style="max-height: 500px;">
                     <ul id="miLista">
                     </ul>
                 </div>

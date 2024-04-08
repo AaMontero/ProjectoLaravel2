@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', function () {
-        return view('welcome');
+        return view('dashboard');
     })->name('dashboard');
 
     Route::middleware('checkRole:Administrador,superAdmin')->group(function () {
@@ -211,7 +211,6 @@ Route::get('/hoteles/{hotel}/edit', [HotelController::class, 'edit'])
 Route::put('hoteles/{hotel}',  [HotelController::class, 'update'])
     ->name('hotel.update');
 
-    //Inicio
-Route::get('/', function () {
-    return view('welcome');
-});
+    Route::get('/welcome', function () {
+        return view('welcome');
+    })->name('politicas');

@@ -290,8 +290,6 @@
                     selecetHelper: true,
                     eventTextColor: '#ffffff',
 
-
-
                     select: function(start, end, allDays, event, view) {
                         $('#eventoModal').modal('show');
                         $('#start_date').val(moment(start).format('YYYY-MM-DD'));

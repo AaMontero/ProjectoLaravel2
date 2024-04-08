@@ -12,7 +12,7 @@
             background-color: rgba(0, 0, 0, 0.1);
         }
     </style>
-    <div class="flex flex-col lg:flex-row  lg:space-x-8">
+    <div class="flex flex-col lg:flex-row lg:space-x-8">
         <!-- Notificaciones -->
         <div id="notificaciones"
             class="w-full lg:w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
@@ -45,7 +45,7 @@
         <!-- Chat -->
         <div id="abrirchat"
             class="relative w-full lg:w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
-            style="display:none;">
+            style="">
             <h3 class="text-xl font-semibold mb-4">Chat</h3>
             <button onclick="cerrarChat()" class="absolute top-6 right-4 text-gray-600 hover:text-gray-800">
                 <!-- Icono de cierre (X) -->
@@ -63,8 +63,8 @@
                     <img src="{{ asset('images\logoFondoNegro.jpeg') }}" alt="User" class="w-8 h-8 rounded-full">
                     <div id="telefono-chat" class="ml-4"></div>
                 </div>
-                <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4  overflow-auto"
-                    style="max-height: 40px;">
+                <div id="historial-mensajes" class="bg-gray-200 p-2 rounded-lg mb-4 overflow-auto"
+                    style="max-height: 300px;">
                     <ul id="miLista">
                     </ul>
                 </div>
@@ -231,13 +231,13 @@
         color: #515151;
         margin-left: 10px;
         `;
-
+//font-size: 13px;
             nuevoElemento.style = `
         border-radius: 10px;
         margin-bottom: 8px;
         background-color: #ffffff;
         font-family: Monserrat;
-        font-size: 15px;
+
         padding-right:10px;
         line-height: 1;
         color: #00000;
@@ -290,13 +290,13 @@
         margin-left: 30px;
 
         `;
-
+//font-size: 13px;
             nuevoElemento.style = `
         border-radius: 10px;
         margin-bottom: 8px;
         background-color: #dcf8c6;
         font-family: Monserrat;
-        font-size: 15px;
+
         line-height: 1;
         color: #00000;
         padding-left: 10px;

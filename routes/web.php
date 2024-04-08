@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -148,17 +148,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('chat.recibe'); //Recibe los mensajes
     Route::get('visto/{idchat}', [WhatsAppController::class, 'leerMensajesUsuario'])
         ->name('chat.leer_mensajes'); //Marcar los mensajes de un usuario como leidos
-
-
-    // RUTAS DE ROLES
-
-
-
-
-
-
-    //RUTAS DE LOGS
-
 
 
     // RUTAS DE TERMINOS Y CONDICIONES

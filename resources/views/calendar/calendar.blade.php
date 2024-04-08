@@ -93,10 +93,9 @@
     </style>
 
     <body>
-
         <!-- Modal -->
         <div class="modal fade" id="eventoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Nuevo Evento</h5>
@@ -144,9 +143,9 @@
         </div>
 
 
-        <!-- editar Modal -->
+        <!-- editar Modal flex justify-between-->
         <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Editar Evento</h5>
@@ -195,52 +194,55 @@
             </div>
         </div>
 
-        <div class="flex justify-between">
-
-            <!-- Detalles -->
-            <div class="w-1/4 p-4">
-                <div class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
-                    <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
-                    <hr class="mb-2">
-                    <div id="event-details"
-                        class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white relative hidden"
-                        style="display: none;">
-                        <button type="button" id="closedetails" class="btn-close absolute top-0 right-0 mt-1 mr-1"
-                            aria-label="Close"></button>
-                        <div class="mb-2 mt-4">
-                            <strong class="font-semibold">Estado:</strong>
-                            <span id="tituloSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Cliente:</strong>
-                            <span id="clienteSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Fecha de Entrada:</strong>
-                            <span id="fechaInicioSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Fecha de Salida:</strong>
-                            <span id="fechaFinSpan" class="ml-2"></span>
-                        </div>
-                        <div class="mb-2">
-                            <strong class="font-semibold">Hoteles:</strong>
-                            <span id="hotel_nombreSpan" class="ml-2"></span>
-                        </div>
-                        <div class="flex">
-                            <button type="button"
-                                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2"
-                                id="ModalEditar">Editar</button>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="bg-gray-400 text-black shadow-md rounded px-4 py-4">
+                        <h3 class="text-2xl font-bold mb-4 text-center ">Detalles del Evento</h3>
+                        <hr class="mb-2">
+                        <div id="event-details"
+                            class="border-2 border-blue-900 bg-blue-900 shadow-md rounded px-4 py-2 text-white relative hidden"
+                            style="display: none;">
+                            <button type="button" id="closedetails" class="btn-close absolute top-0 right-0 mt-1 mr-1"
+                                aria-label="Close"></button>
+                            <div class="mb-2 mt-4">
+                                <strong class="font-semibold">Estado:</strong>
+                                <span id="tituloSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Cliente:</strong>
+                                <span id="clienteSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Fecha de Entrada:</strong>
+                                <span id="fechaInicioSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Fecha de Salida:</strong>
+                                <span id="fechaFinSpan" class="ml-2"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="font-semibold">Hoteles:</strong>
+                                <span id="hotel_nombreSpan" class="ml-2"></span>
+                            </div>
+                            <div class="flex">
+                                <button type="button"
+                                    class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 ease-in-out mt-2 mb-2"
+                                    id="ModalEditar">Editar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-            <!-- Calendar -->
-            <div class="w-3/4 p-4">
-                <div id="calendar"></div>
+                <!-- Calendar -->
+                <div class="col-lg-8 col-md-6 mb-4">
+                    <div id="calendar"></div>
+                </div>
             </div>
+
+            <!-- Detalles -->
+
         </div>
 
 
@@ -259,6 +261,8 @@
                 });
                 var evento = @json($event);
                 $('#calendar').fullCalendar({
+
+
                     header: {
                         left: 'prev, next today',
                         center: 'title',
@@ -286,29 +290,9 @@
                     selecetHelper: true,
                     eventTextColor: '#ffffff',
 
-                    eventRender: function(event, element) {
-                        var colorMapping = {
-                            'Prereservado': '#00227f',
-                            'Reservado': '#FF0000',
-                            'Disponible': '#0C7E21'
-                        };
-                        if (colorMapping[event.title]) {
-                            // Aplica el color correspondiente al evento
-                            element.css('background-color', colorMapping[event.title]);
-                        }
-                        var content = '';
-                        if (event.title === 'Prereservado' || event.title === 'Reservado') {
-                            content = '<div class="event-title">' + event.title + ', ' + event
-                                .hotel_nombre + ', ' + event.cliente_cedula + '</div>';
-                        } else {
-                            content = '<div class="event-title">' + event.title + '</div>';
-                        }
-                        // Agregar el contenido al elemento del evento
-                        element.find('.fc-content').html(content);
 
-                    },
 
-                    select: function(start, end, allDays) {
+                    select: function(start, end, allDays, event, view) {
                         $('#eventoModal').modal('show');
                         $('#start_date').val(moment(start).format('YYYY-MM-DD'));
                         $('#end_date').val(moment(end).format('YYYY-MM-DD'));
@@ -507,6 +491,27 @@
                             'second').utcOffset(false), 'day');
                     },
 
+                    eventRender: function(event, element) {
+                        var colorMapping = {
+                            'Prereservado': '#00227f',
+                            'Reservado': '#FF0000',
+                            'Disponible': '#0C7E21'
+                        };
+                        if (colorMapping[event.title]) {
+                            // Aplica el color correspondiente al evento
+                            element.css('background-color', colorMapping[event.title]);
+                        }
+                        var content = '';
+                        if (event.title === 'Prereservado' || event.title === 'Reservado') {
+                            content = '<div class="event-title">' + event.title + ', ' + event
+                                .hotel_nombre + ', ' + event.cliente_cedula + '</div>';
+                        } else {
+                            content = '<div class="event-title">' + event.title + '</div>';
+                        }
+                        // Agregar el contenido al elemento del evento
+                        element.find('.fc-content').html(content);
+
+                    },
 
                 });
 

@@ -86,6 +86,17 @@
 
 
     <script>
+        var desarrollo = true;
+        var telefonoEmisor = '593999938356';
+        var tokenFin =
+            "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
+        var urlPrincipal = "https://trivai.me"
+        if (desarrollo) {
+            urlPrincipal = "127.0.0.1:8000"
+            telefonoEmisor = '593987411818';
+            tokenFin =
+                "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
+        }
         //Recibir los mensajes en tiempo real
         Pusher.logToConsole = true;
         var pusher = new Pusher('217450e1ce096539fb1c', {
@@ -121,18 +132,16 @@
         }
 
         function llamadaAjax() { //
-            const tokenFin =
-                "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
-            const numEnvia = "593999938356";
+
             return new Promise((resolve, reject) => {
                 const textoIngresado = document.getElementById("mensajeInput").value;
                 const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-                const urlServer = 'https://trivai.me/enviaWpp?_token=' + tokenFin + '&numeroEnvio=' +
+                const urlServer = '/enviaWpp?_token=' + tokenFin + '&numeroEnvio=' +
                     numeroAbierto +
                     '&mensajeEnvio=' +
                     textoIngresado;
                 const url =
-                    'http://localhost:8000/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
+                    urlPrincipal + '/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
                     numeroAbierto + '&mensajeEnvio=' +
                     textoIngresado;
                 fetch(urlServer)
@@ -161,7 +170,6 @@
 
         // Obtener la lista
         var lista = document.getElementById("miLista");
-        var telefonoEmisor = "593999938356";
         var telefonoPruebas = "";
 
         function crearMensajeImgRecibido(elemento) {
@@ -389,7 +397,6 @@
                         elementoCreado = crearMensajeEnviado(elemento);
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
-
                             elementoCreado = crearMensajeImgRecibido(elemento);
                         } else {
                             elementoCreado = crearMensajeRecibido(elemento);

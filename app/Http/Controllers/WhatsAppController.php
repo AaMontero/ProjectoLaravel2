@@ -9,10 +9,8 @@ use Exception;
 use App\Models\Notificacion;
 use Illuminate\Http\Request;
 
-
 class WhatsAppController extends Controller
 {
-
     public function index()
     {
         $mensajes = WhatsApp::all();
@@ -23,13 +21,42 @@ class WhatsAppController extends Controller
     {
         $mensaje = $request->mensajeEnvio;
         $numeroEnviar = $request->numeroEnvio;
+        return $this->enviarMensaje($numeroEnviar, $mensaje);
+    }
+
+
+    public function enviarMensajeChatBot($numeroEnviar, $mensajeLlega)
+    {
+
+        if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
+            $numeroEnviar = '593' . substr($numeroEnviar, 1);
+        }
+        if ($mensajeLlega == "imagen") {
+            $mensaje =  $this->conversacion("Listo");
+        } else {
+            $mensaje  = $this->conversacion($mensajeLlega);
+        }
+
+        if (gettype($mensaje) != 'array') {
+            $this->enviarMensaje($numeroEnviar, $mensaje);
+        } else {
+            foreach ($mensaje as $elem) {
+                $this->enviarMensaje($numeroEnviar, $elem);
+                sleep(30);
+            }
+        }
+    }
+
+    function enviarMensaje($numeroEnviar, $mensaje)
+    {
+        $telefonoEnviaID = getenv('WPP_ID');
+        $apiUrl = 'https://graph.facebook.com/v' . getenv('WPP_VERSION') . '/';
+        $apiKey = getenv('WPP_TOKEN');
         if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
 
-        $telefonoEnviaID = getenv("WPP_ID");
-        $apiUrl = 'https://graph.facebook.com/v18.0/';
-        $apiKey = getenv("WPP_TOKEN");
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_VERBOSE, true);
         curl_setopt_array($curl, array(
@@ -55,80 +82,11 @@ class WhatsAppController extends Controller
             ),
         ));
         $response = curl_exec($curl);
+        $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
         $whatsApp->mensaje_enviado = $mensaje;
-        $whatsApp->id_wa = "asdasdasd"; //Toca cambiar 
-        $whatsApp->telefono_wa = getenv("WPP_NUM");
-        $whatsApp->id_numCliente = $numeroEnviar;
-        $whatsApp->fecha_hora = new DateTime('now');
-        $whatsApp->visto = true;
-        $whatsApp->save();
-        curl_close($curl);
-        return json_encode($whatsApp);
-    }
-
-
-    public function enviarMensajeChatBot($numeroEnviar, $mensajeLlega)
-    {
-
-
-
-        if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
-            $numeroEnviar = '593' . substr($numeroEnviar, 1);
-        }
-        //file_put_contents("elem.txt", $mensajeLlega);
-
-        if ($mensajeLlega == "imagen") {
-            $mensaje =  $this->conversacion("Listo");
-        } else {
-            $mensaje  = $this->conversacion($mensajeLlega);
-        }
-
-        if (gettype($mensaje) != 'array') {
-            $this->enviarMensaje($numeroEnviar, $mensaje);
-        } else {
-            //file_put_contents("segundo elemento.txt", $mensaje[1]);
-            foreach ($mensaje as $elem) {
-                $this->enviarMensaje($numeroEnviar, $elem);
-                sleep(30);
-            }
-        }
-    }
-
-    function enviarMensaje($numeroEnviar, $mensaje)
-    {
-        $telefonoEnviaID = getenv("WPP_ID");
-        $apiUrl = 'https://graph.facebook.com/v18.0/';
-        $apiKey = getenv("WPP_TOKEN");
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_VERBOSE, true);
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $apiUrl . $telefonoEnviaID . '/messages',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode([
-                "messaging_product" => "whatsapp",
-                "to" => $numeroEnviar, // Número de teléfono del destinatario
-                "type" => "text", // Tipo de mensaje
-                "text" => [
-                    "body" => $mensaje, // Cuerpo del mensaje de texto
-                ],
-            ]),
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json',
-                'Authorizataion: Bearer ' . $apiKey,
-            ),
-        ));
-        curl_exec($curl);
-        $whatsApp = new WhatsApp();
-        $whatsApp->mensaje_enviado = $mensaje;
-        $whatsApp->id_wa = "asdasdasd"; //Revisar 
-        $whatsApp->telefono_wa = getenv("WPP_NUM");
+        $whatsApp->id_wa = $idMensajeEnviar;
+        $whatsApp->telefono_wa = "593987411818";
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
         $whatsApp->visto = true;
@@ -169,110 +127,45 @@ class WhatsAppController extends Controller
         if ($respuesta === false) {
             exit; // Salir si no se reciben datos
         }
-        // Archivo llegando bien
         $respuesta = json_decode($respuesta, true);
-        $tipo = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['type'];
-        $id = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['id'];
-        $telefonoUser = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['from'];
-        $timestamp = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['timestamp'];
+        $mensaje = $respuesta['entry'][0]['changes'][0]['value']['messages'][0];
+        $tipo = $mensaje['type'];
+        $id = $mensaje['id'];
+        $telefonoUser = $mensaje['from'];
+        $timestamp = $mensaje['timestamp'];
         $sqlCantidad = WhatsApp::where('id_wa', $id)->count();
         if ($sqlCantidad == 0) {
-            if ($tipo == "image") {
-                // Entrando dentro de la imagen
-                $idImagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image']['id'];
-                $textoImagen = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image']['caption']) ?
-                    $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image']['caption'] : "";
-                $url = "https://graph.facebook.com/v19.0/" . $idImagen;
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => $url,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'GET',
-                    CURLOPT_HTTPHEADER => array(
-                        'Authorization: Bearer ' . getenv("WPP_TOKEN")
-                    ),
-                ));
-                $response = curl_exec($curl);
-                $responseData = json_decode($response, true);
-                $urlDescarga = isset($responseData['url']) ? $responseData['url'] : "";
+            if ($tipo == "audio") {
+                $audio = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['audio'];
+                $idAudio = $audio['id'];
+                $responseAudio = $this->obtenerMultimedia($idAudio);
+                $directorio = 'uploads/audiosWpp/' . $telefonoUser;
+                $rutaAudio = $directorio . '/' . $timestamp . 'audio.ogg';
 
-                if ($urlDescarga != "") {
-                    $rutaImagen = 'uploads/imagenesWpp/' . $telefonoUser . '/' . $timestamp . 'imagen.jpeg';
-                    $directorio = 'uploads/imagenesWpp/' . $telefonoUser;
-                    if (!is_dir($directorio)) {
-                        mkdir($directorio, 0777, true);
-                    }
-                    file_put_contents($rutaImagen, file_get_contents($urlDescarga));
-                    $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
+                if (!is_dir($directorio)) {
+                    mkdir($directorio, 0777, true);
                 }
-                $this->enviarMensajeChatBot($telefonoUser, "imagen");
-            } elseif ($tipo == "audio") {
-
-                $idAudio = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['audio']['id'];
-                $url = "https://graph.facebook.com/v19.0/" . $idAudio;
-
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => $url,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'GET',
-                    CURLOPT_HTTPHEADER => array(
-                        'Authorization: Bearer ' . getenv("WPP_TOKEN")
-                    ),
-                ));
-                $response = curl_exec($curl);
-                curl_close($curl);
-                $responseData = json_decode($response, true);
-                //file_put_contents("audioRes.txt", $response);
-                //file_put_contents("audioResData.txt", $responseData);
-                //$urlDescarga = isset($response['url']) ? $response['url'] : "";
-                $urlDescarga = $responseData;
-                $curl2 = curl_init();
-                $urlCorregido = str_replace('audio/ogg', 'audio%2Fogg', $responseData);
-                //file_put_contents("urlCorregido.txt", $urlCorregido);
-                curl_setopt_array($curl2, array(
-                    CURLOPT_URL => 'https://lookaside.fbsbx.com/whatsapp_business/attachments/?mid=1892935764484584&ext=1712597640&hash=ATtRbK3IjmIWFFZYSITQKqQtydvppKgkYKPAO3gxnYll7Aaudio%2Fogg3b5fd33bad02e418bd8117ce019d57f419a5e563a66563d1ff3cb4071bf4531f57031892935764484584whatsapp',
-                    //CURLOPT_URL => $urlCorregido,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'GET',
-                    CURLOPT_HTTPHEADER => array(
-                        'Authorization: Bearer' . getenv("WPP_TOKEN"),
-                    ),
-                ));
-                $responseAudio = curl_exec($curl2);
-
-                //file_put_contents("audioFinal.txt", $responseAudio);
-                if ($responseAudio != "") {
-                    $rutaImagen = 'uploads/audiosWpp/' . $telefonoUser . '/' . $timestamp . 'audio.ogg';
-                    $rutaImagenmp3 = 'uploads/audiosWpp/' . $telefonoUser . '/' . $timestamp . 'audio.mp3';
-
-                    $directorio = 'uploads/audiosWpp/' . $telefonoUser;
-                    if (!is_dir($directorio)) {
-                        mkdir($directorio, 0777, true);
-                        file_put_contents("entreCarpeta.txt", "Esta entrando a no hay carpeta");
-                    }
-                    //file_put_contents($rutaImagen, "llegaambos");
-                    // file_put_contents($rutaImagenmp3, "llegaambos");
-                    file_put_contents($rutaImagen, file_get_contents($responseAudio));
-                    file_put_contents($rutaImagenmp3, file_get_contents($responseAudio));
-                    curl_close($curl2);
+                file_put_contents($rutaAudio, $responseAudio);
+                $mensaje = '{"rutaAudio": "' . $rutaAudio . '"}';
+            } elseif ($tipo == "image") {
+                $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
+                $idImagen = $imagen['id'];
+                $textoImagen = isset($imagen['caption']) ?
+                    $imagen['caption'] : "";
+                $responseIMG = $this->obtenerMultimedia($idImagen);
+                $directorio = 'uploads/imagenesWpp/' . $telefonoUser;
+                $rutaImagen = $directorio . '/' . $timestamp . 'imagen.jpeg';
+                if (!is_dir($directorio)) {
+                    mkdir($directorio, 0777, true);
                 }
+                file_put_contents($rutaImagen, $responseIMG);
+                $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
+                //$this->enviarMensajeChatBot($telefonoUser, "imagen");
             } else {
                 $mensaje = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']) ?
                     $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] : "";
                 $this->enviarMensajeChatBot($telefonoUser, $mensaje);
             }
-
-            // Guardar el mensaje recibido en la base de datos
             $whatsApp = new WhatsApp();
             $whatsApp->timestamp_wa = $timestamp;
             $whatsApp->mensaje_enviado  = $mensaje;
@@ -344,6 +237,9 @@ class WhatsAppController extends Controller
     }
     public function crearNotificacion($mensaje, $comentario)
     {
+        if ($mensaje->startwWith('{"ruta"')) {
+            $mensaje = "Ha recibido un archivo multimedia";
+        }
         $notificacion = new Notificacion;
         $notificacion->descripcion = $mensaje;
         $notificacion->comentario = $comentario;
@@ -357,6 +253,38 @@ class WhatsAppController extends Controller
         $mensaje = str_replace(array('á', 'é', 'í', 'ó', 'ú', 'ü'), array('a', 'e', 'i', 'o', 'u', 'u'), $mensaje);
         return $mensaje;
     }
+    function obtenerMultimedia($idMedia)
+    {
+        $url = 'https://graph.facebook.com/' . getenv('WPP_MULTIVERSION') . '/' . $idMedia;
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . getenv('WPP_TOKEN')
+            ),
+        ));
+        $response = curl_exec($curl);
+        $responseData = json_decode($response, true);
+        $urlDescarga = isset($responseData['url']) ? $responseData['url'] : "";
+        $curl2 = curl_init();
+        curl_setopt_array($curl2, array(
+            CURLOPT_URL => $urlDescarga,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_USERAGENT => 'PostmanRuntime/7.34.0',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . getenv('WPP_TOKEN')
+            ),
+        ));
+        return curl_exec($curl2);
+    }
+
 
     function conversacion($mensajeRecibido)
     {

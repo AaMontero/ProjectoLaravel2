@@ -293,38 +293,99 @@ class WhatsAppController extends Controller
 
         $mensajenoTilde = $util->convertirMinNoTilde($mensajeRecibido);
         switch ($mensajenoTilde) {
-            case $util->convertirMinNoTilde("Hola, ayúdame con información"):
-                return "¡Encantado! ¿Con quién tengo el gusto?";
+            case $util->convertirMinNoTilde("Buenos días", "Me podría ayudar con más información sobre promociones en Cartagena,Orlando y Miami"):
+                return "Buenos días ☺️☀️para poder ayudarte necesitamos saber la siguiente información\nNombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
                 break;
-            case $util->convertirMinNoTilde("Me llamo Paul"):
-                return "Mucho gusto, Paul. ¿En qué puedo ayudarte?";
+            case $util->convertirMinNoTilde("Nombre Antonella Garcia\nCorreo electrónico antonella.garciacamacho@gmail.com\nDestino Cartagena\nFecha tentativa 25 de mayo del 2024\nCuantas personas viajan 2\nEdades 24 y 25\nSalida de Quito o Guayaquil Quito"):
+                $mesnaje0 = "Estimada Antonella García\n¡Gracias por ponerte en contacto con nosotros para planificar tu viaje a Cartagena! Nos emociona mucho ayudarte a organizar una experiencia inolvidable.";
+                $mensaje1 = "Recibimos su pedido de cotización a Cartagena para dos personas para la fecha del 25 de mayo me puede confirmar.";
+                $retorno = [$mesnaje0, $mensaje1];
+                return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Quiero viajar a México, ¿qué me recomendarías?"):
-                return "Claro, contamos con el siguiente paquete de viaje a México-Cancún:\nPaquete: Grand Oasis Cancún\nDuración: 4 días y 3 noches\nPrecio: $450\nServicios: Traslado aeropuerto CUN – Hotel – aeropuerto CUN.\n- Participación en actividades y entretenimiento del hotel.\n- Sistema de alimentación todo incluido.\n- Habitación Gran Estándar.\n\n¿Te gustaría reservar este paquete o necesitas más información?";
+            case $util->convertirMinNoTilde("Si porfavor ☺️"):
+                $mensaje2 = "CARTAGENA 3 NOCHES Ticket aéreo Guayaquil o Quito / Cartagena / Quito o Guayaquil Vía avianca\n\nINCLUYE:\n\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n•	03 noches de alojamiento en HOTEL ZALMEDINA\n•	Desayunos diarios\n•	Cortesía:\n-	City tour + Visita al Castillo de San Felipe con entrada.\n-	Chip + bolsa de café por habitación\n•	Impuestos hoteleros y aéreos\n$447";
+                $mensaje3 = "CARTAGENA 3 NOCHES TODO INLUIDO Ticket aéreo Guayaquil o Quito / Cartagena / Quito o Guayaquil Vía avianca\n\nINCLUYE:\n\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n•	03 noches de alojamiento en HOTEL CARTAGENA PLAZA\n•	Desayuno, almuerzo y cena tipo buffet\n•	Snacks y bar abierto\n•	  Piscina panorámica\n•	  Bar & discoteca\n•	Noches temáticas y shows de baile\n•	Kids & teen clubs\n•	Wifi gratuito en las instalaciones\n•	CORTESÍAS:\n-	City tour + Castillo de San Felipe con entrada\n-  Chip celular y bolsa de café por habitación\n$565";
+                $mensaje4 = "¡CARTAGENA! ALL INCLUSIVE 04 NOCHES Ticket aéreo QUITO - GUAYAQUIL / CARTAGENA / GUAYAQUIL - QUITO\n\nINCLUYE:\n\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n• 	04 noches de alojamiento en HOTEL CARTAGENA PLAZA\n•	Desayuno, almuerzo y cena tipo buffet\n•	Snacks y bar abierto\n•	Piscina panorámica\n•	Bar & discoteca\n•	Noches temáticas y shows de baile\n•	Kids & teen clubs\n•	Wifi gratuito en las instalaciones\n$829";
+                $mensaje5 = "Te proporcionamos tres opciones de cotización para tu viaje a Cartagena.\nCon gusto ☺️ por favor, revisa la cotización adjunta para más detalles sobre vuelos, alojamiento y servicios incluidos. Si estás de acuerdo y deseas proceder con la reserva, o necesitas ajustes en el itinerario háznoslo saber. Estamos aquí para ayudarte en todo el proceso de planificación.";
+                $retorno = [$mensaje2, $mensaje3, $mensaje4, $mensaje5];
+                return $retorno;
+                break;
+            case $util->convertirMinNoTilde("Muchas gracias ya las reviso ☺️", "Me intereso cartagena 3 noches todo incluido porfavor", "Cómo puedo proceder con la reserva?"):
+                return "¡Por supuesto! Para proceder con la reserva, necesitaremos algunos detalles adicionales de tu parte. Por favor, proporciona los siguientes datos:\nNombres completos de los viajeros:\nNúmeros de pasaporte:\nDirección de correo electrónico y número de teléfono de contacto:\nCualquier preferencia especial o requisito dietético que necesitemos tener en cuenta durante tu estadía.\nUna vez que recibamos esta información, nuestro equipo se pondrá en contacto contigo para confirmar la reserva y proceder con los detalles de pago.\nSi tienes alguna pregunta o necesitas ayuda adicional, no dudes en hacérnoslo saber.";
+                break;
+            case $util->convertirMinNoTilde("Antonella Garcia\n1764309854\nAntonella.garciacamacho@gmail.con\nVegetariana\n\nAdrián Ruiz\n1845876324\nAdriag2345@gmail.com\nNinguna"):
+                return "¡Perfecto, Antonella y Adrián! Hemos registrado sus detalles y preferencias. Nuestro equipo se pondrá en contacto contigo en breve para confirmar la reserva y proporcionarte todos los detalles necesarios para tu viaje a Cartagena.";
                 break;
             case $util->convertirMinNoTilde("¿Cuáles son las fechas disponibles para este paquete?"):
                 return "Las fechas disponibles para el paquete Grand Oasis Cancún, México son: del 10 al 20 de agosto, del 20 al 31 de septiembre y del 5 al 15 de octubre. ¿Te gustaría reservar?";
                 break;
-            case $util->convertirMinNoTilde("Me gustaría reservar para el 10 al 15 de agosto"):
-                return "Perfecto, ¿cuántas personas serán?";
+            case $util->convertirMinNoTilde("Gracias"):
+                return "•   Para mantener esta reservación en firme se requiere el pago del abono de $100, NO REEMBOLSABLE en el caso de pasajeros individuales o grupos. Aplica hasta 31 días antes del viaje para individuales y 46 días para grupos.\n•	El pago total de una reservación deberá ser realizada hasta 30 días antes de la salida.\n•	Si una reservación ingresa 30 días antes de la salida, el pago total deberá estar realizado en 24 horas luego de haber sido realizada la misma.\n•	Reservaciones que no tengan pago SE CANCELARÁN a las 24 HORAS.\n•	En el caso de grupos de pasajeros el pago total se debe realizar 45 días antes de la salida.\n•	Penalidad por cambio de nombre: USD $150 hasta 10 días antes de la salida en vuelo chárter.\n•	No se permite cambios de fecha o destino.\n•	Al momento de la facturación usted acepta estar de acuerdo con los servicios detallados y está de acuerdo con las penalidades descritas en esta liquidación de servicios sin excepción alguna.";
                 break;
-            case $util->convertirMinNoTilde("Dos personas"):
-                return "El valor para la reserva del paquete Grand Oasis Cancún es de $450. Confirma tu reserva, por favor proporcionándome los nombres de los pasajeros, un número de cédula y un correo electrónico.";
+            case $util->convertirMinNoTilde("Listo cuáles serían los métodos de pago"):
+                return "Claro Para completar tu reserva, te ofrecemos varias opciones de pago. Puedes realizar una transferencia bancaria, pagar con tarjeta de crédito o utilizar otras plataformas de pago en línea. Por favor, avísanos cuál prefieres y te proporcionaremos los detalles necesarios para proceder.";
                 break;
-            case $util->convertirMinNoTilde("Paul Romero y Carla Garzon, CI: 1234567890, paulromero90@gmail.com"):
-                return "Gracias, el valor de tu reserva sería $450. Tenemos diferentes formas de pago:\n1- Transferencia\n2- Pago con tarjeta de crédito (PayPhone)\nO puedes solicitar contactarte con uno de nuestros asesores especializados.";
+            case $util->convertirMinNoTilde("Deseo pagar con tarjeta de crédito"):
+                return "Claro para procesar el pago con tarjeta de crédito, por favor haz clic en el siguiente link: https://www.payphone.app/.";
                 break;
-            case $util->convertirMinNoTilde("Voy a realizar mi pago con una tarjeta de crédito"):
-                return "Para finalizar el proceso, por favor haz clic en el siguiente enlace para proceder con el pago: https://www.payphone.app/.\n\nUna vez completado el pago, recibirás un correo electrónico con todos los detalles de tu pago.";
+            case $util->convertirMinNoTilde("Y si deseo pagar en efectivo?"):
+                return "No hay problema. Para realizar el pago, por favor acérquese a nuestras oficinas ubicadas en el centro comercial Galería Plaza, Local N7.  ¿A qué hora te gustaría agendar una cita? Estamos disponibles de lunes a viernes de 9 am a 6 pm . Por favor, avísenos su preferencia para coordinar la cita. ¡Gracias!";
                 break;
-            case $util->convertirMinNoTilde("En este momento ya realicé el pago"):
-                return "Por favor, envía una captura de pantalla del comprobante de pago.";
+            case $util->convertirMinNoTilde("No voy a poder acercarme :( deseo que me mande su número de cuenta mejor, para hacerle el abono"):
+                return "Con gusto, los datos de la cuenta bancaria son:\nCuenta Corriente Banco Guayaquil\nCuenta N°: 0041291060\nNombre: Trivai S.A\nRUC: 1793198413001";
                 break;
+                //mandas la foto
             case $util->convertirMinNoTilde("Listo"):
-                $mensaje1 = "En este momento estamos verificando el pago...";
-                $mensaje2 = "Tu pago se ha creditado correctamente. Recibirás un correo electrónico con más detalles de tu viaje.";
-                $retorno = [$mensaje1, $mensaje2];
+                $mensaje6 = "¡Muchas gracias por realizar tu pago! En este momento procedemos a confirmar tu reserva y asegurarnos de que todo esté en orden para tu viaje. Si tienes alguna pregunta o necesitas asistencia durante el proceso de pago, no dudes en contactarnos. Puedes comunicarte con nuestro equipo de soporte al número 099926280 que te acompañara en tu viaje.";
+                $mensaje7 = "Estimado/a Antonella García y Adrian Ruiz\n\n Queremos confirmar que hemos recibido su pago y que su reserva está ahora completa. Todos los detalles de su viaje han sido registrados y estamos emocionados de asistirlo/a en cada paso del camino.\nSi tiene alguna pregunta adicional o necesita más información, no dude en ponerse en contacto con nosotros. Estamos aquí para ayudarlo/a.\n¡Gracias por confiar en nosotros para su viaje y esperamos que tenga una experiencia memorable!";
+                $retorno = [$mensaje6, $mensaje7];
                 return $retorno;
+                break;
+            case $util->convertirMinNoTilde("Muchísimas gracias ☺️", "También quería preguntarle si tiene paquetes a Orlando y Miami"):
+                $mensaje8 = "ORLANDO FANTASTICO\n05 NOCHES\nGVMCO24-002\n\nINCLUYE:\n\nTicket aéreo UIO/GYE – BOG – MCO – BOG – GYE/UIO vía AVIANCA AIRLINES\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n•	05 noches de alojamiento en HOTEL ROSEN INN LAKE BUENAVISTA\n•	Desayunos Buffet diarios (07:00 a 9:00)\n•	01 día de admisión a AQUATICA\n•	01 día de admisión a SEAWORLD\n•	01 día de admisión al BUSCH GARDENS\n•	CORTESÍA POR HABITACIÓN:\n-	01 almohada de viaje\n-	Tour de compras PREMIUM OUTLET\n$1441";
+                $mensaje9 = "¡ORLANDO FULL!\n 05 NOCHES\nGVMCO01\n\n Ticket aéreo Quito o Guayaquil/ Orlando / Quito o Guayaquil vía COPA AIRLINES\n\nINCLUYE:\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n•	05 noches de alojamiento en HOTEL ROSEN INN LAKE BUENAVISTA\n•	Desayunos\n•	01 día de visita a Universal Studios park-to-park con admisión y traslados ida y vuelta\n•	01 día de visita a Isla de la aventura park-to-park, con admisión y traslados ida y vuelta\n•	01 día de tour de compras a Premium Outlet International Drive, con traslados ida y vuelta\n•	01 día libre\n•	Impuestos hoteleros y aéreos\n$1528";
+                $retorno = [$mensaje8, $mensaje9];
+                return $retorno;
+                break;
+            case $util->convertirMinNoTilde("Gracias porfavor me puede enviar para Miami"):
+                $mensaje10 = "¡MIAMI SALE!\n 03 NOCHES\nTicket aéreo Quito o Guayaquil / Miami / Quito o Guayaquil VÍA avianca\INCLUYE:\n•	Traslado aeropuerto / hotel en servicio shuttle*\n•	03 noches de alojamiento en HOTEL CLARION INN & SUITES MIAMI\n•	Tour de compras a Dolphin Mall\n•	Impuestos aéreos y hoteleros\n$627";
+                $mensaje11 = "¡MIAMI SALE!\n03 NOCHES\nTicket aéreo Quito o Guayaquil / Miami / Quito o Guayaquil VÍA avianca\nINCLUYE:\n•	Traslado aeropuerto / hotel en servicio shuttle*\n•	03 noches de alojamiento en HOTEL CLARION INN & SUITES MIAMI\n•	Tour de compras a Dolphin Mall\n•	Impuestos aéreos y hoteleros\n$627";
+                $retorno = [$mensaje10, $mensaje11];
+                return $retorno;
+                break;
+            case $util->convertirMinNoTilde("Muchas gracias los voy a revisar para unas próximas vacaciones"):
+                return "Con gusto Antonella. Por favor ten en cuenta que los precios están sujetos a disponibilidad y podrían variar hasta la confirmación final de la reserva, si deseas proceder con ella, háznoslo saber y estaremos encantados de gestionarlo todo para ti.";
+                break;
+            case $util->convertirMinNoTilde("Lo entiendo, Gracias","Señorita de igual manera mi madre desea ir a Europa porfavor me puede mandar las opciones"):
+                return "Estimada Antonella para poder ayudarle necesitamos saber la siguiente información\n Nombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
+                break;
+            case $util->convertirMinNoTilde("Nombre: Marisol Camacho\nCorreo: Marylu3020@gmail.com\nDestino: Europa\nFecha tentativa: 15 de Junio\nCuántas personas: 1\nEdad: 60\n Salida: Quito"):
+                return "Recibimos su pedido de cotización a Europa para una persona para la fecha del 15 de junio  me puede confirmar.";
+                break;
+            case $util->convertirMinNoTilde("Si porfavor"):
+                $mensaje12 = "Antonella, le adjunto la cotización del Eurotrip dorada para las fechas estipuladas";
+                $mensaje13 = "Programa Incluye\nTour 16 días - 15 noches\n* Boleto aéreo QUITO - MADRID- QUITO con Iberia\n* Traslado aeropuerto – hotel – aeropuerto\n* Alojamiento en categoría Turista\n* Desayuno diario Buffet\n* Guía acompañante durante todo el viaje\n* Guías locales en español en las visitas indicadas en el itinerario\n* SEGURO DE VIAJE (APLICA PARA VISADO SCHENGEN)\n* Impuestos aéreos\n* Impuestos Ecuatorianos\n$3422";
+                $retorno = [$mensaje12, $mensaje13];
+                return $retorno;
+                break;
+            case $util->convertirMinNoTilde("Qué ciudades se visitan ?"):
+                return "Madrid,Paris,Venecia,Florencia,Roma,Costa Azul,Barcelona,Zaragoza";
+                break;
+            case $util->convertirMinNoTilde("Muchas gracias ☺️ ya le confirmos","Porfavor señorita pueden solo enviarme la cotización de un vuelo a Madrid"):
+                return "¡Por supuesto! Antonella para poder ayudarte necesitamos la siguiente información para enviarte las opciones de vuelo disponibles.\nFecha de salida:\n Destino:\n Número de pasajeros:";
+                break;
+            case $util->convertirMinNoTilde("15 de junio - 15 de julio\nMadrid\n1"):
+                $mensaje12 = "Encontramos dos opciones buenas de viaje para ti en las fechas estipuladas";
+                $mensaje13 = "https://www.avianca.com/es/booking/select/?departure1=2024-06-15&departure2=2024-07-15&platform=WEBB2C&origin1=UIO&destination1=MAD&adt1=1&chd1=0&inf1=0&posCode=EC&origin2=MAD&destination2=UIO&adt2=1&chd2=0&inf2=0&currency=USD&CorporateCode=&Device=Web";
+                $mensaje14 = "https://www.latamairlines.com/ec/es/seleccion-asientos?id=LA4625048IYJY";
+                $retorno = [$mensaje12, $mensaje13, $mensaje14];
+                return $retorno;
+                break;
+            case $util->convertirMinNoTilde("Gracias"):
+                return "Gracias a ti. ¡Buen viaje!";
+                break;
+            case $util->convertirMinNoTilde("Gracias"):
+                return "Gracias a ti. ¡Buen viaje!";
                 break;
             case $util->convertirMinNoTilde("Gracias"):
                 return "Gracias a ti. ¡Buen viaje!";

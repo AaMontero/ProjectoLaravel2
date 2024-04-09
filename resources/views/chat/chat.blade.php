@@ -76,7 +76,6 @@
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px;" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
-
                     <button type="button" onclick="enviarFormulario()"
                         class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
                 </form>

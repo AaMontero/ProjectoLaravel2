@@ -255,7 +255,7 @@ class WhatsAppController extends Controller
     }
     function obtenerMultimedia($idMedia)
     {
-        $url = 'https://graph.facebook.com/' . getenv('WPP_MULTIVERSION') . '/' . $idMedia;
+        $url = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . $idMedia;
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,

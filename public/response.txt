@@ -1,1 +1,0 @@
-{"url":"https:\/\/lookaside.fbsbx.com\/whatsapp_business\/attachments\/?mid=25042018822110007&ext=1712693337&hash=ATs4nVch66uN8MojplcHQNYxblOK76aEDsfyAtfuGgnoDQ","mime_type":"audio\/ogg","sha256":"ef3e22149108fb0d5ed2373b2fc78bb2205078d301db8e2d8d1cb7e1994768dd","file_size":6272,"id":"25042018822110007","messaging_product":"whatsapp"}

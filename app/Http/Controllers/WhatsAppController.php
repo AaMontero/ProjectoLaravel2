@@ -42,7 +42,6 @@ class WhatsAppController extends Controller
         } else {
             foreach ($mensaje as $elem) {
                 $this->enviarMensaje($numeroEnviar, $elem);
-                sleep(30);
             }
         }
     }
@@ -135,6 +134,7 @@ class WhatsAppController extends Controller
         $timestamp = $mensaje['timestamp'];
         $sqlCantidad = WhatsApp::where('id_wa', $id)->count();
         if ($sqlCantidad == 0) {
+            $whatsApp = new WhatsApp();
             if ($tipo == "audio") {
                 $audio = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['audio'];
                 $idAudio = $audio['id'];
@@ -147,6 +147,9 @@ class WhatsAppController extends Controller
                 }
                 file_put_contents($rutaAudio, $responseAudio);
                 $mensaje = '{"rutaAudio": "' . $rutaAudio . '"}';
+                //Enviar el mensaje del chatbot
+
+                $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];
@@ -160,27 +163,26 @@ class WhatsAppController extends Controller
                 }
                 file_put_contents($rutaImagen, $responseIMG);
                 $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
-                //$this->enviarMensajeChatBot($telefonoUser, "imagen");
+
+                $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
+                $this->enviarMensajeChatBot($telefonoUser, "imagen");
             } else {
                 $mensaje = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']) ?
                     $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] : "";
+
+                $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
                 $this->enviarMensajeChatBot($telefonoUser, $mensaje);
             }
-            $whatsApp = new WhatsApp();
-            $whatsApp->timestamp_wa = $timestamp;
-            $whatsApp->mensaje_enviado  = $mensaje;
-            $whatsApp->id_wa = $id;
-            $whatsApp->visto = false;
-            $whatsApp->telefono_wa = $telefonoUser;
-            $whatsApp->id_numCliente = $telefonoUser;
-            $whatsApp->fecha_hora = new DateTime('now');
-            $whatsApp->save();
-
             // Evento de recibir mensaje
-            $event = new RecibirMensaje($telefonoUser, $mensaje, $whatsApp->fecha_hora);
+
+            $event = new RecibirMensaje(
+                $telefonoUser,
+                $mensaje,
+                $whatsApp->fecha_hora->toArray() // Convertir el objeto DateTime a un array
+            );
+            event($event);
             $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
             $this->crearNotificacion($cadenaNotificacion, $mensaje);
-            event($event);
         } else {
         }
     }
@@ -235,16 +237,14 @@ class WhatsAppController extends Controller
     {
         //
     }
-    public function crearNotificacion($mensaje, $comentario)
+    function crearNotificacion($mensaje, $comentario)
     {
-        if ($mensaje->startwWith('{"ruta"')) {
-            $mensaje = "Ha recibido un archivo multimedia";
-        }
         $notificacion = new Notificacion;
         $notificacion->descripcion = $mensaje;
         $notificacion->comentario = $comentario;
         $notificacion->visto = false;
         $notificacion->tipo = "chat";
+
         $notificacion->save();
     }
     function convertirMinNoTilde($mensaje)
@@ -255,7 +255,7 @@ class WhatsAppController extends Controller
     }
     function obtenerMultimedia($idMedia)
     {
-        $url = 'https://graph.facebook.com/' . getenv('WPP_MULTIVERSION') . '/' . $idMedia;
+        $url = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . $idMedia;
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
@@ -284,7 +284,19 @@ class WhatsAppController extends Controller
         ));
         return curl_exec($curl2);
     }
-
+    function guardarMensaje($timestamp, $mensaje, $id, $telefonoUser)
+    {
+        $whatsApp = new WhatsApp();
+        $whatsApp->timestamp_wa = $timestamp;
+        $whatsApp->mensaje_enviado  = $mensaje;
+        $whatsApp->id_wa = $id;
+        $whatsApp->visto = false;
+        $whatsApp->telefono_wa = $telefonoUser;
+        $whatsApp->id_numCliente = $telefonoUser;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->save();
+        return $whatsApp;
+    }
 
     function conversacion($mensajeRecibido)
     {

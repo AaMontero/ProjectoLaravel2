@@ -35,6 +35,9 @@ class WhatsAppController extends Controller
             $mensaje =  $this->conversacion("Listo");
         } else {
             $mensaje  = $this->conversacion($mensajeLlega);
+            if($mensaje == null){
+                return;
+            }
         }
 
         if (gettype($mensaje) != 'array') {
@@ -305,10 +308,25 @@ class WhatsAppController extends Controller
 
         $mensajenoTilde = $util->convertirMinNoTilde($mensajeRecibido);
         switch ($mensajenoTilde) {
-            case $util->convertirMinNoTilde("Buenos días", "Me podría ayudar con más información sobre promociones en Cartagena,Orlando y Miami"):
+            case $util->convertirMinNoTilde("Buenos dias"):
+                return null;
+                break;
+            case $util->convertirMinNoTilde("Ayúdame con información"):
+                return "¡Encantado! ¿Con quién tengo el gusto?";
+                break;
+            case $util->convertirMinNoTilde("Me llamo Antonella"):
+                return "Mucho gusto, Antonella. ¿En qué puedo ayudarte?";
+                break;
+            case $util->convertirMinNoTilde("Me podría ayudar con más información sobre promociones en Cartagena,Orlando y Miami"):
                 return "Buenos días ☺️☀️para poder ayudarte necesitamos saber la siguiente información\nNombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
                 break;
-            case $util->convertirMinNoTilde("Nombre Antonella Garcia\nCorreo electrónico antonella.garciacamacho@gmail.com\nDestino Cartagena\nFecha tentativa 25 de mayo del 2024\nCuantas personas viajan 2\nEdades 24 y 25\nSalida de Quito o Guayaquil Quito"):
+            case $util->convertirMinNoTilde("Nombre Antonella Garcia
+            Correo electrónico antonella.garciacamacho@gmail.com
+            Destino Cartagena
+            Fecha tentativa 25 de mayo del 2024
+            Cuantas personas viajan 2
+            Edades 24 y 25
+            Salida de Quito o Guayaquil Quito"):
                 $mesnaje0 = "Estimada Antonella García\n¡Gracias por ponerte en contacto con nosotros para planificar tu viaje a Cartagena! Nos emociona mucho ayudarte a organizar una experiencia inolvidable.";
                 $mensaje1 = "Recibimos su pedido de cotización a Cartagena para dos personas para la fecha del 25 de mayo me puede confirmar.";
                 $retorno = [$mesnaje0, $mensaje1];
@@ -322,10 +340,23 @@ class WhatsAppController extends Controller
                 $retorno = [$mensaje2, $mensaje3, $mensaje4, $mensaje5];
                 return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Muchas gracias ya las reviso ☺️", "Me intereso cartagena 3 noches todo incluido porfavor", "Cómo puedo proceder con la reserva?"):
+            case $util->convertirMinNoTilde("Muchas gracias ya las reviso ☺️"):
+                return null;
+                break;
+            case $util->convertirMinNoTilde("Me intereso cartagena 3 noches todo incluido porfavor"):
+                return null;
+                break;
+            case $util->convertirMinNoTilde("Cómo puedo proceder con la reserva?"):
                 return "¡Por supuesto! Para proceder con la reserva, necesitaremos algunos detalles adicionales de tu parte. Por favor, proporciona los siguientes datos:\nNombres completos de los viajeros:\nNúmeros de pasaporte:\nDirección de correo electrónico y número de teléfono de contacto:\nCualquier preferencia especial o requisito dietético que necesitemos tener en cuenta durante tu estadía.\nUna vez que recibamos esta información, nuestro equipo se pondrá en contacto contigo para confirmar la reserva y proceder con los detalles de pago.\nSi tienes alguna pregunta o necesitas ayuda adicional, no dudes en hacérnoslo saber.";
                 break;
-            case $util->convertirMinNoTilde("Antonella Garcia\n1764309854\nAntonella.garciacamacho@gmail.con\nVegetariana\n\nAdrián Ruiz\n1845876324\nAdriag2345@gmail.com\nNinguna"):
+            case $util->convertirMinNoTilde("Antonella Garcia
+1764309854
+Antonella.garciacamacho@gmail.con
+Vegetariana
+Adrián Ruiz
+1845876324
+Adriag2345@gmail.com
+Ninguna"):
                 return "¡Perfecto, Antonella y Adrián! Hemos registrado sus detalles y preferencias. Nuestro equipo se pondrá en contacto contigo en breve para confirmar la reserva y proporcionarte todos los detalles necesarios para tu viaje a Cartagena.";
                 break;
             case $util->convertirMinNoTilde("¿Cuáles son las fechas disponibles para este paquete?"):
@@ -353,7 +384,10 @@ class WhatsAppController extends Controller
                 $retorno = [$mensaje6, $mensaje7];
                 return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Muchísimas gracias ☺️", "También quería preguntarle si tiene paquetes a Orlando y Miami"):
+            case $util->convertirMinNoTilde("Muchísimas gracias ☺️"):
+                return null;
+                break;
+            case $util->convertirMinNoTilde("También quería preguntarle si tiene paquetes a Orlando y Miami"):
                 $mensaje8 = "ORLANDO FANTASTICO\n05 NOCHES\nGVMCO24-002\n\nINCLUYE:\n\nTicket aéreo UIO/GYE – BOG – MCO – BOG – GYE/UIO vía AVIANCA AIRLINES\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n•	05 noches de alojamiento en HOTEL ROSEN INN LAKE BUENAVISTA\n•	Desayunos Buffet diarios (07:00 a 9:00)\n•	01 día de admisión a AQUATICA\n•	01 día de admisión a SEAWORLD\n•	01 día de admisión al BUSCH GARDENS\n•	CORTESÍA POR HABITACIÓN:\n-	01 almohada de viaje\n-	Tour de compras PREMIUM OUTLET\n$1441";
                 $mensaje9 = "¡ORLANDO FULL!\n 05 NOCHES\nGVMCO01\n\n Ticket aéreo Quito o Guayaquil/ Orlando / Quito o Guayaquil vía COPA AIRLINES\n\nINCLUYE:\n•	Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n•	05 noches de alojamiento en HOTEL ROSEN INN LAKE BUENAVISTA\n•	Desayunos\n•	01 día de visita a Universal Studios park-to-park con admisión y traslados ida y vuelta\n•	01 día de visita a Isla de la aventura park-to-park, con admisión y traslados ida y vuelta\n•	01 día de tour de compras a Premium Outlet International Drive, con traslados ida y vuelta\n•	01 día libre\n•	Impuestos hoteleros y aéreos\n$1528";
                 $retorno = [$mensaje8, $mensaje9];
@@ -368,10 +402,19 @@ class WhatsAppController extends Controller
             case $util->convertirMinNoTilde("Muchas gracias los voy a revisar para unas próximas vacaciones"):
                 return "Con gusto Antonella. Por favor ten en cuenta que los precios están sujetos a disponibilidad y podrían variar hasta la confirmación final de la reserva, si deseas proceder con ella, háznoslo saber y estaremos encantados de gestionarlo todo para ti.";
                 break;
-            case $util->convertirMinNoTilde("Lo entiendo, Gracias","Señorita de igual manera mi madre desea ir a Europa porfavor me puede mandar las opciones"):
+            case $util->convertirMinNoTilde("Lo entiendo, Gracias"):
+                return null;
+                break;
+            case $util->convertirMinNoTilde("Señorita de igual manera mi madre desea ir a Europa porfavor me puede mandar las opciones"):
                 return "Estimada Antonella para poder ayudarle necesitamos saber la siguiente información\n Nombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
                 break;
-            case $util->convertirMinNoTilde("Nombre: Marisol Camacho\nCorreo: Marylu3020@gmail.com\nDestino: Europa\nFecha tentativa: 15 de Junio\nCuántas personas: 1\nEdad: 60\n Salida: Quito"):
+            case $util->convertirMinNoTilde("Nombre: Marisol Camacho
+Correo: Marylu3020@gmail.com
+Destino: Europa
+Fecha tentativa: 15 de Junio
+Cuántas personas: 1
+Edad: 60
+Salida: Quito"):
                 return "Recibimos su pedido de cotización a Europa para una persona para la fecha del 15 de junio  me puede confirmar.";
                 break;
             case $util->convertirMinNoTilde("Si porfavor"):
@@ -380,26 +423,29 @@ class WhatsAppController extends Controller
                 $retorno = [$mensaje12, $mensaje13];
                 return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Qué ciudades se visitan ?"):
+            case $util->convertirMinNoTilde("Qué ciudades se visitan?"):
                 return "Madrid,Paris,Venecia,Florencia,Roma,Costa Azul,Barcelona,Zaragoza";
                 break;
-            case $util->convertirMinNoTilde("Muchas gracias ☺️ ya le confirmos","Porfavor señorita pueden solo enviarme la cotización de un vuelo a Madrid"):
+            case $util->convertirMinNoTilde("Muchas gracias ☺️ ya le confirmos"):
+                return null;
+                break;
+            case $util->convertirMinNoTilde("Porfavor señorita pueden solo enviarme la cotización de un vuelo a Madrid"):
                 return "¡Por supuesto! Antonella para poder ayudarte necesitamos la siguiente información para enviarte las opciones de vuelo disponibles.\nFecha de salida:\n Destino:\n Número de pasajeros:";
                 break;
-            case $util->convertirMinNoTilde("15 de junio - 15 de julio\nMadrid\n1"):
+            case $util->convertirMinNoTilde("15 de junio - 15 de julio Madrid 1"):
                 $mensaje12 = "Encontramos dos opciones buenas de viaje para ti en las fechas estipuladas";
                 $mensaje13 = "https://www.avianca.com/es/booking/select/?departure1=2024-06-15&departure2=2024-07-15&platform=WEBB2C&origin1=UIO&destination1=MAD&adt1=1&chd1=0&inf1=0&posCode=EC&origin2=MAD&destination2=UIO&adt2=1&chd2=0&inf2=0&currency=USD&CorporateCode=&Device=Web";
                 $mensaje14 = "https://www.latamairlines.com/ec/es/seleccion-asientos?id=LA4625048IYJY";
                 $retorno = [$mensaje12, $mensaje13, $mensaje14];
                 return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Gracias"):
-                return "Gracias a ti. ¡Buen viaje!";
+            case $util->convertirMinNoTilde("Disculpe talvez un hotel en galapagos todo incluido ya que quiero viajar a fin de este mes"):
+                $mensaje12 = "Si Antonella contamos con el hotel Torruga Vay $321 adultos y niños $290 por persona sin ticket aéreo ya que este depende de la temporada que usted viaje.";
+                $mensaje13 = "Incluye\n-Transfer in - Visita parte alta\n-Playa Tortuga Bay\n-Visita estación Charles Darwin\n-Visita Playa de los Alemanes y Grietas\n-Tranfer out\nIncluye alimentación completa";
+                $retorno = [$mensaje12, $mensaje13];
+                return $retorno;
                 break;
-            case $util->convertirMinNoTilde("Gracias"):
-                return "Gracias a ti. ¡Buen viaje!";
-                break;
-            case $util->convertirMinNoTilde("Gracias"):
+            case $util->convertirMinNoTilde("Muchas gracias voy a conversar con mi esposo"):
                 return "Gracias a ti. ¡Buen viaje!";
                 break;
             default:

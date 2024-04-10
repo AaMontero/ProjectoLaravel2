@@ -317,8 +317,8 @@ class WhatsAppController extends Controller
             case $util->convertirMinNoTilde("Me llamo Antonella"):
                 return "Mucho gusto, Antonella. ¿En qué puedo ayudarte?";
                 break;
-            case $util->convertirMinNoTilde("Me podría ayudar con más información sobre promociones en Cartagena,Orlando y Miami"):
-                return "Buenos días ☺️☀️para poder ayudarte necesitamos saber la siguiente información\nNombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
+            case $util->convertirMinNoTilde("Me podría ayudar con más información sobre promociones en Cartagena, Orlando y Miami"):
+                return "Para poder ayudarte necesitamos saber la siguiente información\nNombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
                 break;
             case $util->convertirMinNoTilde("Nombre Antonella Garcia
             Correo electrónico antonella.garciacamacho@gmail.com
@@ -358,9 +358,6 @@ Adrián Ruiz
 Adriag2345@gmail.com
 Ninguna"):
                 return "¡Perfecto, Antonella y Adrián! Hemos registrado sus detalles y preferencias. Nuestro equipo se pondrá en contacto contigo en breve para confirmar la reserva y proporcionarte todos los detalles necesarios para tu viaje a Cartagena.";
-                break;
-            case $util->convertirMinNoTilde("¿Cuáles son las fechas disponibles para este paquete?"):
-                return "Las fechas disponibles para el paquete Grand Oasis Cancún, México son: del 10 al 20 de agosto, del 20 al 31 de septiembre y del 5 al 15 de octubre. ¿Te gustaría reservar?";
                 break;
             case $util->convertirMinNoTilde("Gracias"):
                 return "•   Para mantener esta reservación en firme se requiere el pago del abono de $100, NO REEMBOLSABLE en el caso de pasajeros individuales o grupos. Aplica hasta 31 días antes del viaje para individuales y 46 días para grupos.\n•	El pago total de una reservación deberá ser realizada hasta 30 días antes de la salida.\n•	Si una reservación ingresa 30 días antes de la salida, el pago total deberá estar realizado en 24 horas luego de haber sido realizada la misma.\n•	Reservaciones que no tengan pago SE CANCELARÁN a las 24 HORAS.\n•	En el caso de grupos de pasajeros el pago total se debe realizar 45 días antes de la salida.\n•	Penalidad por cambio de nombre: USD $150 hasta 10 días antes de la salida en vuelo chárter.\n•	No se permite cambios de fecha o destino.\n•	Al momento de la facturación usted acepta estar de acuerdo con los servicios detallados y está de acuerdo con las penalidades descritas en esta liquidación de servicios sin excepción alguna.";

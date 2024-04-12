@@ -360,34 +360,37 @@
             var elementoH1 = document.createElement("h4");
             var horaElemento = document.createElement("small");
             var imagenElemento = document.createElement("img");
+            divGrande.style = `display: flex; justify-content: flex-end; `;
             elementoH1.textContent = msnImg;
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-            width: 200px;
+            width: 350px;
             height: auto;
-            margin-bottom: 10px;
-
+            margin-bottom: 5px;
+            margin-right: 5px;
             `;
 
             // Estilos para la hora
             horaElemento.style = `
-        font-size: 12px;
-        color: #515151;
-        margin-left: 10px;
-        `;
+            font-size: 12px;
+            color: #515151;
+            margin-left: 10px;
+            `;
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
             border-radius: 10px;
-        margin-bottom: 8px;
-        background-color: #dcf8c6;
-        font-family: Monserrat;
-        line-height: 1;
-        color: #00000;
-        padding-left: 10px;
-        text-align: right;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
+            margin-bottom: 8px;
+            background-color: #dcf8c6;
+            font-family: Monserrat;
+            font-size: 12px;
+            padding-left: 10px;
+            line-height: 1;
+            color: #00000;
+            padding-left: 100px;
+            text-align: right;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `   ;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {

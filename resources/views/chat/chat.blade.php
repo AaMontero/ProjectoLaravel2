@@ -108,17 +108,20 @@
                 if (archivo.type.includes('image')) {
                     iconoArchivo.src = "{{ asset('images/imagen.png') }}";
                     iconoArchivoSeleccionado.src = "{{ asset('images/imagen.png') }}";
+                    
                 } else {
-                    iconoArchivo.src = "{{ asset('images/archivo.png') }}";
-                    iconoArchivoSeleccionado.src = "{{ asset('images/archivo.png') }}";
+                  
                 }
                 nombreArchivoSeleccionado.textContent = archivo.name;
                 // Mostrar el contenedor del archivo seleccionado
                 document.getElementById('archivoSeleccionado').style.display = 'flex';
+
+
             } else {
                 // Ocultar el contenedor del archivo seleccionado si no se selecciona ningún archivo
                 document.getElementById('archivoSeleccionado').style.display = 'none';
             }
+
         });
 
         var desarrollo = true;
@@ -158,6 +161,10 @@
                         var lista = document.getElementById("miLista");
                         lista.appendChild(crearMensajeEnviado(objeto));
                         document.getElementById("mensajeInput").value = "";
+                        iconoArchivo.style.display = 'none';
+                        iconoArchivoSeleccionado.style.display = 'none';
+                        iconoArchivoSeleccionado.style.text = '';
+                        nombreArchivoSeleccionado.textContent = "";
                     } catch (error) {
                         console.error("Error al analizar el JSON:", error);
                     }

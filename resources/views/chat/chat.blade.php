@@ -163,7 +163,7 @@
                         var lista = document.getElementById("miLista");
                         lista.appendChild(crearMensajeEnviado(objeto));
                         document.getElementById("mensajeInput").value = "";
-                        iconoArchivo.style.display = 'none';
+                        //iconoArchivo.style.display = 'none';
                         iconoArchivoSeleccionado.style.display = 'none';
                         iconoArchivoSeleccionado.style.text = '';
                         nombreArchivoSeleccionado.textContent = "";

@@ -24,13 +24,13 @@ class WhatsAppController extends Controller
         $mensaje = $request->mensajeEnvio;
         $numeroEnviar = $request->numeroEnvio;
         // Guardar la solicitud en un archivo de texto para depuración (opcional)
-        file_put_contents("requestenvia.txt", json_encode($request->all()));
+        //file_put_contents("requestenvia.txt", json_encode($request->all()));
         $fechaHoraActual = Carbon::now()->format('YmdHis');
 
         if ($request->hasFile('archivo')) {
             $archivo = $request->file('archivo');
             $extension = $archivo->extension();
-            //Se podría crear otra ruta para las imagenes Enviadas 
+            //Se podría crear otra ruta para las imagenes Enviadas
             $rutaArchivo = 'uploads/imagenesWpp/' . $numeroEnviar . '/' . $fechaHoraActual;
             file_put_contents($rutaArchivo . '.' . $extension, file_get_contents($archivo));
             $extensionesImagenes = ['jpeg', 'jpg', 'png', 'gif'];
@@ -127,10 +127,10 @@ class WhatsAppController extends Controller
                 CURLOPT_POSTFIELDS => '{
     "messaging_product": "whatsapp",
     "recipient_type": "individual",
-    "to":' . $numeroEnviar . ' 
+    "to":' . $numeroEnviar . '
     ",type": "document",
     "document": {
-        "link": "' . $url . '" 
+        "link": "' . $url . '"
     }
     }',
                 CURLOPT_HTTPHEADER => array(
@@ -264,11 +264,11 @@ class WhatsAppController extends Controller
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($ch); // Variable que contiene lo que dice el usuario 
+                $response = curl_exec($ch); // Variable que contiene lo que dice el usuario
                 curl_close($ch);
                 $mensaje = $response;
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta  
+                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];

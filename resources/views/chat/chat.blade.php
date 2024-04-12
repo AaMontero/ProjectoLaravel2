@@ -68,19 +68,24 @@
                     <ul id="miLista">
                     </ul>
                 </div>
+                {{-- Campo para mostrar las imagenes subidas --}}
+                <div id="archivoSeleccionado" class="flex items-center ml-1w-20 h-8" style="display:none;">
+                    <img src="{{ asset('images\clip.png') }}" alt="Icono de archivo" id="iconoArchivoSeleccionado" class="w-6 h-6 rounded">
+                    <p id="nombreArchivoSeleccionado" class="ml-3 mt-3 text-xs"></p>
+                </div>
                 <!-- Campo de texto para escribir -->
-                <form id="mensajeForm" class="mt-4 flex items-center relative" method = "POST"
+                <form id="mensajeForm" class="mt-2 flex items-center relative" method = "POST"
                     action="{{ route('chat.envia') }}" enctype="multipart/form-data">
                     @csrf
                     <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px;" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
-                    <input type="file" name="archivo" id="archivo" style="display: none;"
+                    <input type="file" name="archivo" id="archivo" style="display: none;" multiple
                         accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg"> <!-- Input oculto para la carga de archivos -->
-                    <label for="archivo" class=" font-semibold py-2 px-4 rounded-md cursor-pointer">
-                        <img src="{{ asset('images\iconoarchivos.png') }}" alt="Icono de archivos"
-                            class="w-8 h-8 rounded">
+                    <label for="archivo" class=" font-semibold py-2 px-3 rounded-md cursor-pointer">
+                        <img src="{{ asset('images\nube.png') }}" alt="Icono de archivos"
+                            class="w-10 h-10 rounded" id="iconoArchivo">
                     </label>
                     <button type="button" onclick="enviarFormulario()"
                         class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
@@ -91,6 +96,29 @@
 
 
     <script>
+
+    document.getElementById('archivo').addEventListener('change', function(event) {
+            const archivo = event.target.files[0];
+            const iconoArchivo = document.getElementById('iconoArchivo');
+            const iconoArchivoSeleccionado = document.getElementById('iconoArchivoSeleccionado');
+            const nombreArchivoSeleccionado = document.getElementById('nombreArchivoSeleccionado');
+
+            if (archivo) {
+                if (archivo.type.includes('image')) {
+                    iconoArchivo.src = "{{ asset('images/imagen.png') }}";
+                    iconoArchivoSeleccionado.src = "{{ asset('images/imagen.png') }}";
+                } else {
+                    iconoArchivo.src = "{{ asset('images/archivo.png') }}";
+                    iconoArchivoSeleccionado.src = "{{ asset('images/archivo.png') }}";
+                }
+                nombreArchivoSeleccionado.textContent = archivo.name;
+                // Mostrar el contenedor del archivo seleccionado
+                document.getElementById('archivoSeleccionado').style.display = 'flex';
+            } else {
+                // Ocultar el contenedor del archivo seleccionado si no se selecciona ningún archivo
+                document.getElementById('archivoSeleccionado').style.display = 'none';
+            }
+        });
         var desarrollo = true;
         var telefonoEmisor = '593999938356';
         var tokenFin =

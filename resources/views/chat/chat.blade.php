@@ -70,7 +70,8 @@
                 </div>
                 {{-- Campo para mostrar las imagenes subidas --}}
                 <div id="archivoSeleccionado" class="flex items-center ml-1w-20 h-8" style="display:none;">
-                    <img src="{{ asset('images\clip.png') }}" alt="Icono de archivo" id="iconoArchivoSeleccionado" class="w-6 h-6 rounded">
+                    <img src="{{ asset('images\clip.png') }}" alt="Icono de archivo" id="iconoArchivoSeleccionado"
+                        class="w-6 h-6 rounded">
                     <p id="nombreArchivoSeleccionado" class="ml-3 mt-3 text-xs"></p>
                 </div>
                 <!-- Campo de texto para escribir -->
@@ -82,10 +83,11 @@
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px;" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
                     <input type="file" name="archivo" id="archivo" style="display: none;" multiple
-                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg"> <!-- Input oculto para la carga de archivos -->
+                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
+                    <!-- Input oculto para la carga de archivos -->
                     <label for="archivo" class=" font-semibold py-2 px-3 rounded-md cursor-pointer">
-                        <img src="{{ asset('images\nube.png') }}" alt="Icono de archivos"
-                            class="w-10 h-10 rounded" id="iconoArchivo">
+                        <img src="{{ asset('images\nube.png') }}" alt="Icono de archivos" class="w-10 h-10 rounded"
+                            id="iconoArchivo">
                     </label>
                     <button type="button" onclick="enviarFormulario()"
                         class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
@@ -96,7 +98,6 @@
 
 
     <script>
-
         document.getElementById('archivo').addEventListener('change', function(event) {
             const archivo = event.target.files[0];
             const iconoArchivo = document.getElementById('iconoArchivo');
@@ -268,7 +269,7 @@
         margin-bottom: 8px;
         background-color: #ffffff;
         font-family: Monserrat;
-        font-size: 15px;
+        font-size: 12px;
         padding-right: 10px;
         line-height: 1;
         color: #00000;
@@ -353,52 +354,55 @@
 
         function crearMensajeImgEnviado(elemento) {
             datosImg = JSON.parse(elemento['mensaje_enviado']);
-            urlImg = datosImg.ruta
+            urlImg = datosImg.ruta;
             msnImg = datosImg.textoImagen;
+
             var divGrande = document.createElement("div");
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h4");
             var horaElemento = document.createElement("small");
             var imagenElemento = document.createElement("img");
+
             divGrande.style = `display: flex; justify-content: flex-end; `;
             elementoH1.textContent = msnImg;
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-            width: 300px;
-            height: auto;
-            margin-bottom: 5px;
-            margin-right: 5px;
-            `;
+        width: 300px;
+        height: auto;
+        margin-bottom: 5px;
+        margin-right: 5px;
+    `;
 
             // Estilos para la hora
             horaElemento.style = `
-            font-size: 12px;
-            color: #515151;
-            margin-left: 10px;
-            `;
+        font-size: 12px;
+        color: #515151;
+        margin-left: 10px;
+    `;
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
-            border-radius: 10px;
-            margin-bottom: 8px;
-            background-color: #dcf8c6;
-            font-family: Monserrat;
-            font-size: 12px;
-            padding-left: 10px;
-            line-height: 1;
-            color: #00000;
-            padding-left: 100px;
-            margin-left: 100px;
-            text-align: right;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); ` ;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background-color: #dcf8c6;
+        font-family: Monserrat;
+        font-size: 12px;
+        padding-left: 10px;
+        line-height: 1;
+        color: #00000;
+        padding-left: 10px;
+        margin-left: 100px;
+        text-align: right;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    `;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
                 nuevoElemento.style.display = "flex";
                 var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
                 nuevoElemento.style.width = dimensionCuadro + 'px';
-                horaElemento.style.marginTop = "15px";
+                horaElemento.style.marginTop = "15px"; /* Cambiado a 15px */
                 horaElemento.style.marginLeft = "30px";
             } else {
                 nuevoElemento.style.display = "inline-block";
@@ -413,6 +417,7 @@
 
             return divGrande;
         }
+
 
         function crearMensajeEnviado(elemento) {
             // Crear elementos DOM

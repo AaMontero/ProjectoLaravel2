@@ -111,7 +111,7 @@ class WhatsAppController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-            echo $response;
+            //echo $response;
         }
         if ($tipo == "doc") {
             $curl = curl_init();
@@ -143,7 +143,7 @@ class WhatsAppController extends Controller
             $response = curl_exec($curl);
 
             curl_close($curl);
-            echo $response;
+            //echo $response;
         }
         $response = curl_exec($curl);
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];

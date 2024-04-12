@@ -97,7 +97,7 @@
 
     <script>
 
-    document.getElementById('archivo').addEventListener('change', function(event) {
+        document.getElementById('archivo').addEventListener('change', function(event) {
             const archivo = event.target.files[0];
             const iconoArchivo = document.getElementById('iconoArchivo');
             const iconoArchivoSeleccionado = document.getElementById('iconoArchivoSeleccionado');
@@ -119,6 +119,7 @@
                 document.getElementById('archivoSeleccionado').style.display = 'none';
             }
         });
+
         var desarrollo = true;
         var telefonoEmisor = '593999938356';
         var tokenFin =
@@ -150,6 +151,7 @@
         function enviarFormulario() {
             llamadaAjax()
                 .then((respuesta) => {
+                    console.log(respuesta);
                     try {
                         var objeto = JSON.parse(respuesta);
                         var lista = document.getElementById("miLista");
@@ -181,6 +183,7 @@
                             throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
                         }
                         return response.text();
+
                     })
                     .then((responseData) => {
                         resolve(responseData);
@@ -348,6 +351,68 @@
             return divFecha;
         }
 
+        function crearMensajeImgEnviado(elemento) {
+            console.log(elemento);
+            datosImg = JSON.parse(elemento['mensaje_enviado']);
+            urlImg = datosImg.ruta
+            msnImg = datosImg.textoImagen;
+            var divGrande = document.createElement("div");
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h4");
+            var horaElemento = document.createElement("small");
+            var imagenElemento = document.createElement("img");
+            elementoH1.textContent = msnImg;
+            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+            imagenElemento.src = urlImg;
+            imagenElemento.style = `
+            width: 350px;
+            height: auto;
+            margin-bottom: 5px;
+            margin-left:5px;
+            `;
+
+            // Estilos para la hora
+            horaElemento.style = `
+        font-size: 12px;
+        color: #515151;
+        margin-left: 10px;
+        `;
+
+            // Estilos para el nuevo elemento
+            nuevoElemento.style = `
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background-color: #ffffff;
+        font-family: Monserrat;
+        font-size: 15px;
+        padding-right: 10px;
+        line-height: 1;
+        color: #00000;
+        margin-right: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        `;
+
+            // Ajuste de dimensiones del cuadro según la longitud del mensaje
+            if (elemento['mensaje_enviado'].length < 20) {
+                nuevoElemento.style.display = "flex";
+                var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
+                nuevoElemento.style.width = dimensionCuadro + 'px';
+                horaElemento.style.marginTop = "20px";
+                horaElemento.style.marginLeft = "35px";
+            } else {
+                nuevoElemento.style.display = "inline-block";
+            }
+            // Estilos para el elemento H1
+            elementoH1.style.marginLeft = '10px';
+            // Agregar elementos al nuevo elemento
+            nuevoElemento.appendChild(elementoH1);
+            nuevoElemento.appendChild(horaElemento);
+            nuevoElemento.appendChild(imagenElemento); // Agregar imagen al nuevo elemento
+            divGrande.appendChild(nuevoElemento);
+
+            return divGrande;
+        }
+
         function crearMensajeEnviado(elemento) {
             // Crear elementos DOM
             var divGrande = document.createElement("div");
@@ -455,7 +520,13 @@
                         lista.appendChild(elementoCreado);
                     }
                     if (elemento['telefono_wa'] == telefonoEmisor) {
-                        elementoCreado = crearMensajeEnviado(elemento);
+
+                        if (elemento['mensaje_enviado'].startsWith('{')) {
+                            elementoCreado = crearMensajeImgEnviado(elemento);
+                        } else {
+                            elementoCreado = crearMensajeEnviado(elemento);
+                        }
+
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
                             elementoCreado = crearMensajeImgRecibido(elemento);

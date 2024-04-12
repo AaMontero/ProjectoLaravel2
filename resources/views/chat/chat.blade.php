@@ -365,7 +365,7 @@
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-            width: 350px;
+            width: 300px;
             height: auto;
             margin-bottom: 5px;
             margin-right: 5px;
@@ -389,21 +389,22 @@
             line-height: 1;
             color: #00000;
             padding-left: 100px;
+            margin-left: 100px;
             text-align: right;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `   ;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); ` ;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
                 nuevoElemento.style.display = "flex";
                 var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
                 nuevoElemento.style.width = dimensionCuadro + 'px';
-                horaElemento.style.marginTop = "20px";
-                horaElemento.style.marginLeft = "35px";
+                horaElemento.style.marginTop = "15px";
+                horaElemento.style.marginLeft = "30px";
             } else {
                 nuevoElemento.style.display = "inline-block";
             }
             // Estilos para el elemento H1
-            elementoH1.style.marginLeft = '10px';
+            elementoH1.style.marginLeft = '5px';
             // Agregar elementos al nuevo elemento
             nuevoElemento.appendChild(elementoH1);
             nuevoElemento.appendChild(horaElemento);

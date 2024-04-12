@@ -81,7 +81,7 @@
                     <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
-                        style="height: 40px;" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
+                        style="height: 40px; overflow:hidden" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
                     <input type="file" name="archivo" id="archivo" style="display: none;" multiple
                         accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
                     <!-- Input oculto para la carga de archivos -->

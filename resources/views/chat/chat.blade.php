@@ -108,11 +108,13 @@
                 if (archivo.type.includes('image')) {
                     iconoArchivo.src = "{{ asset('images/imagen.png') }}";
                     iconoArchivoSeleccionado.src = "{{ asset('images/imagen.png') }}";
-                    
+
                 } else {
-                  
+                    iconoArchivo.src = "{{ asset('images/archivo.png') }}";
+                    iconoArchivoSeleccionado.src = "{{ asset('images/archivo.png') }}";
                 }
                 nombreArchivoSeleccionado.textContent = archivo.name;
+
                 // Mostrar el contenedor del archivo seleccionado
                 document.getElementById('archivoSeleccionado').style.display = 'flex';
 
@@ -165,6 +167,7 @@
                         iconoArchivoSeleccionado.style.display = 'none';
                         iconoArchivoSeleccionado.style.text = '';
                         nombreArchivoSeleccionado.textContent = "";
+                       // location.reload();
                     } catch (error) {
                         console.error("Error al analizar el JSON:", error);
                     }
@@ -363,7 +366,6 @@
             datosImg = JSON.parse(elemento['mensaje_enviado']);
             urlImg = datosImg.ruta;
             msnImg = datosImg.textoImagen;
-
             var divGrande = document.createElement("div");
             var nuevoElemento = document.createElement("div");
             var elementoH1 = document.createElement("h4");

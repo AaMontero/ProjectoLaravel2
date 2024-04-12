@@ -155,27 +155,27 @@
         });
 
         function enviarFormulario() {
-    llamadaAjax()
-        .then((respuesta) => {
-            console.log(respuesta);
-            try {
-                var objeto = JSON.parse(respuesta);
-                var lista = document.getElementById("miLista");
-                lista.appendChild(crearMensajeImgEnviado(objeto)); 
-                document.getElementById("mensajeInput").value = ""; 
-                document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
-                document.getElementById("iconoArchivoSeleccionado").textContent = '';
-                document.getElementById("nombreArchivoSeleccionado").textContent = "";
-            } catch (error) {
-                console.error("Error al analizar el JSON:", error);
-            }
-        })
-        .catch((error) => {
-            console.error("Error en la llamada AJAX:", error);
-        });
-}
+            llamadaAjax()
+                .then((respuesta) => {
+                    console.log(respuesta);
+                    try {
+                        var objeto = JSON.parse(respuesta);
+                        var lista = document.getElementById("miLista");
+                        lista.appendChild(crearMensajeImgEnviado(objeto));
+                        document.getElementById("mensajeInput").value = "";
 
-
+                        document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
+                        document.getElementById("iconoArchivoSeleccionado").textContent = '';
+                        document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
+                        document.getElementById("nombreArchivoSeleccionado").textContent = "";
+                    } catch (error) {
+                        console.error("Error al analizar el JSON:", error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error en la llamada AJAX:", error);
+                });
+        }
 
         function llamadaAjax() {
             return new Promise((resolve, reject) => {

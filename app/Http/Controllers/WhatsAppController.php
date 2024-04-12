@@ -424,6 +424,9 @@ class WhatsAppController extends Controller
 
         $mensajenoTilde = $util->convertirMinNoTilde($mensajeRecibido);
         switch ($mensajenoTilde) {
+            case $util ->convertirMinNoTilde("hola"):
+                return "Hola, buen dia";
+                break;
             case $util->convertirMinNoTilde("Buenos dias"):
                 return null;
                 break;

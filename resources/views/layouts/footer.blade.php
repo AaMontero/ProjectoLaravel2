@@ -12,7 +12,7 @@
                     document.write(new Date().getFullYear())
                 </script>,
               hecho con <i class="fa fa-heart"></i> por
-              <a href="https://travelqori.com/" class="font-weight-bold no-underline" target="_blank" >Sistemas Snr</a>
+              <a href="https://travelqori.com/" class="font-weight-bold no-underline" target="_blank" ></a>
               para una mejor red.
             </div>
         </div>

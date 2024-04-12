@@ -352,7 +352,6 @@
         }
 
         function crearMensajeImgEnviado(elemento) {
-            console.log(elemento);
             datosImg = JSON.parse(elemento['mensaje_enviado']);
             urlImg = datosImg.ruta
             msnImg = datosImg.textoImagen;
@@ -365,10 +364,10 @@
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-            width: 350px;
+            width: 200px;
             height: auto;
-            margin-bottom: 5px;
-            margin-left:5px;
+            margin-bottom: 10px;
+
             `;
 
             // Estilos para la hora
@@ -380,17 +379,15 @@
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
-        border-radius: 10px;
+            border-radius: 10px;
         margin-bottom: 8px;
-        background-color: #ffffff;
+        background-color: #dcf8c6;
         font-family: Monserrat;
-        font-size: 15px;
-        padding-right: 10px;
         line-height: 1;
         color: #00000;
-        margin-right: 100px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        `;
+        padding-left: 10px;
+        text-align: right;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
@@ -522,15 +519,19 @@
                     if (elemento['telefono_wa'] == telefonoEmisor) {
 
                         if (elemento['mensaje_enviado'].startsWith('{')) {
+                            console.log("entra 1");
                             elementoCreado = crearMensajeImgEnviado(elemento);
                         } else {
+                            console.log("entra 2");
                             elementoCreado = crearMensajeEnviado(elemento);
                         }
 
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
+                            console.log("entra 3");
                             elementoCreado = crearMensajeImgRecibido(elemento);
                         } else {
+                            console.log("entra 4");
                             elementoCreado = crearMensajeRecibido(elemento);
                         }
 

@@ -111,6 +111,7 @@ class WhatsAppController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
+            $mensaje = '{"ruta": "' . $url . '", "textoImagen": "' . $mensaje . '"}';
             //echo $response;
         }
         if ($tipo == "doc") {
@@ -144,10 +145,12 @@ class WhatsAppController extends Controller
 
             curl_close($curl);
             //echo $response;
+
         }
         $response = curl_exec($curl);
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
+
         $whatsApp->mensaje_enviado = $mensaje;
         $whatsApp->id_wa = $idMensajeEnviar;
         $whatsApp->telefono_wa = "593987411818";

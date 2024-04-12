@@ -142,7 +142,7 @@ Route::middleware(['auth'])->group(function () {
     //RUTAS PARA EL CHAT - NOTIFICACIONES
     Route::get('/chat', [WhatsAppController::class, 'index'])
         ->name('chat.chat'); //Mostrar el chat (Principal)
-    Route::get('/enviaWpp', [WhatsAppController::class, 'enviarPHP'])
+    Route::post('/enviaWpp', [WhatsAppController::class, 'enviarPHP'])
         ->name('chat.envia'); //Envía los mensajes
     Route::post('chat/obtenerMensajes', [WhatsappController::class, 'recibe'])
         ->name('chat.recibe'); //Recibe los mensajes

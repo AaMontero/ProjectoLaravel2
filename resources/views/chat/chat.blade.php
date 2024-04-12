@@ -69,13 +69,19 @@
                     </ul>
                 </div>
                 <!-- Campo de texto para escribir -->
-                <form id="mensajeForm" class="mt-4 flex items-center relative" method = "GET"
-                    action={{ route('chat.envia') }}>
+                <form id="mensajeForm" class="mt-4 flex items-center relative" method = "POST"
+                    action="{{ route('chat.envia') }}" enctype="multipart/form-data">
                     @csrf
                     <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px;" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
+                    <input type="file" name="archivo" id="archivo" style="display: none;"
+                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg"> <!-- Input oculto para la carga de archivos -->
+                    <label for="archivo" class=" font-semibold py-2 px-4 rounded-md cursor-pointer">
+                        <img src="{{ asset('images\iconoarchivos.png') }}" alt="Icono de archivos"
+                            class="w-8 h-8 rounded">
+                    </label>
                     <button type="button" onclick="enviarFormulario()"
                         class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
                 </form>
@@ -130,20 +136,18 @@
                 });
         }
 
-        function llamadaAjax() { //
-
+        function llamadaAjax() {
             return new Promise((resolve, reject) => {
-                const textoIngresado = document.getElementById("mensajeInput").value;
-                const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-                const urlServer = '/enviaWpp?_token=' + tokenFin + '&numeroEnvio=' +
-                    numeroAbierto +
-                    '&mensajeEnvio=' +
-                    textoIngresado;
-                const url =
-                    urlPrincipal + '/enviaWpp?_token=BArhkXdxx3XTqwCablP7TY6IWlBox9tl254qbkhM&numeroEnvio=' +
-                    numeroAbierto + '&mensajeEnvio=' +
-                    textoIngresado;
-                fetch(urlServer)
+                const formData = new FormData(document.getElementById('mensajeForm'));
+
+                // Iterar sobre los valores en el FormData y hacer un console.log
+                for (const entry of formData.entries()) {
+                    console.log(entry);
+                }
+                fetch("{{ route('chat.envia') }}", {
+                        method: "POST",
+                        body: formData,
+                    })
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
@@ -159,6 +163,36 @@
                     });
             });
         }
+
+
+        // function llamadaAjax() { //
+
+        //     return new Promise((resolve, reject) => {
+        //         const textoIngresado = document.getElementById("mensajeInput").value;
+        //         const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
+        //         const archivoGuardado = document.getElementById("archivo");
+        //         console.log("El archivo guardado es: " + archivoGuardado.files[0]);
+        //         const urlServer =
+        //             '/enviaWpp?numeroEnvio=' +
+        //             numeroAbierto +
+        //             '&mensajeEnvio=' +
+        //             textoIngresado;
+        //         fetch(urlServer)
+        //             .then((response) => {
+        //                 if (!response.ok) {
+        //                     throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+        //                 }
+        //                 return response.text();
+        //             })
+        //             .then((responseData) => {
+        //                 resolve(responseData);
+        //             })
+        //             .catch((error) => {
+        //                 console.error("Error en la llamada fetch:", error);
+        //                 reject(error);
+        //             });
+        //     });
+        // }
 
         function enviarConEnter(event) {
             if (event.key === 'Enter') {

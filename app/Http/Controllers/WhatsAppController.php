@@ -7,6 +7,8 @@ use App\Models\WhatsApp;
 use DateTime;
 use Exception;
 use App\Models\Notificacion;
+use Carbon\Carbon;
+use CURLFile;
 use Illuminate\Http\Request;
 
 class WhatsAppController extends Controller
@@ -21,7 +23,28 @@ class WhatsAppController extends Controller
     {
         $mensaje = $request->mensajeEnvio;
         $numeroEnviar = $request->numeroEnvio;
-        return $this->enviarMensaje($numeroEnviar, $mensaje);
+        // Guardar la solicitud en un archivo de texto para depuración (opcional)
+        file_put_contents("requestenvia.txt", json_encode($request->all()));
+        $fechaHoraActual = Carbon::now()->format('YmdHis');
+
+        if ($request->hasFile('archivo')) {
+            $archivo = $request->file('archivo');
+            $extension = $archivo->extension();
+            //Se podría crear otra ruta para las imagenes Enviadas 
+            $rutaArchivo = 'uploads/imagenesWpp/' . $numeroEnviar . '/' . $fechaHoraActual;
+            file_put_contents($rutaArchivo . '.' . $extension, file_get_contents($archivo));
+            $extensionesImagenes = ['jpeg', 'jpg', 'png', 'gif'];
+            $extensionesArchivos = ['.pdf', '.doc', '.docx', '.xlsx', '.xls', '.xml', '.svg'];
+            if (in_array($extension, $extensionesImagenes)) {
+                return $this->enviarMensajeMult($numeroEnviar, $mensaje,  "image", $rutaArchivo . '.' . $extension);
+            } elseif (in_array($extension, $extensionesArchivos)) {
+                return $this->enviarMensajeMult($numeroEnviar, $mensaje, "doc", $rutaArchivo . '.' . $extension);
+            }
+        }
+
+
+        // Llamar a la función para enviar el mensaje
+        return $this->enviarMensaje($numeroEnviar, $mensaje, "texto");
     }
 
 
@@ -35,20 +58,106 @@ class WhatsAppController extends Controller
             $mensaje =  $this->conversacion("Listo");
         } else {
             $mensaje  = $this->conversacion($mensajeLlega);
-            if($mensaje == null){
+            if ($mensaje == null) {
                 return;
             }
         }
 
         if (gettype($mensaje) != 'array') {
-            $this->enviarMensaje($numeroEnviar, $mensaje);
+            $this->enviarMensaje($numeroEnviar, $mensaje, "texto");
         } else {
             foreach ($mensaje as $elem) {
-                $this->enviarMensaje($numeroEnviar, $elem);
+                $this->enviarMensaje($numeroEnviar, $elem, "texto");
             }
         }
     }
+    function enviarMensajeMult($numeroEnviar, $mensaje, $tipo, $url)
+    {
 
+        if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
+            $numeroEnviar = '593' . substr($numeroEnviar, 1);
+        }
+        if ($tipo == "image") {
+            $urlRequest = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages';
+            $url = 'https://trivai.me/uploads/imagenesWpp/593998557785/1712761003imagen.jpeg';
+            //$url = "http://127.0.0.1:8000/" . $url;
+            file_put_contents("numeroEnviar.txt", $numeroEnviar);
+            file_put_contents("mensaje.txt", $mensaje);
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $urlRequest,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => '{
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": "' . $numeroEnviar . '",
+                    "type": "image",
+                    "image": {
+                        "link": "' . $url . '",
+                        "caption": "' . $mensaje . '"
+                    }
+                }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . getenv("WPP_TOKEN"),
+                    'Cookie: ps_l=0; ps_n=0'
+                ),
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+            echo $response;
+        }
+        if ($tipo == "doc") {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => '{
+    "messaging_product": "whatsapp",
+    "recipient_type": "individual",
+    "to":' . $numeroEnviar . ' 
+    ",type": "document",
+    "document": {
+        "link": "' . $url . '" 
+    }
+    }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . getenv("WPP_TOKEN"),
+                    'Cookie: ps_l=0; ps_n=0'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            echo $response;
+        }
+        $response = curl_exec($curl);
+        $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
+        $whatsApp = new WhatsApp();
+        $whatsApp->mensaje_enviado = $mensaje;
+        $whatsApp->id_wa = $idMensajeEnviar;
+        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->id_numCliente = $numeroEnviar;
+        $whatsApp->fecha_hora = new DateTime('now');
+        $whatsApp->visto = true;
+        $whatsApp->save();
+        curl_close($curl);
+        return json_encode($whatsApp);
+    }
     function enviarMensaje($numeroEnviar, $mensaje)
     {
         $telefonoEnviaID = getenv('WPP_ID');
@@ -57,8 +166,6 @@ class WhatsAppController extends Controller
         if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
-
-
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_VERBOSE, true);
         curl_setopt_array($curl, array(
@@ -83,6 +190,7 @@ class WhatsAppController extends Controller
                 'Authorization: Bearer ' . $apiKey,
             ),
         ));
+
         $response = curl_exec($curl);
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
@@ -143,16 +251,24 @@ class WhatsAppController extends Controller
                 $idAudio = $audio['id'];
                 $responseAudio = $this->obtenerMultimedia($idAudio);
                 $directorio = 'uploads/audiosWpp/' . $telefonoUser;
-                $rutaAudio = $directorio . '/' . $timestamp . 'audio.ogg';
-
+                $rutaAudio = $directorio . '/' . $timestamp . 'audio.wav';
                 if (!is_dir($directorio)) {
                     mkdir($directorio, 0777, true);
                 }
                 file_put_contents($rutaAudio, $responseAudio);
-                $mensaje = '{"rutaAudio": "' . $rutaAudio . '"}';
                 //Enviar el mensaje del chatbot
-
+                $url = 'http://localhost:5000/audio';
+                $ch = curl_init($url);
+                $cfile = new CURLFile(realpath($rutaAudio));
+                $data = array('audio_file' => $cfile);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($ch); // Variable que contiene lo que dice el usuario 
+                curl_close($ch);
+                $mensaje = $response;
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
+                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta  
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];

@@ -68,19 +68,26 @@
                     <ul id="miLista">
                     </ul>
                 </div>
+                {{-- Campo para mostrar las imagenes subidas --}}
+                <div id="archivoSeleccionado" class="flex items-center ml-1w-20 h-8" style="display:none;">
+                    <img src="{{ asset('images\clip.png') }}" alt="Icono de archivo" id="iconoArchivoSeleccionado"
+                        class="w-6 h-6 rounded">
+                    <p id="nombreArchivoSeleccionado" class="ml-3 mt-3 text-xs"></p>
+                </div>
                 <!-- Campo de texto para escribir -->
-                <form id="mensajeForm" class="mt-4 flex items-center relative" method = "POST"
+                <form id="mensajeForm" class="mt-2 flex items-center relative" method = "POST"
                     action="{{ route('chat.envia') }}" enctype="multipart/form-data">
                     @csrf
                     <input type ="hidden" id = "numeroEnvioOculto" name = "numeroEnvio">
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
-                        style="height: 40px;" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
-                    <input type="file" name="archivo" id="archivo" style="display: none;"
-                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg"> <!-- Input oculto para la carga de archivos -->
-                    <label for="archivo" class=" font-semibold py-2 px-4 rounded-md cursor-pointer">
-                        <img src="{{ asset('images\iconoarchivos.png') }}" alt="Icono de archivos"
-                            class="w-8 h-8 rounded">
+                        style="height: 40px; overflow:hidden" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
+                    <input type="file" name="archivo" id="archivo" style="display: none;" multiple
+                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
+                    <!-- Input oculto para la carga de archivos -->
+                    <label for="archivo" class=" font-semibold py-2 px-3 rounded-md cursor-pointer">
+                        <img src="{{ asset('images\nube.png') }}" alt="Icono de archivos" class="w-10 h-10 rounded"
+                            id="iconoArchivo">
                     </label>
                     <button type="button" onclick="enviarFormulario()"
                         class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Enviar</button>
@@ -91,6 +98,34 @@
 
 
     <script>
+        document.getElementById('archivo').addEventListener('change', function(event) {
+            const archivo = event.target.files[0];
+            const iconoArchivo = document.getElementById('iconoArchivo');
+            const iconoArchivoSeleccionado = document.getElementById('iconoArchivoSeleccionado');
+            const nombreArchivoSeleccionado = document.getElementById('nombreArchivoSeleccionado');
+
+            if (archivo) {
+                if (archivo.type.includes('image')) {
+                    iconoArchivo.src = "{{ asset('images/imagen.png') }}";
+                    iconoArchivoSeleccionado.src = "{{ asset('images/imagen.png') }}";
+
+                } else {
+                    iconoArchivo.src = "{{ asset('images/archivo.png') }}";
+                    iconoArchivoSeleccionado.src = "{{ asset('images/archivo.png') }}";
+                }
+                nombreArchivoSeleccionado.textContent = archivo.name;
+
+                // Mostrar el contenedor del archivo seleccionado
+                document.getElementById('archivoSeleccionado').style.display = 'flex';
+
+
+            } else {
+                // Ocultar el contenedor del archivo seleccionado si no se selecciona ningún archivo
+                document.getElementById('archivoSeleccionado').style.display = 'none';
+            }
+
+        });
+
         var desarrollo = true;
         var telefonoEmisor = '593999938356';
         var tokenFin =
@@ -122,11 +157,17 @@
         function enviarFormulario() {
             llamadaAjax()
                 .then((respuesta) => {
+                    console.log(respuesta);
                     try {
                         var objeto = JSON.parse(respuesta);
                         var lista = document.getElementById("miLista");
-                        lista.appendChild(crearMensajeEnviado(objeto));
+                        lista.appendChild(crearMensajeImgEnviado(objeto));
                         document.getElementById("mensajeInput").value = "";
+
+                        document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
+                        document.getElementById("iconoArchivoSeleccionado").textContent = '';
+                        document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
+                        document.getElementById("nombreArchivoSeleccionado").textContent = "";
                     } catch (error) {
                         console.error("Error al analizar el JSON:", error);
                     }
@@ -153,6 +194,7 @@
                             throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
                         }
                         return response.text();
+
                     })
                     .then((responseData) => {
                         resolve(responseData);
@@ -237,7 +279,7 @@
         margin-bottom: 8px;
         background-color: #ffffff;
         font-family: Monserrat;
-        font-size: 15px;
+        font-size: 12px;
         padding-right: 10px;
         line-height: 1;
         color: #00000;
@@ -319,6 +361,72 @@
             divFecha.appendChild(small);
             return divFecha;
         }
+
+        function crearMensajeImgEnviado(elemento) {
+            datosImg = JSON.parse(elemento['mensaje_enviado']);
+            urlImg = datosImg.ruta;
+            msnImg = datosImg.textoImagen;
+            var divGrande = document.createElement("div");
+            var nuevoElemento = document.createElement("div");
+            var elementoH1 = document.createElement("h4");
+            var horaElemento = document.createElement("small");
+            var imagenElemento = document.createElement("img");
+
+            divGrande.style = `display: flex; justify-content: flex-end; `;
+            elementoH1.textContent = msnImg;
+            horaElemento.textContent = formatearHora(elemento['fecha_hora']);
+            imagenElemento.src = urlImg;
+            imagenElemento.style = `
+        width: 300px;
+        height: auto;
+        margin-bottom: 5px;
+        margin-right: 5px;
+    `;
+
+            // Estilos para la hora
+            horaElemento.style = `
+        font-size: 12px;
+        color: #515151;
+        margin-left: 10px;
+    `;
+
+            // Estilos para el nuevo elemento
+            nuevoElemento.style = `
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background-color: #dcf8c6;
+        font-family: Monserrat;
+        font-size: 12px;
+        padding-left: 10px;
+        line-height: 1;
+        color: #00000;
+        padding-left: 10px;
+        margin-left: 100px;
+        text-align: right;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    `;
+
+            // Ajuste de dimensiones del cuadro según la longitud del mensaje
+            if (elemento['mensaje_enviado'].length < 20) {
+                nuevoElemento.style.display = "flex";
+                var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
+                nuevoElemento.style.width = dimensionCuadro + 'px';
+                horaElemento.style.marginTop = "15px"; /* Cambiado a 15px */
+                horaElemento.style.marginLeft = "30px";
+            } else {
+                nuevoElemento.style.display = "inline-block";
+            }
+            // Estilos para el elemento H1
+            elementoH1.style.marginLeft = '5px';
+            // Agregar elementos al nuevo elemento
+            nuevoElemento.appendChild(elementoH1);
+            nuevoElemento.appendChild(horaElemento);
+            nuevoElemento.appendChild(imagenElemento); // Agregar imagen al nuevo elemento
+            divGrande.appendChild(nuevoElemento);
+
+            return divGrande;
+        }
+
 
         function crearMensajeEnviado(elemento) {
             // Crear elementos DOM
@@ -427,11 +535,21 @@
                         lista.appendChild(elementoCreado);
                     }
                     if (elemento['telefono_wa'] == telefonoEmisor) {
-                        elementoCreado = crearMensajeEnviado(elemento);
+
+                        if (elemento['mensaje_enviado'].startsWith('{')) {
+                            console.log("entra 1");
+                            elementoCreado = crearMensajeImgEnviado(elemento);
+                        } else {
+                            console.log("entra 2");
+                            elementoCreado = crearMensajeEnviado(elemento);
+                        }
+
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
+                            console.log("entra 3");
                             elementoCreado = crearMensajeImgRecibido(elemento);
                         } else {
+                            console.log("entra 4");
                             elementoCreado = crearMensajeRecibido(elemento);
                         }
 

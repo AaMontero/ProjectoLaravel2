@@ -21,20 +21,29 @@ class WhatsAppController extends Controller
 
     public function enviarPHP(Request $request)
     {
+
         $mensaje = $request->mensajeEnvio;
+
         $numeroEnviar = $request->numeroEnvio;
+
         // Guardar la solicitud en un archivo de texto para depuración (opcional)
-        file_put_contents("requestenvia.txt", json_encode($request->all()));
+        //file_put_contents("requestenvia.txt", json_encode($request->all()));
         $fechaHoraActual = Carbon::now()->format('YmdHis');
 
         if ($request->hasFile('archivo')) {
+
             $archivo = $request->file('archivo');
             $extension = $archivo->extension();
-            //Se podría crear otra ruta para las imagenes Enviadas 
+
+            //Se podría crear otra ruta para las imagenes Enviadas
             $rutaArchivo = 'uploads/imagenesWpp/' . $numeroEnviar . '/' . $fechaHoraActual;
+
             file_put_contents($rutaArchivo . '.' . $extension, file_get_contents($archivo));
+            file_put_contents("archivo5.txt","llega hastya aca");
+
             $extensionesImagenes = ['jpeg', 'jpg', 'png', 'gif'];
             $extensionesArchivos = ['.pdf', '.doc', '.docx', '.xlsx', '.xls', '.xml', '.svg'];
+
             if (in_array($extension, $extensionesImagenes)) {
                 return $this->enviarMensajeMult($numeroEnviar, $mensaje,  "image", $rutaArchivo . '.' . $extension);
             } elseif (in_array($extension, $extensionesArchivos)) {
@@ -110,7 +119,9 @@ class WhatsAppController extends Controller
             ));
             $response = curl_exec($curl);
             curl_close($curl);
-            echo $response;
+
+            $mensaje = '{"ruta": "' . $url . '", "textoImagen": "' . $mensaje . '"}';
+            //echo $response;
         }
         if ($tipo == "doc") {
             $curl = curl_init();
@@ -129,7 +140,7 @@ class WhatsAppController extends Controller
     "to": "' . $numeroEnviar . '",
     "type": "document",
     "document": {
-        "link": "' . $url . '" 
+        "link": "' . $url . '"
     }
     }',
                 CURLOPT_HTTPHEADER => array(
@@ -142,7 +153,8 @@ class WhatsAppController extends Controller
             $response = curl_exec($curl);
 
             curl_close($curl);
-            echo $response;
+            //echo $response;
+
         }
         if ($tipo == "audio") {
             file_put_contents("EntraAudio.txt", $url);
@@ -179,6 +191,7 @@ class WhatsAppController extends Controller
         $response = curl_exec($curl);
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
+
         $whatsApp->mensaje_enviado = $mensaje;
         $whatsApp->id_wa = $idMensajeEnviar;
         $whatsApp->telefono_wa = getenv('WPP_NUM');
@@ -295,14 +308,13 @@ class WhatsAppController extends Controller
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($ch); // Variable que contiene lo que dice el usuario 
+                $response = curl_exec($ch); // Variable que contiene lo que dice el usuario
                 curl_close($ch);
                 $mensaje = $response;
                 $linkNrogk = "https://5d35-2800-bf0-1c0-86f-5f8-50aa-b4bf-b67d.ngrok-free.app/";
                 $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                return $this->enviarMensajeMult($telefonoUser, $mensaje, "audio", $linkNrogk . $rutaAudio);
-                //$this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta  
+                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta  
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];

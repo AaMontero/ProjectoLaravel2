@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"_token":"mOtgPZa4J1XLdvR3dA2wPw6bSd4AA0cgXGGNWwWr","numeroEnvio":"593979345051","mensajeEnvio":"Hola que haces"}
+=======
+{"_token":"WO2kSYXDKY6Va6hXs3XH1k2CjXTWdRP3DTwZ5MPb","numeroEnvio":"593998557785","mensajeEnvio":"aaa","archivo":{}}
+>>>>>>> 240a0565ad828c4b86379b01f34ed14161368587

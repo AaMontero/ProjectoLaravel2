@@ -162,10 +162,15 @@
 
                         var objeto = JSON.parse(respuesta);
                         var json = JSON.stringify(objeto);
-                        console.log('esta aqui'+json);
+                        //console.log('esta aqui'+json);
                         var lista = document.getElementById("miLista");
-                        console.log('llega hasta esta parte'+objeto);
+                        //console.log('llega hasta esta parte'+objeto);
                         lista.appendChild(crearMensajeEnviado(objeto));
+                        if('tiene imagen' == true){
+                            lista.appendChild(crearMensajeImgEnviado());
+                        }else{
+                            lista.appendChild(crearMensajeEnviado(objeto));
+                        }
 
                         document.getElementById("mensajeInput").value = "";
 

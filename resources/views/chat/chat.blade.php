@@ -161,23 +161,17 @@
                     try {
                         var objeto = JSON.parse(respuesta);
                         var lista = document.getElementById("miLista");
-                        var mensajeEnviado = JSON.parse(objeto.mensaje_enviado);
-                        if (mensajeEnviado && mensajeEnviado.ruta) {
-                            console.log("La ruta es:", mensajeEnviado.ruta);
-                        } else {
-                            console.log("No se encontró la ruta en el objeto mensaje_enviado.");
+                        var mensajeEnviado = objeto.mensaje_enviado;
+                        if (typeof mensajeEnviado === 'string' && mensajeEnviado.startsWith('{"ruta":')) {
+                            // Si mensaje_enviado es una cadena y comienza con '{"ruta":', entonces parsearla como JSON
+                            mensajeEnviado = JSON.parse(mensajeEnviado);
                         }
-                        //console.log('llega hasta esta parte'+objeto);
-                        //lista.appendChild(crearMensajeEnviado(objeto));
                         console.log(objeto.ruta);
                         if (mensajeEnviado.ruta !== undefined && mensajeEnviado.ruta !== "") {
-                            console.log("Entra a mensaje con imagen");
                             lista.appendChild(crearMensajeImgEnviado(objeto));
                         } else {
-                            console.log("Entra al else de imagen");
                             lista.appendChild(crearMensajeEnviado(objeto));
                         }
-
                         document.getElementById("mensajeInput").value = "";
                         document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
                         document.getElementById("iconoArchivoSeleccionado").textContent = '';

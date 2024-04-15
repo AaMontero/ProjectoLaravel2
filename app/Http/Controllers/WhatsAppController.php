@@ -181,7 +181,7 @@ class WhatsAppController extends Controller
             curl_close($curl);
             //return "Audio";
         }
-      
+
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
 
@@ -618,7 +618,7 @@ Salida de Quito o Guayaquil Quito"):
                 return "Estimada Antonella García,\n¡Gracias por ponerte en contacto con nosotros para planificar tu viaje a México ! Nos emociona mucho ayudarte a organizar una experiencia inolvidable.";
                 break;
             case $util->convertirMinNoTilde("Gracias ☺️"):
-                return "MÉXICO Y CANCÚN!\n06 NOCHES\nTicket aéreo Quito o Guayaquil / México - Cancún / Quito o Guayaquil VÍA COPA AIRLINES\nINCLUYE:\nEN CD. DE MÉXICO:\n* Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n* 03 noches de alojamiento en HOTEL REGENTE O SIMILAR\n* Desayunos diarios incluidos\n* Cortesías:\n- Almuerzo en Teotihuacán\nEN CANCÚN:\n* Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n* 03 noches de alojamiento en CANCUN BAY RESORT\n* Plan alimenticio todo incluido\n$880";
+                return "MÉXICO Y CANCÚN!\n06 NOCHES\nTicket aéreo Quito o Guayaquil / México - Cancún / Quito o Guayaquil VÍA COPA AIRLINES\nINCLUYE:\nEN CD. DE MÉXICO:\n Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n 03 noches de alojamiento en HOTEL REGENTE O SIMILAR\n Desayunos diarios incluidos\n Cortesías:\n- Almuerzo en Teotihuacán\nEN CANCÚN:\n Traslado aeropuerto / hotel / aeropuerto en servicio compartido\n 03 noches de alojamiento en CANCUN BAY RESORT\n Plan alimenticio todo incluido\n$880";
                 break;
             case $util->convertirMinNoTilde("Que actividades incluye"):
                 return null;
@@ -636,7 +636,7 @@ Salida de Quito o Guayaquil Quito"):
                     return $respuesta;
                     break;
             case $util->convertirMinNoTilde("Muchas gracias ☺️"):
-                return "Gracias a ti. ¡Buen viaje!";
+                return null;
                 break;
             default:
                 return "No hay respuesta";

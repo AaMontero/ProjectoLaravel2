@@ -21,26 +21,17 @@ class WhatsAppController extends Controller
 
     public function enviarPHP(Request $request)
     {
-
         $mensaje = $request->mensajeEnvio;
-
         $numeroEnviar = $request->numeroEnvio;
-
         // Guardar la solicitud en un archivo de texto para depuración (opcional)
-        //file_put_contents("requestenvia.txt", json_encode($request->all()));
         $fechaHoraActual = Carbon::now()->format('YmdHis');
-
         if ($request->hasFile('archivo')) {
-
             $archivo = $request->file('archivo');
             $extension = $archivo->extension();
-
             //Se podría crear otra ruta para las imagenes Enviadas
             $rutaArchivo = 'uploads/imagenesWpp/' . $numeroEnviar . '/' . $fechaHoraActual;
 
             file_put_contents($rutaArchivo . '.' . $extension, file_get_contents($archivo));
-            file_put_contents("archivo5.txt","llega hastya aca");
-
             $extensionesImagenes = ['jpeg', 'jpg', 'png', 'gif'];
             $extensionesArchivos = ['.pdf', '.doc', '.docx', '.xlsx', '.xls', '.xml', '.svg'];
 
@@ -50,7 +41,6 @@ class WhatsAppController extends Controller
                 return $this->enviarMensajeMult($numeroEnviar, $mensaje, "doc", $rutaArchivo . '.' . $extension);
             }
         }
-
 
         // Llamar a la función para enviar el mensaje
         return $this->enviarMensaje($numeroEnviar, $mensaje, "texto");
@@ -90,8 +80,6 @@ class WhatsAppController extends Controller
             $urlRequest = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages';
             $url = 'https://trivai.me/uploads/imagenesWpp/593998557785/1712761003imagen.jpeg';
             //$url = "http://127.0.0.1:8000/" . $url;
-            file_put_contents("numeroEnviar.txt", $numeroEnviar);
-            file_put_contents("mensaje.txt", $mensaje);
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => $urlRequest,
@@ -138,8 +126,8 @@ class WhatsAppController extends Controller
                 CURLOPT_POSTFIELDS => '{
     "messaging_product": "whatsapp",
     "recipient_type": "individual",
-    "to":' . $numeroEnviar . '
-    ",type": "document",
+    "to": "' . $numeroEnviar . '",
+    "type": "document",
     "document": {
         "link": "' . $url . '"
     }
@@ -157,13 +145,45 @@ class WhatsAppController extends Controller
             //echo $response;
 
         }
+        if ($tipo == "audio") {
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => '{
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": "' . $numeroEnviar . '",
+                "type": "audio",
+                "audio": {
+                    "link": "' . $url . '"
+                }
+            }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer EAA0cGBz1VmwBO3iS2LpEZAAR5ECVjzIV2wQFOAlNB987Xm2WAZBtPtyTgushApK8ojgq1bpsIUWUxZAqLedN7U21DLZCGTpTANfxerBNhuZB4vB8492ZC77Aw56DwZCey08x1TaXJ0RjdBBvIZBD79BGXaiSlyaTrl2tBYqizijG5G7J5kDDPRV90arZC36nZCFzMT',
+                    'Cookie: ps_l=0; ps_n=0'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+            return "Audio";
+        }
         $response = curl_exec($curl);
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
 
         $whatsApp->mensaje_enviado = $mensaje;
         $whatsApp->id_wa = $idMensajeEnviar;
-        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->telefono_wa = getenv('WPP_NUM');
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
         $whatsApp->visto = true;
@@ -209,7 +229,7 @@ class WhatsAppController extends Controller
         $whatsApp = new WhatsApp();
         $whatsApp->mensaje_enviado = $mensaje;
         $whatsApp->id_wa = $idMensajeEnviar;
-        $whatsApp->telefono_wa = "593987411818";
+        $whatsApp->telefono_wa = getenv('WPP_NUM');
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
         $whatsApp->visto = true;
@@ -280,8 +300,10 @@ class WhatsAppController extends Controller
                 $response = curl_exec($ch); // Variable que contiene lo que dice el usuario
                 curl_close($ch);
                 $mensaje = $response;
+                $linkNrogk = "https://5d35-2800-bf0-1c0-86f-5f8-50aa-b4bf-b67d.ngrok-free.app/";
+                $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta
+                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta  
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];
@@ -430,6 +452,26 @@ class WhatsAppController extends Controller
         return $whatsApp;
     }
 
+    function convertirTextoAudio($texto, $numeroEnviar)
+    {
+        $data = array("texto" => $texto); // Aquí se pasa el texto como un parámetro
+        $url = 'http://127.0.0.1:5000/audioToText';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error: ' . curl_error($ch);
+        }
+        curl_close($ch);
+        $fechaHoraActual = Carbon::now()->format('YmdHis');
+        $ruta = 'uploads/audiosWpp/' . $numeroEnviar . '/' . $fechaHoraActual . '.mp3';
+        // Guardar el archivo MP3 en el servidor
+        file_put_contents($ruta, $response);
+        return $ruta;
+    }
+
     function conversacion($mensajeRecibido)
     {
 
@@ -437,7 +479,7 @@ class WhatsAppController extends Controller
 
         $mensajenoTilde = $util->convertirMinNoTilde($mensajeRecibido);
         switch ($mensajenoTilde) {
-            case $util ->convertirMinNoTilde("hola"):
+            case $util->convertirMinNoTilde("hola"):
                 return "Hola, buen dia";
                 break;
             case $util->convertirMinNoTilde("Buenos dias"):

@@ -179,7 +179,7 @@ class WhatsAppController extends Controller
 
             $response = curl_exec($curl);
             curl_close($curl);
-            return "Audio";
+            //return "Audio";
         }
         $response = curl_exec($curl);
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];

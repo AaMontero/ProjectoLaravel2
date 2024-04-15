@@ -82,7 +82,7 @@ class WhatsAppController extends Controller
         if ($tipo == "image") {
             $urlRequest = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages';
             $url = getenv('URL_RECURSOS').'/'.$url;
-            file_put_contents('qqqq.txt',$url);
+            file_put_contents('imagenllegar.txt',$url);
             //$url = "http://127.0.0.1:8000/" . $url;
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -306,7 +306,7 @@ class WhatsAppController extends Controller
                 $mensaje = $this->conversacion($response);
                 $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta  
+                $this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];

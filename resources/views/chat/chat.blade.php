@@ -159,10 +159,13 @@
                 .then((respuesta) => {
                     console.log("Respuesta del servidor:", respuesta);
                     try {
+
                         var objeto = JSON.parse(respuesta);
-                        console.log(respuesta);
+                        var json = JSON.stringify(objeto);
+                        console.log('esta aqui'+json);
                         var lista = document.getElementById("miLista");
-                        lista.appendChild(crearMensajeImgEnviado(objeto));
+                        console.log('llega hasta esta parte'+objeto);
+                        lista.appendChild(crearMensajeEnviado(objeto));
 
                         document.getElementById("mensajeInput").value = "";
 

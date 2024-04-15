@@ -172,7 +172,6 @@
                         } else {
                             lista.appendChild(crearMensajeEnviado(objeto));
                         }
-
                         document.getElementById("mensajeInput").value = "";
                         document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
                         document.getElementById("iconoArchivoSeleccionado").textContent = '';

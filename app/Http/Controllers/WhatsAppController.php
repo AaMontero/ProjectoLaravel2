@@ -497,12 +497,12 @@ class WhatsAppController extends Controller
                 return "Para poder ayudarte necesitamos saber la siguiente información\nNombre:\nCorreo electrónico:\nDestino:\nFecha tentativa:\nCuantas personas viajan:\nEdades:\nSalida de Quito o Guayaquil:";
                 break;
             case $util->convertirMinNoTilde("Nombre Antonella Garcia
-            Correo electrónico antonella.garciacamacho@gmail.com
-            Destino Cartagena
-            Fecha tentativa 25 de mayo del 2024
-            Cuantas personas viajan 2
-            Edades 24 y 25
-            Salida de Quito o Guayaquil Quito"):
+Correo electrónico antonella.garciacamacho@gmail.com
+Destino Cartagena
+Fecha tentativa 25 de mayo del 2024
+Cuantas personas viajan 2
+Edades 24 y 25
+Salida de Quito o Guayaquil Quito"):
                 $mesnaje0 = "Estimada Antonella García\n¡Gracias por ponerte en contacto con nosotros para planificar tu viaje a Cartagena! Nos emociona mucho ayudarte a organizar una experiencia inolvidable.";
                 $mensaje1 = "Recibimos su pedido de cotización a Cartagena para dos personas para la fecha del 25 de mayo me puede confirmar.";
                 $retorno = [$mesnaje0, $mensaje1];

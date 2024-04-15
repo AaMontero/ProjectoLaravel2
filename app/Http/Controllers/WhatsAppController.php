@@ -50,6 +50,7 @@ class WhatsAppController extends Controller
     public function enviarMensajeChatBot($numeroEnviar, $mensajeLlega)
     {
 
+
         if (strncmp($numeroEnviar, '0', strlen('0')) === 0) {
             $numeroEnviar = '593' . substr($numeroEnviar, 1);
         }
@@ -62,8 +63,10 @@ class WhatsAppController extends Controller
             }
         }
 
+
         if (gettype($mensaje) != 'array') {
-            $this->enviarMensaje($numeroEnviar, $mensaje, "texto");
+            $url = $this->convertirTextoAudio($mensaje, $numeroEnviar);
+            $this->enviarMensajeMult($numeroEnviar, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $url);
         } else {
             foreach ($mensaje as $elem) {
                 $this->enviarMensaje($numeroEnviar, $elem, "texto");
@@ -168,7 +171,7 @@ class WhatsAppController extends Controller
             }',
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
-                    'Authorization: Bearer EAA0cGBz1VmwBO3iS2LpEZAAR5ECVjzIV2wQFOAlNB987Xm2WAZBtPtyTgushApK8ojgq1bpsIUWUxZAqLedN7U21DLZCGTpTANfxerBNhuZB4vB8492ZC77Aw56DwZCey08x1TaXJ0RjdBBvIZBD79BGXaiSlyaTrl2tBYqizijG5G7J5kDDPRV90arZC36nZCFzMT',
+                    'Authorization: Bearer ' . getenv('WPP_TOKEN'),
                     'Cookie: ps_l=0; ps_n=0'
                 ),
             ));
@@ -299,11 +302,10 @@ class WhatsAppController extends Controller
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $response = curl_exec($ch); // Variable que contiene lo que dice el usuario
                 curl_close($ch);
-                $mensaje = $response;
-                $linkNrogk = "https://5d35-2800-bf0-1c0-86f-5f8-50aa-b4bf-b67d.ngrok-free.app/";
+                $mensaje = $this->conversacion($response);
                 $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensaje($telefonoUser, $mensaje); //Envia el mismo mensaje de vuelta  
+                $this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta  
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];

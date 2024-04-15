@@ -21,26 +21,17 @@ class WhatsAppController extends Controller
 
     public function enviarPHP(Request $request)
     {
-
         $mensaje = $request->mensajeEnvio;
-
         $numeroEnviar = $request->numeroEnvio;
-
         // Guardar la solicitud en un archivo de texto para depuración (opcional)
-        //file_put_contents("requestenvia.txt", json_encode($request->all()));
         $fechaHoraActual = Carbon::now()->format('YmdHis');
-
         if ($request->hasFile('archivo')) {
-
             $archivo = $request->file('archivo');
             $extension = $archivo->extension();
-
             //Se podría crear otra ruta para las imagenes Enviadas
             $rutaArchivo = 'uploads/imagenesWpp/' . $numeroEnviar . '/' . $fechaHoraActual;
 
             file_put_contents($rutaArchivo . '.' . $extension, file_get_contents($archivo));
-            file_put_contents("archivo5.txt","llega hastya aca");
-
             $extensionesImagenes = ['jpeg', 'jpg', 'png', 'gif'];
             $extensionesArchivos = ['.pdf', '.doc', '.docx', '.xlsx', '.xls', '.xml', '.svg'];
 
@@ -89,8 +80,6 @@ class WhatsAppController extends Controller
             $urlRequest = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages';
             $url = 'https://trivai.me/uploads/imagenesWpp/593998557785/1712761003imagen.jpeg';
             //$url = "http://127.0.0.1:8000/" . $url;
-            file_put_contents("numeroEnviar.txt", $numeroEnviar);
-            file_put_contents("mensaje.txt", $mensaje);
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => $urlRequest,
@@ -157,7 +146,7 @@ class WhatsAppController extends Controller
 
         }
         if ($tipo == "audio") {
-            file_put_contents("EntraAudio.txt", $url);
+            
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages',

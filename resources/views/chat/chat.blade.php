@@ -97,7 +97,7 @@
     </div>
 
 
-    <script>
+<script>
         document.getElementById('archivo').addEventListener('change', function(event) {
             const archivo = event.target.files[0];
             const iconoArchivo = document.getElementById('iconoArchivo');
@@ -160,8 +160,10 @@
                     console.log(respuesta);
                     try {
                         var objeto = JSON.parse(respuesta);
+                        console.log(respuesta);
                         var lista = document.getElementById("miLista");
                         lista.appendChild(crearMensajeImgEnviado(objeto));
+
                         document.getElementById("mensajeInput").value = "";
 
                         document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
@@ -598,6 +600,6 @@
                 minutos; // Agregar un cero delante si los minutos son menores que 10
             return horaFormato + ':' + minutosFormato;
         }
-    </script>
+</script>
 
 </x-app-layout>

@@ -146,7 +146,7 @@ class WhatsAppController extends Controller
 
         }
         if ($tipo == "audio") {
-            
+
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages',

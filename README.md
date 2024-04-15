@@ -1,9 +1,12 @@
 #Ejecucion del projecto 
-
 ## Instalación de las dependencias 
 ```
-
+    composer install 
 ```
+Es necesario activar algunas extensiones en el archivo php.ini
+- extension=curl
+- extension=intl
+- extension=zip
 ## Cambios para el archivo .env 
 ### Variables de entorno para la aplicación
 ```
@@ -24,6 +27,7 @@ DB_USERNAME=
 DB_PASSWORD=
 ```
 ### Variables para el uso de Pusher 
+```
 PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
@@ -31,6 +35,7 @@ PUSHER_HOST=
 PUSHER_PORT=
 PUSHER_SCHEME=
 PUSHER_APP_CLUSTER=
+```
 ### Variables de entorno para whatsapp 
 ```
 WPP_NUM = ""
@@ -41,6 +46,7 @@ WPP_MULTIVERSION = ""
 ```
 ## Inicialización de npm 
 ```
+ npm install 
  (Para el desarrollo local) - npm run dev 
  (Para el despliegue) - npm run build
 ```

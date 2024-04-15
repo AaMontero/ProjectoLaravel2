@@ -73,6 +73,7 @@ class WhatsAppController extends Controller
             }
         }
     }
+
     function enviarMensajeMult($numeroEnviar, $mensaje, $tipo, $url)
     {
 
@@ -81,8 +82,7 @@ class WhatsAppController extends Controller
         }
         if ($tipo == "image") {
             $urlRequest = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages';
-            $url = getenv('URL_RECURSOS').'/'.$url;
-            file_put_contents('imagenllegar.txt',$url);
+            $url = getenv('URL_RECURSOS') . '/' . $url;
             //$url = "http://127.0.0.1:8000/" . $url;
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -95,15 +95,15 @@ class WhatsAppController extends Controller
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => '{
-                    "messaging_product": "whatsapp",
-                    "recipient_type": "individual",
-                    "to": "' . $numeroEnviar . '",
-                    "type": "image",
-                    "image": {
-                        "link": "' . $url . '",
-                        "caption": "' . $mensaje . '"
-                    }
-                }',
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": "' . $numeroEnviar . '",
+                "type": "image",
+                "image": {
+                    "link": "' . $url . '",
+                    "caption": "' . $mensaje . '"
+                }
+            }',
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer ' . getenv("WPP_TOKEN"),
@@ -128,14 +128,14 @@ class WhatsAppController extends Controller
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => '{
-    "messaging_product": "whatsapp",
-    "recipient_type": "individual",
-    "to": "' . $numeroEnviar . '",
-    "type": "document",
-    "document": {
-        "link": "' . $url . '"
-    }
-    }',
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": "' . $numeroEnviar . '",
+                "type": "document",
+                "document": {
+                    "link": "' . $url . '"
+                }
+                }',
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer ' . getenv("WPP_TOKEN"),
@@ -162,14 +162,14 @@ class WhatsAppController extends Controller
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => '{
-                "messaging_product": "whatsapp",
-                "recipient_type": "individual",
-                "to": "' . $numeroEnviar . '",
-                "type": "audio",
-                "audio": {
-                    "link": "' . $url . '"
-                }
-            }',
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": "' . $numeroEnviar . '",
+                    "type": "audio",
+                    "audio": {
+                        "link": "' . $url . '"
+                    }
+                }',
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer ' . getenv('WPP_TOKEN'),
@@ -179,9 +179,9 @@ class WhatsAppController extends Controller
 
             $response = curl_exec($curl);
             curl_close($curl);
-            return "Audio";
+            //return "Audio";
         }
-        $response = curl_exec($curl);
+      
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
 
@@ -195,6 +195,8 @@ class WhatsAppController extends Controller
         curl_close($curl);
         return json_encode($whatsApp);
     }
+
+
     function enviarMensaje($numeroEnviar, $mensaje)
     {
         $telefonoEnviaID = getenv('WPP_ID');

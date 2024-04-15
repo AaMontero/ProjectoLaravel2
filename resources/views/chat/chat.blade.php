@@ -159,13 +159,22 @@
                 .then((respuesta) => {
                     console.log("Respuesta del servidor:", respuesta);
                     try {
-
                         var objeto = JSON.parse(respuesta);
                         var lista = document.getElementById("miLista");
-                        lista.appendChild(crearMensajeEnviado(objeto));
-                        if (objeto.tieneImagen === true) {
+                        var mensajeEnviado = JSON.parse(objeto.mensaje_enviado);
+                        if (mensajeEnviado && mensajeEnviado.ruta) {
+                            console.log("La ruta es:", mensajeEnviado.ruta);
+                        } else {
+                            console.log("No se encontró la ruta en el objeto mensaje_enviado.");
+                        }
+                        //console.log('llega hasta esta parte'+objeto);
+                        //lista.appendChild(crearMensajeEnviado(objeto));
+                        console.log(objeto.ruta);
+                        if (mensajeEnviado.ruta !== undefined && mensajeEnviado.ruta !== "") {
+                            console.log("Entra a mensaje con imagen");
                             lista.appendChild(crearMensajeImgEnviado(objeto));
                         } else {
+                            console.log("Entra al else de imagen");
                             lista.appendChild(crearMensajeEnviado(objeto));
                         }
 
@@ -370,6 +379,7 @@
 
         function crearMensajeImgEnviado(elemento) {
             datosImg = JSON.parse(elemento['mensaje_enviado']);
+
             urlImg = datosImg.ruta;
             msnImg = datosImg.textoImagen;
             var divGrande = document.createElement("div");
@@ -543,19 +553,19 @@
                     if (elemento['telefono_wa'] == telefonoEmisor) {
 
                         if (elemento['mensaje_enviado'].startsWith('{')) {
-                            console.log("entra 1");
+                            //console.log("entra 1");
                             elementoCreado = crearMensajeImgEnviado(elemento);
                         } else {
-                            console.log("entra 2");
+                            //console.log("entra 2");
                             elementoCreado = crearMensajeEnviado(elemento);
                         }
 
                     } else {
                         if (elemento['mensaje_enviado'].startsWith('{')) {
-                            console.log("entra 3");
+                            //console.log("entra 3");
                             elementoCreado = crearMensajeImgRecibido(elemento);
                         } else {
-                            console.log("entra 4");
+                            //console.log("entra 4");
                             elementoCreado = crearMensajeRecibido(elemento);
                         }
 

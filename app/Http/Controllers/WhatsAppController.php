@@ -81,7 +81,8 @@ class WhatsAppController extends Controller
         }
         if ($tipo == "image") {
             $urlRequest = 'https://graph.facebook.com/v' . getenv('WPP_MULTIVERSION') . '/' . getenv('WPP_ID') . '/messages';
-            $url = 'https://trivai.me/uploads/imagenesWpp/593998557785/1712761003imagen.jpeg';
+            $url = getenv('URL_RECURSOS').'/'.$url;
+            file_put_contents('qqqq.txt',$url);
             //$url = "http://127.0.0.1:8000/" . $url;
             $curl = curl_init();
             curl_setopt_array($curl, array(

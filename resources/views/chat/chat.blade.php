@@ -157,7 +157,7 @@
         function enviarFormulario() {
             llamadaAjax()
                 .then((respuesta) => {
-                    console.log(respuesta);
+                    console.log("Respuesta del servidor:", respuesta);
                     try {
                         var objeto = JSON.parse(respuesta);
                         var lista = document.getElementById("miLista");

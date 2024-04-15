@@ -181,8 +181,7 @@ class WhatsAppController extends Controller
             curl_close($curl);
             return "Audio";
         }
-        // Aquí debes manejar el resto del código, incluyendo la parte que sigue a los bloques if
-        // Solo se ejecutará una vez después de todas las solicitudes cURL
+      
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
 

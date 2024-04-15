@@ -174,7 +174,6 @@
                         }
 
                         document.getElementById("mensajeInput").value = "";
-
                         document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
                         document.getElementById("iconoArchivoSeleccionado").textContent = '';
                         document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";

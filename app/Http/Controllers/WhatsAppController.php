@@ -636,8 +636,31 @@ Salida de Quito o Guayaquil Quito"):
                     return $respuesta;
                     break;
             case $util->convertirMinNoTilde("Muchas gracias ☺️"):
-                return null;
-                break;
+
+                     return "•   Para mantener esta reservación en firme se requiere el pago del abono de $100, NO REEMBOLSABLE en el caso de pasajeros individuales o grupos. Aplica hasta 31 días antes del viaje para individuales y 46 días para grupos.\n•	El pago total de una reservación deberá ser realizada hasta 30 días antes de la salida.\n•	Si una reservación ingresa 30 días antes de la salida, el pago total deberá estar realizado en 24 horas luego de haber sido realizada la misma.\n•	Reservaciones que no tengan pago SE CANCELARÁN a las 24 HORAS.\n•	En el caso de grupos de pasajeros el pago total se debe realizar 45 días antes de la salida.\n•	Penalidad por cambio de nombre: USD $150 hasta 10 días antes de la salida en vuelo chárter.\n•	No se permite cambios de fecha o destino.\n•	Al momento de la facturación usted acepta estar de acuerdo con los servicios detallados y está de acuerdo con las penalidades descritas en esta liquidación de servicios sin excepción alguna.";
+                     break;
+                 case $util->convertirMinNoTilde("Listo cuáles serían los métodos de pago"):
+                     return "Claro Para completar tu reserva, te ofrecemos varias opciones de pago. Puedes realizar una transferencia bancaria, pagar con tarjeta de crédito o utilizar otras plataformas de pago en línea. Por favor, avísanos cuál prefieres y te proporcionaremos los detalles necesarios para proceder.";
+                     break;
+            case $util->convertirMinNoTilde("Deseo pagar con tarjeta de crédito"):
+                     return "Claro para procesar el pago con tarjeta de crédito, por favor haz clic en el siguiente link: https://www.payphone.app/.";
+                     break;
+            case $util->convertirMinNoTilde("Y si deseo pagar en efectivo?"):
+                     return "No hay problema. Para realizar el pago, por favor acérquese a nuestras oficinas ubicadas en el centro comercial Galería Plaza, Local N7.  ¿A qué hora te gustaría agendar una cita? Estamos disponibles de lunes a viernes de 9 am a 6 pm . Por favor, avísenos su preferencia para coordinar la cita. ¡Gracias!";
+                 break;
+             case $util->convertirMinNoTilde("No voy a poder acercarme :( deseo que me mande su número de cuenta mejor, para hacerle el abono"):
+                        return "Con gusto, los datos de la cuenta bancaria son:\nCuenta Corriente Banco Guayaquil\nCuenta N°: 0041291060\nNombre: Trivai S.A\nRUC: 1793198413001";
+                     break;
+            case $util->convertirMinNoTilde("Listo"):
+                 $mensaje6 = "¡Muchas gracias por realizar tu pago! En este momento procedemos a confirmar tu reserva y asegurarnos de que todo esté en orden para tu viaje. Si tienes alguna pregunta o necesitas asistencia durante el proceso de pago, no dudes en contactarnos. Puedes comunicarte con nuestro equipo de soporte al número 099926280 que te acompañara en tu viaje.";
+                 $mensaje7 = "Estimado/a Antonella García\n\n Queremos confirmar que hemos recibido su pago y que su reserva está ahora completa. Todos los detalles de su viaje han sido registrados y estamos emocionados de asistirlo/a en cada paso del camino.\nSi tiene alguna pregunta adicional o necesita más información, no dude en ponerse en contacto con nosotros. Estamos aquí para ayudarlo/a.\n¡Gracias por confiar en nosotros para su viaje y esperamos que tenga una experiencia memorable!";
+                    $retorno = [$mensaje6, $mensaje7];
+                 return $retorno;
+                 break;
+             case $util->convertirMinNoTilde("Muchísimas gracias ☺️"):
+                 return "Gracias por contactarnos con nostros";
+                 break;
+
             default:
                 return "No hay respuesta";
         }

@@ -487,7 +487,6 @@ class WhatsAppController extends Controller
              case $util->convertirMinNoTilde("hola"):
                  return "Hola, buen dia";
                 break;
-
 //             case $util->convertirMinNoTilde("Me llamo Antonella"):
 //                 return "Mucho gusto, Antonella. ¿En qué puedo ayudarte?";
 //                 break;
@@ -660,7 +659,6 @@ Salida de Quito o Guayaquil Quito"):
              case $util->convertirMinNoTilde("Muchísimas gracias ☺️"):
                  return "Gracias por contactarnos con nostros";
                  break;
-
             default:
                 return "No hay respuesta";
         }

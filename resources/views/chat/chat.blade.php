@@ -154,43 +154,35 @@
 
         });
 
-        function enviarFormulario() {
-            llamadaAjax()
-                .then((respuesta) => {
-                    console.log("Respuesta del servidor:", respuesta);
-                    try {
-                        var objeto = JSON.parse(respuesta);
-                        var lista = document.getElementById("miLista");
-                        var mensajeEnviado = JSON.parse(objeto.mensaje_enviado);
-                        if (mensajeEnviado && mensajeEnviado.ruta) {
-                            console.log("La ruta es:", mensajeEnviado.ruta);
-                        } else {
-                            console.log("No se encontró la ruta en el objeto mensaje_enviado.");
-                        }
-                        //console.log('llega hasta esta parte'+objeto);
-                        //lista.appendChild(crearMensajeEnviado(objeto));
-                        console.log(objeto.ruta);
-                        if (mensajeEnviado.ruta !== undefined && mensajeEnviado.ruta !== "") {
-                            console.log("Entra a mensaje con imagen");
-                            lista.appendChild(crearMensajeImgEnviado(objeto));
-                        } else {
-                            console.log("Entra al else de imagen");
-                            lista.appendChild(crearMensajeEnviado(objeto));
-                        }
 
-                        document.getElementById("mensajeInput").value = "";
-                        document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
-                        document.getElementById("iconoArchivoSeleccionado").textContent = '';
-                        document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
-                        document.getElementById("nombreArchivoSeleccionado").textContent = "";
-                    } catch (error) {
-                        console.error("Error al analizar el JSON:", error);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error en la llamada AJAX:", error);
-                });
-        }
+function enviarFormulario() {
+    llamadaAjax()
+        .then((respuesta) => {
+
+            try {
+                var objeto = JSON.parse(respuesta);
+                var lista = document.getElementById("miLista");
+                if (objeto.tiene_imagen) {
+                    lista.appendChild(crearMensajeImgEnviado());
+                } else {
+                    lista.appendChild(crearMensajeEnviado(objeto));
+                }
+                document.getElementById("archivo").value = "";
+                document.getElementById("mensajeInput").value = "";
+                document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
+                document.getElementById("iconoArchivoSeleccionado").textContent = '';
+                document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
+                document.getElementById("nombreArchivoSeleccionado").textContent = "";
+
+            } catch (error) {
+                console.error("Error al analizar el JSON:", error);
+            }
+        })
+        .catch((error) => {
+            console.error("Error en la llamada AJAX:", error);
+        });
+}
+
 
         function llamadaAjax() {
             return new Promise((resolve, reject) => {
@@ -379,7 +371,6 @@
 
         function crearMensajeImgEnviado(elemento) {
             datosImg = JSON.parse(elemento['mensaje_enviado']);
-
             urlImg = datosImg.ruta;
             msnImg = datosImg.textoImagen;
             var divGrande = document.createElement("div");

@@ -82,7 +82,7 @@
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px; overflow:hidden" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
-                    <input type="file" name="archivo" id="archivo" style="display: none;" multiple
+                    <input type="file" name="archivo" id="archivo" style="display: none;"
                         accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
                     <!-- Input oculto para la carga de archivos -->
                     <label for="archivo" class=" font-semibold py-2 px-3 rounded-md cursor-pointer">
@@ -154,35 +154,37 @@
 
         });
 
-
-function enviarFormulario() {
-    llamadaAjax()
-        .then((respuesta) => {
-
-            try {
-                var objeto = JSON.parse(respuesta);
-                var lista = document.getElementById("miLista");
-                if (objeto.tiene_imagen) {
-                    lista.appendChild(crearMensajeImgEnviado());
-                } else {
-                    lista.appendChild(crearMensajeEnviado(objeto));
-                }
-                document.getElementById("archivo").value = "";
-                document.getElementById("mensajeInput").value = "";
-                document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
-                document.getElementById("iconoArchivoSeleccionado").textContent = '';
-                document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
-                document.getElementById("nombreArchivoSeleccionado").textContent = "";
-
-            } catch (error) {
-                console.error("Error al analizar el JSON:", error);
-            }
-        })
-        .catch((error) => {
-            console.error("Error en la llamada AJAX:", error);
-        });
-}
-
+        function enviarFormulario() {
+            llamadaAjax()
+                .then((respuesta) => {
+                    console.log("Respuesta del servidor:", respuesta);
+                    try {
+                        var objeto = JSON.parse(respuesta);
+                        var lista = document.getElementById("miLista");
+                        var mensajeEnviado = objeto.mensaje_enviado;
+                        if (typeof mensajeEnviado === 'string' && mensajeEnviado.startsWith('{"ruta":')) {
+                            // Si mensaje_enviado es una cadena y comienza con '{"ruta":', entonces parsearla como JSON
+                            mensajeEnviado = JSON.parse(mensajeEnviado);
+                        }
+                        console.log(objeto.ruta);
+                        if (mensajeEnviado.ruta !== undefined && mensajeEnviado.ruta !== "") {
+                            lista.appendChild(crearMensajeImgEnviado(objeto));
+                        } else {
+                            lista.appendChild(crearMensajeEnviado(objeto));
+                        }
+                        document.getElementById("mensajeInput").value = "";
+                        document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
+                        document.getElementById("iconoArchivoSeleccionado").textContent = '';
+                        document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
+                        document.getElementById("nombreArchivoSeleccionado").textContent = "";
+                    } catch (error) {
+                        console.error("Error al analizar el JSON:", error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error en la llamada AJAX:", error);
+                });
+        }
 
         function llamadaAjax() {
             return new Promise((resolve, reject) => {

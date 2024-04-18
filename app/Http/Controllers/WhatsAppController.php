@@ -308,7 +308,7 @@ class WhatsAppController extends Controller
                 $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
                 //$this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
-                $this->enviarMensaje($telefonoUser, $mensaje);
+                $this->enviarMensaje($telefonoUser, $mensaje, "texto");
 
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];

@@ -114,6 +114,7 @@ class WhatsAppController extends Controller
             curl_close($curl);
 
             $mensaje = '{"ruta": "' . $url . '", "textoImagen": "' . $mensaje . '"}';
+
             //echo $response;
         }
         if ($tipo == "doc") {

@@ -129,14 +129,14 @@
         var desarrollo = true;
         var telefonoEmisor = '593999938356';
         var tokenFin =
-            "EAALYfjkUo48BOZCOkZAnUrBrhByF9C9LJDlSbsysC45i6LRMZBZBhSBEroPfEeOLT6CTjZB0eR4h3OtxRKQyZBMC3yQ2Fb7ASzubhD4AKDYB1pZCIYVZBIDSaLsjZA4DhEvekCTHwGqq1YAdq4Jyl5aZCqgEZAprqrZBtJVEjsK6qGq3THQZCfMskWPVWYxcbb5yLwwi1YCI1zIoyEDFkTotUHDUJEKKkjMIZC";
+            "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
         var urlPrincipal = "https://trivai.me"
-        // if (desarrollo) {
-        //     urlPrincipal = "127.0.0.1:8000"
-        //     telefonoEmisor = '593987411818';
-        //     tokenFin =
-        //     "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
-        // }
+        if (desarrollo) {
+            urlPrincipal = "127.0.0.1:8000"
+            telefonoEmisor = '593987411818';
+            tokenFin =
+                "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
+        }
         //Recibir los mensajes en tiempo real
         Pusher.logToConsole = true;
         var pusher = new Pusher('217450e1ce096539fb1c', {
@@ -154,7 +154,16 @@
 
         });
 
+        // Variable global para rastrear el estado de envío de la imagen
+        var imagenEnviada = false;
+
         function enviarFormulario() {
+            // Verificar si la imagen ya se ha enviado
+            if (imagenEnviada) {
+                console.log("La imagen ya ha sido enviada, no se puede enviar nuevamente.");
+                return; // Salir de la función si la imagen ya ha sido enviada
+            }
+
             llamadaAjax()
                 .then((respuesta) => {
                     console.log("Respuesta del servidor:", respuesta);
@@ -169,12 +178,15 @@
                         console.log(objeto.ruta);
                         if (mensajeEnviado.ruta !== undefined && mensajeEnviado.ruta !== "") {
                             lista.appendChild(crearMensajeImgEnviado(objeto));
+                            // Establecer la variable de estado de la imagen enviada a true
+                            imagenEnviada = true;
                         } else {
                             lista.appendChild(crearMensajeEnviado(objeto));
                         }
                         document.getElementById("mensajeInput").value = "";
-                        document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
-                        document.getElementById("iconoArchivoSeleccionado").textContent = '';
+
+                        // Reiniciar la imagen y el nombre del archivo seleccionado
+                        document.getElementById('archivoSeleccionado').style.display = 'none';
                         document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
                         document.getElementById("nombreArchivoSeleccionado").textContent = "";
                     } catch (error) {

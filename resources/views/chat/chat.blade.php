@@ -83,7 +83,7 @@
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px; overflow:hidden" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
                     <input type="file" name="archivo" id="archivo" style="display: none;"
-                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
+                        accept="image/jpeg, image/png, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
                     <!-- Input oculto para la carga de archivos -->
                     <label for="archivo" class=" font-semibold py-2 px-3 rounded-md cursor-pointer">
                         <img src="{{ asset('images\nube.png') }}" alt="Icono de archivos" class="w-10 h-10 rounded"

@@ -82,8 +82,8 @@
                     <textarea id="mensajeInput" name="mensajeEnvio"
                         class="w-full lg:w-4/5 border rounded-md py-2 px-3 lg:px-5 focus:outline-none focus:border-blue-500 ml-0 lg:ml-auto resize-none"
                         style="height: 40px; overflow:hidden" placeholder="Escribe un mensaje..." onkeypress="enviarConEnter(event)"></textarea>
-                    <input type="file" name="archivo" id="archivo" style="display: none;" multiple
-                        accept="image/*, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
+                    <input type="file" name="archivo" id="archivo" style="display: none;"
+                        accept="image/jpeg, image/png, .pdf, .doc, .docx, .xlsx, .xls, .xml, .svg">
                     <!-- Input oculto para la carga de archivos -->
                     <label for="archivo" class=" font-semibold py-2 px-3 rounded-md cursor-pointer">
                         <img src="{{ asset('images\nube.png') }}" alt="Icono de archivos" class="w-10 h-10 rounded"
@@ -154,7 +154,16 @@
 
         });
 
+        // Variable global para rastrear el estado de envío de la imagen
+        var imagenEnviada = false;
+
         function enviarFormulario() {
+            // Verificar si la imagen ya se ha enviado
+            if (imagenEnviada) {
+                console.log("La imagen ya ha sido enviada, no se puede enviar nuevamente.");
+                return; // Salir de la función si la imagen ya ha sido enviada
+            }
+
             llamadaAjax()
                 .then((respuesta) => {
                     console.log("Respuesta del servidor:", respuesta);
@@ -169,12 +178,15 @@
                         console.log(objeto.ruta);
                         if (mensajeEnviado.ruta !== undefined && mensajeEnviado.ruta !== "") {
                             lista.appendChild(crearMensajeImgEnviado(objeto));
+                            // Establecer la variable de estado de la imagen enviada a true
+                            imagenEnviada = true;
                         } else {
                             lista.appendChild(crearMensajeEnviado(objeto));
                         }
                         document.getElementById("mensajeInput").value = "";
-                        document.getElementById("iconoArchivoSeleccionado").style.display = 'none';
-                        document.getElementById("iconoArchivoSeleccionado").textContent = '';
+
+                        // Reiniciar la imagen y el nombre del archivo seleccionado
+                        document.getElementById('archivoSeleccionado').style.display = 'none';
                         document.getElementById("iconoArchivo").src = "{{ asset('images/nube.png') }}";
                         document.getElementById("nombreArchivoSeleccionado").textContent = "";
                     } catch (error) {
@@ -373,7 +385,6 @@
 
         function crearMensajeImgEnviado(elemento) {
             datosImg = JSON.parse(elemento['mensaje_enviado']);
-
             urlImg = datosImg.ruta;
             msnImg = datosImg.textoImagen;
             var divGrande = document.createElement("div");

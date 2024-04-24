@@ -113,6 +113,7 @@ class WhatsAppController extends Controller
             curl_close($curl);
 
             $mensaje = '{"ruta": "' . $url . '", "textoImagen": "' . $mensaje . '"}';
+
             //echo $response;
         }
         if ($tipo == "doc") {
@@ -178,8 +179,9 @@ class WhatsAppController extends Controller
 
             $response = curl_exec($curl);
             curl_close($curl);
-            //return "Audio";
+            return "Audio";
         }
+
 
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
@@ -194,7 +196,6 @@ class WhatsAppController extends Controller
         curl_close($curl);
         return json_encode($whatsApp);
     }
-
 
     function enviarMensaje($numeroEnviar, $mensaje)
     {
@@ -233,7 +234,7 @@ class WhatsAppController extends Controller
         $idMensajeEnviar = json_decode($response, true)['messages'][0]['id'];
         $whatsApp = new WhatsApp();
         $whatsApp->mensaje_enviado = $mensaje;
-        $whatsApp->id_wa = $idMensajeEnviar;
+            $whatsApp->id_wa = $idMensajeEnviar;
         $whatsApp->telefono_wa = getenv('WPP_NUM');
         $whatsApp->id_numCliente = $numeroEnviar;
         $whatsApp->fecha_hora = new DateTime('now');
@@ -308,6 +309,8 @@ class WhatsAppController extends Controller
                 $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
                 $this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
+                //$this->enviarMensaje($telefonoUser, $mensaje);
+
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
                 $idImagen = $imagen['id'];

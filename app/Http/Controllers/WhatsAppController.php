@@ -296,7 +296,7 @@ class WhatsAppController extends Controller
                 }
                 file_put_contents($rutaAudio, $responseAudio);
                 //Enviar el mensaje del chatbot
-                $url = 'http://localhost:5000/audio';
+                $url = 'https://trivai.me/audio';
                 $ch = curl_init($url);
                 $cfile = new CURLFile(realpath($rutaAudio));
                 $data = array('audio_file' => $cfile);
@@ -462,7 +462,7 @@ class WhatsAppController extends Controller
     function convertirTextoAudio($texto, $numeroEnviar)
     {
         $data = array("texto" => $texto); // Aquí se pasa el texto como un parámetro
-        $url = 'http://127.0.0.1:5000/audioToText';
+        $url = 'https://trivai.me/audioToText';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -484,7 +484,7 @@ class WhatsAppController extends Controller
 
         $data = array('mensaje' => $mensajeRecibido);
         // URL del servidor Flask
-        $url = 'http://localhost:5000/chat';
+        $url = 'https://trivai.me/chat';
         // Realizar la solicitud al servidor Flask
         $options = array(
             'http' => array(

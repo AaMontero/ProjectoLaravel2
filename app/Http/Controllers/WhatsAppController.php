@@ -296,7 +296,7 @@ class WhatsAppController extends Controller
                 }
                 file_put_contents($rutaAudio, $responseAudio);
                 //Enviar el mensaje del chatbot
-                $url = 'https://trivai.me/audio';
+                $url = 'http://localhost:5000/audio';
                 $ch = curl_init($url);
                 $cfile = new CURLFile(realpath($rutaAudio));
                 $data = array('audio_file' => $cfile);

@@ -308,8 +308,8 @@ class WhatsAppController extends Controller
                 $mensaje = $this->conversacion($response);
                 $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
                 $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
-                //$this->enviarMensaje($telefonoUser, $mensaje);
+                //$this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
+                $this->enviarMensaje($telefonoUser, $mensaje);
 
             } elseif ($tipo == "image") {
                 $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
@@ -484,7 +484,7 @@ class WhatsAppController extends Controller
 
         $data = array('mensaje' => $mensajeRecibido);
         // URL del servidor Flask
-        $url = 'https://trivai.me/chat';
+        $url = 'http://127.0.0.1:5000/chat';
         // Realizar la solicitud al servidor Flask
         $options = array(
             'http' => array(

@@ -10,6 +10,7 @@ use App\Models\Notificacion;
 use Carbon\Carbon;
 use CURLFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class WhatsAppController extends Controller
 {
@@ -502,6 +503,12 @@ class WhatsAppController extends Controller
         } else {
             $respuesta = json_decode($result, true);
             return $respuesta['respuesta'];
+            $responseWithImage = Http::post('http://127.0.0.1:5000/add_hotel_image', ['response' => $mensajeRecibido]);
+            if ($responseWithImage->successful()) {
+                return $responseWithImage->body();
+            } else {
+                return $mensajeRecibido;
+            }
         }
     }
 }

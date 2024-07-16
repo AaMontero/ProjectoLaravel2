@@ -12,11 +12,11 @@
             background-color: rgba(0, 0, 0, 0.1);
         }
     </style>
-    <div class="flex flex-col lg:flex-row lg:space-x-8">
+    <div class="flex flex-col lg:flex-row lg:space-x-8 pl-4">
         <!-- Notificaciones -->
         <div id="notificaciones"
-            class="w-full lg:w-1/2 bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1 ring-slate-900/5 shadow-xl overflow-auto"
-            style="max-height: 700px; border-radius: 10px;">
+            class=" bg-white dark:bg-slate-200 px-8 py-8 mt-5 ring-1  rounded-lg
+            ring-slate-900/5 shadow-xl ">
             <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
             @foreach ($mensajes->groupBy('id_numCliente') as $telefono => $mensajesTelefono)
                 @php
@@ -26,7 +26,7 @@
                 <div class="space-y-4">
                     <div onclick="abrirchat('{{ $telefono }}', {{ json_encode($mensajesTelefono) }})"
                         data-telefono="{{ $telefono }}" data-id="{{ $ultimoMensaje['mensaje_enviado'] }}"
-                        class="flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105"
+                        class="w-96 flex items-center notificacion-clicable bg-gray-{{ $leido ? '200' : '100' }} dark:bg-gray-{{ $leido ? '600' : '800' }} rounded-lg mb-4 p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105"
                         id="notificacion-{{ $ultimoMensaje->id }}">
                         <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
                         <div
@@ -43,11 +43,10 @@
         </div>
 
         <!-- Chat -->
-        <div id="abrirchat"
-            class="relative w-full lg:w-1/2 bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl"
-            style="display:none;">
-            <h3 class="text-xl font-semibold mb-4">Chat</h3>
-            <button onclick="cerrarChat()" class="absolute top-6 right-4 text-gray-600 hover:text-gray-800">
+        <div id="abrirchat" style="display: none; width: 600px; "
+            class="relative w-full  bg-white dark:bg-slate-200 rounded-lg px-6 py-6 mt-5 ring-1 ring-slate-900/5 shadow-xl">
+            <h3 class="text-xl font-semibold">Chat</h3>
+            <button onclick="cerrarChat()" class="absolute top-6 right-4 text-gray-600 hover:text-gray-800 h-20">
                 <!-- Icono de cierre (X) -->
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +56,7 @@
             </button>
 
             <!-- Historial de mensajes -->
-            <div class="flex flex-col h-70 border border-gray-300 rounded-lg px-4 py-4 space-y-4">
+            <div class="flex flex-col border border-gray-300 rounded-lg px-4 py-4 space-y-4">
                 <!-- Historial de mensajes -->
                 <div class="flex items-center bg-gray-200 p-2 rounded-lg shadow-md">
                     <img src="{{ asset('images\logoFondoNegro.jpeg') }}" alt="User" class="w-8 h-8 rounded-full">
@@ -129,7 +128,7 @@
         var desarrollo = true;
         var telefonoEmisor = '593999938356';
         var tokenFin =
-            "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
+            "EAAX58V5eyEEBOw68TUvx8eKrZAGnZBwHkAGkXI3VvGVnrrOgWOxjFJJGMOsJBXvuyiqypELtmuVJkdVBkQKoIBLopZAtAep3xkPv85wQnrYiEQ4paIokQZCCn5JEDJT6VdEx1jyBgckIhOxQkEH15qZAVd7TQHKNMX92mQNZAJQXRporOTY17DrZAu8KAIpZBaVZAHUwZCtgg48C3ZBJ9limN2C1V4oVugZD";
         var urlPrincipal = "https://aitriv.com"
         if (desarrollo) {
             urlPrincipal = "127.0.0.1:8000"
@@ -228,35 +227,6 @@
         }
 
 
-        // function llamadaAjax() { //
-
-        //     return new Promise((resolve, reject) => {
-        //         const textoIngresado = document.getElementById("mensajeInput").value;
-        //         const numeroAbierto = document.getElementById("numeroEnvioOculto").value;
-        //         const archivoGuardado = document.getElementById("archivo");
-        //         console.log("El archivo guardado es: " + archivoGuardado.files[0]);
-        //         const urlServer =
-        //             '/enviaWpp?numeroEnvio=' +
-        //             numeroAbierto +
-        //             '&mensajeEnvio=' +
-        //             textoIngresado;
-        //         fetch(urlServer)
-        //             .then((response) => {
-        //                 if (!response.ok) {
-        //                     throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
-        //                 }
-        //                 return response.text();
-        //             })
-        //             .then((responseData) => {
-        //                 resolve(responseData);
-        //             })
-        //             .catch((error) => {
-        //                 console.error("Error en la llamada fetch:", error);
-        //                 reject(error);
-        //             });
-        //     });
-        // }
-
         function enviarConEnter(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -281,32 +251,32 @@
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-            width: 350px;
-            height: auto;
-            margin-bottom: 5px;
-            margin-left:5px;
+                width: 350px;
+                height: auto;
+                margin-bottom: 5px;
+                margin-left:5px;
             `;
 
             // Estilos para la hora
             horaElemento.style = `
-        font-size: 12px;
-        color: #515151;
-        margin-left: 10px;
-        `;
+                font-size: 12px;
+                color: #515151;
+                margin-left: 10px;
+            `;
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background-color: #ffffff;
-        font-family: Monserrat;
-        font-size: 12px;
-        padding-right: 10px;
-        line-height: 1;
-        color: #00000;
-        margin-right: 100px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        `;
+                border-radius: 10px;
+                margin-bottom: 8px;
+                background-color: #ffffff;
+                font-family: Monserrat;
+                font-size: 12px;
+                padding-right: 10px;
+                line-height: 1;
+                color: #00000;
+                margin-right: 100px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            `;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
@@ -339,21 +309,22 @@
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
 
             horaElemento.style = `
-        font-size: 12px;
-        color: #515151;
-        margin-left: 10px;
-        `;
+                font-size: 12px;
+                color: #515151;
+                margin-left: 10px;
+            `;
             //font-size: 13px;
             nuevoElemento.style = `
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background-color: #ffffff;
-        font-family: Monserrat;
-        padding-right:10px;
-        line-height: 1;
-        color: #00000;
-        margin-right: 100px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
+                border-radius: 10px;
+                margin-bottom: 8px;
+                background-color: #ffffff;
+                font-family: Monserrat;
+                padding-right:10px;
+                line-height: 1;
+                color: #00000;
+                margin-right: 100px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            `;
             if (elemento['mensaje_enviado'].length < 20) {
                 nuevoElemento.style.display = "flex";
                 var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;
@@ -398,34 +369,34 @@
             horaElemento.textContent = formatearHora(elemento['fecha_hora']);
             imagenElemento.src = urlImg;
             imagenElemento.style = `
-        width: 300px;
-        height: auto;
-        margin-bottom: 5px;
-        margin-right: 5px;
-    `;
+                width: 300px;
+                height: auto;
+                margin-bottom: 5px;
+                margin-right: 5px;
+            `;
 
             // Estilos para la hora
             horaElemento.style = `
-        font-size: 12px;
-        color: #515151;
-        margin-left: 10px;
-    `;
+                font-size: 12px;
+                color: #515151;
+                margin-left: 10px;
+            `;
 
             // Estilos para el nuevo elemento
             nuevoElemento.style = `
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background-color: #dcf8c6;
-        font-family: Monserrat;
-        font-size: 12px;
-        padding-left: 10px;
-        line-height: 1;
-        color: #00000;
-        padding-left: 10px;
-        margin-left: 100px;
-        text-align: right;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    `;
+                border-radius: 10px;
+                margin-bottom: 8px;
+                background-color: #dcf8c6;
+                font-family: Monserrat;
+                font-size: 12px;
+                padding-left: 10px;
+                line-height: 1;
+                color: #00000;
+                padding-left: 10px;
+                margin-left: 100px;
+                text-align: right;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            `;
 
             // Ajuste de dimensiones del cuadro según la longitud del mensaje
             if (elemento['mensaje_enviado'].length < 20) {
@@ -463,22 +434,23 @@
 
             divGrande.style = `display: flex; justify-content: flex-end; `;
             horaElemento.style = `
-        font-size: 12px;
-        color: #515151;
-        margin-left: 30px;
+                font-size: 12px;
+                color: #515151;
+                margin-left: 30px;
 
-        `;
+            `;
 
             nuevoElemento.style = `
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background-color: #dcf8c6;
-        font-family: Monserrat;
-        line-height: 1;
-        color: #00000;
-        padding-left: 10px;
-        text-align: right;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); `;
+                border-radius: 10px;
+                margin-bottom: 8px;
+                background-color: #dcf8c6;
+                font-family: Monserrat;
+                line-height: 1;
+                color: #00000;
+                padding-left: 10px;
+                text-align: right;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            `;
             if (elemento['mensaje_enviado'].length < 20) {
                 nuevoElemento.style.display = "flex";
                 var dimensionCuadro = 105 + elemento['mensaje_enviado'].length * 10;

@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png"  sizes="200x200" href="{{ asset('images/logoFondoNegro.jpeg') }}">
 
 
-    <title>Trivai</title>
+    <title>AITriv</title>
 </head>
 
 <body>
@@ -142,7 +142,7 @@
         }
 
         .header__container::before {
-            content: "TRIVAI";
+            content: "AITRIV";
             position: absolute;
             bottom: 5rem;
             right: 20rem;
@@ -387,7 +387,7 @@
         <ul class="nav__links">
             <li class="link"><a href="{{ route('terminos') }}">Términos y condiciones</a></li>
             <li class="link"><a href="{{ route('politicas') }}">Políticas y privacidad</a></li>
-            
+
         </ul>
         <button class="btn"><a href="{{ route('login') }}">Incio de sesión</a></button>
     </nav>
@@ -397,7 +397,7 @@
             <span class="bg__blur"></span>
             <span class="bg__blur header__blur"></span>
             <h4>QORI INTERNATIONAL GROUP L.L.C.</h4>
-            <h1><span>TRIVAI </span> en búsqueda de ampliación</h1>
+            <h1><span>AITRIV</span> en búsqueda de ampliación</h1>
             <p>
                 TRIVAI brindará soporte constante antes, durante y después del viaje, todo mediante mensaje de texto, es
                 tan sencillo como interactuar con una persona real por WhatsApp, todo esto gracias a nuestro poderoso
@@ -432,7 +432,7 @@
             <a>Correo: hola@travelqori.com</a>
             <a>Av. Shyris y Gaspar de Villaroel, C.C. Galeria, piso 2, local 47, Quito - Ecuador.</a>
         </div>
-      
+
         <div class="footer__col">
             <h4>Equipo</h4>
             <a href="https://travelqori.com/about-us/">Nosotros</a>

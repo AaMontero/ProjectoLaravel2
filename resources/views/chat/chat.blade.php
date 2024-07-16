@@ -130,7 +130,7 @@
         var telefonoEmisor = '593999938356';
         var tokenFin =
             "EAALYfjkUo48BO06TlfWIDkeLafOPCf6rpQ9bsj04emZBwgF4k1RkjpQCbVuITExfGuM0MPhGwyQQa1J8UwqSy0KYEmfbwxZASwNIXXhEjsM0VMP5S4SEKZChrvr0t6iJZAVrhbSNh44VBZBAPZCSrXsJwdGXZC2bF0ZBt55tHwMggZCet6CdQi62ncUkNdKN1DQFd";
-        var urlPrincipal = "https://trivai.me"
+        var urlPrincipal = "https://aitriv.com"
         if (desarrollo) {
             urlPrincipal = "127.0.0.1:8000"
             telefonoEmisor = '593987411818';

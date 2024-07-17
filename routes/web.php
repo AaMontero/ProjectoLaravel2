@@ -13,6 +13,7 @@ use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\PagoVendedorController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserActionsController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\VerifyCsrfToken;
 
 /*
@@ -171,11 +172,13 @@ Route::middleware(['auth'])->group(function () {
 
 // RUTAS DE WEBHOOKS
 // Autentifiación para conectarse con APIS (No necesita estar logeado)
-Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
-    ->withoutMiddleware([VerifyCsrfToken::class]);
-Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
-    ->withoutMiddleware([VerifyCsrfToken::class]);
+// Route::get('webhook/recibe', [WhatsAppController::class, 'webhook'])
+//     ->withoutMiddleware([VerifyCsrfToken::class]);
+// Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
+//     ->withoutMiddleware([VerifyCsrfToken::class]);
 
+//Route::get('webhook',[WebhookController::class, 'webhook'])->withoutMiddleware([VerifyCsrfToken::class]);
+Route::get('/send-message',[WebhookController::class, 'sendMenssage']);
 
 
 //RUTAS PARA TERMINOS Y CONDICIONES

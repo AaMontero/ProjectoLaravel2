@@ -246,108 +246,108 @@ class WhatsAppController extends Controller
     }
 
 
-    public function webhook(Request $request)
-    {
+    // public function webhook(Request $request)
+    // {
 
-        try {
-            $verifyToken = 'TokenVerificacion';
-            $query = $request->query();
-            $mode = $query['hub_mode'];
-            $token = $query['hub_verify_token'];
-            $challenge = $query['hub_challenge'];
-            if ($mode && $token) {
-                if ($mode === 'subscribe' && $token == $verifyToken) {
-                    return response($challenge, 200)->header('Content-Type', 'text/plain');
-                }
-            }
-            throw new Exception('Invalid Request');
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-    /*
-      * RECEPCION DE MENSAJES
-      */
-    public function recibe()
-    {
-        $respuesta = file_get_contents("php://input");
-        if ($respuesta === false) {
-            exit; // Salir si no se reciben datos
-        }
-        $respuesta = json_decode($respuesta, true);
-        $mensaje = $respuesta['entry'][0]['changes'][0]['value']['messages'][0];
-        $tipo = $mensaje['type'];
-        $id = $mensaje['id'];
-        $telefonoUser = $mensaje['from'];
-        $timestamp = $mensaje['timestamp'];
-        $sqlCantidad = WhatsApp::where('id_wa', $id)->count();
-        if ($sqlCantidad == 0) {
-            $whatsApp = new WhatsApp();
-            if ($tipo == "audio") {
-                $audio = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['audio'];
-                $idAudio = $audio['id'];
-                $responseAudio = $this->obtenerMultimedia($idAudio);
-                $directorio = 'uploads/audiosWpp/' . $telefonoUser;
-                $rutaAudio = $directorio . '/' . $timestamp . 'audio.wav';
-                if (!is_dir($directorio)) {
-                    mkdir($directorio, 0777, true);
-                }
-                file_put_contents($rutaAudio, $responseAudio);
-                //Enviar el mensaje del chatbot
-                $url = 'http://localhost:5000/audio';
-                $ch = curl_init($url);
-                $cfile = new CURLFile(realpath($rutaAudio));
-                $data = array('audio_file' => $cfile);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($ch); // Variable que contiene lo que dice el usuario
-                curl_close($ch);
-                $mensaje = $this->conversacion($response);
-                $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
-                $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                //$this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
-                $this->enviarMensaje($telefonoUser, $mensaje);
+    //     try {
+    //         $verifyToken = 'TokenVerificacion';
+    //         $query = $request->query();
+    //         $mode = $query['hub_mode'];
+    //         $token = $query['hub_verify_token'];
+    //         $challenge = $query['hub_challenge'];
+    //         if ($mode && $token) {
+    //             if ($mode === 'subscribe' && $token == $verifyToken) {
+    //                 return response($challenge, 200)->header('Content-Type', 'text/plain');
+    //             }
+    //         }
+    //         throw new Exception('Invalid Request');
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+    // /*
+    //   * RECEPCION DE MENSAJES
+    //   */
+    // public function recibe()
+    // {
+    //     $respuesta = file_get_contents("php://input");
+    //     if ($respuesta === false) {
+    //         exit; // Salir si no se reciben datos
+    //     }
+    //     $respuesta = json_decode($respuesta, true);
+    //     $mensaje = $respuesta['entry'][0]['changes'][0]['value']['messages'][0];
+    //     $tipo = $mensaje['type'];
+    //     $id = $mensaje['id'];
+    //     $telefonoUser = $mensaje['from'];
+    //     $timestamp = $mensaje['timestamp'];
+    //     $sqlCantidad = WhatsApp::where('id_wa', $id)->count();
+    //     if ($sqlCantidad == 0) {
+    //         $whatsApp = new WhatsApp();
+    //         if ($tipo == "audio") {
+    //             $audio = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['audio'];
+    //             $idAudio = $audio['id'];
+    //             $responseAudio = $this->obtenerMultimedia($idAudio);
+    //             $directorio = 'uploads/audiosWpp/' . $telefonoUser;
+    //             $rutaAudio = $directorio . '/' . $timestamp . 'audio.wav';
+    //             if (!is_dir($directorio)) {
+    //                 mkdir($directorio, 0777, true);
+    //             }
+    //             file_put_contents($rutaAudio, $responseAudio);
+    //             //Enviar el mensaje del chatbot
+    //             $url = 'http://localhost:5000/audio';
+    //             $ch = curl_init($url);
+    //             $cfile = new CURLFile(realpath($rutaAudio));
+    //             $data = array('audio_file' => $cfile);
+    //             curl_setopt($ch, CURLOPT_POST, 1);
+    //             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    //             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //             $response = curl_exec($ch); // Variable que contiene lo que dice el usuario
+    //             curl_close($ch);
+    //             $mensaje = $this->conversacion($response);
+    //             $rutaAudio =  $this->convertirTextoAudio($mensaje, $telefonoUser);
+    //             $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
+    //             //$this->enviarMensajeMult($telefonoUser, $mensaje, 'audio', getenv('URL_RECURSOS') . '/' . $rutaAudio); //Envia el mismo mensaje de vuelta
+    //             $this->enviarMensaje($telefonoUser, $mensaje);
 
-            } elseif ($tipo == "image") {
-                $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
-                $idImagen = $imagen['id'];
-                $textoImagen = isset($imagen['caption']) ?
-                    $imagen['caption'] : "";
-                $responseIMG = $this->obtenerMultimedia($idImagen);
-                $directorio = 'uploads/imagenesWpp/' . $telefonoUser;
-                $rutaImagen = $directorio . '/' . $timestamp . 'imagen.jpeg';
-                if (!is_dir($directorio)) {
-                    mkdir($directorio, 0777, true);
-                }
-                file_put_contents($rutaImagen, $responseIMG);
-                $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
+    //         } elseif ($tipo == "image") {
+    //             $imagen = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['image'];
+    //             $idImagen = $imagen['id'];
+    //             $textoImagen = isset($imagen['caption']) ?
+    //                 $imagen['caption'] : "";
+    //             $responseIMG = $this->obtenerMultimedia($idImagen);
+    //             $directorio = 'uploads/imagenesWpp/' . $telefonoUser;
+    //             $rutaImagen = $directorio . '/' . $timestamp . 'imagen.jpeg';
+    //             if (!is_dir($directorio)) {
+    //                 mkdir($directorio, 0777, true);
+    //             }
+    //             file_put_contents($rutaImagen, $responseIMG);
+    //             $mensaje = '{"ruta": "' . $rutaImagen . '", "textoImagen": "' . $textoImagen . '"}';
 
-                $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensajeChatBot($telefonoUser, "imagen");
-            } else {
-                $mensaje = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']) ?
-                    $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] : "";
+    //             $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
+    //             $this->enviarMensajeChatBot($telefonoUser, "imagen");
+    //         } else {
+    //             $mensaje = isset($respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']) ?
+    //                 $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'] : "";
 
-                $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
-                $this->enviarMensajeChatBot($telefonoUser, $mensaje);
-            }
-            // Evento de recibir mensaje
+    //             $whatsApp = $this->guardarMensaje($timestamp, $mensaje, $id, $telefonoUser);
+    //             $this->enviarMensajeChatBot($telefonoUser, $mensaje);
+    //         }
+    //         // Evento de recibir mensaje
 
-            $event = new RecibirMensaje(
-                $telefonoUser,
-                $mensaje,
-                $whatsApp->fecha_hora->toArray() // Convertir el objeto DateTime a un array
-            );
-            event($event);
-            $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
-            $this->crearNotificacion($cadenaNotificacion, $mensaje);
-        } else {
-        }
-    }
+    //         $event = new RecibirMensaje(
+    //             $telefonoUser,
+    //             $mensaje,
+    //             $whatsApp->fecha_hora->toArray() // Convertir el objeto DateTime a un array
+    //         );
+    //         event($event);
+    //         $cadenaNotificacion = 'Mensaje de : ' . $telefonoUser;
+    //         $this->crearNotificacion($cadenaNotificacion, $mensaje);
+    //     } else {
+    //     }
+    // }
 
 
     public function leerMensajesUsuario($numeroUsuario)

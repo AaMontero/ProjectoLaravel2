@@ -399,7 +399,7 @@
             <h4>QORI INTERNATIONAL GROUP L.L.C.</h4>
             <h1><span>AITRIV</span> en búsqueda de ampliación</h1>
             <p>
-                TRIVAI brindará soporte constante antes, durante y después del viaje, todo mediante mensaje de texto, es
+                AITRIV brindará soporte constante antes, durante y después del viaje, todo mediante mensaje de texto, es
                 tan sencillo como interactuar con una persona real por WhatsApp, todo esto gracias a nuestro poderoso
                 sistema de Red Neuronal y la versatilidad de nuestra Inteligencia Artificial.
             </p>

@@ -177,8 +177,8 @@ Route::middleware(['auth'])->group(function () {
 // Route::post('webhook/recibe', [WhatsAppController::class, 'recibe'])
 //     ->withoutMiddleware([VerifyCsrfToken::class]);
 
-//Route::get('webhook',[WebhookController::class, 'webhook'])->withoutMiddleware([VerifyCsrfToken::class]);
-Route::get('/send-message',[WebhookController::class, 'sendMenssage']);
+Route::get('/webhook',[WebhookController::class, 'webhook']);
+
 
 
 //RUTAS PARA TERMINOS Y CONDICIONES
